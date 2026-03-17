@@ -11,37 +11,37 @@ profile:
   image: fred-heberle.webp
   image_circular: false
   more_info: >
-    <p>fred.heberle@utk.edu</p>
-    <p>Buehler Hall, Room XXX</p>
+    <p>fheberle@utk.edu</p>
+    <p>Buehler Hall, Room 418</p>
     <p>Knoxville, TN 37996</p>
 
-news: true                        # show recent news items on the home page
-selected_papers: true             # show selected publications on the home page
-social: true                      # show social icons at the bottom of the page
+news: false
+selected_papers: false
+social: false
 ---
 
-## Welcome to the Heberle Lab
+## Advanced Membrane Biophysics Group
 
-We are the **Advanced Membrane Biophysics Group** in the Department of Chemistry at the
-University of Tennessee, Knoxville.
+The plasma membrane that surrounds a living cell is truly a marvel of evolutionary
+nanoengineering. The demands placed on this outermost membrane are, in a sense,
+contradictory: it must be sturdy enough to provide protection against an often harsh
+external environment, yet malleable enough to allow for cell growth, division, and
+motility, and the passage of water and nutrients. Nature's recipe for solving this
+unique challenge? Combine fat, protein, and a pinch of sugar, then let the system
+self-organize! The result is a remarkable organelle that is optimized for its dual
+roles as a cellular barrier and gateway.
 
-Research in our group is aimed at elucidating the structure and function of biological
-membranes, with a focus on the plasma membrane (PM). Just two lipid molecules thick, this
-oily sheet was long thought to be a simple barrier that protects a cell from its
-surroundings. New research is upending this simplistic viewpoint, revealing a more
-complex picture in which the three-dimensional organization of hundreds of chemically
-distinct lipids and thousands of unique proteins plays an active role in cell biology.
+Although the basic architecture of the plasma membrane has been known for nearly fifty
+years, there is an emerging consensus that some critical processes occurring at and
+within the membrane cannot be adequately explained by a simple, uniform bilayer model.
+We use cutting-edge biophysical methods to study the architecture of lipid membranes.
 
-We combine expertise in **biophysical, biochemical, and computational methods** to answer
-fundamental questions about membrane structure and organization. Our model systems span a
-vast range of complexity — from simple liposomes made from a single lipid, to
+We combine expertise in **biophysical, biochemical, and computational methods** to
+answer fundamental questions about membrane structure and organization. Our model systems
+span a vast range of complexity — from simple liposomes made from a single lipid, to
 multicomponent vesicles with engineered lipid asymmetry, to the plasma membrane of a
-living cell. Techniques include calorimetry, fluorescence spectroscopy, cryogenic electron
-microscopy (cryo-EM), and small-angle neutron and X-ray scattering (SANS/SAXS).
+living cell. Techniques include calorimetry, fluorescence spectroscopy, cryogenic
+electron microscopy (cryo-EM), and small-angle neutron and X-ray scattering (SANS/SAXS).
 
-**We are located in Knoxville, TN, with close ties to [Oak Ridge National Laboratory](https://www.ornl.gov/).**
-
----
-
-Interested in joining the lab? See our [People](/people/) page for current openings,
-or [email Fred directly](mailto:fheberle@utk.edu).
+Interested in joining the lab? See our [People](/heberlelab/people/) page, or
+[email Fred directly](mailto:fheberle@utk.edu).
