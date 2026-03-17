@@ -1,34 +1,47 @@
 ---
 layout: about
-title: about
+title: Home
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: >
+  <a href="https://chem.utk.edu">Department of Chemistry</a> ·
+  <a href="https://www.utk.edu">University of Tennessee, Knoxville</a>
 
 profile:
   align: right
-  image: prof_pic.jpg
-  image_circular: false # crops the image to make it circular
+  image: fred-heberle.jpg         # place a photo named fred-heberle.jpg in assets/img/
+  image_circular: false
   more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+    <p>fred.heberle@utk.edu</p>
+    <p>Buehler Hall, Room XXX</p>
+    <p>Knoxville, TN 37996</p>
 
-selected_papers: true # includes a list of papers marked as "selected={true}"
-social: true # includes social icons at the bottom of the page
-
-announcements:
-  enabled: true # includes a list of news items
-  scrollable: true # adds a vertical scroll bar if there are more than 3 news items
-  limit: 5 # leave blank to include all the news in the `_news` folder
-
-latest_posts:
-  enabled: true
-  scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
-  limit: 3 # leave blank to include all the blog posts
+news: true                        # show recent news items on the home page
+selected_papers: true             # show selected publications on the home page
+social: true                      # show social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](https://www.reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+## Welcome to the Heberle Lab
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+We are the **Advanced Membrane Biophysics Group** in the Department of Chemistry at the
+University of Tennessee, Knoxville.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+Research in our group is aimed at elucidating the structure and function of biological
+membranes, with a focus on the plasma membrane (PM). Just two lipid molecules thick, this
+oily sheet was long thought to be a simple barrier that protects a cell from its
+surroundings. New research is upending this simplistic viewpoint, revealing a more
+complex picture in which the three-dimensional organization of hundreds of chemically
+distinct lipids and thousands of unique proteins plays an active role in cell biology.
+
+We combine expertise in **biophysical, biochemical, and computational methods** to answer
+fundamental questions about membrane structure and organization. Our model systems span a
+vast range of complexity — from simple liposomes made from a single lipid, to
+multicomponent vesicles with engineered lipid asymmetry, to the plasma membrane of a
+living cell. Techniques include calorimetry, fluorescence spectroscopy, cryogenic electron
+microscopy (cryo-EM), and small-angle neutron and X-ray scattering (SANS/SAXS).
+
+**We are located in Knoxville, TN, with close ties to [Oak Ridge National Laboratory](https://www.ornl.gov/).**
+
+---
+
+Interested in joining the lab? See our [People](/people/) page for current openings,
+or [email Fred directly](mailto:fheberle@utk.edu).
