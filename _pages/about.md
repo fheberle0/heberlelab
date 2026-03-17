@@ -8,12 +8,8 @@ subtitle: >
 
 profile:
   align: right
-  image: fred-heberle.webp
+  image: heberlelab-logo.svg
   image_circular: false
-  more_info: >
-    <p>fheberle@utk.edu</p>
-    <p>Buehler Hall, Room 418</p>
-    <p>Knoxville, TN 37996</p>
 
 news: false
 selected_papers: false
