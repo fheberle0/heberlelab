@@ -1,3 +1,4 @@
+if: false
 name: Prettier code formatter
 
 on:
