@@ -13,7 +13,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/fred-heberle.jpg" alt="Fred Heberle"
+    <img src="/assets/img/fred-heberle.webp" alt="Fred Heberle"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -40,7 +40,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/elizabeth-crumley.jpg" alt="Elizabeth Crumley"
+    <img src="/assets/img/elizabeth-crumley.webp" alt="Elizabeth Crumley"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -57,7 +57,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/deeksha-mehta.jpg" alt="Deeksha Mehta"
+    <img src="/assets/img/deeksha-mehta.webp" alt="Deeksha Mehta"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -76,7 +76,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/zidan-khan.jpg" alt="Zidan Khan"
+    <img src="/assets/img/zidan-khan.webp" alt="Zidan Khan"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -94,7 +94,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/anupam-sarker.jpg" alt="Anupam Sarker"
+    <img src="/assets/img/anupam-sarker.webp" alt="Anupam Sarker"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -112,7 +112,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/loretta-akakpo.jpg" alt="Loretta Akakpo"
+    <img src="/assets/img/loretta-akakpo.webp" alt="Loretta Akakpo"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
