@@ -8,7 +8,7 @@ subtitle: >
 
 profile:
   align: right
-  image: fred-heberle.jpg         # place a photo named fred-heberle.jpg in assets/img/
+  image: fred-heberle.webp
   image_circular: false
   more_info: >
     <p>fred.heberle@utk.edu</p>
