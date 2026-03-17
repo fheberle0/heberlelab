@@ -7,113 +7,120 @@ nav: true
 nav_order: 3
 ---
 
-<!--
-  HOW TO USE THIS PAGE
-  ====================
-  Edit the sections below to reflect your current lab members.
-  For each person:
-    - Replace the placeholder name, title, and description
-    - Upload their photo to assets/img/ with the filename shown
-    - The photo should ideally be square, ~400x400 px
+## Who we are
 
-  To add/remove people, copy or delete a "card" block.
--->
+---
 
-## Principal Investigator
-
-<div class="row justify-content-sm-center mt-4">
-  <div class="col-sm-3 text-center">
+<div class="row mt-4 mb-4">
+  <div class="col-sm-4">
     <img src="/assets/img/fred-heberle.jpg" alt="Fred Heberle"
-         class="img-fluid rounded-circle" style="max-width:180px;">
+         class="img-fluid" style="max-width:220px;">
   </div>
-  <div class="col-sm-9">
-    <h4>Fred A. Heberle</h4>
-    <p><em>Associate Professor, Department of Chemistry</em></p>
+  <div class="col-sm-8">
+    <p><strong>FRED HEBERLE</strong><br>
+    <strong>PRINCIPAL INVESTIGATOR</strong></p>
     <p>
-      Fred received his Ph.D. in Biophysics from Cornell University, where he studied
-      phase separation in model membranes with Gerald Feigenson. He then did his postdoc
-      with John Katsaras in the Neutron Sciences Division at Oak Ridge National Laboratory,
-      developing neutron contrast variation methods to investigate lipid organization in
-      biomimetic membranes. Fred joined the University of Tennessee faculty in [YEAR].
+      Fred received his PhD from Cornell University, where he studied phase separation
+      in model membranes with Gerald Feigenson. That was followed by a postdoc with
+      John Katsaras in the Neutron Sciences Division at Oak Ridge National Lab. At ORNL,
+      Fred used innovative neutron contrast variation methods to investigate the
+      three-dimensional organization of lipids in complex biomimetic membranes. Fred is
+      now an <a href="https://chem.utk.edu/people/fred-a-heberle/">Assistant Professor
+      in the Department of Chemistry at the University of Tennessee, Knoxville</a>.
     </p>
     <p>
-      📧 <a href="mailto:fheberle@utk.edu">fheberle@utk.edu</a> &nbsp;|&nbsp;
-      🔗 <a href="https://chem.utk.edu/people/fred-a-heberle/" target="_blank">UTK Faculty Page</a>
-    </p>
-  </div>
-</div>
-
----
-
-## Graduate Students
-
-<!--  Copy this block for each graduate student  -->
-<div class="row mt-4">
-  <div class="col-sm-3 text-center">
-    <img src="/assets/img/student1.jpg" alt="Student Name"
-         class="img-fluid rounded-circle" style="max-width:150px;">
-  </div>
-  <div class="col-sm-9">
-    <h5>Student Name</h5>
-    <p><em>Ph.D. Student, Year X</em></p>
-    <p>
-      Brief description of their research project, background, or interests.
-      Replace with real content.
-    </p>
-  </div>
-</div>
-
-<div class="row mt-4">
-  <div class="col-sm-3 text-center">
-    <img src="/assets/img/student2.jpg" alt="Student Name"
-         class="img-fluid rounded-circle" style="max-width:150px;">
-  </div>
-  <div class="col-sm-9">
-    <h5>Student Name</h5>
-    <p><em>Ph.D. Student, Year X</em></p>
-    <p>
-      Brief description of their research project, background, or interests.
+      <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Heberle+FA&sort=date">PUBMED</a> |
+      <a href="https://scholar.google.com/citations?hl=en&user=SGQB_SIAAAAJ">GOOGLE SCHOLAR</a> |
+      <a href="/assets/pdf/heberle-cv.pdf" target="_blank">CV</a>
     </p>
   </div>
 </div>
 
 ---
 
-## Undergraduate Researchers
-
-<!--  Copy this block for each undergraduate  -->
-<div class="row mt-4">
-  <div class="col-sm-3 text-center">
-    <img src="/assets/img/undergrad1.jpg" alt="Student Name"
-         class="img-fluid rounded-circle" style="max-width:150px;">
+<div class="row mt-4 mb-4">
+  <div class="col-sm-4">
+    <img src="/assets/img/elizabeth-crumley.jpg" alt="Elizabeth Crumley"
+         class="img-fluid" style="max-width:220px;">
   </div>
-  <div class="col-sm-9">
-    <h5>Student Name</h5>
-    <p><em>Undergraduate Researcher</em></p>
-    <p>Major, expected graduation year. Brief description of project.</p>
+  <div class="col-sm-8">
+    <p><strong>ELIZABETH CRUMLEY</strong><br>
+    <strong>GRADUATE STUDENT</strong></p>
+    <p>
+      Elizabeth received her B.S. in Chemistry from Lincoln Memorial University in 2020.
+      She joined the Heberle Lab in Fall 2020.
+    </p>
   </div>
 </div>
 
 ---
 
-## Alumni
-
-| Name | Degree / Role | Year | Current Position |
-|------|--------------|------|-----------------|
-| Alumni Name | Ph.D. | 20XX | Position, Institution |
-| Alumni Name | M.S.  | 20XX | Position, Institution |
-| Alumni Name | Postdoc | 20XX–20XX | Position, Institution |
+<div class="row mt-4 mb-4">
+  <div class="col-sm-4">
+    <img src="/assets/img/deeksha-mehta.jpg" alt="Deeksha Mehta"
+         class="img-fluid" style="max-width:220px;">
+  </div>
+  <div class="col-sm-8">
+    <p><strong>DEEKSHA MEHTA</strong><br>
+    <strong>GRADUATE STUDENT</strong></p>
+    <p>
+      Deeksha completed a masters in Chemistry (with honors) from Panjab University,
+      Chandigarh. Her work focused on the synthesis of lanthanide doped metal oxide
+      nanoparticles and their biological application. She joined the Heberle Lab in
+      Fall 2021.
+    </p>
+  </div>
+</div>
 
 ---
 
-## Join Us
+<div class="row mt-4 mb-4">
+  <div class="col-sm-4">
+    <img src="/assets/img/zidan-khan.jpg" alt="Zidan Khan"
+         class="img-fluid" style="max-width:220px;">
+  </div>
+  <div class="col-sm-8">
+    <p><strong>ZIDAN KHAN</strong><br>
+    <strong>GRADUATE STUDENT</strong></p>
+    <p>
+      Zidan received his Bachelor of Pharmacy degree from International Islamic University
+      Chittagong, Bangladesh. He joined the Heberle lab in Fall 2022, where his research
+      is focused on the phase behavior of bacterial membrane models.
+    </p>
+  </div>
+</div>
 
-We welcome motivated students and researchers at all levels. Current openings:
+---
 
-- **Graduate students**: Prospective Ph.D. students should apply through the
-  [UTK Chemistry graduate program](https://chem.utk.edu/graduate/). Feel free to
-  email Fred before or after applying.
-- **Undergraduate researchers**: UTK undergraduates interested in research experience
-  are encouraged to [contact Fred](mailto:fheberle@utk.edu).
-- **Postdoctoral researchers**: Please [email Fred](mailto:fheberle@utk.edu) with your
-  CV and a brief description of your research interests.
+<div class="row mt-4 mb-4">
+  <div class="col-sm-4">
+    <img src="/assets/img/anupam-sarker.jpg" alt="Anupam Sarker"
+         class="img-fluid" style="max-width:220px;">
+  </div>
+  <div class="col-sm-8">
+    <p><strong>ANUPAM SARKER</strong><br>
+    <strong>GRADUATE STUDENT</strong></p>
+    <p>
+      Anupam completed his B.Sc. (2021) and M.Sc. (2023) from University of Dhaka,
+      Bangladesh, majoring in Applied Chemistry and Chemical Engineering. He joined the
+      Heberle lab in Fall 2023.
+    </p>
+  </div>
+</div>
+
+---
+
+<div class="row mt-4 mb-4">
+  <div class="col-sm-4">
+    <img src="/assets/img/loretta-akakpo.jpg" alt="Loretta Akakpo"
+         class="img-fluid" style="max-width:220px;">
+  </div>
+  <div class="col-sm-8">
+    <p><strong>LORETTA AKAKPO</strong><br>
+    <strong>GRADUATE STUDENT</strong></p>
+    <p>
+      Loretta received her B.S. in Chemistry from Kwame Nkrumah University of Science
+      and Technology in 2021. She joined the Heberle Lab in Fall 2023.
+    </p>
+  </div>
+</div>
