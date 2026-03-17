@@ -13,7 +13,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/fred-heberle.webp" alt="Fred Heberle"
+    <img src="{{ '/assets/img/fred-heberle.webp' | relative_url }}" alt="Fred Heberle"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -31,7 +31,7 @@ nav_order: 3
     <p>
       <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Heberle+FA&sort=date">PUBMED</a> |
       <a href="https://scholar.google.com/citations?hl=en&user=SGQB_SIAAAAJ">GOOGLE SCHOLAR</a> |
-      <a href="/assets/pdf/heberle-cv.pdf" target="_blank">CV</a>
+      <a href="{{ '/assets/pdf/heberle-cv.pdf' | relative_url }}" target="_blank">CV</a>
     </p>
   </div>
 </div>
@@ -40,7 +40,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/elizabeth-crumley.webp" alt="Elizabeth Crumley"
+    <img src="{{ '/assets/img/elizabeth-crumley.webp' | relative_url }}" alt="Elizabeth Crumley"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -57,7 +57,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/deeksha-mehta.webp" alt="Deeksha Mehta"
+    <img src="{{ '/assets/img/deeksha-mehta.webp' | relative_url }}" alt="Deeksha Mehta"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -76,7 +76,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/zidan-khan.webp" alt="Zidan Khan"
+    <img src="{{ '/assets/img/zidan-khan.webp' | relative_url }}" alt="Zidan Khan"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -94,7 +94,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/anupam-sarker.webp" alt="Anupam Sarker"
+    <img src="{{ '/assets/img/anupam-sarker.webp' | relative_url }}" alt="Anupam Sarker"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
@@ -112,7 +112,7 @@ nav_order: 3
 
 <div class="row mt-4 mb-4">
   <div class="col-sm-4">
-    <img src="/assets/img/loretta-akakpo.webp" alt="Loretta Akakpo"
+    <img src="{{ '/assets/img/loretta-akakpo.webp' | relative_url }}" alt="Loretta Akakpo"
          class="img-fluid" style="max-width:220px;">
   </div>
   <div class="col-sm-8">
