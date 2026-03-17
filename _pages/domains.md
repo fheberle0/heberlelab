@@ -2,77 +2,119 @@
 layout: page
 title: Domains
 permalink: /domains/
-description: Research domains and focus areas of the Heberle Lab
-nav: true
-nav_order: 2
+nav: false
 ---
 
-The Heberle Lab works at the intersection of **physical chemistry, biophysics, and
-cell biology**. Our research is organized around three interconnected domains:
+Compartmentalization is a fundamental organizing principle of biological systems.
 
----
+The numerous chemical reactions and physical processes that support cellular life are enabled by a complex, three-dimensional compartmentalization of the cytosol into functionally specialized organelles. These include the endoplasmic reticulum, Golgi, and endocytic recycling compartment, as well as vesicular endosomes and lysosomes. Indeed, the evolution of the proto-compartment—the plasma membrane—was a critical development in the origin of life, delineating the living cell and providing its interface with the outside world.
 
-## Lipid Membrane Structure & Organization
+Given the ubiquity of compartmentalization in biology, it should not have been surprising to find substructure within the plane of the plasma membrane itself. Yet the discovery of lipid rafts—hard won through clever experiments spanning five decades, and involving thousands of researchers across multiple scientific disciplines—has triggered a complete re-imagining of the role of the plasma membrane in life's most important processes. The influence of rafts is apparently far-reaching, ranging from protein sorting and lipid trafficking within the cell, to signaling events outside the cell, to the pathogenesis of viruses including influenza and HIV.
 
-A central question in membrane biology is how the diverse mixture of lipids in the
-plasma membrane organizes laterally. We study **lipid phase behavior** — the tendency of
-certain lipid mixtures to spontaneously separate into coexisting liquid phases — as a
-model for the formation of functional membrane domains (rafts) in living cells.
-
-Using SANS contrast variation and cryo-EM, we have directly characterized the size,
-composition, and physical properties of nanoscale liquid-ordered domains. This work has
-provided some of the first **probe-free evidence** for nanoscale lateral heterogeneity in
-model membranes.
-
-**Key questions:**
-- What governs the size and stability of lipid nanodomains?
-- How do cholesterol and sphingomyelin drive liquid–liquid phase separation?
-- How do domain properties depend on membrane composition and temperature?
+How did rafts evade researchers for so long? In part, because they are too small to see with conventional scientific tools. For example, ordinary light microscopy is fundamentally incapable of resolving structures smaller than a few hundred nanometers in size (though special tricks can break through the "diffraction limit" and enable resolution of structures as small as a few tens of nanometers). To circumvent these limitations, our lab uses specialized techniques that can detect lipid domains as small as 5 nanometers in diameter.
 
 ---
 
-## Membrane Asymmetry
+## Imaging nanoscopic domains with cryo electron microscopy
 
-The two leaflets of a biological membrane are compositionally distinct — the outer leaflet
-is enriched in phosphatidylcholine (PC) and sphingomyelin (SM), while the inner leaflet
-contains mostly phosphatidylethanolamine (PE) and phosphatidylserine (PS). This **lipid
-asymmetry** is actively maintained by flippases and scramblases and is believed to play
-important roles in signaling and membrane trafficking.
+The advent of cryogenic electron microscopy (cryoEM) has revolutionized the field of structural biology, allowing for near-atomic resolution structures of the molecular architecture of proteins and nucleic acids. Importantly, cryoEM does not require the addition of any probe molecules to the sample, or any electron-dense stains to create image contrast. Compared to X-ray and neutron scattering—which produce reciprocal space data that must be interpreted by mathematical modeling—cryoEM has the distinct advantage that images are obtained in real space, in analogy to ordinary light microscopy. Scientists, it seems, are not immune to the old adage "seeing is believing"!
 
-We develop and use **asymmetric vesicles** — model membranes engineered to mimic this
-natural asymmetry — to study how inter-leaflet coupling influences domain formation and
-membrane physical properties.
+Specimens for cryoEM are prepared by plunging an aqueous sample of a biological material of interest into liquid ethane (–188 ºC) to rapidly freeze the water and lock in the ensemble of structures found in the macromolecular assembly under native conditions. When water is rapidly frozen in this way, it does not have time to form the well-ordered crystalline lattice that we are familiar with from everyday objects like ice cubes and snowflakes. Instead, it forms an amorphous solid similar to glass that scientists call non-crystalline or "vitreous" ice. This lack of long-range structure in the ice is crucial both for preserving the sample and for obtaining high quality EM images.
 
-**Key questions:**
-- How does inter-leaflet coupling propagate structural information across the membrane?
-- Does asymmetry suppress or promote domain formation?
-- What happens to asymmetry during cell signaling events (e.g., apoptosis)?
+Given the excitement generated by cryoEM, it is perhaps surprising that as of early 2020, the revolution had not yet come for membranes. It was already known that with the right imaging conditions, lipid bilayers appear as double lines similar to railroad tracks, suggesting that membrane thickness can be directly measured in a cryoEM image. It is also known that ordered and disordered bilayer phases can be distinguished, among other properties, by their different thickness. Together with colleagues Neal Waxham and Ilya Levental at the University of Texas Health Science Center in Houston, our group was the first\* to show real-space pictures of nanoscopic domains both in model and biological membranes, with contrast provided not by extrinsic probes, but by intrinsic differences in the thickness of the coexisting phases.
 
----
+\*A nearly identical discovery was made simultaneously in the Sarah Keller lab at the University of Washington, led by graduate student Caitlin Cornell. The two papers were submitted and published together in the journal PNAS.
 
-## Lipid–Protein Interactions
+**Research articles**
 
-Many membrane proteins are functionally regulated by their lipid environment. We study
-how specific lipids interact with and influence the activity of membrane-associated
-proteins, with a focus on proteins relevant to signaling and disease.
+Heberle FA, Doktorova M, Scott HL, Skinkle A, Waxham MN, Levental I. 2020. Direct label-free imaging of nanodomains in biomimetic and biological membranes by cryogenic electron microscopy. *Proceedings of the National Academy of Sciences of the USA* 117:19943-19952.
 
-We collaborate with biochemists and structural biologists to combine our physical
-measurements with protein activity assays and structural data.
+Scott HL, Skinkle A, Kelley EG, Waxham MN, Levental I, Heberle FA. 2019. On the mechanism of bilayer separation by extrusion: or, why your LUVs are not really unilamellar. *Biophysical Journal* 117:1381-1386.
 
-**Key questions:**
-- How does local lipid composition affect protein conformation and function?
-- Do raft-associating proteins preferentially partition into ordered domains?
-- Can we design lipid nanoparticles with tailored compositions for drug delivery?
+**Reviews**
+
+Levental I, Levental K, Heberle FA. 2020. Lipid rafts: controversies solved, mysteries remain. *Trends in Cell Biology* 30:341-353.
+
+Heberle FA. 2019. With lipid rafts, context is everything. *Biophysical Journal* 117:1549-1551.
 
 ---
 
-## Methods Development
+## Probe-free detection of lipid domains using neutrons
 
-A recurring theme in our work is the development of new experimental methods and
-analysis approaches for characterizing membrane structure. Notable contributions include:
+While fluorescence techniques will always be important tools for membrane research, experiments that can inform on membrane properties while avoiding the use of probes are particularly valuable. Our group specializes in the development of innovative methods for detecting and characterizing rafts using probe-free techniques including small-angle neutron scattering (SANS). We use deuterated lipids to generate the contrast that allows SANS to "see" domains, analogous to the contrast provided by fluorescent probes under the microscope. Importantly, deuterium (²H, a stable isotope of hydrogen) is nearly identical to protium (¹H, hydrogen's other, far more naturally abundant stable isotope) in its chemistry, and replacing some of a biological molecule's protium with deuterium usually has little effect on its properties and behavior. Yet because of their different nuclei, protium and deuterium interact very differently with neutrons. As a result, deuterated molecules scatter neutrons differently than their protium-containing counterparts. In the study of membrane structure, SANS—combined with selectively deuterated lipids—circumvents the need for bulky fluorescence or spin labels that can perturb the membrane's native phase behavior.
 
-- **Neutron contrast variation SANS** for detecting nanoscale membrane domains
-  without fluorescent probes
-- **Asymmetric vesicle preparation** via cyclodextrin-mediated lipid exchange
-- **Cryo-EM imaging of lipid nanodomains** (first direct images published in *PNAS*)
-- **Global analysis of SANS data** combining multiple contrast conditions
+When we applied our SANS contrast matching methodology to four-component model membranes, we found that domain size is strongly affected by the degree of acyl chain unsaturation of low-melting temperature lipids, and tightly correlated to the thickness mismatch between coexisting liquid phases. Taken together, these results suggest a dominant role for line tension in controlling raft size. We have also used this strategy to examine the influence of mixed-chain and polyunsaturated lipids, as well as various sphingomyelins, on domain size.
+
+**Research articles**
+
+DiPasquale M, Nguyen MHL, Rickeard BW, Cesca N, Tannous C, Castillo SR, Katsaras J, Kelley EG, Heberle FA, Marquardt D. 2020. The antioxidant vitamin E as a membrane raft modulator: Tocopherols do not abolish lipid domains. *Biochimica et Biophysica Acta Biomembranes* 1862:183189.
+
+Wassall SR, Leng X, Canner SW, Pennington ER, Kinnun JJ, Cavazos AT, Dadoo S, Johnson D, DeSantis A, Zeczycki T, Heberle FA, Katsaras J, Shaikh SR. 2018. Docosahexaenoic acid regulates the formation of lipid rafts: A unified view from experiment and simulation. *Biochimica et Biophysica Acta* 1860:1985-1993.
+
+Usery RD, Enoki TA, Wickramasinghe SP, Weiner MD, Tsai W-C, Kim MB, Wang S, Torng TL, Ackerman DG, Heberle FA, Katsaras J, Feigenson GW. 2017. Line tension controls liquid-disordered + liquid-ordered domain size transition in lipid bilayers. *Biophysical Journal* 112:1431-1443.
+
+Heberle FA, Doktorova M, Goh SL, Standaert RF, Katsaras J, Feigenson GW. 2013. Hybrid and Nonhybrid Lipids Exert Common Effects on Membrane Raft Size and Morphology. *Journal of the American Chemical Society* 135:14932-14935.
+
+Heberle FA, Petruzielo RS, Pan J, Drazba P, Kučerka N, Standaert RF, Feigenson GW, Katsaras J. 2013. Bilayer Thickness Mismatch Controls Domain Size in Model Membranes. *Journal of the American Chemical Society* 135:6853-6859.
+
+Petruzielo RS, Heberle FA, Drazba P, Katsaras J, Feigenson GW. 2013. Phase Behavior and Domain Size in Sphingomyelin-Containing Lipid Bilayers. *Biochimica et Biophysica Acta* 1828:1302-1313.
+
+**Reviews**
+
+Heberle FA, Pabst G. 2017. Complex Biomembrane Mimetics on the Sub-Nanometer Scale. *Biophysical Reviews* 9:353-373.
+
+Heberle FA, Myles DAA, Katsaras J. 2015. Biomembranes Research Using Thermal and Cold Neutrons. *Chemistry and Physics of Lipids* 192:41-50.
+
+Marquardt D, Heberle FA, Nickels JD, Pabst G, Katsaras J. 2015. On scattered waves and lipid domains: Detecting rafts with X-rays and neutrons. *Soft Matter* 11:9055-9072.
+
+Pan J, Heberle FA, Petruzielo RS, Katsaras J. 2013. The Use of Small-Angle Neutron Scattering to Detect Nanoscopic Lipid Domains. *Chemistry and Physics of Lipids* 170-171:19-32.
+
+---
+
+## New experimental tools need new analytical tools
+
+As the experimental possibilities for studying domains with neutrons have expanded, the analytical tools necessary to fully understand the data have not kept pace. We are continually looking for new ways of extracting more information from data, by developing computational methods and analytical scattering models that correctly capture important details of lipid spatial organization and dynamics.
+
+Our network of collaborators includes theoretical physicists and experts in molecular dynamics (MD) who are pushing the boundaries of all-atom simulations of lipid bilayers to long time scales, where lateral organization can emerge. We work with them to develop analytical methodology for extracting neutron and X-ray scattering curves from the simulations, to enable valid comparison to experiments.
+
+**Research articles**
+
+Dorrell MW, Heberle FA, Katsaras J, Maibaum L, Lyman E, Sodt AJ. 2020. Laterally resolved small-angle scattering intensity from lipid bilayer simulations: an exact and a limited-range treatment. *Journal of Chemical Theory and Computation* DOI:10.1021/acs.jctc.0c00132.
+
+Heberle FA, Anghel VNP, Katsaras J. 2015. Scattering from phase-separated vesicles I. An analytical form factor for multiple static domains. *Journal of Applied Crystallography* 48:1391-1404.
+
+**Reviews**
+
+Marquardt D, Heberle FA, Nickels JD, Pabst G, Katsaras J. 2015. On scattered waves and lipid domains: Detecting rafts with X-rays and neutrons. *Soft Matter* 11:9055-9072.
+
+---
+
+## Do FRET about it: detecting tiny domains with fluorescence
+
+While SANS has many advantages, it is ultimately a resource-limited technique: only a handful of neutron sources exist in the world, and acquiring instrument time is extremely competitive. Used properly, fluorescence techniques can also provide valuable information about lipid organization using ubiquitous laboratory equipment, and at a fraction of the cost of a neutron experiment. For the study of small domains, a phenomenon known as Förster resonance energy transfer or FRET is particularly useful. FRET acts like a molecular ruler for distances similar to the size of molecules—in other words, a few nanometers. Like SANS, it is sensitive to the presence of very small rafts that are impossible to see with ordinary fluorescence microscopy.
+
+Using FRET together with electron spin resonance and confocal microscopy, we determined phase diagrams for lipid mixtures that mimic the composition of the plasma membrane outer leaflet. These diagrams reveal a nearly universal propensity for liquid-liquid phase separation in lipid mixtures that mimic the composition of the plasma membrane outer leaflet. Just as importantly, they map the range of possible compositions for coexisting ordered and disordered phases, and are the starting point for systematic investigation of domain size and physical properties, including the experiments described in previous sections.
+
+**Research articles**
+
+Scott HL, Baker JR, Frederick AJ, Kennison KB, Mendes K, Heberle FA. 2020. FRET from phase-separated vesicles: An analytical solution for a spherical geometry. *Chemistry and Physics of Lipids* 233:104982.
+
+Enoki TA, Heberle FA, Feigenson GW. 2018. FRET Detects the Size of Nanodomains for Coexisting Liquid-Disordered + Liquid-Ordered Phases. *Biophysical Journal* 114:1921-1935.
+
+Taylor GJ, Heberle FA, Seinfeld JS, Katsaras J, Collier CP, Sarles SA. 2017. Capacitive Detection of Low-Enthalpy, Higher Order Phase Transitions in Synthetic and Natural Composition Lipid Membranes. *Langmuir* 33:10016-10026.
+
+Heberle FA, Doktorova M, Goh SL, Standaert RF, Katsaras J, Feigenson GW. 2013. Hybrid and Nonhybrid Lipids Exert Common Effects on Membrane Raft Size and Morphology. *Journal of the American Chemical Society* 135:14932-14935.
+
+Konyakhina TM, Wu J, Mastroianni JD, Heberle FA, Feigenson GW. 2013. Phase Diagram of a 4-Component Lipid Mixture: DSPC/DOPC/POPC/chol. *Biochimica et Biophysica Acta* 1828:2204-2214.
+
+Petruzielo RS, Heberle FA, Drazba P, Katsaras J, Feigenson GW. 2013. Phase Behavior and Domain Size in Sphingomyelin-Containing Lipid Bilayers. *Biochimica et Biophysica Acta* 1828:1302-1313.
+
+Konyakhina TM, Goh SL, Amazon JA, Heberle FA, Wu J, Feigenson GW. 2011. Control of a Nanoscopic-to-Macroscopic Transition: Modulated Phases in 4-Component DSPC/DOPC/POPC/chol Giant Unilamellar Vesicles. *Biophysical Journal* 101:L08-L10.
+
+Heberle FA, Wu J, Goh SL, Petruzielo RS, Feigenson GW. 2010. Comparison of three ternary bilayer mixtures: FRET and ESR reveal nanodomains. *Biophysical Journal* 99:3309-3318.
+
+**Reviews**
+
+Heberle FA, Petruzielo RS, Goh SL, Konyakhina TM, Ackerman DG, Amazon JJ, Feigenson GW. 2014. Liposome-Based Models for Membrane Rafts: Methodology and Applications. In *Liposomes, Lipid Bilayers and Model Membranes: From Basic Research to Application*. G. Pabst, editor. CRC Press. Boca Raton, FL.
+
+Heberle FA, Feigenson GW. 2011. Phase Separation in Lipid Membranes. In *The Biology of Lipids: Trafficking, Regulation, and Function*. K. Simons, editor. Cold Spring Harbor Laboratory Press. New York. 49-61.
