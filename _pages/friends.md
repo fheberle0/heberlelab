@@ -3,7 +3,7 @@ layout: page
 title: Friends
 permalink: /friends/
 description: Collaborators and friends of the Heberle Lab
-nav: true
+nav: false
 nav_order: 5
 ---
 
