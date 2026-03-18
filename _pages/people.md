@@ -3,6 +3,7 @@ layout: page
 title: People
 permalink: /people/
 description: Members of the Heberle Lab
+banner: banner-people.webp
 nav: true
 nav_order: 3
 ---

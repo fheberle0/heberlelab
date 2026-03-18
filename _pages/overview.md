@@ -2,6 +2,7 @@
 layout: page
 title: Overview
 permalink: /overview/
+banner: banner-overview.webp
 nav: false
 ---
 

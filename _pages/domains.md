@@ -2,6 +2,7 @@
 layout: page
 title: Domains
 permalink: /domains/
+banner: banner-domains.webp
 nav: false
 ---
 

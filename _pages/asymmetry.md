@@ -2,6 +2,7 @@
 layout: page
 title: Asymmetry
 permalink: /asymmetry/
+banner: banner-asymmetry.webp
 nav: false
 ---
 

@@ -11,6 +11,7 @@ profile:
   image: heberlelab-logo-dark.svg
   image_circular: false
 
+banner: banner-home.webp
 news: false
 selected_papers: false
 social: false

@@ -2,6 +2,7 @@
 layout: page
 title: Chronological
 permalink: /chronological/
+banner: banner-publications.webp
 nav: false
 ---
 
