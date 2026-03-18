@@ -56,7 +56,24 @@ Heberle FA. 2019. With lipid rafts, context is everything. *Biophysical Journal*
 
 ## Probe-free detection of lipid domains using neutrons
 
+<figure style="float: right; margin: 0 1.5em 1.5em 0; width: 225px;">
+  <img src="{{ '/assets/img/chol-compare.webp' | relative_url }}" alt="Description" style="width: 100%; height: auto; display: block;">
+  <figcaption style="font-size: 0.8em; color: #aaa; margin-top: 0.4em;">Cholesterol (left) is the most abundant lipid in mammalian plasma membranes. Adding a bulky fluorescent tag (right) can dramatically alter its interactions with other membrane lipids.</figcaption>
+</figure>
+
+Unique among the major classes of biological structures, membranes are mixtures rather than polymers; their building blocks (i.e. lipids) are not joined by covalent bonds. Because membranes are instead held together by weak interactions, experimenting on them presents special challenges. For example, recent advances in microscopy techniques have revolutionized the study of biological systems using fluorescence (the inventors of two of these breakthrough techniques recently shared the Nobel Prize in Chemistry). By their very nature, these experiments usually require putting a fluorescent label on a molecule of interest to “probe” the system. While such experiments should always be carefully designed (with careful controls) to minimize the possibility of artifacts arising from the use of non-native molecules, this is especially true—and a well-documented problem—for membranes. In some cases, fluorescent lipids no longer behave like their unlabeled counterparts, which can lead to erroneous conclusions. Probes also introduce new types of interactions in the lipid mixture that can alter a membrane’s physical properties. In perhaps the worst-case scenario, fluorescent lipids can break down upon illumination and form free radical species that chemically react with other lipids, completely changing the composition and behavior of the membrane!
+
+<figure style="float: left; margin: 0 1.5em 1.5em 0; width: 300px;">
+  <img src="{{ '/assets/img/contrast-match.webp' | relative_url }}" alt="Description" style="width: 100%; height: auto; display: block;">
+  <figcaption style="font-size: 0.8em; color: #aaa; margin-top: 0.4em;">SANS, combined with contrast matching, is sensitive to the lateral organization of lipids in membranes.</figcaption>
+</figure>
+
 While fluorescence techniques will always be important tools for membrane research, experiments that can inform on membrane properties while avoiding the use of probes are particularly valuable. Our group specializes in the development of innovative methods for detecting and characterizing rafts using probe-free techniques including small-angle neutron scattering (SANS). We use deuterated lipids to generate the contrast that allows SANS to "see" domains, analogous to the contrast provided by fluorescent probes under the microscope. Importantly, deuterium (²H, a stable isotope of hydrogen) is nearly identical to protium (¹H, hydrogen's other, far more naturally abundant stable isotope) in its chemistry, and replacing some of a biological molecule's protium with deuterium usually has little effect on its properties and behavior. Yet because of their different nuclei, protium and deuterium interact very differently with neutrons. As a result, deuterated molecules scatter neutrons differently than their protium-containing counterparts. In the study of membrane structure, SANS—combined with selectively deuterated lipids—circumvents the need for bulky fluorescence or spin labels that can perturb the membrane's native phase behavior.
+
+<figure style="float: right; margin: 0 1.5em 1.5em 0; width: 350px;">
+  <img src="{{ '/assets/img/sans-domains.webp' | relative_url }}" alt="Description" style="width: 100%; height: auto; display: block;">
+  <figcaption style="font-size: 0.8em; color: #aaa; margin-top: 0.4em;">SANS data (left) reveal an increase in domain size with increasing fraction of dimonounsaturated DOPC in the low-melting lipid fraction. The solid lines are fits to the data from simulated vesicles, shown upper right. Image adapted from Heberle et al. 2013 JACS 135:6853.</figcaption>
+</figure>
 
 When we applied our SANS contrast matching methodology to four-component model membranes, we found that domain size is strongly affected by the degree of acyl chain unsaturation of low-melting temperature lipids, and tightly correlated to the thickness mismatch between coexisting liquid phases. Taken together, these results suggest a dominant role for line tension in controlling raft size. We have also used this strategy to examine the influence of mixed-chain and polyunsaturated lipids, as well as various sphingomyelins, on domain size.
 
@@ -88,6 +105,11 @@ Pan J, Heberle FA, Petruzielo RS, Katsaras J. 2013. The Use of Small-Angle Neutr
 
 ## New experimental tools need new analytical tools
 
+<figure style="float: left; margin: 0 1.5em 1.5em 0; width: 300px;">
+  <img src="{{ '/assets/img/analytical.webp' | relative_url }}" alt="Description" style="width: 100%; height: auto; display: block;">
+  <figcaption style="font-size: 0.8em; color: #aaa; margin-top: 0.4em;">Theoretical predictions for SANS intensity from an analytical model parameterized by round domains of varying size. Image from Marquardt et al. 2015 Soft Matter 11:9055.</figcaption>
+</figure>
+
 As the experimental possibilities for studying domains with neutrons have expanded, the analytical tools necessary to fully understand the data have not kept pace. We are continually looking for new ways of extracting more information from data, by developing computational methods and analytical scattering models that correctly capture important details of lipid spatial organization and dynamics.
 
 Our network of collaborators includes theoretical physicists and experts in molecular dynamics (MD) who are pushing the boundaries of all-atom simulations of lipid bilayers to long time scales, where lateral organization can emerge. We work with them to develop analytical methodology for extracting neutron and X-ray scattering curves from the simulations, to enable valid comparison to experiments.
@@ -107,6 +129,11 @@ Marquardt D, Heberle FA, Nickels JD, Pabst G, Katsaras J. 2015. On scattered wav
 ## Do FRET about it: detecting tiny domains with fluorescence
 
 While SANS has many advantages, it is ultimately a resource-limited technique: only a handful of neutron sources exist in the world, and acquiring instrument time is extremely competitive. Used properly, fluorescence techniques can also provide valuable information about lipid organization using ubiquitous laboratory equipment, and at a fraction of the cost of a neutron experiment. For the study of small domains, a phenomenon known as Förster resonance energy transfer or FRET is particularly useful. FRET acts like a molecular ruler for distances similar to the size of molecules—in other words, a few nanometers. Like SANS, it is sensitive to the presence of very small rafts that are impossible to see with ordinary fluorescence microscopy.
+
+<figure style="float: left; margin: 0 1.5em 1.5em 0; width: 300px;">
+  <img src="{{ '/assets/img/analytical.webp' | relative_url }}" alt="Description" style="width: 100%; height: auto; display: block;">
+  <figcaption style="font-size: 0.8em; color: #aaa; margin-top: 0.4em;">FRET between fluorescent donor and acceptor lipids in membranes composed of two phospholipids and cholesterol reveals phase separation over a wide region of composition space. Image from Heberle et al. 2010 Biophys. J. 99:3309.</figcaption>
+</figure>
 
 Using FRET together with electron spin resonance and confocal microscopy, we determined phase diagrams for lipid mixtures that mimic the composition of the plasma membrane outer leaflet. These diagrams reveal a nearly universal propensity for liquid-liquid phase separation in lipid mixtures that mimic the composition of the plasma membrane outer leaflet. Just as importantly, they map the range of possible compositions for coexisting ordered and disordered phases, and are the starting point for systematic investigation of domain size and physical properties, including the experiments described in previous sections.
 
