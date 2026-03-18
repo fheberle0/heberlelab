@@ -212,13 +212,23 @@
     var DARK  = '{{ "/assets/img/heberlelab-logo-dark.svg"  | relative_url }}';
 
     function swapLogo() {
-      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var theme = document.documentElement.getAttribute('data-theme')
+                  || localStorage.getItem('theme')
+                  || 'light';
+      var src = theme === 'dark' ? DARK : LIGHT;
       document.querySelectorAll('.profile img').forEach(function (img) {
-        img.src = isDark ? DARK : LIGHT;
+        img.src = src;
       });
     }
 
-    document.addEventListener('DOMContentLoaded', swapLogo);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', swapLogo);
+    } else {
+      swapLogo();
+    }
+
+    window.addEventListener('load', swapLogo);
+
     new MutationObserver(swapLogo).observe(
       document.documentElement,
       { attributes: true, attributeFilter: ['data-theme'] }
