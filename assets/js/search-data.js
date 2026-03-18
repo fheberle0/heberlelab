@@ -30,14 +30,14 @@ ninja.data = [{
               handler: () => {
                 window.location.href = "/heberlelab/asymmetry/";
               },
-            },{id: "dropdown-chronological",
-              title: "Chronological",
-              description: "",
-              section: "Dropdown",
-              handler: () => {
-                window.location.href = "/heberlelab/chronological/";
-              },
-            },{id: "nav-people",
+            },{id: "nav-publications",
+          title: "Publications",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/heberlelab/publications/";
+          },
+        },{id: "nav-people",
           title: "People",
           description: "Members of the Heberle Lab",
           section: "Navigation",
