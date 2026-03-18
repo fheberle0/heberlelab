@@ -3,6 +3,8 @@ layout: page
 title: Asymmetry
 permalink: /asymmetry/
 banner: banner-asymmetry.webp
+banner_height: 450px
+banner_position: center
 nav: false
 ---
 
