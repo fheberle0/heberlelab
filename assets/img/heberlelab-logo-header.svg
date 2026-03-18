@@ -153,5 +153,5 @@
 <line x1="140.5" y1="92.8" x2="130.4" y2="68.3" stroke="#F0A0DC" stroke-width="2.8" stroke-linecap="round"/>
 <line x1="140.5" y1="92.8" x2="142.0" y2="66.4" stroke="#F0A0DC" stroke-width="2.8" stroke-linecap="round"/>
 <circle cx="140.5" cy="92.8" r="5.5" fill="#CC00AA"/>
-<text x="293.5" y="150" text-anchor="start" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="193" font-weight="bold" fill="#F0F0F0">Heberle Lab</text>
+<text x="293.5" y="150" text-anchor="start" dominant-baseline="central" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="154" font-weight="bold" fill="#00C244">Heberle Lab</text>
 </svg>
