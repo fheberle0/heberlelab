@@ -22,8 +22,11 @@
 
     <!-- Content -->
     {% if page.banner %}
+    {% assign banner_style = "" %}
+    {% if page.banner_height %}{% assign banner_style = banner_style | append: "height:" | append: page.banner_height | append: ";" %}{% endif %}
+    {% if page.banner_position %}{% assign banner_style = banner_style | append: "object-position:" | append: page.banner_position | append: ";" %}{% endif %}
     <div class="page-banner">
-      <img src="{{ page.banner | prepend: '/assets/img/' | relative_url }}" alt="{{ page.title }}">
+      <img src="{{ page.banner | prepend: '/assets/img/' | relative_url }}" alt="{{ page.title }}"{% if banner_style != "" %} style="{{ banner_style }}"{% endif %}>
     </div>
     {% endif %}
     <div class="container mt-5" role="main">
