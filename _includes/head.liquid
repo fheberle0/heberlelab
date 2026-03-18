@@ -206,3 +206,23 @@
     crossorigin="anonymous"
   >
 {% endif %}
+<script>
+  (function () {
+    var LIGHT = '{{ "/assets/img/heberlelab-logo-light.svg" | relative_url }}';
+    var DARK  = '{{ "/assets/img/heberlelab-logo-dark.svg"  | relative_url }}';
+
+    function swapLogo() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.querySelectorAll('.profile img').forEach(function (img) {
+        img.src = isDark ? DARK : LIGHT;
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', swapLogo);
+    new MutationObserver(swapLogo).observe(
+      document.documentElement,
+      { attributes: true, attributeFilter: ['data-theme'] }
+    );
+  })();
+</script>
+
