@@ -27,10 +27,24 @@ layout: default
           {% endif %}
           {% capture sizes %}(min-width: {{ site.max_width }}) {{ site.max_width | minus: 30 | times: 0.3}}px, (min-width: 576px)
       30vw, 95vw"{% endcapture %}
-          {%
-            include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image
-            cache_bust=true
-          %}
+
+<div class="logo-light-wrapper">
+            {%
+              include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image
+              cache_bust=true
+            %}
+          </div>
+          {% if page.profile.image contains '-light' %}
+            {% assign dark_image = page.profile.image | replace: '-light', '-dark' %}
+            {% assign dark_image_path = dark_image | prepend: 'assets/img/' %}
+            <div class="logo-dark-wrapper">
+              {%
+                include figure.liquid loading="eager" path=dark_image_path class=profile_image_class sizes=sizes alt=dark_image
+                cache_bust=true
+              %}
+            </div>
+          {% endif %}
+
         {% endif %}
         {% if page.profile.more_info %}
           <div class="more-info">{{ page.profile.more_info }}</div>
