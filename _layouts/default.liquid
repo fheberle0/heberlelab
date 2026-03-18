@@ -21,6 +21,11 @@
     {% include header.liquid %}
 
     <!-- Content -->
+    {% if page.banner %}
+    <div class="page-banner">
+      <img src="{{ page.banner | prepend: '/assets/img/' | relative_url }}" alt="{{ page.title }}">
+    </div>
+    {% endif %}
     <div class="container mt-5" role="main">
       {% if page.toc and page.toc.sidebar %}
         {% if page.toc.sidebar == 'right' %}
