@@ -41,6 +41,3 @@ span a vast range of complexity — from simple liposomes made from a single lip
 multicomponent vesicles with engineered lipid asymmetry, to the plasma membrane of a
 living cell. Techniques include calorimetry, fluorescence spectroscopy, cryogenic
 electron microscopy (cryo-EM), and small-angle neutron and X-ray scattering (SANS/SAXS).
-
-Interested in joining the lab? See our [People](/heberlelab/people/) page, or
-[email Fred directly](mailto:fheberle@utk.edu).
