@@ -3,7 +3,7 @@ layout: page
 title: News
 permalink: /news/
 description: Latest news from the Heberle Lab
-nav: true
+nav: false
 nav_order: 4
 banner: banner-news.webp
 ---
