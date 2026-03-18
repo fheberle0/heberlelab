@@ -1,16 +1,14 @@
-// ── Logo light/dark switching ─────────────────────────────────────────────────
-// The about page profile section includes both logo variants.
-// CSS shows/hides the correct one based on al-folio's data-theme attribute.
-
-.logo-dark-wrapper {
-  display: none;
+// ── Force dark mode only — hide the theme toggle button ───────────────────────
+#light-toggle {
+  display: none !important;
 }
 
-html[data-theme="dark"] {
-  .logo-light-wrapper {
-    display: none;
-  }
-  .logo-dark-wrapper {
-    display: block;
-  }
+// ── Link colors matching logo palette ────────────────────────────────────────
+// Green (#00C244) for standard links; magenta (#CC00AA) for hover
+a {
+  color: #00C244 !important;
+}
+
+a:hover {
+  color: #CC00AA !important;
 }
