@@ -4,6 +4,8 @@ title: People
 permalink: /people/
 description: Members of the Heberle Lab
 banner: banner-people.webp
+banner_height: 500px
+banner_position: top
 nav: true
 nav_order: 3
 ---
