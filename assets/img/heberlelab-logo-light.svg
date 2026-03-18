@@ -153,6 +153,8 @@
 <line x1="140.5" y1="92.8" x2="130.4" y2="68.3" stroke="#F0A0DC" stroke-width="2.8" stroke-linecap="round"/>
 <line x1="140.5" y1="92.8" x2="142.0" y2="66.4" stroke="#F0A0DC" stroke-width="2.8" stroke-linecap="round"/>
 <circle cx="140.5" cy="92.8" r="5.5" fill="#CC00AA"/>
-<text x="150" y="143" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="28" font-weight="bold" fill="#111111" textLength="250" lengthAdjust="spacingAndGlyphs">HEBERLE LAB</text>
-<text x="150" y="166" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="10" opacity="0.85" fill="#111111" textLength="200" lengthAdjust="spacingAndGlyphs">Advanced Membrane Biophysics</text>
+<text x="150" y="130" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="28" font-weight="bold" fill="#111111" textLength="250" lengthAdjust="spacingAndGlyphs">HEBERLE LAB</text>
+<text x="150" y="152" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="11" opacity="0.85" fill="#111111">Advanced</text>
+<text x="150" y="165" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="11" opacity="0.85" fill="#111111">Membrane</text>
+<text x="150" y="178" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="11" opacity="0.85" fill="#111111">Biophysics</text>
 </svg>
