@@ -8,7 +8,7 @@ subtitle: >
 
 profile:
   align: right
-  image: heberlelab-logo.svg
+  image: heberlelab-logo-light.svg
   image_circular: false
 
 news: false
