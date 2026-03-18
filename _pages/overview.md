@@ -12,7 +12,7 @@ The interaction of a living cell with the outside world is mediated by a thin la
 
 Just two lipid molecules thick, this oily sheet was long thought to be a simple barrier that protects a cell from its surroundings, providing structural integrity and enabling a regulated internal environment necessary for life's chemical reactions. However, new research is upending this simplistic viewpoint and replacing it with a more complicated one, in which the three-dimensional organization of hundreds of chemically distinct lipids and thousands of unique proteins plays an active role in the life of a cell.
 
-<figure style="float: left; margin: 0 1.5em 1.5em 0; width: 250px;">
+<figure style="float: left; margin: 0 1.5em 1.5em 0; width: 300px;">
   <img src="{{ '/assets/img/rafts.webp' | relative_url }}" alt="Cartoon depiction of raft hypothesis" style="width: 100%; height: auto; display: block;">
   <figcaption style="font-size: 0.8em; color: #aaa; margin-top: 0.4em;">The current model for lateral organization of the plasma membrane (figure from Sezgin et al. 2017 Nat. Rev. Mol. Cell Biol. 18:361).</figcaption>
 </figure>
