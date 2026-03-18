@@ -3,6 +3,8 @@ layout: page
 title: Overview
 permalink: /overview/
 banner: banner-overview.webp
+banner_height: 450px
+banner_position: center
 nav: false
 ---
 
