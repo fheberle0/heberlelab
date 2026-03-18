@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Domains
+title: The secret life of membrane domains
 permalink: /domains/
 banner: banner-domains.webp
 banner_height: 450px
@@ -131,7 +131,7 @@ Marquardt D, Heberle FA, Nickels JD, Pabst G, Katsaras J. 2015. On scattered wav
 While SANS has many advantages, it is ultimately a resource-limited technique: only a handful of neutron sources exist in the world, and acquiring instrument time is extremely competitive. Used properly, fluorescence techniques can also provide valuable information about lipid organization using ubiquitous laboratory equipment, and at a fraction of the cost of a neutron experiment. For the study of small domains, a phenomenon known as Förster resonance energy transfer or FRET is particularly useful. FRET acts like a molecular ruler for distances similar to the size of molecules—in other words, a few nanometers. Like SANS, it is sensitive to the presence of very small rafts that are impossible to see with ordinary fluorescence microscopy.
 
 <figure style="float: left; margin: 0 1.5em 1.5em 0; width: 300px;">
-  <img src="{{ '/assets/img/analytical.webp' | relative_url }}" alt="Description" style="width: 100%; height: auto; display: block;">
+  <img src="{{ '/assets/img/fret-ternary.webp' | relative_url }}" alt="Description" style="width: 100%; height: auto; display: block;">
   <figcaption style="font-size: 0.8em; color: #aaa; margin-top: 0.4em;">FRET between fluorescent donor and acceptor lipids in membranes composed of two phospholipids and cholesterol reveals phase separation over a wide region of composition space. Image from Heberle et al. 2010 Biophys. J. 99:3309.</figcaption>
 </figure>
 
