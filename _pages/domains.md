@@ -3,6 +3,8 @@ layout: page
 title: Domains
 permalink: /domains/
 banner: banner-domains.webp
+banner_height: 450px
+banner_position: center
 nav: false
 ---
 
