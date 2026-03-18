@@ -12,6 +12,8 @@ profile:
   image_circular: false
 
 banner: banner-home.webp
+banner_height: 850px
+banner_position: center
 news: false
 selected_papers: false
 social: false
