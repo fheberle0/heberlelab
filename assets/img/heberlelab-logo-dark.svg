@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
-<rect width="300" height="300" rx="60" ry="60" fill="#111111"/>
-<circle cx="150" cy="150" r="50.5" fill="#1A1A1A"/>
+<circle cx="150" cy="150" r="50.5" fill="#111111"/>
 <line x1="150.0" y1="42.0" x2="145.5" y2="68.1" stroke="#88DDA8" stroke-width="2.8" stroke-linecap="round"/>
 <line x1="150.0" y1="42.0" x2="154.5" y2="68.1" stroke="#88DDA8" stroke-width="2.8" stroke-linecap="round"/>
 <circle cx="150.0" cy="42.0" r="5.5" fill="#00C244"/>
@@ -154,4 +153,6 @@
 <line x1="140.5" y1="92.8" x2="130.4" y2="68.3" stroke="#F0A0DC" stroke-width="2.8" stroke-linecap="round"/>
 <line x1="140.5" y1="92.8" x2="142.0" y2="66.4" stroke="#F0A0DC" stroke-width="2.8" stroke-linecap="round"/>
 <circle cx="140.5" cy="92.8" r="5.5" fill="#CC00AA"/>
+<text x="150" y="143" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="28" font-weight="bold" fill="#F0F0F0" textLength="250" lengthAdjust="spacingAndGlyphs">HEBERLE LAB</text>
+<text x="150" y="166" text-anchor="middle" dominant-baseline="middle" font-family="Century Gothic, Futura, Trebuchet MS, Arial, sans-serif" font-size="10" opacity="0.85" fill="#F0F0F0" textLength="200" lengthAdjust="spacingAndGlyphs">Advanced Membrane Biophysics</text>
 </svg>
