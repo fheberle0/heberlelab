@@ -1,0 +1,16 @@
+// ── Logo light/dark switching ─────────────────────────────────────────────────
+// The about page profile section includes both logo variants.
+// CSS shows/hides the correct one based on al-folio's data-theme attribute.
+
+.logo-dark-wrapper {
+  display: none;
+}
+
+html[data-theme="dark"] {
+  .logo-light-wrapper {
+    display: none;
+  }
+  .logo-dark-wrapper {
+    display: block;
+  }
+}
