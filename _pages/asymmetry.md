@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Asymmetry
+title: A tale of two leaflets
 permalink: /asymmetry/
 banner: banner-asymmetry.webp
 banner_height: 450px
