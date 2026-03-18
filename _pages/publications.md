@@ -3,6 +3,8 @@ layout: page
 title: Publications
 permalink: /publications/
 banner: banner-publications.webp
+banner_height: 450px
+banner_position: center
 nav: true
 nav_order: 2
 ---
