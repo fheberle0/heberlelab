@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://fheberle0.github.io/heberlelab/sitemap.xml
+Sitemap: https://heberlelab.com/sitemap.xml
