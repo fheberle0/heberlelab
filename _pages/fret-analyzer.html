@@ -116,8 +116,8 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
   <!-- Settings -->
   <div class="fa-settings">
     <label>Fit range:
-      <input class="fa-num" type="number" id="fa-tmin" value="15" step="1"> °C &nbsp;to&nbsp;
-      <input class="fa-num" type="number" id="fa-tmax" value="55" step="1"> °C
+      <input class="fa-num" type="number" id="fa-tmin" value="20" step="1"> °C &nbsp;to&nbsp;
+      <input class="fa-num" type="number" id="fa-tmax" value="70" step="1"> °C
     </label>
     <label>Sample name:
       <input class="fa-txt" type="text" id="fa-name" placeholder="e.g. DPPC/DOPC/Chol 40/40/20 mol%">
@@ -214,12 +214,13 @@ const sem = arr => stdev(arr)/Math.sqrt(arr.length);
 //   FRET_R  = FRET_TD / FRET_ND
 // ═══════════════════════════════════════════════════════
 function calcFRET(sheet) {
+  // parseExcel lowercases all keys, so use lowercase column names here
   return sheet
-    .filter(r => [r.Temperature,r.FRET1,r.FRET2,r.nap,r.tfpc,r.did].every(isFinite))
+    .filter(r => [r.temperature,r.fret1,r.fret2,r.nap,r.tfpc,r.did].every(isFinite))
     .map(r => {
-      const ND = r.FRET1 / Math.sqrt(r.nap  * r.did);
-      const TD = r.FRET2 / Math.sqrt(r.tfpc * r.did);
-      return { T: r.Temperature, ND, TD, R: TD/ND };
+      const ND = r.fret1 / Math.sqrt(r.nap  * r.did);
+      const TD = r.fret2 / Math.sqrt(r.tfpc * r.did);
+      return { T: r.temperature, ND, TD, R: TD/ND };
     });
 }
 
