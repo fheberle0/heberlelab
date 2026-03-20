@@ -88,6 +88,23 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
 
   /* Plot container */
   #fa-plot { background: white; border-radius: 6px; display: inline-block; }
+
+  /* Refinement panel */
+  #fa-refine {
+    margin-bottom: 20px; padding: 14px 16px;
+    background: #1a1a1a; border: 1px solid #2e2e2e; border-radius: 8px;
+  }
+  .fa-refine-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .fa-refine-label { width: 72px; font-size: 13px; color: #ccc; }
+  .fa-refine-slider { width: 180px; accent-color: #00C244; cursor: pointer; }
+  .fa-refine-num {
+    width: 58px; padding: 4px 6px; border: 1px solid #555; border-radius: 4px;
+    background: #252525; color: #f0f0f0; font-size: 13px;
+  }
+  .fa-refine-auto { font-size: 11px; color: #666; }
+  .fa-refine-check { accent-color: #CC00AA; width: 14px; height: 14px; cursor: pointer; }
 </style>
 
 <div class="fa-tool">
@@ -135,10 +152,29 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
 
     <div id="fa-tmix-section"></div>
 
+    <!-- Tmix refinement panel -->
+    <div id="fa-refine" style="display:none">
+      <h3 style="margin:0 0 6px; font-size:14px; color:#ccc;">Refine T<sub>mix</sub></h3>
+      <p style="font-size:12px; color:#888; margin:0 0 12px;">
+        If the automatic fit found the wrong transition temperature, check a series,
+        set its T<sub>mix</sub> to a better starting value, and click Refit.
+      </p>
+      <div id="fa-refine-rows"></div>
+      <button class="fa-btn fa-secondary" style="margin-top:10px;" onclick="refitWithHints()">↺ Refit with adjusted T<sub>mix</sub></button>
+    </div>
+
     <div class="fa-dbar">
       <button class="fa-btn fa-secondary" onclick="dlPlot('svg')">⬇ SVG (vector)</button>
       <button class="fa-btn fa-secondary" onclick="dlPlot('png')">⬇ PNG (300 DPI)</button>
       <button class="fa-btn fa-secondary" onclick="dlXLSX()">⬇ Results XLSX</button>
+      <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#bbb; margin-left:6px;">
+        Error bars:
+        <select id="fa-errbar" onchange="if(RES) makePlot(RES)"
+                style="background:#252525; border:1px solid #555; color:#f0f0f0; border-radius:4px; padding:4px 8px; font-size:13px; cursor:pointer;">
+          <option value="sd" selected>SD</option>
+          <option value="sem">SEM</option>
+        </select>
+      </label>
     </div>
 
     <div id="fa-plot"></div>
@@ -274,17 +310,21 @@ function fitM5atTm(T, F, W, tm) {
   return {model:'5p', a,b,m2,ymix,tmix:tm, resids, ssrRaw, ssr, n:T.length, p:5};
 }
 
-function fitM5(T, F, W, tMin, tMax) {
+function fitM5(T, F, W, tMin, tMax, tmixHint) {
   const lo = Math.ceil(tMin)+1, hi = Math.floor(tMax)-1;
+  // If a hint is given, constrain search to ±8°C around it
+  const searchLo = tmixHint!=null ? Math.max(lo, Math.round(tmixHint)-8) : lo;
+  const searchHi = tmixHint!=null ? Math.min(hi, Math.round(tmixHint)+8) : hi;
   let best = null;
-  // Integer grid search (matches Mathematica approach)
-  for (let tm=lo; tm<=hi; tm++) {
+  for (let tm=searchLo; tm<=searchHi; tm++) {
     const r = fitM5atTm(T,F,W,tm);
     if (!best || r.ssr < best.ssr) best = r;
   }
   if (!best) return null;
-  // Golden section refinement in [best-1, best+1]
-  const tmRef = goldenMin(tm=>fitM5atTm(T,F,W,tm).ssr, best.tmix-1, best.tmix+1, 0.02);
+  // Golden section refinement around best integer Tmix
+  const refLo = Math.max(lo-0.5, best.tmix-1);
+  const refHi = Math.min(hi+0.5, best.tmix+1);
+  const tmRef = goldenMin(tm=>fitM5atTm(T,F,W,tm).ssr, refLo, refHi, 0.02);
   return fitM5atTm(T,F,W,tmRef);
 }
 
@@ -307,7 +347,8 @@ function akaikeW(vals) {
 // ═══════════════════════════════════════════════════════
 let RES = null;  // global results
 
-function analyzeSeries(scaledArrs, label, temps, tMin, tMax) {
+// hint = { tmix: <number|null>, force: <bool> }
+function analyzeSeries(scaledArrs, label, temps, tMin, tMax, hint) {
   const nReps = scaledArrs.length, nT = temps.length;
   // Mean and SD at each temperature point
   const avg = temps.map((_,j) => mean(scaledArrs.map(a=>a[j])));
@@ -322,25 +363,28 @@ function analyzeSeries(scaledArrs, label, temps, tMin, tMax) {
   const F = idx.map(i=>avg[i]);
   const W = idx.map(i=>sd[i]>0 ? 1/(sd[i]*sd[i]) : 1);
 
+  const tmixHint = hint?.tmix ?? null;
   const m3 = fitM3(T,F,W);
-  const m5 = fitM5(T,F,W,tMin,tMax);
+  const m5 = fitM5(T,F,W,tMin,tMax,tmixHint);
 
   const a3 = aicc(m3.ssrRaw, m3.n, m3.p);
   const a5 = m5 ? aicc(m5.ssrRaw, m5.n, m5.p) : Infinity;
   const [w3,w5] = akaikeW([a3, a5]);
-  const best = w3 >= w5 ? m3 : m5;
+  // Use AICc selection, but override if user forces phase-sep model
+  const best = (hint?.force && m5) ? m5 : (w3 >= w5 ? m3 : m5);
 
-  // Individual replicate Tmix values
+  // Individual replicate Tmix values (use same hint for per-rep fits)
   const repTmix = scaledArrs.map(rep => {
     const Frep = idx.map(i=>rep[i]);
-    const r5 = fitM5(T,Frep,W,tMin,tMax);
+    const r5 = fitM5(T,Frep,W,tMin,tMax,tmixHint);
     return r5 ? r5.tmix : null;
   }).filter(v=>v!==null);
 
   return { label, temps, avg, sd, T, F, W, m3, m5, a3, a5, w3, w5, best, repTmix };
 }
 
-function runAnalysis(sheets, tMin, tMax, sampleName) {
+// hints = { nd:{tmix,force}, td:{tmix,force}, r:{tmix,force} }
+function runAnalysis(sheets, tMin, tMax, sampleName, hints={}) {
   const rawFRET = sheets.map(calcFRET);
   // Sort all replicates by temperature ascending
   rawFRET.forEach(r=>r.sort((a,b)=>a.T-b.T));
@@ -351,9 +395,9 @@ function runAnalysis(sheets, tMin, tMax, sampleName) {
   const TDsc = scaleReps(rawFRET.map(r=>r.map(p=>p.TD)));
   const Rsc  = scaleReps(rawFRET.map(r=>r.map(p=>p.R)));
 
-  const nd = analyzeSeries(NDsc, 'FRET_ND', temps, tMin, tMax);
-  const td = analyzeSeries(TDsc, 'FRET_TD', temps, tMin, tMax);
-  const r  = analyzeSeries(Rsc,  'FRET_R',  temps, tMin, tMax);
+  const nd = analyzeSeries(NDsc, 'FRET_ND', temps, tMin, tMax, hints.nd);
+  const td = analyzeSeries(TDsc, 'FRET_TD', temps, tMin, tMax, hints.td);
+  const r  = analyzeSeries(Rsc,  'FRET_R',  temps, tMin, tMax, hints.r);
 
   return { sampleName, temps, tMin, tMax, nReps:sheets.length, nd, td, r };
 }
@@ -378,6 +422,11 @@ function fitCurve(res, tMin, tMax) {
 function makePlot(res) {
   const {temps, tMin, tMax, sampleName, nd, td, r} = res;
   const tRange = [Math.min(...temps)-1, Math.max(...temps)+1];
+  // SD vs SEM toggle
+  const useSEM = (document.getElementById('fa-errbar')?.value === 'sem');
+  const errArr = ser => useSEM
+    ? ser.sd.map((s,j) => s / Math.sqrt(res.nReps))   // SEM = SD / √n
+    : ser.sd;
 
   function traces(ser, color, symbol, yax, xax) {
     const {Ts,Fs} = fitCurve(ser, tMin, tMax);
@@ -385,7 +434,7 @@ function makePlot(res) {
       // Data + error bars
       { type:'scatter', mode:'markers', name:ser.label,
         x:temps, y:ser.avg,
-        error_y:{ type:'data', array:ser.sd, visible:true,
+        error_y:{ type:'data', array:errArr(ser), visible:true,
                   thickness:1.5, width:4, color },
         marker:{ symbol, size:8, color:'rgba(0,0,0,0)',
                  line:{color,width:2} },
@@ -518,6 +567,78 @@ function renderTmixTable(res) {
 }
 
 // ═══════════════════════════════════════════════════════
+// Refinement panel (manual Tmix initial values)
+// ═══════════════════════════════════════════════════════
+const REFINE_IDS = [
+  {label:'FRET_ND', key:'nd', id:'ref-nd'},
+  {label:'FRET_TD', key:'td', id:'ref-td'},
+  {label:'FRET_R',  key:'r',  id:'ref-r' },
+];
+
+function renderRefinePanel(res) {
+  const tMin = res.tMin, tMax = res.tMax;
+  const container = document.getElementById('fa-refine-rows');
+  container.innerHTML = '';
+
+  REFINE_IDS.forEach(({label, key, id}) => {
+    const ser = res[key];
+    const isPhSep = ser.best.model === '5p';
+    const autoTmix = isPhSep ? +ser.best.tmix.toFixed(1) : +((tMin+tMax)/2).toFixed(1);
+    const autoLabel = isPhSep
+      ? `auto: ${autoTmix}°C`
+      : 'auto: uniform';
+
+    const row = document.createElement('div');
+    row.className = 'fa-refine-row';
+    row.innerHTML = `
+      <span class="fa-refine-label">${label}</span>
+      <input type="checkbox" class="fa-refine-check" id="${id}-force"
+             ${isPhSep ? 'checked' : ''}>
+      <label for="${id}-force" style="font-size:12px;color:#aaa;cursor:pointer;">phase sep</label>
+      <input type="range" class="fa-refine-slider" id="${id}-slider"
+             min="${tMin}" max="${tMax}" step="0.5" value="${autoTmix}"
+             oninput="document.getElementById('${id}-num').value=this.value">
+      <input type="number" class="fa-refine-num" id="${id}-num"
+             min="${tMin}" max="${tMax}" step="0.5" value="${autoTmix}"
+             oninput="document.getElementById('${id}-slider').value=this.value">
+      <span style="font-size:12px;color:#888;">°C &nbsp;<span class="fa-refine-auto">(${autoLabel})</span></span>
+    `;
+    container.appendChild(row);
+  });
+
+  document.getElementById('fa-refine').style.display = '';
+}
+
+function refitWithHints() {
+  if (!loadedSheets) return;
+  const tMin = parseFloat(document.getElementById('fa-tmin').value);
+  const tMax = parseFloat(document.getElementById('fa-tmax').value);
+  const name = document.getElementById('fa-name').value.trim();
+
+  const hints = {};
+  REFINE_IDS.forEach(({key, id}) => {
+    const force  = document.getElementById(id+'-force')?.checked;
+    const tmix   = parseFloat(document.getElementById(id+'-num')?.value);
+    hints[key] = { tmix: isFinite(tmix) ? tmix : null, force: !!force };
+  });
+
+  showStatus('Refitting…', false);
+  setTimeout(() => {
+    try {
+      RES = runAnalysis(loadedSheets, tMin, tMax, name, hints);
+      renderCards(RES);
+      renderTmixTable(RES);
+      renderRefinePanel(RES);
+      makePlot(RES);
+      document.getElementById('fa-results').style.display = '';
+      document.getElementById('fa-status').style.display  = 'none';
+    } catch(err) {
+      showStatus('Refit error: ' + err.message, true);
+    }
+  }, 50);
+}
+
+// ═══════════════════════════════════════════════════════
 // Download helpers
 // ═══════════════════════════════════════════════════════
 function dlPlot(fmt) {
@@ -634,8 +755,16 @@ function handleFile(file) {
       );
       const badSheets = validCounts.filter(n=>n===0).length;
       loadedSheets = raw;
+
+      // Auto-populate fit range from actual data temperature extent
+      const allT = raw.flatMap(s => s.map(r=>r.temperature).filter(isFinite));
+      if (allT.length > 0) {
+        document.getElementById('fa-tmin').value = Math.min(...allT);
+        document.getElementById('fa-tmax').value = Math.max(...allT);
+      }
+
       if (badSheets > 0) {
-        showStatus(`⚠ Loaded ${raw.length} sheets but ${badSheets} sheet(s) had 0 valid rows (check column headers: Temperature, FRET1, FRET2, nap/Nap/Naph, tfpc/TFPC, did/DiD).`, true);
+        showStatus(`⚠ Loaded ${raw.length} sheets but ${badSheets} had 0 valid rows — check column order (col 1=Temperature, 2=FRET1, 3=FRET2, 4=nap, 5=tfpc, 6=did).`, true);
       } else {
         showStatus(`Loaded ${raw.length} sheet(s) — valid rows per sheet: ${validCounts.join(', ')}.`, false);
       }
@@ -672,6 +801,7 @@ document.getElementById('fa-run').addEventListener('click', ()=>{
       RES = runAnalysis(loadedSheets, tMin, tMax, name);
       renderCards(RES);
       renderTmixTable(RES);
+      renderRefinePanel(RES);
       makePlot(RES);
       document.getElementById('fa-results').style.display = '';
       document.getElementById('fa-status').style.display  = 'none';
