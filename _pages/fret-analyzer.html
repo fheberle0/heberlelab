@@ -100,9 +100,9 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
     miscibility transition exists, following
     <a href="https://doi.org/10.1016/j.bbamem.2026.184505" target="_blank">Chaisson et al. (2026)</a>.
     <br><br>
-    <strong>Required column headers:</strong>
-    <code>Temperature</code>, <code>FRET1</code>, <code>FRET2</code>,
-    <code>nap</code>, <code>tfpc</code>, <code>did</code>
+    <strong>Required column order</strong> (headers are ignored — columns are read by position):<br>
+    col 1: <code>Temperature</code> &nbsp; col 2: <code>FRET1</code> &nbsp; col 3: <code>FRET2</code> &nbsp;
+    col 4: <code>nap</code> &nbsp; col 5: <code>tfpc</code> &nbsp; col 6: <code>did</code>
   </p>
 
   <!-- Upload zone -->
@@ -138,7 +138,7 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
     <div class="fa-dbar">
       <button class="fa-btn fa-secondary" onclick="dlPlot('svg')">⬇ SVG (vector)</button>
       <button class="fa-btn fa-secondary" onclick="dlPlot('png')">⬇ PNG (300 DPI)</button>
-      <button class="fa-btn fa-secondary" onclick="dlCSV()">⬇ Results CSV</button>
+      <button class="fa-btn fa-secondary" onclick="dlXLSX()">⬇ Results XLSX</button>
     </div>
 
     <div id="fa-plot"></div>
@@ -439,10 +439,14 @@ function makePlot(res) {
              title:{text:'FRET', font:{size:13,family:'Arial'}}},
     yaxis2: {...axBase, domain:[0,0.30], anchor:'x2',
              title:{text:'FRET ratio', font:{size:13,family:'Arial'}}},
-    legend:{x:1.03, y:0.95, bgcolor:'rgba(255,255,255,0.9)',
-            bordercolor:'#ccc', borderwidth:1, font:{size:12}},
-    margin:{l:70, r:130, t:50, b:55},
-    width:560, height:580,
+    legend:{
+      x:0.99, y:0.99, xanchor:'right', yanchor:'top',
+      bgcolor:'rgba(255,255,255,0.88)', bordercolor:'#ccc', borderwidth:1,
+      font:{size:11, family:'Arial'},
+      tracegroupgap: 4,
+    },
+    margin:{l:70, r:30, t:50, b:55},
+    width:520, height:580,
     showlegend:true,
   };
 
@@ -527,46 +531,84 @@ function dlPlot(fmt) {
   }
 }
 
-function dlCSV() {
+function dlXLSX() {
   if (!RES) return;
-  const rows = [['Dataset','Model','Tmix_avg_fit','Tmix_repMean','Tmix_repSEM','Tmix_repSD',
-                 'w3_uniform','w5_phsep','N_replicates']];
-  [RES.nd,RES.td,RES.r].forEach(ser=>{
-    const reps=ser.repTmix;
-    rows.push([
+  const wb_out = XLSX.utils.book_new();
+  const baseName = (document.getElementById('fa-name').value||'fret-analysis')
+    .replace(/[^a-zA-Z0-9_\-]/g,'_');
+
+  // Helper: evaluate best-fit model at temperature t
+  function evalModel(ser, t) {
+    const m = ser.best;
+    return m.model==='3p'
+      ? m3eval(t, m.a, m.b, m.c)
+      : m5eval(t, m.a, m.b, m.m2, m.ymix, m.tmix);
+  }
+
+  // --- Three data sheets (one per FRET series) ---
+  [RES.nd, RES.td, RES.r].forEach(ser => {
+    const header = [
+      'Temperature (°C)',
+      `${ser.label}_avg`,
+      `${ser.label}_SD`,
+      `${ser.label}_pred`,
+    ];
+    const dataRows = RES.temps.map((t, i) => {
+      const inRange = t >= RES.tMin && t <= RES.tMax;
+      return [
+        t,
+        ser.avg[i],
+        ser.sd[i],
+        inRange ? evalModel(ser, t) : null,   // blank outside fit range
+      ];
+    });
+    const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows]);
+    XLSX.utils.book_append_sheet(wb_out, ws, ser.label);
+  });
+
+  // --- Summary sheet (fitting results) ---
+  const summaryRows = [[
+    'Dataset','Model','Tmix_avg_fit','Tmix_repMean',
+    'Tmix_repSEM','Tmix_repSD','w_uniform','w_phsep','N_replicates',
+  ]];
+  [RES.nd, RES.td, RES.r].forEach(ser => {
+    const reps = ser.repTmix;
+    summaryRows.push([
       ser.label,
-      ser.best.model==='3p'?'Uniform mixing':'Phase separation',
-      ser.best.model==='5p'?ser.best.tmix.toFixed(2):'',
-      reps.length>0 ? mean(reps).toFixed(2) : '',
-      reps.length>1 ? sem(reps).toFixed(2)  : '',
-      reps.length>1 ? stdev(reps).toFixed(2): '',
-      ser.w3.toFixed(4), ser.w5.toFixed(4),
+      ser.best.model==='3p' ? 'Uniform mixing' : 'Phase separation',
+      ser.best.model==='5p' ? +ser.best.tmix.toFixed(4) : '',
+      reps.length>0 ? +mean(reps).toFixed(4)  : '',
+      reps.length>1 ? +sem(reps).toFixed(4)   : '',
+      reps.length>1 ? +stdev(reps).toFixed(4) : '',
+      +ser.w3.toFixed(6), +ser.w5.toFixed(6),
       RES.nReps,
     ]);
   });
-  const blob = new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = (document.getElementById('fa-name').value||'fret-analysis')
-    .replace(/[^a-zA-Z0-9_-]/g,'_')+'_results.csv';
-  a.click();
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+  XLSX.utils.book_append_sheet(wb_out, wsSummary, baseName+'_results');
+
+  XLSX.writeFile(wb_out, baseName+'_results.xlsx');
 }
 
 // ═══════════════════════════════════════════════════════
-// File loading with SheetJS
+// File loading with SheetJS — positional column parsing
+//   Col 0: Temperature, 1: FRET1, 2: FRET2, 3: nap, 4: tfpc, 5: did
+//   Header row is always skipped; column names are ignored.
 // ═══════════════════════════════════════════════════════
 function parseExcel(ab) {
   const wb = XLSX.read(new Uint8Array(ab), {type:'array'});
   return wb.SheetNames.map(name=>{
-    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], {defval:null});
-    // Case-insensitive column mapping
-    return rows.map(row=>{
-      const out={};
-      Object.entries(row).forEach(([k,v])=>{ out[k.toLowerCase().trim()]=v; });
-      // Accept 'temperature' or 'temp'
-      if (out.temp!==undefined && out.temperature===undefined) out.temperature=out.temp;
-      return out;
-    });
+    // header:1 returns arrays (rows) instead of objects, preserving column order
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], {header:1, defval:null});
+    // rows[0] is the header row — always skip it
+    return rows.slice(1).filter(row => row.length >= 6).map(row => ({
+      temperature: row[0],
+      fret1:       row[1],
+      fret2:       row[2],
+      nap:         row[3],
+      tfpc:        row[4],
+      did:         row[5],
+    }));
   });
 }
 
@@ -585,8 +627,18 @@ function handleFile(file) {
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      loadedSheets = parseExcel(e.target.result);
-      showStatus(`Loaded ${loadedSheets.length} sheet(s) with ${loadedSheets[0].length} rows each.`, false);
+      const raw = parseExcel(e.target.result);
+      // Compute valid FRET rows per sheet for diagnostic
+      const validCounts = raw.map(sheet =>
+        sheet.filter(r=>[r.temperature,r.fret1,r.fret2,r.nap,r.tfpc,r.did].every(isFinite)).length
+      );
+      const badSheets = validCounts.filter(n=>n===0).length;
+      loadedSheets = raw;
+      if (badSheets > 0) {
+        showStatus(`⚠ Loaded ${raw.length} sheets but ${badSheets} sheet(s) had 0 valid rows (check column headers: Temperature, FRET1, FRET2, nap/Nap/Naph, tfpc/TFPC, did/DiD).`, true);
+      } else {
+        showStatus(`Loaded ${raw.length} sheet(s) — valid rows per sheet: ${validCounts.join(', ')}.`, false);
+      }
       document.getElementById('fa-run').disabled = false;
     } catch(err) {
       showStatus('Error reading file: ' + err.message, true);
