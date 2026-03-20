@@ -139,6 +139,14 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
     <label>Sample name:
       <input class="fa-txt" type="text" id="fa-name" placeholder="e.g. DPPC/DOPC/Chol 40/40/20 mol%">
     </label>
+    <label>Fit weights:
+      <select id="fa-weighted"
+              style="background:#1e1e1e; border:1px solid #555; color:#f0f0f0; border-radius:4px;
+                     padding:5px 8px; font-size:14px; cursor:pointer;">
+        <option value="wls" selected>Error-weighted (1/σ²)</option>
+        <option value="ols">Unweighted (OLS)</option>
+      </select>
+    </label>
     <button class="fa-btn fa-primary" id="fa-run" disabled>Analyze</button>
   </div>
 
@@ -293,9 +301,10 @@ function fitM3(T, F, W) {
   const X = T.map(t=>[t*t,t,1]);
   const [a,b,c] = wls(X, F, W);
   const resids = F.map((f,i)=>f-m3eval(T[i],a,b,c));
-  const ssrRaw = resids.reduce((s,r)=>s+r*r,0);
-  const ssr    = resids.reduce((s,r,i)=>s+W[i]*r*r,0);
-  return {model:'3p', a,b,c, resids, ssrRaw, ssr, n:T.length, p:3};
+  const ssrRaw   = resids.reduce((s,r)=>s+r*r,0);
+  const ssr      = resids.reduce((s,r,i)=>s+W[i]*r*r,0);
+  const chiSqRed = ssr / (T.length - 3);   // reduced chi² = weighted SSR / DOF
+  return {model:'3p', a,b,c, resids, ssrRaw, ssr, chiSqRed, n:T.length, p:3};
 }
 
 function fitM5atTm(T, F, W, tm) {
@@ -304,28 +313,43 @@ function fitM5atTm(T, F, W, tm) {
   const X = T.map(t=> t<tm ? [t*t-tm*tm, t-tm, 0, 1]
                             : [0, 0, t-tm, 1]);
   const [a,b,m2,ymix] = wls(X, F, W);
-  const resids = F.map((f,i)=>f-m5eval(T[i],a,b,m2,ymix,tm));
-  const ssrRaw = resids.reduce((s,r)=>s+r*r,0);
-  const ssr    = resids.reduce((s,r,i)=>s+W[i]*r*r,0);
-  return {model:'5p', a,b,m2,ymix,tmix:tm, resids, ssrRaw, ssr, n:T.length, p:5};
+  const resids   = F.map((f,i)=>f-m5eval(T[i],a,b,m2,ymix,tm));
+  const ssrRaw   = resids.reduce((s,r)=>s+r*r,0);
+  const ssr      = resids.reduce((s,r,i)=>s+W[i]*r*r,0);
+  const chiSqRed = ssr / (T.length - 5);   // reduced chi² = weighted SSR / DOF
+  return {model:'5p', a,b,m2,ymix,tmix:tm, resids, ssrRaw, ssr, chiSqRed, n:T.length, p:5};
 }
 
 function fitM5(T, F, W, tMin, tMax, tmixHint) {
   const lo = Math.ceil(tMin)+1, hi = Math.floor(tMax)-1;
-  // If a hint is given, constrain search to ±8°C around it
-  const searchLo = tmixHint!=null ? Math.max(lo, Math.round(tmixHint)-8) : lo;
-  const searchHi = tmixHint!=null ? Math.min(hi, Math.round(tmixHint)+8) : hi;
+  // Always run full grid search to find global SSR minimum
   let best = null;
-  for (let tm=searchLo; tm<=searchHi; tm++) {
+  for (let tm=lo; tm<=hi; tm++) {
     const r = fitM5atTm(T,F,W,tm);
     if (!best || r.ssr < best.ssr) best = r;
   }
   if (!best) return null;
-  // Golden section refinement around best integer Tmix
-  const refLo = Math.max(lo-0.5, best.tmix-1);
-  const refHi = Math.min(hi+0.5, best.tmix+1);
-  const tmRef = goldenMin(tm=>fitM5atTm(T,F,W,tm).ssr, refLo, refHi, 0.02);
-  return fitM5atTm(T,F,W,tmRef);
+
+  // Helper: golden-section refinement around a center integer
+  const refine = center => {
+    const rLo = Math.max(lo-0.5, center-1);
+    const rHi = Math.min(hi+0.5, center+1);
+    const tmRef = goldenMin(tm => fitM5atTm(T,F,W,tm).ssr, rLo, rHi, 0.02);
+    return fitM5atTm(T,F,W,tmRef);
+  };
+
+  // Refine around global minimum
+  let result = refine(best.tmix);
+
+  // If a hint is given, also refine near the user-specified value and keep
+  // whichever gives lower SSR — hint can only improve, never worsen the fit.
+  if (tmixHint != null) {
+    const hintCenter = Math.round(Math.max(lo, Math.min(hi, tmixHint)));
+    const hintResult = refine(hintCenter);
+    if (hintResult.ssr < result.ssr) result = hintResult;
+  }
+
+  return result;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -348,7 +372,8 @@ function akaikeW(vals) {
 let RES = null;  // global results
 
 // hint = { tmix: <number|null>, force: <bool> }
-function analyzeSeries(scaledArrs, label, temps, tMin, tMax, hint) {
+// useWeights: true → WLS with 1/σ², false → OLS (all weights = 1)
+function analyzeSeries(scaledArrs, label, temps, tMin, tMax, hint, useWeights=true) {
   const nReps = scaledArrs.length, nT = temps.length;
   // Mean and SD at each temperature point
   const avg = temps.map((_,j) => mean(scaledArrs.map(a=>a[j])));
@@ -361,7 +386,7 @@ function analyzeSeries(scaledArrs, label, temps, tMin, tMax, hint) {
 
   const T = idx.map(i=>temps[i]);
   const F = idx.map(i=>avg[i]);
-  const W = idx.map(i=>sd[i]>0 ? 1/(sd[i]*sd[i]) : 1);
+  const W = idx.map(i=> (useWeights && sd[i]>0) ? 1/(sd[i]*sd[i]) : 1);
 
   const tmixHint = hint?.tmix ?? null;
   const m3 = fitM3(T,F,W);
@@ -373,18 +398,19 @@ function analyzeSeries(scaledArrs, label, temps, tMin, tMax, hint) {
   // Use AICc selection, but override if user forces phase-sep model
   const best = (hint?.force && m5) ? m5 : (w3 >= w5 ? m3 : m5);
 
-  // Individual replicate Tmix values (use same hint for per-rep fits)
+  // Individual replicate Tmix values (use same W and hint for per-rep fits)
   const repTmix = scaledArrs.map(rep => {
     const Frep = idx.map(i=>rep[i]);
     const r5 = fitM5(T,Frep,W,tMin,tMax,tmixHint);
     return r5 ? r5.tmix : null;
   }).filter(v=>v!==null);
 
-  return { label, temps, avg, sd, T, F, W, m3, m5, a3, a5, w3, w5, best, repTmix };
+  return { label, temps, avg, sd, T, F, W, m3, m5, a3, a5, w3, w5, best, repTmix, useWeights };
 }
 
 // hints = { nd:{tmix,force}, td:{tmix,force}, r:{tmix,force} }
-function runAnalysis(sheets, tMin, tMax, sampleName, hints={}) {
+// useWeights: true → WLS (1/σ²), false → OLS
+function runAnalysis(sheets, tMin, tMax, sampleName, hints={}, useWeights=true) {
   const rawFRET = sheets.map(calcFRET);
   // Sort all replicates by temperature ascending
   rawFRET.forEach(r=>r.sort((a,b)=>a.T-b.T));
@@ -395,9 +421,9 @@ function runAnalysis(sheets, tMin, tMax, sampleName, hints={}) {
   const TDsc = scaleReps(rawFRET.map(r=>r.map(p=>p.TD)));
   const Rsc  = scaleReps(rawFRET.map(r=>r.map(p=>p.R)));
 
-  const nd = analyzeSeries(NDsc, 'FRET_ND', temps, tMin, tMax, hints.nd);
-  const td = analyzeSeries(TDsc, 'FRET_TD', temps, tMin, tMax, hints.td);
-  const r  = analyzeSeries(Rsc,  'FRET_R',  temps, tMin, tMax, hints.r);
+  const nd = analyzeSeries(NDsc, 'FRET_ND', temps, tMin, tMax, hints.nd, useWeights);
+  const td = analyzeSeries(TDsc, 'FRET_TD', temps, tMin, tMax, hints.td, useWeights);
+  const r  = analyzeSeries(Rsc,  'FRET_R',  temps, tMin, tMax, hints.r,  useWeights);
 
   return { sampleName, temps, tMin, tMax, nReps:sheets.length, nd, td, r };
 }
@@ -430,15 +456,24 @@ function makePlot(res) {
 
   function traces(ser, color, symbol, yax, xax) {
     const {Ts,Fs} = fitCurve(ser, tMin, tMax);
+    const chiStr = isFinite(ser.best.chiSqRed)
+      ? `  χ²ᵣ = ${ser.best.chiSqRed.toFixed(3)}` : '';
     const out = [
-      // Data + error bars
+      // Legend-only dummy trace: shows both marker+line in legend box
+      { type:'scatter', mode:'lines+markers', name: ser.label + chiStr,
+        x:[null], y:[null],
+        marker:{ symbol, size:8, color:'rgba(0,0,0,0)', line:{color, width:2} },
+        line:{color, width:2.5},
+        xaxis:xax, yaxis:yax,
+        legendgroup:ser.label, showlegend:true, hoverinfo:'none' },
+      // Data + error bars (no legend entry — covered by dummy above)
       { type:'scatter', mode:'markers', name:ser.label,
         x:temps, y:ser.avg,
         error_y:{ type:'data', array:errArr(ser), visible:true,
                   thickness:1.5, width:4, color },
         marker:{ symbol, size:8, color:'rgba(0,0,0,0)',
                  line:{color,width:2} },
-        xaxis:xax, yaxis:yax, legendgroup:ser.label, showlegend:true },
+        xaxis:xax, yaxis:yax, legendgroup:ser.label, showlegend:false },
       // Fit line
       { type:'scatter', mode:'lines', name:ser.label+' fit',
         x:Ts, y:Fs, line:{color,width:2.5},
@@ -518,6 +553,13 @@ function renderCards(res) {
     const isPhSep = ser.best.model==='5p';
     const pct = Math.round(ser.w3*100);
     const fillColor = isPhSep ? '#CC00AA' : '#1A73E8';
+
+    // χ²_red for each model (with ★ on selected)
+    const chi3 = ser.m3 ? ser.m3.chiSqRed.toFixed(3) : '—';
+    const chi5 = ser.m5 ? ser.m5.chiSqRed.toFixed(3) : '—';
+    const star3 = !isPhSep ? ' ★' : '';
+    const star5 =  isPhSep ? ' ★' : '';
+
     const card = document.createElement('div');
     card.className = 'fa-card';
     card.innerHTML = `
@@ -529,6 +571,10 @@ function renderCards(res) {
       </div>
       <div class="cl" style="margin-top:4px;font-size:11px;">
         ${pct}% → uniform &nbsp;|&nbsp; ${100-pct}% → phase sep.
+      </div>
+      <div class="cl" style="margin-top:8px;font-size:11px;line-height:1.7;border-top:1px solid #2e2e2e;padding-top:6px;">
+        χ²<sub>red</sub> (uniform): ${chi3}${star3}<br>
+        χ²<sub>red</sub> (phase sep): ${chi5}${star5}
       </div>`;
     cards.appendChild(card);
   });
@@ -622,10 +668,11 @@ function refitWithHints() {
     hints[key] = { tmix: isFinite(tmix) ? tmix : null, force: !!force };
   });
 
+  const useWeights = (document.getElementById('fa-weighted')?.value !== 'ols');
   showStatus('Refitting…', false);
   setTimeout(() => {
     try {
-      RES = runAnalysis(loadedSheets, tMin, tMax, name, hints);
+      RES = runAnalysis(loadedSheets, tMin, tMax, name, hints, useWeights);
       renderCards(RES);
       renderTmixTable(RES);
       renderRefinePanel(RES);
@@ -689,14 +736,20 @@ function dlXLSX() {
 
   // --- Summary sheet (fitting results) ---
   const summaryRows = [[
-    'Dataset','Model','Tmix_avg_fit','Tmix_repMean',
-    'Tmix_repSEM','Tmix_repSD','w_uniform','w_phsep','N_replicates',
+    'Dataset','Model','Fit_weights',
+    'chiSqRed_uniform','chiSqRed_phasesep','chiSqRed_best',
+    'Tmix_avg_fit','Tmix_repMean','Tmix_repSEM','Tmix_repSD',
+    'w_uniform','w_phsep','N_replicates',
   ]];
   [RES.nd, RES.td, RES.r].forEach(ser => {
     const reps = ser.repTmix;
     summaryRows.push([
       ser.label,
       ser.best.model==='3p' ? 'Uniform mixing' : 'Phase separation',
+      ser.useWeights ? 'Error-weighted (1/σ²)' : 'Unweighted (OLS)',
+      ser.m3 ? +ser.m3.chiSqRed.toFixed(6) : '',
+      ser.m5 ? +ser.m5.chiSqRed.toFixed(6) : '',
+      +ser.best.chiSqRed.toFixed(6),
       ser.best.model==='5p' ? +ser.best.tmix.toFixed(4) : '',
       reps.length>0 ? +mean(reps).toFixed(4)  : '',
       reps.length>1 ? +sem(reps).toFixed(4)   : '',
@@ -794,11 +847,12 @@ document.getElementById('fa-run').addEventListener('click', ()=>{
   const tMax = parseFloat(document.getElementById('fa-tmax').value);
   const name = document.getElementById('fa-name').value.trim();
 
+  const useWeights = (document.getElementById('fa-weighted')?.value !== 'ols');
   showStatus('Analyzing…', false);
   // Defer to let browser repaint
   setTimeout(()=>{
     try {
-      RES = runAnalysis(loadedSheets, tMin, tMax, name);
+      RES = runAnalysis(loadedSheets, tMin, tMax, name, {}, useWeights);
       renderCards(RES);
       renderTmixTable(RES);
       renderRefinePanel(RES);
