@@ -321,19 +321,37 @@ function fitM5atTm(T, F, W, tm) {
 }
 
 function fitM5(T, F, W, tMin, tMax, tmixHint) {
-  const lo = Math.ceil(tMin)+1, hi = Math.floor(tMax)-1;
-  // Always run full grid search to find global SSR minimum
+  // Grid bounds must ensure ≥2 data points STRICTLY BELOW and ≥2 STRICTLY ABOVE Tmix.
+  // With only 1 point on one side, design-matrix columns 1 & 2 become linearly
+  // dependent (both collapse to a scalar multiple of the same unit vector), making
+  // XtWX singular → NaN from Gaussian elimination → NaN SSR → NaN poisons the
+  // entire grid because NaN < any_finite is always false.
+  // Fix: use the actual sorted data T values.
+  const Tsorted = [...T].sort((a,b)=>a-b);
+  if (Tsorted.length < 7) return null;   // need ≥7 pts overall for p=5 + DOF
+  // lo > T[1]  →  T[0] and T[1] are both below lo (≥2 points below)
+  // hi < T[n-2] → T[n-2] and T[n-1] are both above hi (≥2 points above)
+  const lo = Math.ceil( Tsorted[1]             + 0.001);
+  const hi = Math.floor(Tsorted[Tsorted.length-2] - 0.001);
+  if (lo > hi) return null;
+
+  // Full grid search — guard against any residual NaN/Inf with isFinite check
   let best = null;
   for (let tm=lo; tm<=hi; tm++) {
     const r = fitM5atTm(T,F,W,tm);
-    if (!best || r.ssr < best.ssr) best = r;
+    if (isFinite(r.ssr) &&
+        (!best || !isFinite(best.ssr) || r.ssr < best.ssr)) best = r;
   }
   if (!best) return null;
 
-  // Helper: golden-section refinement around a center integer
+  // Helper: golden-section refinement within ±1 °C of a centre, staying in
+  // the same safe region (T[1] < rLo ≤ rHi < T[n-2]).
+  const safeL = Tsorted[1]             + 0.001;
+  const safeH = Tsorted[Tsorted.length-2] - 0.001;
   const refine = center => {
-    const rLo = Math.max(lo-0.5, center-1);
-    const rHi = Math.min(hi+0.5, center+1);
+    const rLo = Math.max(safeL, center - 1);
+    const rHi = Math.min(safeH, center + 1);
+    if (rLo >= rHi) return fitM5atTm(T,F,W,center);
     const tmRef = goldenMin(tm => fitM5atTm(T,F,W,tm).ssr, rLo, rHi, 0.02);
     return fitM5atTm(T,F,W,tmRef);
   };
@@ -344,9 +362,10 @@ function fitM5(T, F, W, tMin, tMax, tmixHint) {
   // If a hint is given, also refine near the user-specified value and keep
   // whichever gives lower SSR — hint can only improve, never worsen the fit.
   if (tmixHint != null) {
-    const hintCenter = Math.round(Math.max(lo, Math.min(hi, tmixHint)));
-    const hintResult = refine(hintCenter);
-    if (hintResult.ssr < result.ssr) result = hintResult;
+    const hintClamp = Math.max(safeL, Math.min(safeH, tmixHint));
+    const hintResult = refine(hintClamp);
+    if (isFinite(hintResult.ssr) &&
+        (!isFinite(result.ssr) || hintResult.ssr < result.ssr)) result = hintResult;
   }
 
   return result;
@@ -691,12 +710,21 @@ function refitWithHints() {
 function dlPlot(fmt) {
   const name = (document.getElementById('fa-name').value||'fret-analysis')
     .replace(/[^a-zA-Z0-9_-]/g,'_');
-  if (fmt==='svg') {
-    Plotly.downloadImage('fa-plot',{format:'svg',filename:name,width:560,height:580});
-  } else {
-    // 300 DPI at ~3.5" wide = 1050 px; scale proportionally
-    Plotly.downloadImage('fa-plot',{format:'png',filename:name,width:1120,height:1160,scale:2});
-  }
+  // Use Plotly.toImage + programmatic anchor — more reliable than downloadImage
+  // across browsers / Jekyll/CSP environments.
+  const cfg = fmt === 'svg'
+    ? {format:'svg', width:560,  height:580,  scale:1}
+    : {format:'png', width:1120, height:1160, scale:2};   // ~300 DPI at 3.5 in wide
+  Plotly.toImage('fa-plot', cfg)
+    .then(dataUrl => {
+      const a = document.createElement('a');
+      a.href     = dataUrl;
+      a.download = name + '.' + fmt;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    })
+    .catch(err => alert(fmt.toUpperCase() + ' export failed: ' + err.message));
 }
 
 function dlXLSX() {
