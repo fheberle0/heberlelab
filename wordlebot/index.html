@@ -78,8 +78,9 @@ permalink: /wordlebot/
     /* Color states (also used for completed guesses) */
     .tile.gray   { background: #787c7f; border-color: #787c7f; color: #fff; }
     .tile.yellow { background: #c8b653; border-color: #c8b653; color: #fff; }
-    .tile.green   { background: #6ca965; border-color: #6ca965; color: #fff; }
-    .tile.neutral { background: #fff; border-color: #333; color: #1a1a1b; }
+    .tile.green     { background: #6ca965; border-color: #6ca965; color: #fff; }
+    /* candidate: white bg, dark border — word being previewed/scored, not yet committed */
+    .tile.candidate { background: #fff; border-color: #333; color: #1a1a1b; }
 
     /* ── Controls ──────────────────────────────────────────────────── */
     .controls { display: flex; flex-direction: column; gap: 10px; }
@@ -199,6 +200,14 @@ permalink: /wordlebot/
     }
     .badge-sol  { background: #6ca965; color: #fff; }
     .badge-past { background: #878a8c; color: #fff; }
+
+    /* Candidate comparison table (challenge mode) */
+    .cand-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
+    .cand-table th { text-align: left; font-size: 0.72rem; color: #aaa; text-transform: uppercase;
+                     letter-spacing: 0.5px; padding: 2px 6px 4px; border-bottom: 1px solid #e8e8e8; }
+    .cand-table td { padding: 4px 6px; border-bottom: 1px solid #f0f0f0; }
+    .cand-table tr.cand-current td { background: #f7fbf7; font-weight: 700; }
+    .cand-table tr.cand-best td:first-child::before { content: '★ '; color: #6ca965; }
 
     /* Undo button (challenge mode) */
     .undo-guess-btn {
@@ -347,11 +356,12 @@ permalink: /wordlebot/
 "use strict";
 
 // ── State ──────────────────────────────────────────────────────────────────
-let gameData      = null;   // loaded from precomputed.json
-let guessHistory  = [];     // [{word, colors:[0-2,…]}, …]  — confirmed guesses
-let pendingWord   = null;   // word typed, awaiting color selection
-let pendingColors = null;   // [0,0,0,0,0]  0=gray 1=yellow 2=green
-let appMode       = 'solver'; // 'solver' | 'challenge'
+let gameData            = null;   // loaded from precomputed.json
+let guessHistory        = [];     // [{word, colors:[0-2,…]}, …]  — confirmed guesses
+let pendingWord         = null;   // word typed, awaiting color selection
+let pendingColors       = null;   // [0,0,0,0,0]  0=gray 1=yellow 2=green
+let appMode             = 'solver'; // 'solver' | 'challenge'
+let challengeCandidates = [];     // [{word, score, isSol, isPast}] — this turn's scored candidates
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -423,6 +433,19 @@ function submitWord() {
 }
 
 // ── Challenge: score a candidate word (no commitment) ──────────────────────
+function clearCandidateTiles() {
+  // Remove any candidate-style preview from the next open row
+  if (pendingWord) return; // in color-entry mode, don't touch tiles
+  const row = guessHistory.length;
+  for (let c = 0; c < 5; c++) {
+    const tile = document.getElementById(`tile-${row}-${c}`);
+    if (tile.className.includes('candidate')) {
+      tile.textContent = ''; tile.className = 'tile';
+      tile.onclick = null; delete tile.dataset.color;
+    }
+  }
+}
+
 function scoreChallengeCandidate(word) {
   const excludeUsed = document.getElementById('excludeUsed').checked;
   const result      = computeResult(guessHistory, excludeUsed);
@@ -434,9 +457,22 @@ function scoreChallengeCandidate(word) {
     return;
   }
 
-  const myScore   = scoreGuess(word, remaining);
-  const isSol     = new Set(remaining).has(word);
-  const solUsed   = new Set(gameData.meta.usedWords);
+  // Show word in next grid row as a white-background candidate preview
+  clearCandidateTiles();
+  const row = guessHistory.length;
+  for (let c = 0; c < 5; c++) {
+    const tile = document.getElementById(`tile-${row}-${c}`);
+    tile.textContent = word[c].toUpperCase();
+    tile.className   = 'tile has-letter candidate';
+    tile.onclick     = null;
+    delete tile.dataset.color;
+  }
+
+  const myScore  = scoreGuess(word, remaining);
+  const remainSet = new Set(remaining);
+  const isSol    = remainSet.has(word);
+  const solUsed  = new Set(gameData.meta.usedWords);
+  const isPast   = solUsed.has(word);
 
   const useFullPool = remaining.length <= 500;
   const guessPool   = useFullPool ? gameData.meta.allWords : remaining;
@@ -446,22 +482,56 @@ function scoreChallengeCandidate(word) {
     if (scoreGuess(w, remaining) < myScore - 0.0001) betterCount++;
   }
 
-  const rankMsg  = betterCount === 0
+  // Update candidate list (replace if word already scored, otherwise append)
+  const existing = challengeCandidates.findIndex(c => c.word === word);
+  const entry = { word, score: myScore, isSol, isPast, betterCount, poolLabel };
+  if (existing >= 0) challengeCandidates[existing] = entry;
+  else challengeCandidates.push(entry);
+
+  // Sort by score ascending (best first) for display
+  const sorted = [...challengeCandidates].sort((a, b) => a.score - b.score);
+  const bestScore = sorted[0].score;
+
+  const rankMsg = betterCount === 0
     ? `<span style="color:#6ca965;font-weight:700;">🏆 Optimal! No guess could do better.</span>`
     : `${betterCount.toLocaleString()} ${poolLabel} would be better`;
-  const solBadge  = isSol             ? '<span class="badge badge-sol">SOL</span>'  : '';
-  const pastBadge = solUsed.has(word) ? '<span class="badge badge-past">PAST</span>' : '';
+  const solLine = isSol
+    ? `<div style="color:#6ca965;font-weight:600;font-size:0.85rem;">✓ Possible solution</div>`
+    : `<div style="color:#787c7f;font-size:0.85rem;">✗ Not a possible solution (valid guess only)</div>`;
+  const pastBadge = isPast ? '<span class="badge badge-past">PAST</span>' : '';
+
+  // Build comparison table
+  let tableRows = sorted.map(c => {
+    const isCurrent = c.word === word;
+    const isBest    = Math.abs(c.score - bestScore) < 0.0001;
+    const rowClass  = isCurrent ? 'cand-current' : (isBest ? 'cand-best' : '');
+    const solMark   = c.isSol  ? '<span class="badge badge-sol" style="font-size:0.65rem;">SOL</span>' : '';
+    const pastMark  = c.isPast ? '<span class="badge badge-past" style="font-size:0.65rem;">PAST</span>' : '';
+    return `<tr class="${rowClass}">
+      <td>${c.word.toUpperCase()}</td>
+      <td>${c.score.toFixed(2)}</td>
+      <td>${solMark}${pastMark}</td>
+    </tr>`;
+  }).join('');
+
+  const tableHtml = challengeCandidates.length > 1 ? `
+    <table class="cand-table">
+      <thead><tr><th>Word</th><th>Avg remaining</th><th></th></tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>` : '';
 
   setPanel(`
     <p class="remaining-header"><strong>${remaining.length}</strong> solutions still possible</p>
     <div class="challenge-score">
-      <div style="font-size:1.05rem;font-weight:700;margin-bottom:6px;">
-        ${word.toUpperCase()} ${solBadge}${pastBadge}
+      <div style="font-size:1.05rem;font-weight:700;margin-bottom:4px;">
+        ${word.toUpperCase()} ${pastBadge}
       </div>
-      <div style="font-size:0.85rem;color:#555;">Avg remaining after this guess: <strong>${myScore.toFixed(2)}</strong></div>
-      <div class="rank-line" style="margin-top:4px;">${rankMsg}</div>
+      ${solLine}
+      <div style="font-size:0.85rem;color:#555;margin-top:4px;">Avg remaining: <strong>${myScore.toFixed(2)}</strong></div>
+      <div class="rank-line" style="margin-top:3px;">${rankMsg}</div>
     </div>
-    <p class="hint-text" style="margin-top:8px;">Try another word above, or record a guess you played in Wordle:</p>
+    ${tableHtml}
+    <p class="hint-text" style="margin-top:10px;">Try another word above, or record a guess you played in Wordle:</p>
     <button class="btn-green" style="margin-top:6px;font-size:0.85rem;padding:6px 14px;"
             onclick="startRecordGuess('${word}')">
       ▶ I played ${word.toUpperCase()} — enter Wordle's result
@@ -472,14 +542,16 @@ function scoreChallengeCandidate(word) {
 // ── Challenge: commit a played guess (enter colors) ────────────────────────
 function startRecordGuess(word) {
   if (guessHistory.length >= 6) return;
+  challengeCandidates = []; // reset table for next turn
   pendingWord   = word;
   pendingColors = [0, 0, 0, 0, 0];
 
+  // Flip tiles from white candidate preview → gray (standard Wordle color-entry style)
   const row = guessHistory.length;
   for (let c = 0; c < 5; c++) {
     const tile = document.getElementById(`tile-${row}-${c}`);
     tile.textContent   = word[c].toUpperCase();
-    tile.className     = 'tile has-letter clickable neutral';
+    tile.className     = 'tile has-letter clickable gray';
     tile.dataset.color = '0';
     tile.onclick = () => cycleTile(row, c);
   }
@@ -494,9 +566,7 @@ function startRecordGuess(word) {
 // Cycle a tile through gray → yellow → green → gray
 function cycleTile(row, col) {
   const tile  = document.getElementById(`tile-${row}-${col}`);
-  // In challenge record mode, tiles start neutral and cycle: neutral→yellow→green→neutral
-  const isNeutralStart = tile.className.includes('neutral');
-  const names = appMode === 'challenge' ? ['neutral', 'yellow', 'green'] : ['gray', 'yellow', 'green'];
+  const names = ['gray', 'yellow', 'green'];
   let   c     = (parseInt(tile.dataset.color) + 1) % 3;
   tile.dataset.color = String(c);
   tile.className = `tile has-letter clickable ${names[c]}`;
@@ -549,6 +619,10 @@ function undoWord() {
   document.getElementById('colorHint').style.display = 'none';
   document.getElementById('inputRow').style.display  = 'flex';
   document.getElementById('wordInput').focus();
+  // In challenge mode, restore the scoring panel hint
+  if (appMode === 'challenge') {
+    setPanel('<p class="hint-text">Type a candidate word and press Score — try as many as you like before recording your actual play.</p>');
+  }
 }
 
 // ── Solver mode: suggestions ───────────────────────────────────────────────
@@ -829,7 +903,7 @@ function onOptionChange() {
 }
 
 function resetGame() {
-  guessHistory = []; pendingWord = pendingColors = null;
+  guessHistory = []; pendingWord = pendingColors = null; challengeCandidates = [];
   for (let r = 0; r < 6; r++) {
     for (let c = 0; c < 5; c++) {
       const t = document.getElementById(`tile-${r}-${c}`);
