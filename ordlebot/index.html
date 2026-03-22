@@ -358,7 +358,7 @@ permalink: /ordlebot/
       <span>💡 Show translation hint</span>
     </label>
     <label class="helper-toggle">
-      <input type="checkbox" id="firstLetterToggle" onchange="newGame()" />
+      <input type="checkbox" id="firstLetterToggle" onchange="onFirstLetterToggle()" />
       <span>🔤 Reveal first letter</span>
     </label>
   </div>
@@ -500,6 +500,25 @@ function speak() {
 /* ── Hint box ────────────────────────────────────────────────────── */
 function onHintToggle() { updateHintBox(); }
 
+/* ── First-letter toggle (no game reset) ─────────────────────────── */
+function onFirstLetterToggle() {
+  if (gameOver || !solution) return;
+  const on = document.getElementById('firstLetterToggle').checked;
+  // Only act if no guesses submitted yet (row 0 still active)
+  if (guesses.length > 0) return;
+  if (on) {
+    const firstLetter = [...solution.w][0];
+    currentInput[0] = firstLetter;          // overwrite or insert position 0
+    renderInput();
+    const tile = document.getElementById('tile-0-0');
+    if (tile) { tile.className = 'tile green'; tile.textContent = firstLetter.toUpperCase(); }
+  } else {
+    // Remove first letter from input and re-render
+    currentInput.shift();
+    renderInput();
+  }
+}
+
 function updateHintBox() {
   const show = document.getElementById('hintToggle').checked;
   const box  = document.getElementById('hintBox');
@@ -507,10 +526,13 @@ function updateHintBox() {
   const {e, g, w} = solution;
   const content   = document.getElementById('hintContent');
   if (e) {
+    const gramLabel = g === 'en'  ? 'common noun (en)'
+                    : g === 'ett' ? 'neuter noun (ett)'
+                    : g === 'att' ? 'verb'
+                    : '';
     content.innerHTML =
       `<div class="hint-english">"${e}"</div>` +
-      (g && (g === 'en' || g === 'ett' || g === 'att')
-        ? `<div class="hint-grammar">${g} ${w.toLowerCase()}</div>` : '');
+      (gramLabel ? `<div class="hint-grammar">${gramLabel}</div>` : '');
   } else {
     content.innerHTML = '<div class="hint-no-trans">Translation unavailable</div>';
   }
@@ -561,8 +583,8 @@ function handleKey(key) {
   if (gameOver) return;
   key = key.toLowerCase();
 
-  // How many positions are locked at the front (0 or 1 with first-letter feature)
-  const lockedLen = document.getElementById('firstLetterToggle').checked ? 1 : 0;
+  // Lock position 0 only on the very first row
+  const lockedLen = (document.getElementById('firstLetterToggle').checked && guesses.length === 0) ? 1 : 0;
 
   if (key === '⌫') {
     if (currentInput.length > lockedLen) {
@@ -585,7 +607,7 @@ function handleKey(key) {
 /* ── Render current input onto active row ────────────────────────── */
 function renderInput(pop = false) {
   const rowIdx      = guesses.length;
-  const firstOn     = document.getElementById('firstLetterToggle').checked;
+  const firstOn     = document.getElementById('firstLetterToggle').checked && guesses.length === 0;
   for (let c = 0; c < 5; c++) {
     const tile = document.getElementById(`tile-${rowIdx}-${c}`);
     if (!tile) continue;
