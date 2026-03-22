@@ -348,7 +348,7 @@ permalink: /ordlebot/
         <option value="all">All Swedish words</option>
       </select>
     </div>
-    <button class="btn-new-top" onclick="newGame()">New Game ↻</button>
+    <button class="btn-new-top" onclick="newGame();this.blur()">New Game ↻</button>
   </div>
 
   <!-- Helper toggles -->
@@ -386,7 +386,7 @@ permalink: /ordlebot/
     <div class="result-english" id="resultEnglish"></div>
     <div class="result-meta"    id="resultMeta"></div>
     <div class="btn-row">
-      <button class="btn-primary" onclick="newGame()">New Game ↻</button>
+      <button class="btn-primary" onclick="newGame();this.blur()">New Game ↻</button>
       <button class="btn-share"   onclick="shareResult()">Share 📋</button>
     </div>
   </div>
@@ -575,9 +575,15 @@ function newGame() {
 /* ── Physical keyboard ───────────────────────────────────────────── */
 document.addEventListener('keydown', e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === 'Enter')     handleKey('enter');
-  else if (e.key === 'Backspace') handleKey('⌫');
-  else if (/^[a-zA-ZåäöÅÄÖ]$/.test(e.key)) handleKey(e.key.toLowerCase());
+  if (e.key === 'Enter') {
+    e.preventDefault();          // stop focused buttons (e.g. New Game) from also firing
+    handleKey('enter');
+  } else if (e.key === 'Backspace') {
+    e.preventDefault();          // stop browser back-navigation
+    handleKey('⌫');
+  } else if (/^[a-zA-ZåäöÅÄÖ]$/.test(e.key)) {
+    handleKey(e.key.toLowerCase());
+  }
 });
 
 /* ── Key handler ─────────────────────────────────────────────────── */
