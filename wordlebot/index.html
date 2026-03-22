@@ -155,6 +155,16 @@ permalink: /wordlebot/
       color: #888;
       text-transform: uppercase;
       margin: 10px 0 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .score-col-label {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: #aaa;
     }
 
     .suggestion-list {
@@ -475,9 +485,9 @@ function showSuggestions(history) {
              </p>`;
   }
 
-  // Top suggestions
+  // Top suggestions (all words)
   if (suggestions.length > 0 && rw.length > 1) {
-    html += '<div class="section-label">Top guesses</div>';
+    html += '<div class="section-label">Top guesses <span class="score-col-label">avg. remaining ↓</span></div>';
     html += '<div class="suggestion-list">';
     suggestions.forEach((g, i) => {
       const solClass = g.sol ? ' is-sol' : '';
@@ -493,14 +503,24 @@ function showSuggestions(history) {
     html += '</div>';
   }
 
-  // Expandable remaining solutions list
-  if (rw.length >= 2 && rw.length <= 60) {
-    html += `<details class="rem-details">
-      <summary>${rw.length} possible solutions</summary>
-      <div class="rem-words">${rw.map(w=>w.toUpperCase()).join(', ')}</div>
-    </details>`;
-  } else if (rw.length > 60) {
-    html += `<p style="font-size:0.8rem;color:#aaa;margin-top:8px;">${rw.length} solutions — narrow down further to see them listed</p>`;
+  // Ranked possible solutions
+  if (rw.length >= 2 && rw.length <= 200) {
+    const topN = Math.min(rw.length, 30);
+    const rankedSols = rankGuesses(rw, rw, topN);
+    html += '<div class="section-label" style="margin-top:14px;">Best solution guesses <span class="score-col-label">avg. remaining ↓</span></div>';
+    html += '<div class="suggestion-list">';
+    rankedSols.forEach((g, i) => {
+      const pastBadge = usedSet.has(g.word) ? '<span class="badge badge-past">PAST</span>' : '';
+      html += `<div class="suggestion-item is-sol">
+        <span class="sugg-rank">${i+1}</span>
+        <span class="sugg-word">${g.word.toUpperCase()}</span>
+        <span class="sugg-score">${g.score.toFixed(2)}</span>
+        ${pastBadge}
+      </div>`;
+    });
+    html += '</div>';
+  } else if (rw.length > 200) {
+    html += `<p style="font-size:0.8rem;color:#aaa;margin-top:8px;">${rw.length} solutions remaining — narrow down further to see ranked solutions</p>`;
   }
 
   setPanel(html);
