@@ -82,6 +82,22 @@ permalink: /wordlebot/
     /* candidate: white bg, dark border — word being previewed/scored, not yet committed */
     .tile.candidate { background: #fff; border-color: #333; color: #1a1a1b; }
 
+    /* ── Keyboard ──────────────────────────────────────────────────── */
+    .keyboard { margin-top: 10px; margin-bottom: 4px; display: flex; flex-direction: column; gap: 5px; }
+    .kb-row   { display: flex; gap: 5px; justify-content: center; }
+    .kb-key   {
+      min-width: 30px; height: 38px; padding: 0 5px;
+      border-radius: 4px; border: none;
+      background: #d3d6da; color: #1a1a1b;
+      font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+      display: flex; align-items: center; justify-content: center;
+      user-select: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .kb-key.gray   { background: #787c7f; color: #fff; }
+    .kb-key.yellow { background: #c8b653; color: #fff; }
+    .kb-key.green  { background: #6ca965; color: #fff; }
+
     /* ── Controls ──────────────────────────────────────────────────── */
     .controls { display: flex; flex-direction: column; gap: 10px; }
     .ctrl-row  { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -279,6 +295,30 @@ permalink: /wordlebot/
       <!-- 6×5 tile grid (built by JS) -->
       <div class="grid" id="grid"></div>
 
+      <!-- QWERTY keyboard -->
+      <div class="keyboard" id="keyboard">
+        <div class="kb-row">
+          <div class="kb-key" id="key-q">Q</div><div class="kb-key" id="key-w">W</div>
+          <div class="kb-key" id="key-e">E</div><div class="kb-key" id="key-r">R</div>
+          <div class="kb-key" id="key-t">T</div><div class="kb-key" id="key-y">Y</div>
+          <div class="kb-key" id="key-u">U</div><div class="kb-key" id="key-i">I</div>
+          <div class="kb-key" id="key-o">O</div><div class="kb-key" id="key-p">P</div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-key" id="key-a">A</div><div class="kb-key" id="key-s">S</div>
+          <div class="kb-key" id="key-d">D</div><div class="kb-key" id="key-f">F</div>
+          <div class="kb-key" id="key-g">G</div><div class="kb-key" id="key-h">H</div>
+          <div class="kb-key" id="key-j">J</div><div class="kb-key" id="key-k">K</div>
+          <div class="kb-key" id="key-l">L</div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-key" id="key-z">Z</div><div class="kb-key" id="key-x">X</div>
+          <div class="kb-key" id="key-c">C</div><div class="kb-key" id="key-v">V</div>
+          <div class="kb-key" id="key-b">B</div><div class="kb-key" id="key-n">N</div>
+          <div class="kb-key" id="key-m">M</div>
+        </div>
+      </div>
+
       <div class="controls">
 
         <!-- Mode toggle -->
@@ -447,15 +487,18 @@ function clearCandidateTiles() {
 }
 
 function scoreChallengeCandidate(word) {
+  // Reject words not in the valid Wordle guess list
+  if (!gameData.meta.allWords.includes(word)) {
+    setPanel(`<p class="error-msg">⚠ <strong>${word.toUpperCase()}</strong> is not a valid Wordle word.</p>`);
+    return;
+  }
+
   const excludeUsed = document.getElementById('excludeUsed').checked;
   const result      = computeResult(guessHistory, excludeUsed);
   const remaining   = result.remainingWords;
 
   if (remaining.length === 0) { setPanel('<p class="hint-text">No solutions left.</p>'); return; }
-  if (remaining.length === 1) {
-    setPanel(`<p class="solved-msg">Only one solution left: <strong>${remaining[0].toUpperCase()}</strong>!</p>`);
-    return;
-  }
+  // Note: do NOT reveal the answer when 1 solution remains — let the user figure it out!
 
   // Show word in next grid row as a white-background candidate preview
   clearCandidateTiles();
@@ -588,6 +631,7 @@ function confirmColors() {
 
   guessHistory.push({ word: pendingWord, colors });
   pendingWord = pendingColors = null;
+  updateKeyboard(guessHistory);
 
   document.getElementById('colorRow').style.display  = 'none';
   document.getElementById('colorHint').style.display = 'none';
@@ -766,6 +810,7 @@ function undoLastGuess() {
     delete tile.dataset.color;
   }
   guessHistory.pop();
+  updateKeyboard(guessHistory);
   document.getElementById('inputRow').style.display  = 'flex';
   document.getElementById('colorRow').style.display  = 'none';
   document.getElementById('colorHint').style.display = 'none';
@@ -871,6 +916,28 @@ function setPanel(html) {
   document.getElementById('suggestionsPanel').innerHTML = html;
 }
 
+// ── Keyboard state tracker ──────────────────────────────────────────────────
+function updateKeyboard(history) {
+  // Determine best color for each letter (green > yellow > gray)
+  const states = {};
+  for (const { word, colors } of history) {
+    for (let i = 0; i < 5; i++) {
+      const letter = word[i];
+      const c = colors[i];
+      if (states[letter] === undefined || c > states[letter]) states[letter] = c;
+    }
+  }
+  // Apply to key elements
+  for (const letter of 'abcdefghijklmnopqrstuvwxyz') {
+    const el = document.getElementById(`key-${letter}`);
+    if (!el) continue;
+    if (states[letter] === 2)      el.className = 'kb-key green';
+    else if (states[letter] === 1) el.className = 'kb-key yellow';
+    else if (states[letter] === 0) el.className = 'kb-key gray';
+    else                           el.className = 'kb-key';
+  }
+}
+
 function onModeChange() {
   appMode = document.querySelector('input[name="mode"]:checked').value;
   const isSolver = appMode === 'solver';
@@ -911,6 +978,7 @@ function resetGame() {
       delete t.dataset.color;
     }
   }
+  updateKeyboard([]);
   document.getElementById('colorRow').style.display  = 'none';
   document.getElementById('colorHint').style.display = 'none';
   document.getElementById('inputRow').style.display  = 'flex';
