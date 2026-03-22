@@ -78,7 +78,8 @@ permalink: /wordlebot/
     /* Color states (also used for completed guesses) */
     .tile.gray   { background: #787c7f; border-color: #787c7f; color: #fff; }
     .tile.yellow { background: #c8b653; border-color: #c8b653; color: #fff; }
-    .tile.green  { background: #6ca965; border-color: #6ca965; color: #fff; }
+    .tile.green   { background: #6ca965; border-color: #6ca965; color: #fff; }
+    .tile.neutral { background: #fff; border-color: #333; color: #1a1a1b; }
 
     /* ── Controls ──────────────────────────────────────────────────── */
     .controls { display: flex; flex-direction: column; gap: 10px; }
@@ -300,7 +301,7 @@ permalink: /wordlebot/
           <input type="text" id="wordInput" maxlength="5"
                  autocomplete="off" autocorrect="off" autocapitalize="characters"
                  spellcheck="false" placeholder="WORD" />
-          <button class="btn-green" onclick="submitWord()">Enter</button>
+          <button class="btn-green" id="submitBtn" onclick="submitWord()">Enter</button>
         </div>
 
         <!-- Color-selection controls (hidden until word submitted) -->
@@ -393,14 +394,23 @@ function submitWord() {
   if (word.length !== 5) { alert('Please enter a 5-letter word.'); return; }
   if (guessHistory.length >= 6) return;
 
+  // Challenge mode: score the candidate without committing it
+  if (appMode === 'challenge') {
+    scoreChallengeCandidate(word);
+    input.value = '';
+    input.focus();
+    return;
+  }
+
+  // Solver mode: show word in grid and open color-selection
   pendingWord   = word;
-  pendingColors = [0, 0, 0, 0, 0]; // default all gray
+  pendingColors = [0, 0, 0, 0, 0];
 
   const row = guessHistory.length;
   for (let c = 0; c < 5; c++) {
     const tile = document.getElementById(`tile-${row}-${c}`);
-    tile.textContent  = word[c].toUpperCase();
-    tile.className    = 'tile has-letter clickable gray';
+    tile.textContent   = word[c].toUpperCase();
+    tile.className     = 'tile has-letter clickable gray';
     tile.dataset.color = '0';
     tile.onclick = () => cycleTile(row, c);
   }
@@ -409,16 +419,84 @@ function submitWord() {
   document.getElementById('inputRow').style.display  = 'none';
   document.getElementById('colorRow').style.display  = 'flex';
   document.getElementById('colorHint').style.display = 'block';
+  document.getElementById('confirmBtn').textContent  = 'Get Suggestions';
+}
 
-  // Update confirm button label for challenge mode
-  document.getElementById('confirmBtn').textContent =
-    appMode === 'challenge' ? 'Score My Guess' : 'Get Suggestions';
+// ── Challenge: score a candidate word (no commitment) ──────────────────────
+function scoreChallengeCandidate(word) {
+  const excludeUsed = document.getElementById('excludeUsed').checked;
+  const result      = computeResult(guessHistory, excludeUsed);
+  const remaining   = result.remainingWords;
+
+  if (remaining.length === 0) { setPanel('<p class="hint-text">No solutions left.</p>'); return; }
+  if (remaining.length === 1) {
+    setPanel(`<p class="solved-msg">Only one solution left: <strong>${remaining[0].toUpperCase()}</strong>!</p>`);
+    return;
+  }
+
+  const myScore   = scoreGuess(word, remaining);
+  const isSol     = new Set(remaining).has(word);
+  const solUsed   = new Set(gameData.meta.usedWords);
+
+  const useFullPool = remaining.length <= 500;
+  const guessPool   = useFullPool ? gameData.meta.allWords : remaining;
+  const poolLabel   = useFullPool ? 'possible guesses' : 'solution guesses';
+  let betterCount   = 0;
+  for (const w of guessPool) {
+    if (scoreGuess(w, remaining) < myScore - 0.0001) betterCount++;
+  }
+
+  const rankMsg  = betterCount === 0
+    ? `<span style="color:#6ca965;font-weight:700;">🏆 Optimal! No guess could do better.</span>`
+    : `${betterCount.toLocaleString()} ${poolLabel} would be better`;
+  const solBadge  = isSol             ? '<span class="badge badge-sol">SOL</span>'  : '';
+  const pastBadge = solUsed.has(word) ? '<span class="badge badge-past">PAST</span>' : '';
+
+  setPanel(`
+    <p class="remaining-header"><strong>${remaining.length}</strong> solutions still possible</p>
+    <div class="challenge-score">
+      <div style="font-size:1.05rem;font-weight:700;margin-bottom:6px;">
+        ${word.toUpperCase()} ${solBadge}${pastBadge}
+      </div>
+      <div style="font-size:0.85rem;color:#555;">Avg remaining after this guess: <strong>${myScore.toFixed(2)}</strong></div>
+      <div class="rank-line" style="margin-top:4px;">${rankMsg}</div>
+    </div>
+    <p class="hint-text" style="margin-top:8px;">Try another word above, or record a guess you played in Wordle:</p>
+    <button class="btn-green" style="margin-top:6px;font-size:0.85rem;padding:6px 14px;"
+            onclick="startRecordGuess('${word}')">
+      ▶ I played ${word.toUpperCase()} — enter Wordle's result
+    </button>
+  `);
+}
+
+// ── Challenge: commit a played guess (enter colors) ────────────────────────
+function startRecordGuess(word) {
+  if (guessHistory.length >= 6) return;
+  pendingWord   = word;
+  pendingColors = [0, 0, 0, 0, 0];
+
+  const row = guessHistory.length;
+  for (let c = 0; c < 5; c++) {
+    const tile = document.getElementById(`tile-${row}-${c}`);
+    tile.textContent   = word[c].toUpperCase();
+    tile.className     = 'tile has-letter clickable neutral';
+    tile.dataset.color = '0';
+    tile.onclick = () => cycleTile(row, c);
+  }
+
+  document.getElementById('inputRow').style.display  = 'none';
+  document.getElementById('colorRow').style.display  = 'flex';
+  document.getElementById('colorHint').style.display = 'block';
+  document.getElementById('confirmBtn').textContent  = 'Record Result';
+  setPanel(`<p class="hint-text">Set the colors Wordle gave you for <strong>${word.toUpperCase()}</strong>, then press Record Result.</p>`);
 }
 
 // Cycle a tile through gray → yellow → green → gray
 function cycleTile(row, col) {
   const tile  = document.getElementById(`tile-${row}-${col}`);
-  const names = ['gray', 'yellow', 'green'];
+  // In challenge record mode, tiles start neutral and cycle: neutral→yellow→green→neutral
+  const isNeutralStart = tile.className.includes('neutral');
+  const names = appMode === 'challenge' ? ['neutral', 'yellow', 'green'] : ['gray', 'yellow', 'green'];
   let   c     = (parseInt(tile.dataset.color) + 1) % 3;
   tile.dataset.color = String(c);
   tile.className = `tile has-letter clickable ${names[c]}`;
@@ -618,7 +696,7 @@ function undoLastGuess() {
   document.getElementById('colorRow').style.display  = 'none';
   document.getElementById('colorHint').style.display = 'none';
   if (guessHistory.length === 0) {
-    setPanel('<p class="hint-text">Type a guess, enter the colors — see how good your guess was.</p>');
+    setPanel('<p class="hint-text">Type a candidate word and press Score — try as many as you like before recording your actual play.</p>');
   } else {
     showChallengeScore(guessHistory);
   }
@@ -723,13 +801,14 @@ function onModeChange() {
   appMode = document.querySelector('input[name="mode"]:checked').value;
   const isSolver = appMode === 'solver';
   document.getElementById('startWordRow').style.display = isSolver ? 'flex' : 'none';
+  document.getElementById('submitBtn').textContent = isSolver ? 'Enter' : 'Score This Guess';
   if (guessHistory.length > 0) {
     if (isSolver) showSuggestions(guessHistory);
     else          showChallengeScore(guessHistory);
   } else {
     setPanel(`<p class="hint-text">${isSolver
       ? 'Type your first guess and press Enter.'
-      : 'Type a guess, enter the colors — see how good your guess was.'}</p>`);
+      : 'Type a candidate word and press Score — try as many as you like before recording your actual play.'}</p>`);
   }
 }
 
@@ -761,9 +840,14 @@ function resetGame() {
   document.getElementById('colorRow').style.display  = 'none';
   document.getElementById('colorHint').style.display = 'none';
   document.getElementById('inputRow').style.display  = 'flex';
-  onStartWordChange(document.getElementById('startWordSelect').value);
+  if (appMode === 'solver') {
+    onStartWordChange(document.getElementById('startWordSelect').value);
+    setPanel('<p class="hint-text">Type your first guess and press Enter.</p>');
+  } else {
+    document.getElementById('wordInput').value = '';
+    setPanel('<p class="hint-text">Type a candidate word and press Score — try as many as you like before recording your actual play.</p>');
+  }
   document.getElementById('wordInput').focus();
-  setPanel(`<p class="hint-text">Type your first guess and press Enter.</p>`);
 }
 </script>
 </body>
