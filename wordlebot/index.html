@@ -199,6 +199,19 @@ permalink: /wordlebot/
     .badge-sol  { background: #6ca965; color: #fff; }
     .badge-past { background: #878a8c; color: #fff; }
 
+    /* Undo button (challenge mode) */
+    .undo-guess-btn {
+      margin-top: 10px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #555;
+    }
+    .undo-guess-btn:hover { background: #f5f5f5; }
+
     /* Challenge mode score display */
     .challenge-score {
       margin: 8px 0;
@@ -542,21 +555,25 @@ function showChallengeScore(history) {
 
   if (before.length === 0) { setPanel('<p class="hint-text">No solutions to compare.</p>'); return; }
 
-  const pctElim = ((before.length - after.length) / before.length * 100).toFixed(1);
-  const avgAfter = scoreGuess(lastGuess.word, before).toFixed(2);
+  const eliminated = before.length - after.length;
+  const pctElim    = (eliminated / before.length * 100).toFixed(1);
+  const myScore    = scoreGuess(lastGuess.word, before);
 
-  // Rank this guess among all guesses (top 50 check for speed)
-  // Find position in full ranked list — do this only if solution count is manageable
+  // Count how many guesses would have been better.
+  // Use all ~13k words when feasible; fall back to remaining solutions when pool is large.
+  const useFullPool = before.length <= 500;
+  const guessPool   = useFullPool ? gameData.meta.allWords : before;
+  const poolLabel   = useFullPool ? 'possible guesses' : 'possible solution guesses';
+  let betterCount = 0;
+  for (const w of guessPool) {
+    if (scoreGuess(w, before) < myScore - 0.0001) betterCount++;
+  }
+
   let rankLine = '';
-  if (before.length <= 200 && gameData) {
-    const allWords  = gameData.meta.allWords;
-    const myScore   = parseFloat(avgAfter);
-    let betterCount = 0;
-    for (const w of allWords) {
-      if (scoreGuess(w, before) < myScore) betterCount++;
-    }
-    const rank = betterCount + 1;
-    rankLine = `<div class="rank-line">Ranks #${rank.toLocaleString()} of ${allWords.length.toLocaleString()} possible guesses</div>`;
+  if (betterCount === 0) {
+    rankLine = `<div class="rank-line" style="color:#6ca965;font-weight:700;">🏆 Optimal! No guess could have done better.</div>`;
+  } else {
+    rankLine = `<div class="rank-line">${betterCount.toLocaleString()} ${poolLabel} would have been better</div>`;
   }
 
   let color = after.length === 0 ? '#6ca965'
@@ -572,7 +589,7 @@ function showChallengeScore(history) {
       <div class="pct" style="color:${color}">${pctElim}%</div>
       <div style="font-size:0.82rem;color:#555;">of remaining solutions eliminated</div>
       <div style="font-size:0.82rem;color:#555;margin-top:4px;">
-        Avg remaining if you had guessed this: <strong>${avgAfter}</strong>
+        Avg remaining after ${lastGuess.word.toUpperCase()}: <strong>${myScore.toFixed(2)}</strong>
       </div>
       ${rankLine}
     </div>
@@ -582,8 +599,29 @@ function showChallengeScore(history) {
            <div class="rem-words">${after.map(w=>w.toUpperCase()).join(', ')}</div>
          </details>`
       : ''}
+    ${after.length > 1 ? '<p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>' : ''}
+    <button class="undo-guess-btn" onclick="undoLastGuess()">↩ Try a different guess</button>
   `;
   setPanel(html);
+}
+
+function undoLastGuess() {
+  if (guessHistory.length === 0) return;
+  const row = guessHistory.length - 1;
+  for (let c = 0; c < 5; c++) {
+    const tile = document.getElementById(`tile-${row}-${c}`);
+    tile.textContent = ''; tile.className = 'tile'; tile.onclick = null;
+    delete tile.dataset.color;
+  }
+  guessHistory.pop();
+  document.getElementById('inputRow').style.display  = 'flex';
+  document.getElementById('colorRow').style.display  = 'none';
+  document.getElementById('colorHint').style.display = 'none';
+  if (guessHistory.length === 0) {
+    setPanel('<p class="hint-text">Type a guess, enter the colors — see how good your guess was.</p>');
+  } else {
+    showChallengeScore(guessHistory);
+  }
 }
 
 // ── Core computation (tree lookup + live fallback) ─────────────────────────
