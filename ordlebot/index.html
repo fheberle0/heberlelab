@@ -441,10 +441,10 @@ permalink: /ordlebot/
     <div class="setting-group">
       <label>Level:</label>
       <select id="cefrSelect" onchange="onSettingsChange()">
-        <option value="A1">A1 only</option>
+        <option value="A1" selected>A1 only</option>
         <option value="A1-A2">A1–A2</option>
         <option value="A1-B1">A1–B1</option>
-        <option value="A1-B2" selected>A1–B2</option>
+        <option value="A1-B2">A1–B2</option>
         <option value="A1-C1">A1–C1</option>
         <option value="ALL">All levels</option>
       </select>
@@ -668,12 +668,16 @@ function toggleDict() {
   panel.classList.toggle('open', opening);
   overlay.classList.toggle('open', opening);
   if (opening) {
-    // Always open fresh: clear search, reset CEFR tab
+    // Open fresh: clear search, default tab = puzzle's current level
     clearDictSearch(false);
-    dictCefrTab = 'ALL';
+    const puzzleVal = document.getElementById('cefrSelect').value;
+    // Map puzzle range (e.g. "A1-B2") to its upper bound ("B2"); "ALL" → "ALL"
+    const parts     = puzzleVal.split('-');
+    const defaultTab = puzzleVal === 'ALL' ? 'ALL' : parts[parts.length - 1];
+    dictCefrTab = defaultTab;
     document.querySelectorAll('.btn-cefr-tab').forEach(b => b.classList.remove('active'));
-    const allTab = document.getElementById('dcefr-ALL');
-    if (allTab) allTab.classList.add('active');
+    const tab = document.getElementById(`dcefr-${defaultTab}`);
+    if (tab) tab.classList.add('active');
     renderDictList();
   }
 }
