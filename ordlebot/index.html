@@ -118,12 +118,8 @@ function buildDictData() {
     const s = SOL_MAP[w];
     return { w, c: s?.c || null, e: s?.e || null, k: s?.k || null };
   });
-  // Sort by CEFR rank, then alphabetically; non-Kelly words last
-  dictWords.sort((a, b) => {
-    const ra = a.c ? CEFR_RANK[a.c] : 99;
-    const rb = b.c ? CEFR_RANK[b.c] : 99;
-    return ra !== rb ? ra - rb : a.w.localeCompare(b.w, 'sv');
-  });
+  // Sort purely alphabetically so all views are A–Z
+  dictWords.sort((a, b) => a.w.localeCompare(b.w, 'sv'));
   // Build CEFR filter tabs
   const row = document.getElementById('dictCefrRow');
   row.innerHTML = ['ALL','A1','A2','B1','B2','C1','C2'].map(l =>
