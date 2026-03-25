@@ -267,6 +267,70 @@ function monoCoexistence(chi) {
   return [1 - phi_hi, phi_hi];
 }
 
+// Direct T_b search: scan along the anti-diagonal φ+ψ=1 for the T_b endpoint.
+// For each candidate right-endpoint (phi_T, 1-phi_T), probe just inside the arm
+// with structured initialization from the monolayer coexistence compositions.
+// This bypasses the need to find interior arm tielines first, and is robust for
+// short arms near Λ* where step1FindDrAr's column scan fails.
+function findTbDirect(chi, lam, nRandom, rng) {
+  const [phi_lo, phi_hi] = monoCoexistence(chi);
+
+  let bestTl = null, bestSum = -Infinity;   // track tieline with R endpoint sum closest to 1.0 from below
+
+  for (let phi_T = 0.55; phi_T <= 0.92; phi_T += 0.012) {
+    const psi_T  = 1.0 - phi_T;
+    // Probe point sits just to the lower-left of the anti-diagonal, on the expected tieline
+    const phi_c  = phi_T - 0.025;
+    const psi_c  = psi_T - 0.010;
+    if (phi_c <= GUARD || psi_c <= GUARD || psi_c >= phi_c) continue;
+
+    // Hint L: R_D-like composition from monolayer coexistence
+    // Hint R: right endpoint near the anti-diagonal at (phi_T, psi_T)
+    const hintL = [Math.max(GUARD + 0.01, Math.min(phi_c - 0.02, phi_hi * 0.80)),
+                   Math.max(GUARD + 0.01, phi_lo * 0.80)];
+    const hintR = [Math.min(1 - GUARD - 0.01, phi_T + 0.005), psi_T]; // phi_R ≈ phi_T
+
+    if (hintL[0] >= phi_c || hintR[0] <= phi_c) continue;
+
+    let tl = null;
+    for (const sig of [0.055, 0.090, 0.120]) {
+      tl = findTielineWarm(phi_c, psi_c, chi, lam, hintL, hintR, nRandom, rng, sig);
+      if (tl !== null) break;
+    }
+    if (tl === null) continue;
+
+    tl = sortTl(tl);
+    const sumR = tl[1][0] + tl[1][1];
+
+    // Accept if the right endpoint is approaching or just crossing the anti-diagonal.
+    // Track the candidate whose R endpoint sum is closest to 1.0 from below.
+    if (sumR >= 0.88 && sumR <= 1.02) {
+      if (sumR > bestSum) { bestSum = sumR; bestTl = tl; }
+    }
+  }
+
+  // If best candidate has R endpoint slightly below anti-diagonal, try to refine
+  // upward with a warm-start trace toward psi_max
+  if (bestTl !== null && bestSum < 1.0 - 1e-3) {
+    let hL = bestTl[0].slice(), hR = bestTl[1].slice();
+    const phi_c_ref = (bestTl[0][0] + bestTl[1][0]) / 2;
+    for (let dpsi = 0.005; dpsi <= 0.05; dpsi += 0.005) {
+      const psi_c_ref = (bestTl[0][1] + bestTl[1][1]) / 2 + dpsi;
+      if (psi_c_ref >= phi_c_ref) break;
+      const tl2 = findTielineWarm(phi_c_ref, psi_c_ref, chi, lam, hL, hR,
+                                   Math.floor(nRandom / 2), rng, 0.020);
+      if (tl2 === null) break;
+      const stl2 = sortTl(tl2);
+      const s2 = stl2[1][0] + stl2[1][1];
+      if (s2 > bestSum) { bestSum = s2; bestTl = stl2; }
+      if (s2 > 1.0 - 1e-4) break;
+      hL = stl2[0].slice(); hR = stl2[1].slice();
+    }
+  }
+
+  return bestTl;
+}
+
 // Step 1: vertical trajectory DR+AR arm
 function step1FindDrAr(chi, lam, resolution, nRandom, rng) {
   const cands = [];
@@ -563,8 +627,19 @@ function solveBilayer(chi, lam) {
   // ── Type 1 / Type 2 ──────────────────────────────────────────────────────
   let { green, T_b, phi_c } = step1FindDrAr(chi, lam, RES, NR, rng);
 
+  // If step1 failed (column scan missed the narrow basin), try the direct anti-diagonal
+  // search.  This targets T_b by probing along φ+ψ=1 with physics-guided hints, and
+  // is more robust for short arms near Λ*.
+  if (T_b === null && morph === 'type2') {
+    const tb2 = findTbDirect(chi, lam, NR, rng);
+    if (tb2 !== null) {
+      T_b = tb2;
+      green = []; // no pre-collected arm tielines; sampleLensTrajectory will fill these
+    }
+  }
+
   if (T_b === null) {
-    // AR-containing regions not findable (near Type 2/3 boundary or resolution limit).
+    // AR-containing regions still not findable.
     // Fall back to the Type 3 anti-diagonal scan to at least show the R_D+R_O lens.
     const dt3  = Math.max(0.005, RES / (0.5*Math.SQRT2));
     const blue3 = [];
