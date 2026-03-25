@@ -1,0 +1,915 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Asymmetric Bilayer Phase Diagram | Heberle Lab </title> <meta name="author" content="Fred A. Heberle"> <meta name="description" content="Interactive phase diagram calculator for asymmetric lipid bilayers using the Bragg–Williams mean-field model. "> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?v=f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?v=62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="/assets/img/favicon.svg?v=1711252639d7fd55f75c1a48ace9036a"> <link rel="stylesheet" href="/assets/css/main.css?v=d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://heberlelab.com/asymmetry/phase-diagram/"> <script src="/assets/js/theme.js?v=5fea5159b787642c1bbc1f334d60f883"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+    document.documentElement.setAttribute('data-theme', 'dark');
+  </script> <style>#light-toggle{display:none!important}a{color:#00c244!important}a:hover{color:#c0a!important}.page-banner{width:100%;overflow:hidden}.page-banner img{width:100%;height:720px;object-fit:cover;object-position:center;display:block}</style> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand" href="/"> <img src="/assets/img/heberlelab-logo-header.svg" alt="Heberle Lab" style="height: 52px; width: auto;"> </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">Home </a> </li> <li class="nav-item dropdown "> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Research </a> <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> <a class="dropdown-item " href="/overview/">Overview</a> <a class="dropdown-item " href="/domains/">Domains</a> <a class="dropdown-item " href="/asymmetry/">Asymmetry</a> </div> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">Publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/people/">People </a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Asymmetric Bilayer Phase Diagram</h1> <p class="post-description">Interactive phase diagram calculator for asymmetric lipid bilayers using the Bragg–Williams mean-field model. </p> </header> <article> <style>.pd-tool{max-width:840px}.pd-desc{font-size:14px;color:#aaa;margin-bottom:24px;line-height:1.65}.pd-desc a{color:#00c244}.pd-panel{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:8px;padding:16px 20px;margin-bottom:14px}.pd-panel h4{margin:0 0 12px;font-size:12px;color:#777;text-transform:uppercase;letter-spacing:.06em}.pd-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}.pd-row:last-child{margin-bottom:0}.pd-sym{font-size:16px;min-width:22px;font-style:italic}.pd-slider{flex:1;min-width:160px;max-width:320px;accent-color:#00c244;cursor:pointer}.pd-num{width:68px;padding:5px 8px;border:1px solid #555;border-radius:4px;background:#1e1e1e;color:#f0f0f0;font-size:14px}.pd-hint{font-size:12px;color:#666;white-space:nowrap}#pd-morph{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.03em;background:#252525;border:1px solid #444;color:#888;vertical-align:middle;transition:color .2s,border-color .2s}.pd-check-row{display:flex;align-items:center;gap:9px;margin-bottom:10px}.pd-check{accent-color:#00c244;width:14px;height:14px;cursor:pointer}.pd-tl-label{font-size:13px;min-width:130px;color:#bbb}#pd-generate{padding:10px 28px;border:0;border-radius:6px;background:#00c244;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}#pd-generate:hover:not(:disabled){background:#00a838}#pd-generate:disabled{opacity:.4;cursor:default}#pd-status{display:none;padding:9px 14px;border-radius:6px;margin:12px 0 4px;font-size:13px}.pd-err{background:rgba(200,0,0,.12);color:#ff7070;border:1px solid #c22}.pd-ok{background:rgba(0,194,68,.10);color:#00c244;border:1px solid #00c244}#pd-canvas{display:block;border:1px solid #2e2e2e;border-radius:4px;background:#111;margin-top:14px;max-width:100%}.pd-legend{display:flex;flex-wrap:wrap;gap:12px 20px;margin-top:14px;font-size:13px;color:#bbb}.pd-legend-item{display:flex;align-items:center;gap:6px}.pd-swatch{width:16px;height:16px;border-radius:3px;flex-shrink:0}</style> <div class="pd-tool"> <p class="pd-desc"> Interactive phase diagram calculator for asymmetric lipid bilayers based on the Bragg–Williams mean-field model: <em>f</em>(φ,ψ) = <em>f</em><sub>BW</sub>(φ) + <em>f</em><sub>BW</sub>(ψ) + Λ(φ−ψ)<sup>2</sup>. Here φ and ψ are the ordered-lipid mole fractions in the upper and lower leaflets, χ is the Flory–Huggins interaction parameter, and Λ is the interleaflet coupling. Three morphology types arise depending on Λ relative to Λ<sub>C</sub> = χ−2 and Λ* = 1.5χ(χ−2)/(2χ−3): <strong>Type 1</strong> (Λ ≤ Λ<sub>C</sub>, T-junction), <strong>Type 2</strong> (Λ<sub>C</sub> &lt; Λ &lt; Λ*, interior lenses), and <strong>Type 3</strong> (Λ ≥ Λ*, R<sub>D</sub>+R<sub>O</sub> only). Phase notation follows Kennison et al. (2024). </p> <div class="pd-panel"> <h4>Parameters</h4> <div class="pd-row"> <span class="pd-sym" title="Flory-Huggins interaction parameter">χ</span> <input type="range" class="pd-slider" id="chi-slider" min="2.05" max="4.0" step="0.05" value="2.2"> <input type="number" class="pd-num" id="chi-input" min="2.05" max="4.0" step="0.05" value="2.2"> <span class="pd-hint"> Λ<sub>C</sub> = <span id="lam-c-val">0.200</span>  Λ* = <span id="lam-s-val">0.471</span> </span> </div> <div class="pd-row"> <span class="pd-sym" title="Interleaflet coupling">Λ</span> <input type="range" class="pd-slider" id="lam-slider" min="0" max="1.5" step="0.005" value="0.3"> <input type="number" class="pd-num" id="lam-input" min="0" max="1.5" step="0.005" value="0.3"> <span id="pd-morph">Type 2</span> </div> </div> <div class="pd-panel"> <h4>Tielines</h4> <div class="pd-check-row"> <input type="checkbox" class="pd-check" id="show-tielines" checked> <label for="show-tielines" style="font-size:14px; cursor:pointer;">Show tielines</label> </div> <div id="pd-tl-rows"> <div class="pd-row"> <span class="pd-tl-label">R<sub>D</sub>+R<sub>O</sub></span> <input type="range" class="pd-slider" id="n-rdro" min="2" max="15" step="1" value="6"> <span id="n-rdro-val" style="min-width:18px;">6</span> </div> <div class="pd-row"> <span class="pd-tl-label">AR-containing</span> <input type="range" class="pd-slider" id="n-ar" min="2" max="15" step="1" value="6"> <span id="n-ar-val" style="min-width:18px;">6</span> </div> </div> </div> <button id="pd-generate">Generate Phase Diagram</button> <div id="pd-status"></div> <canvas id="pd-canvas" width="500" height="500" style="width:500px; height:500px;"></canvas> <div class="pd-legend" id="pd-legend" style="display:none;"> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#AAAAEE;"></div> R<sub>D</sub> + AR<sub>OD</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#F0D080;"></div> R<sub>D</sub> + AR<sub>DO</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#88CC88;"></div> R<sub>O</sub> + AR<sub>OD</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#CC99CC;"></div> R<sub>O</sub> + AR<sub>DO</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#FFAAAA;"></div> R<sub>D</sub> + R<sub>O</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#CCCCCC; border:1px solid #777;"></div> Three-phase </div> </div> </div> <script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Constants & colours
+// ═══════════════════════════════════════════════════════════════════════════
+const EPS   = 1e-12;
+const GUARD = 5e-4;
+
+const C_RD_AROD = '#AAAAEE', C_RD_ARDO = '#F0D080';
+const C_RO_AROD = '#88CC88', C_RO_ARDO = '#CC99CC';
+const C_RD_RO   = '#FFAAAA', C_3PH = '#CCCCCC';
+const T_RD_AROD = '#2222AA', T_RD_ARDO = '#887700';
+const T_RO_AROD = '#116611', T_RO_ARDO = '#773388';
+const T_RD_RO   = '#AA1111';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Seeded PRNG  (Mulberry32)
+// ═══════════════════════════════════════════════════════════════════════════
+function makePRNG(seed) {
+  let s = (seed >>> 0) || 42;
+  return {
+    next() {
+      s = (s + 0x6D2B79F5) >>> 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 0x100000000;
+    },
+    uniform(lo, hi) { return lo + this.next() * (hi - lo); },
+    normal(mu, sig) {
+      const u1 = Math.max(1e-15, this.next()), u2 = this.next();
+      return (mu || 0) + (sig || 1) * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+    }
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Free energy
+// ═══════════════════════════════════════════════════════════════════════════
+function fBW(phi, chi) {
+  phi = Math.max(EPS, Math.min(1 - EPS, phi));
+  return phi * Math.log(phi) + (1 - phi) * Math.log(1 - phi) + chi * phi * (1 - phi);
+}
+function fBilayer(phi, psi, chi, lam) {
+  return fBW(phi, chi) + fBW(psi, chi) + lam * (phi - psi) * (phi - psi);
+}
+
+// Objective: weighted average of f at two coexisting points, center constrained
+function f2Obj(p, phi_c, psi_c, chi, lam) {
+  const [phi1, psi1, phi2] = p;
+  if (phi1 < GUARD || phi1 > phi_c - GUARD ||
+      psi1 < GUARD || psi1 > 1 - GUARD ||
+      phi2 < phi_c + GUARD || phi2 > 1 - GUARD) return 1e9;
+  const d = phi_c - phi1;
+  if (d < GUARD) return 1e9;
+  const psi2 = psi_c + (psi_c - psi1) / d * (phi2 - phi_c);
+  if (psi2 < GUARD || psi2 > 1 - GUARD) return 1e9;
+  const th1 = (phi2 - phi_c) / (phi2 - phi1), th2 = 1 - th1;
+  if (th1 < GUARD || th2 < GUARD) return 1e9;
+  return th1 * fBilayer(phi1, psi1, chi, lam) + th2 * fBilayer(phi2, psi2, chi, lam);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Nelder-Mead minimizer  (translated from Python)
+// ═══════════════════════════════════════════════════════════════════════════
+function nelderMead(func, x0, xArgs, tol, maxIter) {
+  tol = tol || 1e-9; maxIter = maxIter || 5000;
+  const n = x0.length;
+  const simplex = Array.from({length: n + 1}, (_, i) => {
+    const v = x0.slice();
+    if (i > 0) { v[i-1] += Math.abs(v[i-1]) > 1e-10 ? 0.05 : 0.00025; }
+    return v;
+  });
+  const fv = v => func(v, ...xArgs);
+  const fvals = simplex.map(fv);
+
+  for (let iter = 0; iter < maxIter; iter++) {
+    const ord = Array.from({length: n+1}, (_, i) => i).sort((a, b) => fvals[a] - fvals[b]);
+    const S = ord.map(i => simplex[i].slice());
+    const F = ord.map(i => fvals[i]);
+
+    let maxDF = 0, maxDX = 0;
+    for (let i = 1; i <= n; i++) {
+      maxDF = Math.max(maxDF, Math.abs(F[i] - F[0]));
+      for (let j = 0; j < n; j++) maxDX = Math.max(maxDX, Math.abs(S[i][j] - S[0][j]));
+    }
+    if (maxDF < tol && maxDX < tol) return [S[0], F[0]];
+
+    for (let i = 0; i <= n; i++) { simplex[i] = S[i]; fvals[i] = F[i]; }
+
+    const c = new Array(n).fill(0);
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) c[j] += simplex[i][j] / n;
+
+    const xr = c.map((cj, j) => cj + (cj - simplex[n][j]));
+    const fr = fv(xr);
+
+    if (fr < fvals[0]) {
+      const xe = c.map((cj, j) => cj + 2*(xr[j] - cj)), fe = fv(xe);
+      [simplex[n], fvals[n]] = fe < fr ? [xe, fe] : [xr, fr];
+    } else if (fr < fvals[n-1]) {
+      [simplex[n], fvals[n]] = [xr, fr];
+    } else {
+      const inside = fr >= fvals[n];
+      const xc = c.map((cj, j) => cj + 0.5*(inside ? simplex[n][j] - cj : xr[j] - cj));
+      const fc = fv(xc);
+      if (fc < (inside ? fvals[n] : fr)) {
+        [simplex[n], fvals[n]] = [xc, fc];
+      } else {
+        for (let i = 1; i <= n; i++) {
+          simplex[i] = simplex[0].map((s0j, j) => s0j + 0.5*(simplex[i][j] - s0j));
+          fvals[i] = fv(simplex[i]);
+        }
+      }
+    }
+  }
+  let bi = 0;
+  for (let i = 1; i <= n; i++) if (fvals[i] < fvals[bi]) bi = i;
+  return [simplex[bi], fvals[bi]];
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tieline finders
+// ═══════════════════════════════════════════════════════════════════════════
+function findTieline(phi_c, psi_c, chi, lam, nRandom, rng) {
+  const f_c = fBilayer(phi_c, psi_c, chi, lam);
+  const ph1a = [], ps1a = [], ph2a = [];
+  let bv = 1e9, bi = 0;
+
+  for (let i = 0; i < nRandom; i++) {
+    const ph1 = rng.uniform(GUARD, phi_c - GUARD);
+    const ps1 = rng.uniform(GUARD, 1 - GUARD);
+    const ph2 = rng.uniform(phi_c + GUARD, 1 - GUARD);
+    const fv  = f2Obj([ph1, ps1, ph2], phi_c, psi_c, chi, lam);
+    ph1a.push(ph1); ps1a.push(ps1); ph2a.push(ph2);
+    if (fv < bv) { bv = fv; bi = i; }
+  }
+  if (bv >= f_c - 1e-8) return null;
+
+  const [xo, fo] = nelderMead(f2Obj, [ph1a[bi], ps1a[bi], ph2a[bi]],
+                               [phi_c, psi_c, chi, lam], 1e-11);
+  if (fo > f_c - 1e-8) return null;
+  const [phi1, psi1, phi2] = xo;
+  const d = phi_c - phi1;
+  if (Math.abs(d) < GUARD) return null;
+  const psi2 = psi_c + (psi_c - psi1) / d * (phi2 - phi_c);
+  return [[phi1, psi1], [phi2, psi2]];
+}
+
+function findTielineWarm(phi_c, psi_c, chi, lam, hintL, hintR, nRandom, rng, sigma) {
+  sigma = sigma || 0.025;
+  const f_c = fBilayer(phi_c, psi_c, chi, lam);
+  const ph1a = [], ps1a = [], ph2a = [];
+  let bv = 1e9, bi = 0;
+  const nWarm = 50;
+
+  const add = (ph1, ps1, ph2) => {
+    const fv = f2Obj([ph1, ps1, ph2], phi_c, psi_c, chi, lam);
+    const i = ph1a.length;
+    ph1a.push(ph1); ps1a.push(ps1); ph2a.push(ph2);
+    if (fv < bv) { bv = fv; bi = i; }
+  };
+
+  for (let i = 0; i < nWarm; i++) {
+    add(Math.max(GUARD, Math.min(phi_c - GUARD, hintL[0] + rng.normal(0, sigma))),
+        Math.max(GUARD, Math.min(1 - GUARD,     hintL[1] + rng.normal(0, sigma))),
+        Math.max(phi_c + GUARD, Math.min(1 - GUARD, hintR[0] + rng.normal(0, sigma))));
+  }
+  for (let i = 0; i < nRandom; i++) {
+    add(rng.uniform(GUARD, phi_c - GUARD),
+        rng.uniform(GUARD, 1 - GUARD),
+        rng.uniform(phi_c + GUARD, 1 - GUARD));
+  }
+
+  if (bv >= f_c - 1e-8) return null;
+  const [xo, fo] = nelderMead(f2Obj, [ph1a[bi], ps1a[bi], ph2a[bi]],
+                               [phi_c, psi_c, chi, lam], 1e-11);
+  if (fo > f_c - 1e-8) return null;
+  const [phi1, psi1, phi2] = xo;
+  const d = phi_c - phi1;
+  if (Math.abs(d) < GUARD) return null;
+  const psi2 = psi_c + (psi_c - psi1) / d * (phi2 - phi_c);
+  return [[phi1, psi1], [phi2, psi2]];
+}
+
+// 1-D finder for Type 3: constant d_L = phi - psi
+function findT3Tieline(phi_c, psi_c, chi, lam) {
+  const f_c  = fBilayer(phi_c, psi_c, chi, lam);
+  const dmax = Math.min(phi_c - GUARD, 1 - phi_c - GUARD,
+                        psi_c - GUARD, 1 - psi_c - GUARD);
+  if (dmax <= GUARD) return [null, 0];
+
+  const f1d = delta => {
+    if (delta <= GUARD || delta >= dmax) return 1e9;
+    const p1 = phi_c - delta, q1 = psi_c - delta;
+    const p2 = phi_c + delta, q2 = psi_c + delta;
+    if (p1 < GUARD || q1 < GUARD || p2 > 1-GUARD || q2 > 1-GUARD) return 1e9;
+    return 0.5*fBilayer(p1, q1, chi, lam) + 0.5*fBilayer(p2, q2, chi, lam);
+  };
+
+  const N = 800;
+  const dStep = (dmax*0.99 - GUARD*2) / (N - 1);
+  const deltas = Array.from({length: N}, (_, i) => GUARD*2 + i*dStep);
+  let bi = 0, bv = 1e9;
+  for (let i = 0; i < N; i++) {
+    const fv = f1d(deltas[i]);
+    if (fv < bv) { bv = fv; bi = i; }
+  }
+  if (bv >= f_c - 1e-10) return [null, 0];
+
+  // Golden-section refinement
+  const gr = (Math.sqrt(5) - 1) / 2;
+  let a = deltas[Math.max(0, bi-1)], b = deltas[Math.min(N-1, bi+1)];
+  for (let k = 0; k < 200; k++) {
+    const cc = b - gr*(b-a), dd = a + gr*(b-a);
+    if (f1d(cc) < f1d(dd)) b = dd; else a = cc;
+    if (Math.abs(b-a) < 1e-12) break;
+  }
+  const dOpt = (a+b)/2;
+  if (f1d(dOpt) >= f_c - 1e-10) return [null, 0];
+  return [[[phi_c-dOpt, psi_c-dOpt], [phi_c+dOpt, psi_c+dOpt]], dOpt];
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Morphology classification
+// ═══════════════════════════════════════════════════════════════════════════
+function lamCritical(chi) { return chi - 2.0; }
+function lamStar(chi)     { return 1.5*chi*(chi-2) / (2*chi-3); }
+function getMorphology(chi, lam) {
+  const lc = lamCritical(chi), ls = lamStar(chi);
+  if (lam <= lc + 1e-9)  return 'type1';
+  if (lam <  ls - 1e-9)  return 'type2';
+  return 'type3';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Geometry helpers
+// ═══════════════════════════════════════════════════════════════════════════
+const lr   = tl => tl[0][0] <= tl[1][0] ? [tl[0], tl[1]] : [tl[1], tl[0]];
+const tb   = tl => tl[0][1] >= tl[1][1] ? [tl[0], tl[1]] : [tl[1], tl[0]];
+const d2   = (a, b) => Math.hypot(a[0]-b[0], a[1]-b[1]);
+const sortTl = tl => tl[0][0] <= tl[1][0] ? tl : [tl[1], tl[0]];
+
+function reflectTl(tl) {
+  return [[1-tl[1][1], 1-tl[1][0]], [1-tl[0][1], 1-tl[0][0]]];
+}
+function swapPoly(poly) { return poly.map(p => [p[1], p[0]]); }
+function swapTl(tl) {
+  return [[tl[0][1], tl[0][0]], [tl[1][1], tl[1][0]]];
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Solver steps
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Step 1: vertical trajectory DR+AR arm
+function step1FindDrAr(chi, lam, resolution, nRandom, rng) {
+  const cands = [];
+  for (let v = 0.500; v <= 0.726; v += 0.025) cands.push(+v.toFixed(3));
+
+  for (const phi_c of cands) {
+    const green = [];
+    let T_b = null;
+    const psi_max = Math.min(phi_c, 0.5) + resolution/2;
+
+    for (let psi_c = resolution; psi_c <= psi_max; psi_c += resolution) {
+      let tl = findTieline(phi_c, psi_c, chi, lam, nRandom, rng);
+      if (tl === null) continue;
+      tl = sortTl(tl);
+      const [L, R] = tl;
+      if (R[0] + R[1] <= 1 + 1e-4) {
+        green.push(tl);
+      } else {
+        if (green.length > 0) {
+          const [Lp, Rp] = green[green.length-1];
+          const ap = Rp[0]+Rp[1], ac = R[0]+R[1];
+          const t  = (1 - ap) / (ac - ap);
+          T_b = [[Lp[0]+t*(L[0]-Lp[0]), Lp[1]+t*(L[1]-Lp[1])],
+                 [Rp[0]+t*(R[0]-Rp[0]), Rp[1]+t*(R[1]-Rp[1])]];
+        }
+        break;
+      }
+    }
+    if (T_b === null && green.length > 0) { T_b = green.pop(); }
+    if (T_b !== null) return { green, T_b, phi_c };
+  }
+  return { green: [], T_b: null, phi_c: null };
+}
+
+// Type 1: extend arm toward consolute
+function extendDrArArm(chi, lam, green, phi_c, nRandom, rng) {
+  if (green.length === 0) return { extra: [], consolute: null, taper: false };
+  const [hL0, hR0] = green[0];
+  const psi0     = (hL0[1]+hR0[1])/2;
+  const init_len = d2(hR0, hL0);
+  const step     = Math.max(psi0/30, GUARD*10);
+
+  let hintL = hL0.slice(), hintR = hR0.slice();
+  let best_len = init_len, bestL = hL0.slice(), bestR = hR0.slice();
+  const extra = [];
+
+  for (let psi_c = psi0 - step/2; psi_c > GUARD*5; psi_c -= step) {
+    if (psi_c >= phi_c) continue;
+    let tl = null;
+    for (const sig of [0.010, 0.005, 0.002]) {
+      tl = findTielineWarm(phi_c, psi_c, chi, lam, hintL, hintR,
+                            Math.floor(nRandom/2), rng, sig);
+      if (tl !== null) break;
+    }
+    if (tl === null) break;
+    tl = sortTl(tl);
+    const [L, R] = tl;
+    const len = d2(R, L);
+    extra.push(tl);
+    if (len < best_len) { best_len = len; bestL = L.slice(); bestR = R.slice(); }
+    hintL = L.slice(); hintR = R.slice();
+  }
+
+  const consolute = [(bestL[0]+bestR[0])/2, (bestL[1]+bestR[1])/2];
+  return { extra, consolute, taper: best_len < 0.60*init_len };
+}
+
+// Type 2: find consolute point
+function findConsolutePoint(chi, lam, V1, V3, nRandom, rng) {
+  const [phi1, psi1] = V1, [phi3, psi3] = V3;
+  const col_step = 0.030;
+  let best_pt = null, best_len = Infinity, best_hint = null;
+
+  for (let phi_c = phi1+col_step/2; phi_c < phi3-col_step/4; phi_c += col_step) {
+    const t_f    = (phi_c-phi1)/(phi3-phi1);
+    const psi_Tb = psi1 + t_f*(psi3-psi1);
+    let hintL = V1.slice(), hintR = V3.slice();
+    let deep_tl = null, deep_psi = null;
+
+    for (let psi_c = psi_Tb-0.002; psi_c > Math.max(0.05, psi_Tb-0.30); psi_c -= 0.008) {
+      if (psi_c >= phi_c) continue;
+      let tl = null;
+      for (const sig of [0.025, 0.010]) {
+        tl = findTielineWarm(phi_c, psi_c, chi, lam, hintL, hintR,
+                              Math.floor(nRandom/2), rng, sig);
+        if (tl !== null) break;
+      }
+      if (tl === null) break;
+      tl = sortTl(tl);
+      if (tl[1][0]+tl[1][1] > 1.05) break;
+      deep_tl = tl; deep_psi = psi_c;
+      hintL = tl[0].slice(); hintR = tl[1].slice();
+    }
+
+    if (deep_tl !== null) {
+      const len = d2(deep_tl[1], deep_tl[0]);
+      if (len < best_len) {
+        best_len = len; best_pt = [phi_c, deep_psi];
+        best_hint = [deep_tl[0].slice(), deep_tl[1].slice()];
+      }
+    }
+  }
+  if (best_pt === null) return null;
+
+  // Fine scan below best column
+  if (best_hint !== null) {
+    const phi_c = best_pt[0];
+    let hL = best_hint[0].slice(), hR = best_hint[1].slice();
+    for (let psi_c = best_pt[1]-0.001; psi_c > best_pt[1]-0.06; psi_c -= 0.001) {
+      if (psi_c <= 0.05 || psi_c >= phi_c) break;
+      let tl = null;
+      for (const sig of [0.008, 0.003]) {
+        tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR,
+                              Math.floor(nRandom/2), rng, sig);
+        if (tl !== null) break;
+      }
+      if (tl === null) break;
+      tl = sortTl(tl);
+      if (tl[1][0]+tl[1][1] > 1.05) break;
+      const len = d2(tl[1], tl[0]);
+      if (len < best_len) {
+        best_len = len; best_pt = [phi_c, psi_c];
+        best_hint = [tl[0].slice(), tl[1].slice()];
+      }
+      hL = tl[0].slice(); hR = tl[1].slice();
+    }
+  }
+
+  if (best_hint) {
+    const [hL, hR] = best_hint;
+    return [(hL[0]+hR[0])/2, (hL[1]+hR[1])/2];
+  }
+  return best_pt;
+}
+
+// Type 2: lens trajectory sampling
+function sampleLensTrajectory(chi, lam, V1, V3, cp, resolution, nRandom, rng) {
+  const mid  = [(V1[0]+V3[0])/2, (V1[1]+V3[1])/2];
+  const tlen = d2(cp, mid);
+  const ext  = 1.15;
+  const nSt  = Math.max(8, Math.round(tlen*ext/resolution));
+  const ts   = Array.from({length: nSt}, (_, i) => (i+1)/nSt*ext);
+
+  let hintL = V1.slice(), hintR = V3.slice();
+  let prev1 = V1.slice();
+  const tls = [];
+  let nmiss = 0;
+
+  for (let i = 0; i < ts.length; i++) {
+    const t  = ts[i];
+    const pt = [mid[0]+t*(cp[0]-mid[0]), mid[1]+t*(cp[1]-mid[1])];
+    if (pt[0] < 0.01 || pt[0] > 0.99 || pt[1] < 0.01 || pt[1] > 0.99) break;
+
+    const sig = 0.025 + i/Math.max(ts.length-1,1) * (0.007-0.025);
+    let tl = findTielineWarm(pt[0], pt[1], chi, lam, hintL, hintR, nRandom, rng, sig);
+    if (tl === null)
+      tl = findTielineWarm(pt[0], pt[1], chi, lam, hintL, hintR, nRandom, rng, Math.max(sig*1.5, 0.012));
+    if (tl === null) { if (++nmiss >= 3) break; continue; }
+    nmiss = 0;
+    tl = sortTl(tl);
+    const [ea, eb] = tl;
+    const [ep1, ep2] = d2(ea, prev1) <= d2(eb, prev1) ? [ea, eb] : [eb, ea];
+    tls.push([ep1.slice(), ep2.slice()]);
+    prev1 = ep1.slice(); hintL = ep1.slice(); hintR = ep2.slice();
+  }
+  return tls;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Main solver
+// ═══════════════════════════════════════════════════════════════════════════
+function solveBilayer(chi, lam) {
+  const RES = 0.010, NR = 150;
+  const rng  = makePRNG(42);
+  const morph = getMorphology(chi, lam);
+  const res  = { morphology: morph };
+
+  // ── Type 3 ──────────────────────────────────────────────────────────────
+  if (morph === 'type3') {
+    const dt   = Math.max(0.005, RES / (0.5*Math.SQRT2));
+    const blue = [];
+    let best_len = Infinity, t3_cp = null;
+
+    for (let t = dt; t < 1.0;) {
+      const phi_c = 0.5+0.5*t, psi_c = 0.5-0.5*t;
+      if (phi_c >= 1-GUARD || psi_c <= GUARD) break;
+      const [tl] = findT3Tieline(phi_c, psi_c, chi, lam);
+      if (tl === null) break;
+      const stl = sortTl(tl);
+      const len = d2(stl[1], stl[0]);
+      blue.push(stl);
+      if (len < best_len) {
+        best_len = len;
+        t3_cp = [(stl[0][0]+stl[1][0])/2, (stl[0][1]+stl[1][1])/2];
+      }
+      if (len < 0.005) break;
+      t += best_len > 0.15 ? dt : Math.min(dt, Math.max(1e-5, best_len/8));
+    }
+    blue.sort((a, b) => (a[0][0]-a[0][1]) - (b[0][0]-b[0][1]));
+    return Object.assign(res, {
+      green: [], blue, purple: [],
+      V1: null, V2: null, V3: null, T_b: null,
+      consolute_pt: null, t3_consolute_lo: t3_cp,
+      type1_consolute_pt: null, type1_taper: false
+    });
+  }
+
+  // ── Type 1 / Type 2 ──────────────────────────────────────────────────────
+  let { green, T_b, phi_c } = step1FindDrAr(chi, lam, RES, NR, rng);
+
+  if (T_b === null) {
+    return Object.assign(res, {
+      morphology: 'type3', green: [], blue: [], purple: [],
+      V1: null, V2: null, V3: null, T_b: null,
+      consolute_pt: null, t3_consolute_lo: null,
+      type1_consolute_pt: null, type1_taper: false
+    });
+  }
+
+  // Type 1: extend arm toward consolute
+  let type1_cp = null, type1_taper = false;
+  if (morph === 'type1' && green.length > 0) {
+    const ext = extendDrArArm(chi, lam, green, phi_c, NR, rng);
+    if (ext.extra.length > 0) green = [...ext.extra.reverse(), ...green];
+    type1_cp = ext.consolute; type1_taper = ext.taper;
+  }
+
+  // Triangle vertices
+  const V1 = T_b[0].slice(), V3 = T_b[1].slice();
+  const V2 = [1-V1[1], 1-V1[0]];
+  const T_r = [V1.slice(), V2.slice()];
+
+  // Type 2: consolute + lens sampling
+  let consolute_pt = null;
+  if (morph === 'type2') {
+    consolute_pt = findConsolutePoint(chi, lam, V1, V3, NR, rng);
+    if (consolute_pt !== null) {
+      const lens = sampleLensTrajectory(chi, lam, V1, V3, consolute_pt, RES, NR, rng);
+      if (lens.length > 0) green = lens;
+    }
+  }
+
+  const purple = green.map(reflectTl);
+
+  // Step 3: DR+OR tielines along (0.5,0.5) → mid(T_r)
+  const mid_r  = [(V1[0]+V2[0])/2, (V1[1]+V2[1])/2];
+  const nSteps = Math.max(2, Math.round(d2(mid_r, [0.5, 0.5]) / RES));
+  const blue   = [];
+  for (let i = 1; i < nSteps; i++) {
+    const t = i/nSteps;
+    const pc = [0.5+t*(mid_r[0]-0.5), 0.5+t*(mid_r[1]-0.5)];
+    let tl = findTieline(pc[0], pc[1], chi, lam, NR, rng);
+    if (tl === null) continue;
+    blue.push(sortTl(tl));
+  }
+  blue.push(T_r);
+  blue.sort((a, b) => (a[0][0]-a[0][1]) - (b[0][0]-b[0][1]));
+
+  return Object.assign(res, {
+    green, blue, purple,
+    V1, V2, V3, T_b, T_r,
+    consolute_pt, t3_consolute_lo: null,
+    type1_consolute_pt: type1_cp, type1_taper
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Build fill polygons  (translated from Python _build_polygons)
+// ═══════════════════════════════════════════════════════════════════════════
+function buildPolygons(res) {
+  const { morphology: morph, green, blue, purple,
+          V1, V2, V3, consolute_pt,
+          type1_consolute_pt, type1_taper, t3_consolute_lo } = res;
+
+  const rd_branch    = green.map(tl =>  lr(tl)[0]);
+  const arod_branch  = green.map(tl =>  lr(tl)[1]);
+  const rd_rdro      = blue.map(tl =>   lr(tl)[0]);
+  const ro_rdro      = blue.map(tl =>   lr(tl)[1]);
+  const ro_branch    = purple.map(tl => tb(tl)[0]);
+  const arod_branch2 = purple.map(tl => tb(tl)[1]);
+
+  // DR+OR polygon
+  let poly_rdro = [];
+  if (blue.length > 0) {
+    if (V2 !== null) {
+      poly_rdro = [...rd_rdro, V2, ...[...ro_rdro].reverse()];
+    } else {
+      const cp = t3_consolute_lo;
+      poly_rdro = cp !== null ? [...rd_rdro, cp, ...[...ro_rdro].reverse()]
+                              : [...rd_rdro, ...[...ro_rdro].reverse()];
+    }
+  }
+
+  if (morph === 'type3') return { poly_rd_arod: [], poly_ro_arod: [], poly_rdro };
+
+  let poly_rd_arod = [], poly_ro_arod = [];
+
+  if (morph === 'type1') {
+    if (green.length > 0) {
+      if (type1_taper && type1_consolute_pt !== null) {
+        const cp1 = [type1_consolute_pt[0], 0];
+        poly_rd_arod = [cp1, ...rd_branch, V3, ...[...arod_branch].reverse(), cp1];
+      } else {
+        poly_rd_arod = [[rd_branch[0][0], 0], ...rd_branch, V3,
+                        ...[...arod_branch].reverse(), [arod_branch[0][0], 0]];
+      }
+    }
+    if (purple.length > 0) {
+      if (type1_taper && type1_consolute_pt !== null) {
+        const cp1r = [1, 1 - type1_consolute_pt[0]];
+        poly_ro_arod = [...[...ro_branch].reverse(), cp1r, ...arod_branch2];
+      } else {
+        poly_ro_arod = [...[...ro_branch].reverse(),
+                        [1, ro_branch[0][1]], [1, arod_branch2[0][1]],
+                        ...arod_branch2];
+      }
+    }
+
+  } else { // type2
+    if (green.length > 0) {
+      const rd_t2 = green.map(tl => tl[0]);
+      const ar_t2 = green.map(tl => tl[1]);
+      const tip   = consolute_pt ? [consolute_pt] : [];
+      poly_rd_arod = [V1, ...rd_t2, ...tip, ...[...ar_t2].reverse(), V3];
+    }
+    if (purple.length > 0) {
+      const ar_p  = purple.map(tl => tl[0]);
+      const ro_p  = purple.map(tl => tl[1]);
+      const tip_p = consolute_pt ? [[1-consolute_pt[1], 1-consolute_pt[0]]] : [];
+      poly_ro_arod = [V3, ...ar_p, ...tip_p, ...[...ro_p].reverse(), V2];
+    }
+  }
+
+  return { poly_rd_arod, poly_ro_arod, poly_rdro };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Tieline selection: pick n evenly-spaced tielines from sorted list
+// ═══════════════════════════════════════════════════════════════════════════
+function selectN(tls, n) {
+  if (tls.length === 0 || n <= 0) return [];
+  if (n >= tls.length) return tls.slice();
+  if (n === 1) return [tls[Math.floor(tls.length/2)]];
+  return Array.from({length: n},
+    (_, i) => tls[Math.round(i*(tls.length-1)/(n-1))]);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Canvas drawing
+// ═══════════════════════════════════════════════════════════════════════════
+// Canvas layout: 500×500 CSS px, square 420×420 plot area
+const PSZ  = 420;   // square plot side length (px)
+const ML   = 54;    // left margin   (y-axis label + ticks)
+const MT   = 26;    // top margin    (title)
+const MR   = 26;    // right margin  (= 500 - 54 - 420)
+const MB   = 54;    // bottom margin (x-axis label + ticks, = 500 - 26 - 420)
+const CSZ  = ML + PSZ + MR;   // canvas width  = 500
+const CSZH = MT + PSZ + MB;   // canvas height = 500
+
+function toCanvas(phi, psi) {
+  return [ML + phi*PSZ, MT + (1-psi)*PSZ];
+}
+
+function fillPoly(ctx, pts, color, alpha) {
+  if (!pts || pts.length < 3) return;
+  ctx.save();
+  ctx.globalAlpha = alpha != null ? alpha : 0.55;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  const [x0, y0] = toCanvas(pts[0][0], pts[0][1]);
+  ctx.moveTo(x0, y0);
+  for (let i = 1; i < pts.length; i++) {
+    const [x, y] = toCanvas(pts[i][0], pts[i][1]);
+    ctx.lineTo(x, y);
+  }
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function strokePoly(ctx, pts, color, lw) {
+  if (!pts || pts.length < 2) return;
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 0.9; ctx.globalAlpha = 1;
+  ctx.beginPath();
+  const [x0, y0] = toCanvas(pts[0][0], pts[0][1]);
+  ctx.moveTo(x0, y0);
+  for (let i = 1; i < pts.length; i++) {
+    const [x, y] = toCanvas(pts[i][0], pts[i][1]);
+    ctx.lineTo(x, y);
+  }
+  ctx.closePath(); ctx.stroke();
+  ctx.restore();
+}
+
+function drawTl(ctx, tl, color, dashed) {
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = 0.9; ctx.globalAlpha = 0.85;
+  if (dashed) ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  const [x1, y1] = toCanvas(tl[0][0], tl[0][1]);
+  const [x2, y2] = toCanvas(tl[1][0], tl[1][1]);
+  ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.restore();
+}
+
+function drawStar(ctx, phi, psi, fillColor, edgeColor) {
+  const [cx, cy] = toCanvas(phi, psi);
+  const R = 7, r = 3, n = 5;
+  ctx.save();
+  ctx.beginPath();
+  for (let i = 0; i < n*2; i++) {
+    const ang = i*Math.PI/n - Math.PI/2;
+    const rad = i%2===0 ? R : r;
+    const x = cx + rad*Math.cos(ang), y = cy + rad*Math.sin(ang);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = fillColor; ctx.fill();
+  ctx.strokeStyle = edgeColor; ctx.lineWidth = 0.8; ctx.stroke();
+  ctx.restore();
+}
+
+function drawAxes(ctx, chi, lam, morph) {
+  const ticks = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
+  ctx.save();
+
+  // Plot border
+  ctx.strokeStyle = '#666'; ctx.lineWidth = 0.8;
+  ctx.strokeRect(ML, MT, PSZ, PSZ);
+
+  // Tick marks + labels
+  ctx.fillStyle = '#999'; ctx.font = '11px sans-serif';
+
+  ctx.textAlign = 'center';
+  for (const v of ticks) {
+    const [x] = toCanvas(v, 0);
+    ctx.beginPath(); ctx.moveTo(x, MT+PSZ); ctx.lineTo(x, MT+PSZ+4);
+    ctx.strokeStyle = '#666'; ctx.lineWidth = 0.8; ctx.stroke();
+    ctx.fillText(v.toFixed(1), x, MT+PSZ+15);
+  }
+
+  ctx.textAlign = 'right';
+  for (const v of ticks) {
+    const [, y] = toCanvas(0, v);
+    ctx.beginPath(); ctx.moveTo(ML, y); ctx.lineTo(ML-4, y);
+    ctx.strokeStyle = '#666'; ctx.lineWidth = 0.8; ctx.stroke();
+    ctx.fillText(v.toFixed(1), ML-7, y+4);
+  }
+
+  // Axis labels
+  ctx.fillStyle = '#ccc'; ctx.font = '12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('\u03c6u  (upper leaflet)', ML + PSZ/2, MT + PSZ + 36);
+
+  ctx.save();
+  ctx.translate(13, MT + PSZ/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('\u03c6l  (lower leaflet)', 0, 0);
+  ctx.restore();
+
+  // Title
+  const mLabel = morph === 'type1' ? 'Type 1' : morph === 'type2' ? 'Type 2' : 'Type 3';
+  ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('\u03c7 = ' + chi.toFixed(2) + ',  \u039b = ' + lam.toFixed(3) +
+               '  [' + mLabel + ']', ML + PSZ/2, MT - 8);
+
+  // Reference diagonals
+  ctx.save();
+  ctx.setLineDash([5, 4]); ctx.globalAlpha = 0.3; ctx.strokeStyle = '#888'; ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  let [x0, y0] = toCanvas(0, 0), [x1, y1] = toCanvas(1, 1);
+  ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+  ctx.setLineDash([3, 6]); ctx.globalAlpha = 0.15;
+  ctx.beginPath();
+  [x0, y0] = toCanvas(0, 1); [x1, y1] = toCanvas(1, 0);
+  ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+  ctx.restore();
+
+  ctx.restore();
+}
+
+function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = CSZ  * dpr;
+  canvas.height = CSZH * dpr;
+  canvas.style.width  = CSZ  + 'px';
+  canvas.style.height = CSZH + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, CSZ, MT + PSZ + MB);
+
+  const { morphology: morph, green, blue, purple, V1, V2, V3,
+          consolute_pt, type1_consolute_pt, type1_taper, t3_consolute_lo } = res;
+  const polys = buildPolygons(res);
+
+  // ── Filled regions ──
+  fillPoly(ctx, polys.poly_rd_arod,            C_RD_AROD, 0.55);
+  fillPoly(ctx, polys.poly_ro_arod,            C_RO_AROD, 0.55);
+  fillPoly(ctx, polys.poly_rdro,               C_RD_RO,   0.55);
+  fillPoly(ctx, swapPoly(polys.poly_rd_arod),  C_RD_ARDO, 0.55);
+  fillPoly(ctx, swapPoly(polys.poly_ro_arod),  C_RO_ARDO, 0.55);
+  fillPoly(ctx, swapPoly(polys.poly_rdro),     C_RD_RO,   0.55);
+
+  // ── Three-phase triangles ──
+  if (V1 !== null) {
+    for (const tri of [[V1, V2, V3], swapPoly([V1, V2, V3])]) {
+      fillPoly(ctx, tri, C_3PH, 0.85);
+      strokePoly(ctx, tri, '#555', 0.9);
+    }
+  }
+
+  // ── Axes, ticks, title ──
+  drawAxes(ctx, chi, lam, morph);
+
+  // ── Consolute stars ──
+  const _ar = p => [1-p[1], 1-p[0]];
+  const _dr = p => [p[1], p[0]];
+
+  let cp_rd_arod = null;
+  if (morph === 'type2' && consolute_pt !== null) cp_rd_arod = consolute_pt;
+  else if (morph === 'type1' && type1_taper && type1_consolute_pt !== null)
+    cp_rd_arod = type1_consolute_pt;
+
+  if (cp_rd_arod !== null) {
+    const cp_ro_arod = _ar(cp_rd_arod);
+    drawStar(ctx, cp_rd_arod[0], cp_rd_arod[1], C_RD_AROD, T_RD_AROD);
+    drawStar(ctx, cp_ro_arod[0], cp_ro_arod[1], C_RO_AROD, T_RO_AROD);
+    drawStar(ctx, ..._dr(cp_rd_arod),  C_RD_ARDO, T_RD_ARDO);
+    drawStar(ctx, ..._dr(cp_ro_arod),  C_RO_ARDO, T_RO_ARDO);
+  }
+  if (morph === 'type3' && t3_consolute_lo !== null) {
+    drawStar(ctx, t3_consolute_lo[0], t3_consolute_lo[1], C_RD_RO, T_RD_RO);
+    const up = _dr(t3_consolute_lo);
+    drawStar(ctx, up[0], up[1], C_RD_RO, T_RD_RO);
+  }
+
+  // ── Tielines ──
+  if (showTielines) {
+    const DIAG = 0.005;
+
+    // For Type 3, filter out tielines very near the main diagonal before selecting
+    let blue_pool;
+    if (morph === 'type3') {
+      blue_pool = blue.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >= 0.0125);
+    } else {
+      blue_pool = blue;
+    }
+
+    const g_sel = selectN(green,      nAr);
+    const p_sel = selectN(purple,     nAr);
+    const b_sel = selectN(blue_pool,  nRdro);
+
+    const b_solid = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >  DIAG);
+    const b_dash  = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] <= DIAG);
+
+    // Lower half
+    for (const tl of g_sel)   drawTl(ctx, tl, T_RD_AROD, false);
+    for (const tl of p_sel)   drawTl(ctx, tl, T_RO_AROD, false);
+    for (const tl of b_solid) drawTl(ctx, tl, T_RD_RO,   false);
+    for (const tl of b_dash)  drawTl(ctx, tl, T_RD_RO,   true);
+    // Upper half (swap φ↔ψ)
+    for (const tl of g_sel)   drawTl(ctx, swapTl(tl), T_RD_ARDO, false);
+    for (const tl of p_sel)   drawTl(ctx, swapTl(tl), T_RO_ARDO, false);
+    for (const tl of b_solid) drawTl(ctx, swapTl(tl), T_RD_RO,   false);
+    for (const tl of b_dash)  drawTl(ctx, swapTl(tl), T_RD_RO,   true);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// UI
+// ═══════════════════════════════════════════════════════════════════════════
+const chiSlider  = document.getElementById('chi-slider');
+const chiInput   = document.getElementById('chi-input');
+const lamSlider  = document.getElementById('lam-slider');
+const lamInput   = document.getElementById('lam-input');
+const showTlChk  = document.getElementById('show-tielines');
+const tlRows     = document.getElementById('pd-tl-rows');
+const nRdroSl    = document.getElementById('n-rdro');
+const nRdroVal   = document.getElementById('n-rdro-val');
+const nArSl      = document.getElementById('n-ar');
+const nArVal     = document.getElementById('n-ar-val');
+const genBtn     = document.getElementById('pd-generate');
+const statusEl   = document.getElementById('pd-status');
+const canvas     = document.getElementById('pd-canvas');
+const legendEl   = document.getElementById('pd-legend');
+const morphBadge = document.getElementById('pd-morph');
+const lamCEl     = document.getElementById('lam-c-val');
+const lamSEl     = document.getElementById('lam-s-val');
+
+const MORPH_COLOR = { type1: '#1A73E8', type2: '#00C244', type3: '#CC00AA' };
+const MORPH_LABEL = { type1: 'Type 1',  type2: 'Type 2',  type3: 'Type 3'  };
+
+function updateBadge() {
+  const chi = +chiInput.value, lam = +lamInput.value;
+  const lc = lamCritical(chi), ls = lamStar(chi);
+  lamCEl.textContent = lc.toFixed(3);
+  lamSEl.textContent = ls.toFixed(3);
+  const m = getMorphology(chi, lam);
+  morphBadge.textContent    = MORPH_LABEL[m];
+  morphBadge.style.color    = MORPH_COLOR[m];
+  morphBadge.style.borderColor = MORPH_COLOR[m];
+}
+
+function sync(slider, input) {
+  slider.addEventListener('input', () => { input.value = slider.value; updateBadge(); });
+  input.addEventListener('change', () => {
+    const lo = +input.min, hi = +input.max;
+    const v  = Math.max(lo, Math.min(hi, +input.value || lo));
+    slider.value = v; input.value = v; updateBadge();
+  });
+}
+sync(chiSlider, chiInput);
+sync(lamSlider, lamInput);
+
+nRdroSl.addEventListener('input', () => { nRdroVal.textContent = nRdroSl.value; });
+nArSl.addEventListener('input',   () => { nArVal.textContent   = nArSl.value; });
+
+showTlChk.addEventListener('change', () => {
+  tlRows.style.display = showTlChk.checked ? '' : 'none';
+});
+
+function setStatus(msg, isErr) {
+  statusEl.textContent = msg;
+  statusEl.className   = isErr ? 'pd-err' : 'pd-ok';
+  statusEl.style.display = msg ? 'block' : 'none';
+}
+
+genBtn.addEventListener('click', async () => {
+  const chi = +chiInput.value, lam = +lamInput.value;
+  if (chi < 2.05 || chi > 4.0) { setStatus('\u03c7 must be between 2.05 and 4.0', true); return; }
+  if (lam <  0   || lam > 1.5) { setStatus('\u039b must be between 0 and 1.5',    true); return; }
+
+  genBtn.disabled = true;
+  setStatus('Computing\u2026', false);
+  await new Promise(r => setTimeout(r, 30));
+
+  const t0 = performance.now();
+  try {
+    const res = solveBilayer(chi, lam);
+    const dt  = ((performance.now() - t0)/1000).toFixed(2);
+    drawDiagram(canvas, res, chi, lam,
+                showTlChk.checked, +nRdroSl.value, +nArSl.value);
+    legendEl.style.display = 'flex';
+    setStatus('Done in ' + dt + '\u202fs', false);
+    setTimeout(() => setStatus('', false), 3000);
+  } catch (e) {
+    setStatus('Error: ' + e.message, true);
+    console.error(e);
+  }
+  genBtn.disabled = false;
+});
+
+// Initialise badge on load
+updateBadge();
+</script> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Fred A. Heberle. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?v=85ddb88934d28b74e78031fd54cf8308"></script> <script src="/assets/js/no_defer.js?v=2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?v=c15de51d4bb57887caa2c21988d97279"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/js/mathjax-setup.js?v=a5bb4e6a542c546dd929b24b8b236dfd"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script defer src="/assets/js/progress-bar.js?v=2f30e0e6801ea8f5036fa66e1ab0a71a" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?v=f40d453793ff4f64e238e420181a1d17"></script> <script>
+    addBackToTop();
+  </script> </body> </html>
