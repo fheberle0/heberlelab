@@ -56,7 +56,7 @@ description: >
   .pd-check { accent-color: #00C244; width: 14px; height: 14px; cursor: pointer; }
   .pd-tl-label { font-size: 13px; min-width: 130px; color: #bbb; }
 
-  /* ── Generate button ────────────────────────────────────── */
+  /* ── Generate / Export buttons ─────────────────────────── */
   #pd-generate {
     padding: 10px 28px; border: none; border-radius: 6px;
     background: #00C244; color: #fff;
@@ -64,6 +64,15 @@ description: >
   }
   #pd-generate:hover:not(:disabled) { background: #00a838; }
   #pd-generate:disabled { opacity: .4; cursor: default; }
+
+  #pd-export {
+    padding: 10px 20px; border: 1px solid #444; border-radius: 6px;
+    background: #222; color: #ccc;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: .15s;
+    margin-left: 10px;
+  }
+  #pd-export:hover:not(:disabled) { background: #333; color: #fff; border-color: #666; }
+  #pd-export:disabled { opacity: .35; cursor: default; }
 
   /* ── Status bar ─────────────────────────────────────────── */
   #pd-status {
@@ -155,6 +164,16 @@ description: >
       <label for="show-tielines" style="font-size:14px; cursor:pointer;">Show tielines</label>
     </div>
 
+    <div class="pd-check-row" style="margin-top:4px;">
+      <input type="checkbox" class="pd-check" id="show-spinodal">
+      <label for="show-spinodal" style="font-size:14px; cursor:pointer;">Show spinodal</label>
+    </div>
+
+    <div class="pd-check-row" style="margin-top:4px;">
+      <input type="checkbox" class="pd-check" id="show-stars" checked>
+      <label for="show-stars" style="font-size:14px; cursor:pointer;">Show consolute points</label>
+    </div>
+
     <div id="pd-tl-rows">
       <div class="pd-row">
         <span class="pd-tl-label">R<sub>D</sub>+R<sub>O</sub></span>
@@ -170,6 +189,7 @@ description: >
   </div>
 
   <button id="pd-generate">Generate Phase Diagram</button>
+  <button id="pd-export" disabled title="Generate a diagram first">Export to Excel</button>
   <div id="pd-status"></div>
 
   <div class="pd-diagram-row">
@@ -206,6 +226,7 @@ description: >
 
 </div><!-- .pd-tool -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 'use strict';
 
@@ -480,12 +501,38 @@ function monoCoexistence(chi) {
 // solution into the near-Lambda* regime where cold random restarts fail.
 function findTbByContinuation(chi, lam_target, nRandom, rng) {
   const lam_c    = chi - 2.0;
-  const lam_start = lam_c + 0.015;   // comfortably inside Type 2; step1 always works here
   const LAM_STEP  = 0.008;
+
+  // Binary search: find highest Lambda where step1FindDrAr still succeeds.
+  // Starting the chain closer to lam_target reduces accumulated drift and
+  // dramatically speeds up the trace for large Lambda values.
+  // IMPORTANT: cache the winning result so we don't call step1 a second time
+  // at the same Lambda (it's stochastic and might fail on the retry).
+  let lam_start = lam_c + 0.015;   // guaranteed to work (comfortably inside Type 2)
+  let seedResult = null;            // will hold the cached step1 result for lam_start
+  {
+    let bsLo = lam_start, bsHi = lam_target;
+    let bsLoResult = null;
+    for (let iter = 0; iter < 4; iter++) {
+      const bsMid = (bsLo + bsHi) / 2;
+      if (bsMid <= lam_start + 1e-6 || bsMid >= lam_target - 1e-6) break;
+      const tryMid = step1FindDrAr(chi, bsMid, 0.010, nRandom, rng);
+      if (tryMid.T_b !== null) { bsLo = bsMid; bsLoResult = tryMid; }
+      else                      { bsHi = bsMid; }
+    }
+    lam_start  = bsLo;
+    seedResult = bsLoResult;   // null if binary search never advanced past the initial point
+  }
+
   if (lam_start >= lam_target - 1e-6) return null;
 
   // ── 1. Reliable seed at lam_start ──────────────────────────────────────────
-  const { green: green0, T_b: tb0 } = step1FindDrAr(chi, lam_start, 0.010, nRandom, rng);
+  // Reuse the cached binary-search result when available; fall back to a fresh
+  // call only when lam_start is still the original lam_c+0.015 (not advanced).
+  const { green: green0, T_b: tb0 } =
+    seedResult !== null
+      ? seedResult
+      : step1FindDrAr(chi, lam_start, 0.010, nRandom, rng);
   if (tb0 === null) return null;
 
   // Use an interior arm tieline (mid-green) as the trace seed — it's more stable
@@ -1093,6 +1140,73 @@ function drawStar(ctx, phi, psi, fillColor, edgeColor) {
   ctx.restore();
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Spinodal computation
+// BW bilayer Hessian: H = [[A+2Λ, -2Λ],[-2Λ, B+2Λ]]
+//   A = 1/(φ(1−φ)) − 2χ,  B = 1/(ψ(1−ψ)) − 2χ
+// Spinodal condition: det(H) = 0  ⟺  AB + 2Λ(A+B) = 0
+// Solving for ψ given φ:  B = −2ΛA/(A+2Λ),  ψ from B = 1/(ψ(1−ψ)) − 2χ
+// ─────────────────────────────────────────────────────────────────────────────
+function computeSpinodal(chi, lam) {
+  const N = 800;
+  const lo = [], hi = [];
+  for (let i = 1; i < N; i++) {
+    const phi   = i / N;
+    const A     = 1 / (phi * (1 - phi)) - 2 * chi;
+    const denom = A + 2 * lam;
+    if (Math.abs(denom) < 1e-8) continue;
+    const B   = -2 * lam * A / denom;
+    const C   = B + 2 * chi;   // = 1/(ψ(1−ψ)) on the spinodal
+    if (C < 4 + 1e-9) continue;
+    const disc = 1 - 4 / C;
+    if (disc < 0) continue;
+    const sqd    = Math.sqrt(disc);
+    const psi_lo = (1 - sqd) / 2;
+    const psi_hi = (1 + sqd) / 2;
+    if (psi_lo > 1e-5 && psi_lo < 1 - 1e-5) lo.push([phi, psi_lo]);
+    if (psi_hi > 1e-5 && psi_hi < 1 - 1e-5) hi.push([phi, psi_hi]);
+  }
+  return { lo, hi };
+}
+
+function drawSpinodal(ctx, chi, lam) {
+  const { lo, hi } = computeSpinodal(chi, lam);
+  if (lo.length + hi.length === 0) return;
+
+  // Helper: draw a polyline, breaking on large psi-jumps (branch discontinuities)
+  const GAP = 0.08;
+  const strokePath = (pts) => {
+    if (pts.length < 2) return;
+    ctx.beginPath();
+    let pen = false;
+    for (let i = 0; i < pts.length; i++) {
+      const [p, q] = pts[i];
+      const x = ML + p * PSZ, y = MT + (1 - q) * PSZ;
+      if (!pen || (i > 0 && Math.abs(q - pts[i-1][1]) > GAP)) {
+        ctx.moveTo(x, y); pen = true;
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+    ctx.stroke();
+  };
+
+  ctx.save();
+  ctx.setLineDash([5, 4]);
+  ctx.lineWidth = 1.3;
+  ctx.strokeStyle = '#444';
+  ctx.globalAlpha = 0.65;
+
+  // Draw both branches and their φ↔ψ reflections (spinodal is symmetric)
+  const reflect = pts => pts.map(([p,q]) => [q,p]).sort((a,b) => a[0]-b[0]);
+  strokePath(lo);
+  strokePath(hi);
+  strokePath(reflect(lo));
+  strokePath(reflect(hi));
+
+  ctx.restore();
+}
+
 function drawAxes(ctx, chi, lam, morph) {
   const ticks = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
   ctx.save();
@@ -1154,7 +1268,7 @@ function drawAxes(ctx, chi, lam, morph) {
   ctx.restore();
 }
 
-function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
+function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinodal, showStars) {
   const dpr = window.devicePixelRatio || 1;
   canvas.width  = CSZ  * dpr;
   canvas.height = CSZH * dpr;
@@ -1196,22 +1310,24 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
   const _ar = p => [1-p[1], 1-p[0]];
   const _dr = p => [p[1], p[0]];
 
-  let cp_rd_arod = null;
-  if (morph === 'type2' && consolute_pt !== null) cp_rd_arod = consolute_pt;
-  else if (morph === 'type1' && type1_taper && type1_consolute_pt !== null)
-    cp_rd_arod = type1_consolute_pt;
+  if (showStars) {
+    let cp_rd_arod = null;
+    if (morph === 'type2' && consolute_pt !== null) cp_rd_arod = consolute_pt;
+    else if (morph === 'type1' && type1_taper && type1_consolute_pt !== null)
+      cp_rd_arod = type1_consolute_pt;
 
-  if (cp_rd_arod !== null) {
-    const cp_ro_arod = _ar(cp_rd_arod);
-    drawStar(ctx, cp_rd_arod[0], cp_rd_arod[1], C_RD_AROD, T_RD_AROD);
-    drawStar(ctx, cp_ro_arod[0], cp_ro_arod[1], C_RO_AROD, T_RO_AROD);
-    drawStar(ctx, ..._dr(cp_rd_arod),  C_RD_ARDO, T_RD_ARDO);
-    drawStar(ctx, ..._dr(cp_ro_arod),  C_RO_ARDO, T_RO_ARDO);
-  }
-  if ((morph === 'type3' || morph === 'type2_fallback') && t3_consolute_lo !== null) {
-    drawStar(ctx, t3_consolute_lo[0], t3_consolute_lo[1], C_RD_RO, T_RD_RO);
-    const up = _dr(t3_consolute_lo);
-    drawStar(ctx, up[0], up[1], C_RD_RO, T_RD_RO);
+    if (cp_rd_arod !== null) {
+      const cp_ro_arod = _ar(cp_rd_arod);
+      drawStar(ctx, cp_rd_arod[0], cp_rd_arod[1], C_RD_AROD, T_RD_AROD);
+      drawStar(ctx, cp_ro_arod[0], cp_ro_arod[1], C_RO_AROD, T_RO_AROD);
+      drawStar(ctx, ..._dr(cp_rd_arod),  C_RD_ARDO, T_RD_ARDO);
+      drawStar(ctx, ..._dr(cp_ro_arod),  C_RO_ARDO, T_RO_ARDO);
+    }
+    if ((morph === 'type3' || morph === 'type2_fallback') && t3_consolute_lo !== null) {
+      drawStar(ctx, t3_consolute_lo[0], t3_consolute_lo[1], C_RD_RO, T_RD_RO);
+      const up = _dr(t3_consolute_lo);
+      drawStar(ctx, up[0], up[1], C_RD_RO, T_RD_RO);
+    }
   }
 
   // ── Tielines ──
@@ -1245,6 +1361,9 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
     for (const tl of b_dash)  drawTl(ctx, swapTl(tl), T_RD_RO,   true);
   }
 
+  // ── Spinodal curve ──
+  if (showSpinodal) drawSpinodal(ctx, chi, lam);
+
   // Annotation for Type 2 diagrams where arm regions could not be resolved
   if (morph === 'type2_fallback') {
     ctx.save();
@@ -1258,20 +1377,136 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// Excel export
+// ═══════════════════════════════════════════════════════════════════════════
+// Produces a workbook with:
+//   Sheet "Summary"   — parameters, morphology, three-phase vertices, consolute pts
+//   Sheet "RD+RO"     — R_D + R_O  tielines (central lens, both halves are identical
+//                       by the φ↔ψ symmetry, so only lower half is written)
+//   Sheet "RD+AR_OD"  — R_D + AR_OD arm tielines (lower half, φ < ψ region)
+//   Sheet "RO+AR_OD"  — R_O + AR_OD arm tielines (lower half)
+//   Sheet "RD+AR_DO"  — R_D + AR_DO arm tielines (upper half, φ > ψ, φ↔ψ mirror)
+//   Sheet "RO+AR_DO"  — R_O + AR_DO arm tielines (upper half)
+//   Sheet "Spinodal"  — analytical spinodal curve points
+//
+// Each tieline row: phi_1, psi_1, phi_2, psi_2  (sorted so phi_1 ≤ phi_2)
+// ═══════════════════════════════════════════════════════════════════════════
+function exportToExcel(chi, lam, res) {
+  if (typeof XLSX === 'undefined') {
+    alert('SheetJS library not loaded — please try again in a moment.');
+    return;
+  }
+
+  const wb    = XLSX.utils.book_new();
+  const morph = res.morphology;
+  const MORPH_LABEL = {
+    type1: 'Type 1', type2: 'Type 2',
+    type3: 'Type 3', type2_fallback: 'Type 2 (arm regions unresolved near Λ*)'
+  };
+  const lc = lamCritical(chi), ls = lamStar(chi);
+
+  // ── Summary sheet ─────────────────────────────────────────────────────────
+  const sum = [
+    ['Asymmetric Bilayer Phase Diagram — Exported Data'],
+    [],
+    ['Parameter',             'Value'],
+    ['χ (chi)',               chi],
+    ['Λ (lambda)',            lam],
+    ['Λ_C (lambda_critical)', +lc.toFixed(6)],
+    ['Λ* (lambda_star)',      +ls.toFixed(6)],
+    ['Morphology',            MORPH_LABEL[morph] || morph],
+    [],
+    ['Note: in all tieline sheets phi_1 ≤ phi_2 (sorted by outer-leaflet composition).'],
+    [],
+  ];
+
+  if (res.V1 !== null) {
+    sum.push(['Three-phase triangle — lower half (ψ < φ region)']);
+    sum.push(['Vertex', 'φ (outer leaflet)', 'ψ (inner leaflet)']);
+    sum.push(['V1',  res.V1[0], res.V1[1]]);
+    sum.push(['V2',  res.V2[0], res.V2[1]]);
+    sum.push(['V3',  res.V3[0], res.V3[1]]);
+    sum.push([]);
+    sum.push(['Three-phase triangle — upper half (ψ > φ region, φ↔ψ mirror)']);
+    sum.push(['Vertex', 'φ (outer leaflet)', 'ψ (inner leaflet)']);
+    sum.push(["V1'", res.V1[1], res.V1[0]]);
+    sum.push(["V2'", res.V2[1], res.V2[0]]);
+    sum.push(["V3'", res.V3[1], res.V3[0]]);
+  } else {
+    sum.push(['Three-phase triangle: none for this morphology / parameter combination']);
+  }
+
+  const addCp = (label, pt) => {
+    if (pt !== null) { sum.push([]); sum.push([label, 'φ', pt[0], 'ψ', pt[1]]); }
+  };
+  addCp('Consolute point — R_D+AR_OD arm (Type 2)',  res.consolute_pt);
+  addCp('Consolute point — R_D+R_O lens (Type 3)',   res.t3_consolute_lo);
+  addCp('Consolute point — arm (Type 1)',             res.type1_consolute_pt);
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sum), 'Summary');
+
+  // ── Tieline sheet helper ───────────────────────────────────────────────────
+  // Each row: phi_1, psi_1, phi_2, psi_2  (endpoint with smaller φ listed first)
+  const addTlSheet = (tls, name) => {
+    if (!tls || tls.length === 0) return;
+    const rows = [['phi_1', 'psi_1', 'phi_2', 'psi_2']];
+    for (const tl of tls) {
+      const [p1, p2] = lr(tl);
+      rows.push([p1[0], p1[1], p2[0], p2[1]]);
+    }
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), name);
+  };
+
+  // Lower-half sheets (φ > ψ region — canonical tielines from solver)
+  addTlSheet(res.blue,   'RD+RO');
+  addTlSheet(res.green,  'RD+AR_OD');
+  addTlSheet(res.purple, 'RO+AR_OD');
+
+  // Upper-half sheets (φ < ψ region — φ↔ψ mirror of lower half)
+  if (res.green  && res.green.length  > 0) addTlSheet(res.green.map(swapTl),  'RD+AR_DO');
+  if (res.purple && res.purple.length > 0) addTlSheet(res.purple.map(swapTl), 'RO+AR_DO');
+
+  // ── Spinodal sheet ────────────────────────────────────────────────────────
+  // Analytical curve det(H)=0 for the BW bilayer Hessian.
+  // "lo" branch: smaller ψ solution; "hi" branch: larger ψ solution.
+  // The full spinodal is the union of lo, hi, and their φ↔ψ reflections.
+  const { lo: spLo, hi: spHi } = computeSpinodal(chi, lam);
+  if (spLo.length + spHi.length > 0) {
+    const spRows = [['phi', 'psi', 'branch']];
+    for (const [p, q] of spLo) spRows.push([p, q, 'lo']);
+    for (const [p, q] of spHi) spRows.push([p, q, 'hi']);
+    // Reflections (φ↔ψ) — listed so external code can reconstruct the full closed curve
+    for (const [p, q] of spLo) spRows.push([q, p, 'lo_reflected']);
+    for (const [p, q] of spHi) spRows.push([q, p, 'hi_reflected']);
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(spRows), 'Spinodal');
+  }
+
+  // ── Download ──────────────────────────────────────────────────────────────
+  const fname = `bilayer_phase_diagram_chi${chi.toFixed(2)}_lam${lam.toFixed(3)}.xlsx`;
+  XLSX.writeFile(wb, fname);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // UI
 // ═══════════════════════════════════════════════════════════════════════════
 const chiSlider  = document.getElementById('chi-slider');
 const chiInput   = document.getElementById('chi-input');
 const lamSlider  = document.getElementById('lam-slider');
 const lamInput   = document.getElementById('lam-input');
-const showTlChk  = document.getElementById('show-tielines');
-const tlRows     = document.getElementById('pd-tl-rows');
+const showTlChk   = document.getElementById('show-tielines');
+const showSpinChk = document.getElementById('show-spinodal');
+const showStarChk = document.getElementById('show-stars');
+const tlRows      = document.getElementById('pd-tl-rows');
 const nRdroSl    = document.getElementById('n-rdro');
 const nRdroVal   = document.getElementById('n-rdro-val');
 const nArSl      = document.getElementById('n-ar');
 const nArVal     = document.getElementById('n-ar-val');
 const genBtn     = document.getElementById('pd-generate');
+const exportBtn  = document.getElementById('pd-export');
 const statusEl   = document.getElementById('pd-status');
+
+// Cache the most-recently computed result for export
+let _lastRes = null, _lastChi = null, _lastLam = null;
 const canvas     = document.getElementById('pd-canvas');
 const legendEl   = document.getElementById('pd-legend');
 const morphBadge = document.getElementById('pd-morph');
@@ -1330,15 +1565,25 @@ genBtn.addEventListener('click', async () => {
     const res = solveBilayer(chi, lam);
     const dt  = ((performance.now() - t0)/1000).toFixed(2);
     drawDiagram(canvas, res, chi, lam,
-                showTlChk.checked, +nRdroSl.value, +nArSl.value);
+                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showSpinChk.checked, showStarChk.checked);
     legendEl.style.display = 'flex';
     setStatus('Done in ' + dt + '\u202fs', false);
     setTimeout(() => setStatus('', false), 3000);
+    // Cache for export
+    _lastRes = res; _lastChi = chi; _lastLam = lam;
+    exportBtn.disabled = false;
+    exportBtn.title    = '';
   } catch (e) {
     setStatus('Error: ' + e.message, true);
     console.error(e);
   }
   genBtn.disabled = false;
+});
+
+exportBtn.addEventListener('click', () => {
+  if (_lastRes === null) return;
+  exportToExcel(_lastChi, _lastLam, _lastRes);
 });
 
 // Initialise badge on load
