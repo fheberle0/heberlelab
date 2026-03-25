@@ -114,7 +114,9 @@ description: >
     <strong>Type&nbsp;1</strong> (&Lambda;&nbsp;&le;&nbsp;&Lambda;<sub>C</sub>, T-junction),
     <strong>Type&nbsp;2</strong> (&Lambda;<sub>C</sub>&nbsp;&lt;&nbsp;&Lambda;&nbsp;&lt;&nbsp;&Lambda;*,
     interior lenses), and
-    <strong>Type&nbsp;3</strong> (&Lambda;&nbsp;&ge;&nbsp;&Lambda;*, R<sub>D</sub>+R<sub>O</sub> only).
+    <strong>Type&nbsp;3</strong> (&Lambda;&nbsp;&ge;&nbsp;&Lambda;*, R<sub>D</sub>+R<sub>O</sub> only),
+    as described by
+    <a href="https://doi.org/10.1529/biophysj.107.115675" target="_blank">Wagner, Loew &amp; May (2007)</a>.
     Phase notation follows Kennison&nbsp;et&nbsp;al.&nbsp;(2024).
   </p>
 
@@ -1044,7 +1046,7 @@ function drawAxes(ctx, chi, lam, morph) {
 
   // Reference diagonals
   ctx.save();
-  ctx.setLineDash([5, 4]); ctx.globalAlpha = 0.3; ctx.strokeStyle = '#888'; ctx.lineWidth = 0.7;
+  ctx.setLineDash([5, 4]); ctx.globalAlpha = 0.65; ctx.strokeStyle = '#444'; ctx.lineWidth = 0.9;
   ctx.beginPath();
   let [x0, y0] = toCanvas(0, 0), [x1, y1] = toCanvas(1, 1);
   ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
