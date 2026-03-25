@@ -113,3 +113,10 @@ Embedded membrane proteins with completely unrelated functions are also thought 
 Doktorova M, Heberle FA, Marquardt D, Rusinova R, Sanford RL, Peyear TA, Katsaras J, Feigenson GW, Weinstein H, Anderson OS. 2019. Gramicidin Increases Lipid Flip-Flop in Symmetric and Asymmetric Lipid Vesicles. *Biophysical Journal* 116:860-873.
 
 Nguyen MHL, DiPasquale M, Rickeard BW, Doktorova M, Heberle FA, Scott HL, Barrera FN, Taylor G, Collier CP, Stanley CB, Katsaras J, Marquardt D. 2019. Peptide-Induced Lipid Flip-Flop in Asymmetric Liposomes Measured by Small Angle Neutron Scattering. *Langmuir* 35:11735-11744.
+
+---
+
+## Interactive tools
+
+**[Asymmetric Bilayer Phase Diagram →]({{ '/asymmetry/phase-diagram/' | relative_url }})**
+Compute and visualize the phase diagram of an asymmetric lipid bilayer using the Bragg–Williams mean-field model. Enter values for the Flory–Huggins interaction parameter χ and the interleaflet coupling Λ to see registered and anti-registered coexistence regions, tielines, and consolute points.
