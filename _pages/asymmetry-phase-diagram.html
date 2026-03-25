@@ -87,8 +87,10 @@ description: >
   /* ── Legend ─────────────────────────────────────────────── */
   .pd-legend {
     display: flex; flex-direction: column; gap: 10px;
-    font-size: 13px; color: #bbb; flex-shrink: 0;
-    padding-top: 28px; /* align with top of plot area (canvas top margin) */
+    font-size: 13px; color: #222; flex-shrink: 0;
+    margin-top: 28px; /* align with top of plot area */
+    background: #fff; border: 1px solid #ccc; border-radius: 6px;
+    padding: 12px 14px; align-self: flex-start;
   }
   .pd-legend-item { display: flex; align-items: center; gap: 6px; }
   .pd-swatch {
@@ -883,17 +885,17 @@ function drawAxes(ctx, chi, lam, morph) {
   ctx.save();
 
   // Plot border
-  ctx.strokeStyle = '#666'; ctx.lineWidth = 0.8;
+  ctx.strokeStyle = '#333'; ctx.lineWidth = 1.0;
   ctx.strokeRect(ML, MT, PSZ, PSZ);
 
   // Tick marks + labels
-  ctx.fillStyle = '#999'; ctx.font = '11px sans-serif';
+  ctx.fillStyle = '#222'; ctx.font = '13px sans-serif';
 
   ctx.textAlign = 'center';
   for (const v of ticks) {
     const [x] = toCanvas(v, 0);
     ctx.beginPath(); ctx.moveTo(x, MT+PSZ); ctx.lineTo(x, MT+PSZ+4);
-    ctx.strokeStyle = '#666'; ctx.lineWidth = 0.8; ctx.stroke();
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 0.8; ctx.stroke();
     ctx.fillText(v.toFixed(1), x, MT+PSZ+15);
   }
 
@@ -901,14 +903,14 @@ function drawAxes(ctx, chi, lam, morph) {
   for (const v of ticks) {
     const [, y] = toCanvas(0, v);
     ctx.beginPath(); ctx.moveTo(ML, y); ctx.lineTo(ML-4, y);
-    ctx.strokeStyle = '#666'; ctx.lineWidth = 0.8; ctx.stroke();
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 0.8; ctx.stroke();
     ctx.fillText(v.toFixed(1), ML-7, y+4);
   }
 
   // Axis labels
-  ctx.fillStyle = '#ccc'; ctx.font = '12px sans-serif';
+  ctx.fillStyle = '#111'; ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('\u03c6u  (upper leaflet)', ML + PSZ/2, MT + PSZ + 36);
+  ctx.fillText('\u03c6u  (upper leaflet)', ML + PSZ/2, MT + PSZ + 40);
 
   ctx.save();
   ctx.translate(13, MT + PSZ/2);
@@ -918,7 +920,7 @@ function drawAxes(ctx, chi, lam, morph) {
 
   // Title
   const mLabel = morph === 'type1' ? 'Type 1' : morph === 'type2' ? 'Type 2' : 'Type 3';
-  ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#111'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('\u03c7 = ' + chi.toFixed(2) + ',  \u039b = ' + lam.toFixed(3) +
                '  [' + mLabel + ']', ML + PSZ/2, MT - 8);
 
@@ -954,12 +956,15 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
   const polys = buildPolygons(res);
 
   // ── Filled regions ──
+  // R_D+R_O: build full lens as single polygon to avoid diagonal gap
+  const full_rdro = polys.poly_rdro.length >= 3
+    ? [...polys.poly_rdro, ...swapPoly([...polys.poly_rdro].reverse())]
+    : [];
+  fillPoly(ctx, full_rdro,                     C_RD_RO,   0.55);
   fillPoly(ctx, polys.poly_rd_arod,            C_RD_AROD, 0.55);
   fillPoly(ctx, polys.poly_ro_arod,            C_RO_AROD, 0.55);
-  fillPoly(ctx, polys.poly_rdro,               C_RD_RO,   0.55);
   fillPoly(ctx, swapPoly(polys.poly_rd_arod),  C_RD_ARDO, 0.55);
   fillPoly(ctx, swapPoly(polys.poly_ro_arod),  C_RO_ARDO, 0.55);
-  fillPoly(ctx, swapPoly(polys.poly_rdro),     C_RD_RO,   0.55);
 
   // ── Three-phase triangles ──
   if (V1 !== null) {
