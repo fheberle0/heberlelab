@@ -76,13 +76,19 @@ description: >
   /* ── Canvas ─────────────────────────────────────────────── */
   #pd-canvas {
     display: block; border: 1px solid #2e2e2e; border-radius: 4px;
-    background: #111; margin-top: 14px; max-width: 100%;
+    background: #fff; max-width: 100%;
+  }
+
+  /* ── Canvas + legend row ─────────────────────────────────── */
+  .pd-diagram-row {
+    display: flex; align-items: flex-start; gap: 18px; margin-top: 14px;
   }
 
   /* ── Legend ─────────────────────────────────────────────── */
   .pd-legend {
-    display: flex; flex-wrap: wrap; gap: 12px 20px;
-    margin-top: 14px; font-size: 13px; color: #bbb;
+    display: flex; flex-direction: column; gap: 10px;
+    font-size: 13px; color: #bbb; flex-shrink: 0;
+    padding-top: 28px; /* align with top of plot area (canvas top margin) */
   }
   .pd-legend-item { display: flex; align-items: center; gap: 6px; }
   .pd-swatch {
@@ -162,33 +168,35 @@ description: >
   <button id="pd-generate">Generate Phase Diagram</button>
   <div id="pd-status"></div>
 
-  <canvas id="pd-canvas" width="500" height="500"
-          style="width:500px; height:500px;"></canvas>
+  <div class="pd-diagram-row">
+    <canvas id="pd-canvas" width="500" height="500"
+            style="width:500px; height:500px;"></canvas>
 
-  <div class="pd-legend" id="pd-legend" style="display:none;">
-    <div class="pd-legend-item">
-      <div class="pd-swatch" style="background:#AAAAEE;"></div>
-      R<sub>D</sub> + AR<sub>OD</sub>
-    </div>
-    <div class="pd-legend-item">
-      <div class="pd-swatch" style="background:#F0D080;"></div>
-      R<sub>D</sub> + AR<sub>DO</sub>
-    </div>
-    <div class="pd-legend-item">
-      <div class="pd-swatch" style="background:#88CC88;"></div>
-      R<sub>O</sub> + AR<sub>OD</sub>
-    </div>
-    <div class="pd-legend-item">
-      <div class="pd-swatch" style="background:#CC99CC;"></div>
-      R<sub>O</sub> + AR<sub>DO</sub>
-    </div>
-    <div class="pd-legend-item">
-      <div class="pd-swatch" style="background:#FFAAAA;"></div>
-      R<sub>D</sub> + R<sub>O</sub>
-    </div>
-    <div class="pd-legend-item">
-      <div class="pd-swatch" style="background:#CCCCCC; border:1px solid #777;"></div>
-      Three-phase
+    <div class="pd-legend" id="pd-legend" style="display:none;">
+      <div class="pd-legend-item">
+        <div class="pd-swatch" style="background:#AAAAEE;"></div>
+        R<sub>D</sub> + AR<sub>OD</sub>
+      </div>
+      <div class="pd-legend-item">
+        <div class="pd-swatch" style="background:#F0D080;"></div>
+        R<sub>D</sub> + AR<sub>DO</sub>
+      </div>
+      <div class="pd-legend-item">
+        <div class="pd-swatch" style="background:#88CC88;"></div>
+        R<sub>O</sub> + AR<sub>OD</sub>
+      </div>
+      <div class="pd-legend-item">
+        <div class="pd-swatch" style="background:#CC99CC;"></div>
+        R<sub>O</sub> + AR<sub>DO</sub>
+      </div>
+      <div class="pd-legend-item">
+        <div class="pd-swatch" style="background:#FFAAAA;"></div>
+        R<sub>D</sub> + R<sub>O</sub>
+      </div>
+      <div class="pd-legend-item">
+        <div class="pd-swatch" style="background:#CCCCCC; border:1px solid #777;"></div>
+        Three-phase
+      </div>
     </div>
   </div>
 
@@ -938,7 +946,8 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
 
   const ctx = canvas.getContext('2d');
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, CSZ, MT + PSZ + MB);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, CSZ, MT + PSZ + MB);
 
   const { morphology: morph, green, blue, purple, V1, V2, V3,
           consolute_pt, type1_consolute_pt, type1_taper, t3_consolute_lo } = res;
