@@ -90,7 +90,7 @@ description: >
     font-size: 13px; color: #222; flex-shrink: 0;
     margin-top: 28px; /* align with top of plot area */
     background: #fff; border: 1px solid #ccc; border-radius: 6px;
-    padding: 12px 14px; align-self: flex-start;
+    padding: 12px 14px; align-self: flex-start; color: #000;
   }
   .pd-legend-item { display: flex; align-items: center; gap: 6px; }
   .pd-swatch {
@@ -528,7 +528,7 @@ function extendDrArArm(chi, lam, green, phi_c, nRandom, rng) {
 // Type 2: find consolute point
 function findConsolutePoint(chi, lam, V1, V3, nRandom, rng) {
   const [phi1, psi1] = V1, [phi3, psi3] = V3;
-  const col_step = 0.030;
+  const col_step = 0.020;
   let best_pt = null, best_len = Infinity, best_hint = null;
 
   for (let phi_c = phi1+col_step/2; phi_c < phi3-col_step/4; phi_c += col_step) {
@@ -593,35 +593,48 @@ function findConsolutePoint(chi, lam, V1, V3, nRandom, rng) {
   return best_pt;
 }
 
-// Type 2: lens trajectory sampling
+// Type 2: lens trajectory sampling — adaptive stepping near consolute
 function sampleLensTrajectory(chi, lam, V1, V3, cp, resolution, nRandom, rng) {
   const mid  = [(V1[0]+V3[0])/2, (V1[1]+V3[1])/2];
   const tlen = d2(cp, mid);
+  if (tlen < 1e-4) return [];
+
+  // dt0: base step in normalised t-space (t=1 reaches cp, t=ext overshoots)
+  const dt0  = Math.max(resolution / tlen, 0.015);
   const ext  = 1.15;
-  const nSt  = Math.max(8, Math.round(tlen*ext/resolution));
-  const ts   = Array.from({length: nSt}, (_, i) => (i+1)/nSt*ext);
 
   let hintL = V1.slice(), hintR = V3.slice();
   let prev1 = V1.slice();
   const tls = [];
   let nmiss = 0;
+  let cur_len = Infinity;
+  let t = dt0;
 
-  for (let i = 0; i < ts.length; i++) {
-    const t  = ts[i];
+  while (t <= ext + dt0) {
     const pt = [mid[0]+t*(cp[0]-mid[0]), mid[1]+t*(cp[1]-mid[1])];
     if (pt[0] < 0.01 || pt[0] > 0.99 || pt[1] < 0.01 || pt[1] > 0.99) break;
 
-    const sig = 0.025 + i/Math.max(ts.length-1,1) * (0.007-0.025);
+    // Sigma shrinks as we approach consolute for tighter warm-start window
+    const frac = Math.min(1, t / ext);
+    const sig  = 0.025 - frac * (0.025 - 0.007);
+
     let tl = findTielineWarm(pt[0], pt[1], chi, lam, hintL, hintR, nRandom, rng, sig);
     if (tl === null)
-      tl = findTielineWarm(pt[0], pt[1], chi, lam, hintL, hintR, nRandom, rng, Math.max(sig*1.5, 0.012));
-    if (tl === null) { if (++nmiss >= 3) break; continue; }
+      tl = findTielineWarm(pt[0], pt[1], chi, lam, hintL, hintR, nRandom, rng, Math.max(sig*1.5, 0.010));
+    if (tl === null) { if (++nmiss >= 3) break; t += dt0; continue; }
     nmiss = 0;
+
     tl = sortTl(tl);
     const [ea, eb] = tl;
     const [ep1, ep2] = d2(ea, prev1) <= d2(eb, prev1) ? [ea, eb] : [eb, ea];
     tls.push([ep1.slice(), ep2.slice()]);
     prev1 = ep1.slice(); hintL = ep1.slice(); hintR = ep2.slice();
+
+    cur_len = d2(ep1, ep2);
+    if (cur_len < 0.003) break;   // at consolute — stop
+
+    // Adaptive step: mirrors the Type-3 approach — shrink when tielines are short
+    t += cur_len > 0.15 ? dt0 : Math.min(dt0, Math.max(dt0 / 20, cur_len / (tlen * 6)));
   }
   return tls;
 }
@@ -669,10 +682,28 @@ function solveBilayer(chi, lam) {
   let { green, T_b, phi_c } = step1FindDrAr(chi, lam, RES, NR, rng);
 
   if (T_b === null) {
+    // AR-containing regions not findable (near Type 2/3 boundary or resolution limit).
+    // Fall back to the Type 3 anti-diagonal scan to at least show the R_D+R_O lens.
+    const dt3  = Math.max(0.005, RES / (0.5*Math.SQRT2));
+    const blue3 = [];
+    let best3_len = Infinity, t3_cp = null;
+    for (let t = dt3; t < 1.0;) {
+      const phi_c = 0.5+0.5*t, psi_c = 0.5-0.5*t;
+      if (phi_c >= 1-GUARD || psi_c <= GUARD) break;
+      const [tl] = findT3Tieline(phi_c, psi_c, chi, lam);
+      if (tl === null) break;
+      const stl = sortTl(tl);
+      const len  = d2(stl[1], stl[0]);
+      blue3.push(stl);
+      if (len < best3_len) { best3_len = len; t3_cp = [(stl[0][0]+stl[1][0])/2, (stl[0][1]+stl[1][1])/2]; }
+      if (len < 0.005) break;
+      t += best3_len > 0.15 ? dt3 : Math.min(dt3, Math.max(1e-5, best3_len/8));
+    }
+    blue3.sort((a, b) => (a[0][0]-a[0][1]) - (b[0][0]-b[0][1]));
     return Object.assign(res, {
-      morphology: 'type3', green: [], blue: [], purple: [],
+      morphology: 'type3', green: [], blue: blue3, purple: [],
       V1: null, V2: null, V3: null, T_b: null,
-      consolute_pt: null, t3_consolute_lo: null,
+      consolute_pt: null, t3_consolute_lo: t3_cp,
       type1_consolute_pt: null, type1_taper: false
     });
   }
