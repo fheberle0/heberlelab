@@ -458,10 +458,23 @@ function swapTl(tl) {
 // Solver steps
 // ═══════════════════════════════════════════════════════════════════════════
 
+// Solve BW monolayer coexistence: returns [phi_lo, phi_hi] for chi > 2
+function monoCoexistence(chi) {
+  if (chi <= 2.0 + 1e-9) return [0.5, 0.5];
+  let lo = 0.5 + 1e-6, hi = 1.0 - 1e-6;
+  for (let i = 0; i < 60; i++) {
+    const m = (lo + hi) / 2;
+    if (chi * (1 - 2 * m) - Math.log(m / (1 - m)) > 0) lo = m; else hi = m;
+  }
+  const phi_hi = (lo + hi) / 2;
+  return [1 - phi_hi, phi_hi];
+}
+
 // Step 1: vertical trajectory DR+AR arm
 function step1FindDrAr(chi, lam, resolution, nRandom, rng) {
   const cands = [];
   for (let v = 0.475; v <= 0.750; v += 0.015) cands.push(+v.toFixed(3));
+  const [phi_lo, phi_hi] = monoCoexistence(chi);
 
   for (const phi_c of cands) {
     const psi_max = Math.min(phi_c, 0.5) + resolution / 2;
@@ -476,6 +489,41 @@ function step1FindDrAr(chi, lam, resolution, nRandom, rng) {
         firstTl = stl; firstPsi = psi_c; break;
       }
     }
+
+    // --- Structured-hint fallback: monolayer coexistence as physics-based seed ---
+    // When random restarts miss the narrow basin (near Λ*), initialise findTielineWarm
+    // at compositions derived from the known monolayer coexistence (phi_lo, phi_hi).
+    if (firstTl === null) {
+      const structHints = [
+        // R_D-like left endpoint, AR-like right endpoint
+        [[Math.min(phi_c - 0.04, phi_hi * 0.85), phi_lo * 0.85],
+         [Math.min(0.97, phi_c + 0.18),           phi_lo + 0.12]],
+        [[Math.min(phi_c - 0.08, phi_hi * 0.80), phi_lo * 0.75],
+         [Math.min(0.97, phi_c + 0.22),           phi_lo + 0.16]],
+        // Geometry-centred hints adapted to this phi_c / psi_max
+        [[phi_c - 0.08,  psi_max * 0.75],
+         [Math.min(0.97, phi_c + 0.14),           psi_max * 0.88]],
+        [[phi_c - 0.12,  psi_max * 0.65],
+         [Math.min(0.97, phi_c + 0.18),           psi_max * 0.80]],
+      ];
+      outer:
+      for (const [hL, hR] of structHints) {
+        if (hL[0] <= GUARD || hR[0] >= 1 - GUARD || hL[0] >= phi_c || hR[0] <= phi_c) continue;
+        for (const frac of [0.88, 0.65, 0.42]) {
+          const probe_psi = psi_max * frac;
+          if (probe_psi < resolution) continue;
+          let tl = findTielineWarm(phi_c, probe_psi, chi, lam, hL, hR, nRandom, rng, 0.07);
+          if (tl === null)
+            tl = findTielineWarm(phi_c, probe_psi, chi, lam, hL, hR, nRandom, rng, 0.11);
+          if (tl === null) continue;
+          const stl = sortTl(tl);
+          if (stl[1][0] + stl[1][1] <= 1 + 1e-4) {
+            firstTl = stl; firstPsi = probe_psi; break outer;
+          }
+        }
+      }
+    }
+
     if (firstTl === null) continue;
 
     // --- Warm-start trace DOWN from firstPsi toward psi=0 ---
@@ -738,7 +786,7 @@ function solveBilayer(chi, lam) {
     }
     blue3.sort((a, b) => (a[0][0]-a[0][1]) - (b[0][0]-b[0][1]));
     return Object.assign(res, {
-      morphology: 'type3', green: [], blue: blue3, purple: [],
+      morphology: 'type2_fallback', green: [], blue: blue3, purple: [],
       V1: null, V2: null, V3: null, T_b: null,
       consolute_pt: null, t3_consolute_lo: t3_cp,
       type1_consolute_pt: null, type1_taper: false
@@ -819,7 +867,7 @@ function buildPolygons(res) {
     }
   }
 
-  if (morph === 'type3') return { poly_rd_arod: [], poly_ro_arod: [], poly_rdro };
+  if (morph === 'type3' || morph === 'type2_fallback') return { poly_rd_arod: [], poly_ro_arod: [], poly_rdro };
 
   let poly_rd_arod = [], poly_ro_arod = [];
 
@@ -987,7 +1035,9 @@ function drawAxes(ctx, chi, lam, morph) {
   ctx.restore();
 
   // Title
-  const mLabel = morph === 'type1' ? 'Type 1' : morph === 'type2' ? 'Type 2' : 'Type 3';
+  const mLabel = morph === 'type1' ? 'Type 1'
+               : (morph === 'type2' || morph === 'type2_fallback') ? 'Type 2'
+               : 'Type 3';
   ctx.fillStyle = '#111'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('\u03c7 = ' + chi.toFixed(2) + ',  \u039b = ' + lam.toFixed(3) +
                '  [' + mLabel + ']', ML + PSZ/2, MT - 8);
@@ -1061,7 +1111,7 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
     drawStar(ctx, ..._dr(cp_rd_arod),  C_RD_ARDO, T_RD_ARDO);
     drawStar(ctx, ..._dr(cp_ro_arod),  C_RO_ARDO, T_RO_ARDO);
   }
-  if (morph === 'type3' && t3_consolute_lo !== null) {
+  if ((morph === 'type3' || morph === 'type2_fallback') && t3_consolute_lo !== null) {
     drawStar(ctx, t3_consolute_lo[0], t3_consolute_lo[1], C_RD_RO, T_RD_RO);
     const up = _dr(t3_consolute_lo);
     drawStar(ctx, up[0], up[1], C_RD_RO, T_RD_RO);
@@ -1073,7 +1123,7 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
 
     // For Type 3, filter out tielines very near the main diagonal before selecting
     let blue_pool;
-    if (morph === 'type3') {
+    if (morph === 'type3' || morph === 'type2_fallback') {
       blue_pool = blue.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >= 0.0125);
     } else {
       blue_pool = blue;
@@ -1096,6 +1146,17 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr) {
     for (const tl of p_sel)   drawTl(ctx, swapTl(tl), T_RO_ARDO, false);
     for (const tl of b_solid) drawTl(ctx, swapTl(tl), T_RD_RO,   false);
     for (const tl of b_dash)  drawTl(ctx, swapTl(tl), T_RD_RO,   true);
+  }
+
+  // Annotation for Type 2 diagrams where arm regions could not be resolved
+  if (morph === 'type2_fallback') {
+    ctx.save();
+    ctx.fillStyle = 'rgba(160,0,0,0.80)';
+    ctx.font = 'italic 11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Note: asymmetric arm regions too small to resolve (\u039b near \u039b*)',
+                 ML + PSZ / 2, MT + PSZ - 10);
+    ctx.restore();
   }
 }
 
