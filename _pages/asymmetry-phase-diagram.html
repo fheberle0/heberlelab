@@ -87,12 +87,12 @@ description: >
   /* ── Legend ─────────────────────────────────────────────── */
   .pd-legend {
     display: flex; flex-direction: column; gap: 10px;
-    font-size: 13px; color: #222; flex-shrink: 0;
+    font-size: 13px; color: #000 !important; flex-shrink: 0;
     margin-top: 28px; /* align with top of plot area */
-    background: #fff; border: 1px solid #ccc; border-radius: 6px;
-    padding: 12px 14px; align-self: flex-start; color: #000;
+    background: #fff !important; border: 1px solid #ccc; border-radius: 6px;
+    padding: 12px 14px; align-self: flex-start;
   }
-  .pd-legend-item { display: flex; align-items: center; gap: 6px; }
+  .pd-legend-item { display: flex; align-items: center; gap: 6px; color: #000 !important; }
   .pd-swatch {
     width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0;
   }
@@ -461,32 +461,69 @@ function swapTl(tl) {
 // Step 1: vertical trajectory DR+AR arm
 function step1FindDrAr(chi, lam, resolution, nRandom, rng) {
   const cands = [];
-  for (let v = 0.500; v <= 0.726; v += 0.025) cands.push(+v.toFixed(3));
+  for (let v = 0.475; v <= 0.750; v += 0.015) cands.push(+v.toFixed(3));
 
   for (const phi_c of cands) {
-    const green = [];
-    let T_b = null;
-    const psi_max = Math.min(phi_c, 0.5) + resolution/2;
+    const psi_max = Math.min(phi_c, 0.5) + resolution / 2;
 
+    // --- Cold scan with doubled restarts: find ONE seed tieline in this column ---
+    let firstTl = null, firstPsi = null;
     for (let psi_c = resolution; psi_c <= psi_max; psi_c += resolution) {
-      let tl = findTieline(phi_c, psi_c, chi, lam, nRandom, rng);
+      const tl = findTieline(phi_c, psi_c, chi, lam, nRandom * 2, rng);
       if (tl === null) continue;
-      tl = sortTl(tl);
-      const [L, R] = tl;
-      if (R[0] + R[1] <= 1 + 1e-4) {
-        green.push(tl);
-      } else {
-        if (green.length > 0) {
-          const [Lp, Rp] = green[green.length-1];
-          const ap = Rp[0]+Rp[1], ac = R[0]+R[1];
-          const t  = (1 - ap) / (ac - ap);
-          T_b = [[Lp[0]+t*(L[0]-Lp[0]), Lp[1]+t*(L[1]-Lp[1])],
-                 [Rp[0]+t*(R[0]-Rp[0]), Rp[1]+t*(R[1]-Rp[1])]];
-        }
-        break;
+      const stl = sortTl(tl);
+      if (stl[1][0] + stl[1][1] <= 1 + 1e-4) {
+        firstTl = stl; firstPsi = psi_c; break;
       }
     }
-    if (T_b === null && green.length > 0) { T_b = green.pop(); }
+    if (firstTl === null) continue;
+
+    // --- Warm-start trace DOWN from firstPsi toward psi=0 ---
+    const below = [];
+    {
+      let hL = firstTl[0].slice(), hR = firstTl[1].slice();
+      for (let psi_c = firstPsi - resolution; psi_c >= resolution; psi_c -= resolution) {
+        let tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR,
+                                  Math.floor(nRandom / 2), rng, 0.015);
+        if (tl === null)
+          tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, nRandom, rng, 0.030);
+        if (tl === null) break;
+        tl = sortTl(tl);
+        if (tl[1][0] + tl[1][1] > 1 + 1e-4) break;
+        below.unshift(tl);
+        hL = tl[0].slice(); hR = tl[1].slice();
+      }
+    }
+
+    // --- Warm-start trace UP from firstPsi toward psi_max, looking for T_b boundary ---
+    const above = [firstTl];
+    let T_b = null;
+    {
+      let hL = firstTl[0].slice(), hR = firstTl[1].slice();
+      for (let psi_c = firstPsi + resolution; psi_c <= psi_max; psi_c += resolution) {
+        let tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR,
+                                  Math.floor(nRandom / 2), rng, 0.015);
+        if (tl === null)
+          tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, nRandom, rng, 0.030);
+        if (tl === null) break;
+        tl = sortTl(tl);
+        const [L, R] = tl;
+        if (R[0] + R[1] <= 1 + 1e-4) {
+          above.push(tl);
+          hL = tl[0].slice(); hR = tl[1].slice();
+        } else {
+          const [Lp, Rp] = above[above.length - 1];
+          const ap = Rp[0] + Rp[1], ac = R[0] + R[1];
+          const t  = (1 - ap) / (ac - ap);
+          T_b = [[Lp[0] + t*(L[0]-Lp[0]), Lp[1] + t*(L[1]-Lp[1])],
+                 [Rp[0] + t*(R[0]-Rp[0]), Rp[1] + t*(R[1]-Rp[1])]];
+          break;
+        }
+      }
+    }
+
+    const green = [...below, ...above];
+    if (T_b === null && green.length > 0) T_b = green.pop();
     if (T_b !== null) return { green, T_b, phi_c };
   }
   return { green: [], T_b: null, phi_c: null };
