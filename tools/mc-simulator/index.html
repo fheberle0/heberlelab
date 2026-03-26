@@ -5,34 +5,22 @@
 'use strict';
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Web Worker source (runs the MC simulation off the main thread)
+   MC Simulation Engine (runs on main thread in async chunks via setTimeout)
    ═══════════════════════════════════════════════════════════════════════════ */
-const WORKER_SRC = `
-'use strict';
-
-/* ── Triangular lattice helpers ────────────────────────────────────────── */
 
 /**
  * Precompute nearest-neighbor index lists for every site on an L×L
  * triangular lattice with periodic boundary conditions.
  * Uses offset-row convention: odd rows (0-indexed) are shifted right.
- *
- * Even row (0-indexed) neighbor offsets (Δrow, Δcol):
- *   (-1,-1) (-1, 0)  (0,-1) (0,+1)  (+1,-1) (+1, 0)
- *
- * Odd row (0-indexed) neighbor offsets:
- *   (-1, 0) (-1,+1)  (0,-1) (0,+1)  (+1, 0) (+1,+1)
  */
 function buildNeighborTable(L) {
   const N = L * L;
-  // Flat array: nn[6*k .. 6*k+5] are the 6 neighbor indices of site k
   const nn = new Int32Array(6 * N);
   for (let k = 0; k < N; k++) {
     const r = (k / L) | 0;
     const c = k % L;
     const base = 6 * k;
     if (r % 2 === 0) {
-      // even row
       nn[base    ] = ((r - 1 + L) % L) * L + ((c - 1 + L) % L);
       nn[base + 1] = ((r - 1 + L) % L) * L + c;
       nn[base + 2] = r * L + ((c - 1 + L) % L);
@@ -40,7 +28,6 @@ function buildNeighborTable(L) {
       nn[base + 4] = ((r + 1) % L) * L + ((c - 1 + L) % L);
       nn[base + 5] = ((r + 1) % L) * L + c;
     } else {
-      // odd row
       nn[base    ] = ((r - 1 + L) % L) * L + c;
       nn[base + 1] = ((r - 1 + L) % L) * L + ((c + 1) % L);
       nn[base + 2] = r * L + ((c - 1 + L) % L);
@@ -52,17 +39,12 @@ function buildNeighborTable(L) {
   return nn;
 }
 
-/**
- * Create a random binary lattice. 0 = A, 1 = B.
- * Exactly round(xA * N) sites are assigned species A.
- */
+/** Create a random binary lattice. 0 = A, 1 = B. */
 function makeRandomLattice(L, xA) {
   const N = L * L;
   const nA = Math.round(xA * N);
   const lattice = new Uint8Array(N);
-  // Fill first nA with 0 (A), rest with 1 (B), then shuffle
   for (let i = nA; i < N; i++) lattice[i] = 1;
-  // Fisher-Yates shuffle
   for (let i = N - 1; i > 0; i--) {
     const j = (Math.random() * (i + 1)) | 0;
     const tmp = lattice[i]; lattice[i] = lattice[j]; lattice[j] = tmp;
@@ -70,39 +52,25 @@ function makeRandomLattice(L, xA) {
   return lattice;
 }
 
-/**
- * Compute ΔE for swapping sites i and j on the lattice.
- * Binary lattice: energy = ω * (number of unlike neighbor pairs).
- * Returns ΔE in units of ω (caller multiplies by ω_AB).
- */
+/** Compute ΔE (in units of ω) for swapping sites i and j. */
 function computeDeltaE(lattice, nn, i, j) {
   const si = lattice[i], sj = lattice[j];
-  // si !== sj is guaranteed by the caller
   let dE = 0;
   const bi = 6 * i, bj = 6 * j;
   for (let m = 0; m < 6; m++) {
     const ki = nn[bi + m];
     if (ki === j) continue;
-    // Before: pair (i, ki) unlike if si !== s_ki → +1 if unlike
-    // After:  pair (i, ki) unlike if sj !== s_ki
-    // Change: (sj !== s_ki) - (si !== s_ki)
-    // Since si !== sj, this is +1 if s_ki === si, -1 if s_ki === sj, 0 never (binary)
-    const sk = lattice[ki];
-    dE += (sk === si) ? 1 : -1;
+    dE += (lattice[ki] === si) ? 1 : -1;
   }
   for (let m = 0; m < 6; m++) {
     const kj = nn[bj + m];
     if (kj === i) continue;
-    const sk = lattice[kj];
-    // Change at site j: (si !== sk) - (sj !== sk) = opposite sign
-    dE += (sk === sj) ? 1 : -1;
+    dE += (lattice[kj] === sj) ? 1 : -1;
   }
-  return dE;  // multiply by omega to get actual ΔE
+  return dE;
 }
 
-/**
- * Compute total lattice energy in units of ω.
- */
+/** Compute total lattice energy in units of ω. */
 function totalEnergy(lattice, nn, L) {
   const N = L * L;
   let E = 0;
@@ -113,109 +81,16 @@ function totalEnergy(lattice, nn, L) {
       if (lattice[nn[b + m]] !== sk) E++;
     }
   }
-  return E / 2; // each pair counted twice
+  return E / 2;
 }
 
-/* ── Main simulation loop ──────────────────────────────────────────────── */
-self.onmessage = function(e) {
-  const { L, xA, omega, numCycles, updateEvery } = e.data;
+/** Spatial autocorrelation g(r) via direct pair counting. */
+function computeGr(lattice, L) {
   const N = L * L;
+  let meanSum = 0;
+  for (let k = 0; k < N; k++) meanSum += lattice[k];
+  const mean = meanSum / N;
 
-  // Build neighbor table
-  const nn = buildNeighborTable(L);
-
-  // Create random initial lattice
-  const lattice = makeRandomLattice(L, xA);
-
-  // Build index arrays for A and B species (for efficient random selection)
-  const aIndices = [];
-  const bIndices = [];
-  for (let k = 0; k < N; k++) {
-    if (lattice[k] === 0) aIndices.push(k);
-    else bIndices.push(k);
-  }
-  const nA = aIndices.length;
-  const nB = bIndices.length;
-
-  // Compute initial energy (in units of ω)
-  let energy = totalEnergy(lattice, nn, L);
-
-  // Energy history: [cycle, energy_per_site_in_kBT]
-  const energyHistory = [[0, energy * omega / N]];
-
-  const exchangesPerCycle = N;
-
-  // Send initial state
-  self.postMessage({
-    type: 'update',
-    cycle: 0,
-    lattice: new Uint8Array(lattice),
-    energyHistory: energyHistory,
-    progress: 0
-  });
-
-  // MC cycles
-  for (let cycle = 1; cycle <= numCycles; cycle++) {
-    for (let ex = 0; ex < exchangesPerCycle; ex++) {
-      // Pick one A site and one B site at random
-      const idxA = (Math.random() * nA) | 0;
-      const idxB = (Math.random() * nB) | 0;
-      const iA = aIndices[idxA];
-      const iB = bIndices[idxB];
-
-      // Compute energy change (in units of ω)
-      const dE = computeDeltaE(lattice, nn, iA, iB);
-
-      // Metropolis criterion (dE * omega is in kBT)
-      const dEkBT = dE * omega;
-      if (dEkBT <= 0 || Math.random() < Math.exp(-dEkBT)) {
-        // Accept: swap the two sites
-        lattice[iA] = 1;
-        lattice[iB] = 0;
-        energy += dE;
-
-        // Update index arrays: iA (was A) goes to bIndices, iB (was B) goes to aIndices
-        // Array sizes don't change — just swap entries in place
-        aIndices[idxA] = iB;
-        bIndices[idxB] = iA;
-      }
-    }
-
-    energyHistory.push([cycle, energy * omega / N]);
-
-    // Send periodic updates
-    if (cycle % updateEvery === 0 || cycle === numCycles) {
-      self.postMessage({
-        type: 'update',
-        cycle: cycle,
-        lattice: new Uint8Array(lattice),
-        energyHistory: energyHistory.slice(),
-        progress: (cycle / numCycles) * 100
-      });
-    }
-  }
-
-  // Final message with g(r) data
-  const gr = computeGr(lattice, nn, L);
-  self.postMessage({
-    type: 'done',
-    cycle: numCycles,
-    lattice: new Uint8Array(lattice),
-    energyHistory: energyHistory,
-    gr: gr,
-    progress: 100
-  });
-};
-
-/* ── Spatial autocorrelation g(r) via direct pair counting ──────────────
- *  For each site, examine neighbors within a cutoff radius and compute
- *  the pair correlation function.  Uses the triangular lattice geometry.
- * ──────────────────────────────────────────────────────────────────────── */
-function computeGr(lattice, nn, L) {
-  const N = L * L;
-  const mean = lattice.reduce((s, v) => s + v, 0) / N;
-
-  // Precompute Cartesian coordinates for every site
   const xCoord = new Float64Array(N);
   const yCoord = new Float64Array(N);
   for (let k = 0; k < N; k++) {
@@ -225,37 +100,27 @@ function computeGr(lattice, nn, L) {
     yCoord[k] = r * Math.sqrt(3) / 2;
   }
 
-  // Bin distances up to L/3 lattice spacings
   const rMax = L / 3;
   const dr = 0.5;
   const nBins = Math.ceil(rMax / dr);
   const corrSum  = new Float64Array(nBins);
   const countSum = new Float64Array(nBins);
-
-  // Lattice dimension in Cartesian units
-  const Lx = L;  // even rows span [0, L-1], odd rows span [0.5, L-0.5]
+  const Lx = L;
   const Ly = L * Math.sqrt(3) / 2;
-
-  // For efficiency, only sample a subset of reference sites for large lattices
   const maxRef = Math.min(N, 4000);
   const step = Math.max(1, (N / maxRef) | 0);
 
   for (let i = 0; i < N; i += step) {
     const si = lattice[i] - mean;
     const xi = xCoord[i], yi = yCoord[i];
-
     for (let j = 0; j < N; j++) {
       if (j === i) continue;
-      // Minimum image distance on the periodic lattice
       let dx = xCoord[j] - xi;
       let dy = yCoord[j] - yi;
-      // Periodic in y
       if (dy > Ly / 2) dy -= Ly;
       else if (dy < -Ly / 2) dy += Ly;
-      // Periodic in x
       if (dx > Lx / 2) dx -= Lx;
       else if (dx < -Lx / 2) dx += Lx;
-
       const dist = Math.sqrt(dx * dx + dy * dy);
       const bin = (dist / dr) | 0;
       if (bin < nBins) {
@@ -265,22 +130,16 @@ function computeGr(lattice, nn, L) {
     }
   }
 
-  // Normalize: compute the variance directly from the lattice
-  // Var(s) = <s^2> - <s>^2 = mean*(1-mean) for binary {0,1}
   const variance = mean * (1 - mean);
-  if (variance < 1e-12) return [];  // uniform lattice, no correlations
-
+  if (variance < 1e-12) return [];
   const grData = [];
   for (let b = 0; b < nBins; b++) {
-    if (countSum[b] > 10) {  // require sufficient sampling
-      const rVal = (b + 0.5) * dr;
-      const gVal = (corrSum[b] / countSum[b]) / variance;
-      grData.push([rVal, gVal]);
+    if (countSum[b] > 10) {
+      grData.push([(b + 0.5) * dr, (corrSum[b] / countSum[b]) / variance]);
     }
   }
   return grData;
 }
-`;
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Main thread: UI, canvas rendering, Plotly plots
@@ -469,30 +328,26 @@ function plotGr(grData, apl) {
   Plotly.newPlot('mc-gr-plot', data, layout, { responsive: true });
 }
 
-// ── Worker management ─────────────────────────────────────────────────────
-let worker = null;
+// ── Simulation management (async chunked on main thread) ─────────────────
+let simRunning = false;
+let simStopped = false;
 
 function startSimulation() {
-  const L      = +Linput.value;
-  const xA     = +xAinput.value;
+  const L       = +Linput.value;
+  const xA      = +xAinput.value;
   const omega   = +omInput.value;
   const numCycles = +cycInput.value;
 
   // Validate
-  if (L < 20 || L > 200)     { setStatus('L must be between 20 and 200', true); return; }
+  if (L < 20 || L > 200)      { setStatus('L must be between 20 and 200', true); return; }
   if (xA < 0.05 || xA > 0.95) { setStatus('x_A must be between 0.05 and 0.95', true); return; }
-  if (omega < 0 || omega > 0.8) { setStatus('ω_AB must be between 0 and 0.80', true); return; }
+  if (omega < 0 || omega > 0.8){ setStatus('\u03c9_AB must be between 0 and 0.80', true); return; }
 
-  // Determine update frequency
-  const updateEvery = numCycles <= 500 ? 1 : Math.max(1, Math.round(numCycles / 200));
-
-  // Create worker from blob
-  const blob = new Blob([WORKER_SRC], { type: 'application/javascript' });
-  const url  = URL.createObjectURL(blob);
-  worker = new Worker(url);
-  URL.revokeObjectURL(url);
+  // How often to yield to the browser for UI updates
+  const updateEvery = Math.max(1, Math.min(50, Math.round(numCycles / 100)));
 
   // UI state
+  simRunning = true; simStopped = false;
   runBtn.disabled = true;
   stopBtn.style.display = 'inline-block';
   progWrap.style.display = 'block';
@@ -505,62 +360,105 @@ function startSimulation() {
 
   const t0 = performance.now();
 
-  worker.onmessage = function(e) {
-    const msg = e.data;
+  // Initialize simulation state
+  const N = L * L;
+  const nn = buildNeighborTable(L);
+  const lattice = makeRandomLattice(L, xA);
+  const aIndices = [];
+  const bIndices = [];
+  for (let k = 0; k < N; k++) {
+    if (lattice[k] === 0) aIndices.push(k);
+    else bIndices.push(k);
+  }
+  const nA = aIndices.length;
+  const nB = bIndices.length;
+  let energy = totalEnergy(lattice, nn, L);
+  const energyHistory = [[0, energy * omega / N]];
 
-    // Update progress
-    progBar.value = msg.progress;
-    progLabel.textContent = 'Cycle ' + msg.cycle + ' / ' + numCycles +
-      '  (' + msg.progress.toFixed(0) + '%)';
+  // Draw initial state
+  drawLattice(lattice, L);
+  plotEnergy(energyHistory);
 
-    // Draw lattice
-    drawLattice(msg.lattice, L);
-
-    // Update energy plot
-    if (msg.energyHistory) {
-      plotEnergy(msg.energyHistory);
+  // Run simulation in chunks, yielding to the browser between chunks
+  let cycle = 1;
+  function runChunk() {
+    if (simStopped) {
+      finishSim(false);
+      return;
     }
 
-    if (msg.type === 'done') {
-      const dt = ((performance.now() - t0) / 1000).toFixed(1);
-      setStatus('Done in ' + dt + ' s', false);
-      setTimeout(() => setStatus('', false), 5000);
+    const chunkEnd = Math.min(cycle + updateEvery, numCycles + 1);
+    while (cycle < chunkEnd) {
+      // One MC cycle = N proposed exchanges
+      for (let ex = 0; ex < N; ex++) {
+        const idxA = (Math.random() * nA) | 0;
+        const idxB = (Math.random() * nB) | 0;
+        const iA = aIndices[idxA];
+        const iB = bIndices[idxB];
 
-      // Plot g(r)
-      if (msg.gr && msg.gr.length > 0) {
-        grSec.style.display = 'block';
-        plotGr(msg.gr, 0.6);
+        const dE = computeDeltaE(lattice, nn, iA, iB);
+        const dEkBT = dE * omega;
+
+        if (dEkBT <= 0 || Math.random() < Math.exp(-dEkBT)) {
+          lattice[iA] = 1;
+          lattice[iB] = 0;
+          energy += dE;
+          aIndices[idxA] = iB;
+          bIndices[idxB] = iA;
+        }
       }
-
-      // Clean up
-      worker.terminate();
-      worker = null;
-      runBtn.disabled = false;
-      stopBtn.style.display = 'none';
+      energyHistory.push([cycle, energy * omega / N]);
+      cycle++;
     }
-  };
 
-  worker.onerror = function(err) {
-    setStatus('Worker error: ' + err.message, true);
-    worker.terminate();
-    worker = null;
+    // Update UI
+    const pct = ((cycle - 1) / numCycles) * 100;
+    progBar.value = pct;
+    progLabel.textContent = 'Cycle ' + (cycle - 1) + ' / ' + numCycles +
+      '  (' + pct.toFixed(0) + '%)';
+    drawLattice(lattice, L);
+    plotEnergy(energyHistory);
+
+    if (cycle > numCycles) {
+      finishSim(true);
+    } else {
+      setTimeout(runChunk, 0);
+    }
+  }
+
+  function finishSim(completed) {
+    simRunning = false;
     runBtn.disabled = false;
     stopBtn.style.display = 'none';
-  };
 
-  // Start
-  worker.postMessage({ L, xA, omega, numCycles, updateEvery });
+    if (completed) {
+      const dt = ((performance.now() - t0) / 1000).toFixed(1);
+      setStatus('Done in ' + dt + ' s.  Computing g(r)\u2026', false);
+
+      // Compute g(r) after a brief yield so the status message renders
+      setTimeout(function() {
+        const gr = computeGr(lattice, L);
+        if (gr.length > 0) {
+          grSec.style.display = 'block';
+          plotGr(gr, 0.6);
+        }
+        setStatus('Done in ' + dt + ' s', false);
+        setTimeout(function() { setStatus('', false); }, 5000);
+      }, 50);
+    } else {
+      setStatus('Stopped by user', true);
+    }
+  }
+
+  // Kick off the first chunk
+  setTimeout(runChunk, 0);
 }
 
 runBtn.addEventListener('click', startSimulation);
 
-stopBtn.addEventListener('click', () => {
-  if (worker) {
-    worker.terminate();
-    worker = null;
-    setStatus('Stopped by user', true);
-    runBtn.disabled = false;
-    stopBtn.style.display = 'none';
+stopBtn.addEventListener('click', function() {
+  if (simRunning) {
+    simStopped = true;
   }
 });
 </script> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Fred A. Heberle. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?v=85ddb88934d28b74e78031fd54cf8308"></script> <script src="/assets/js/no_defer.js?v=2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?v=c15de51d4bb57887caa2c21988d97279"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/js/mathjax-setup.js?v=a5bb4e6a542c546dd929b24b8b236dfd"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script defer src="/assets/js/progress-bar.js?v=2f30e0e6801ea8f5036fa66e1ab0a71a" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?v=f40d453793ff4f64e238e420181a1d17"></script> <script>
