@@ -212,14 +212,14 @@ description: >
     <div class="pd-row">
       <span class="pd-tl-label">Point spacing</span>
       <input type="number" id="n-dense"
-             min="0.0001" max="0.05" step="0.0001" value="0.001"
+             min="0.0001" max="0.05" step="0.0001" value="0.02"
              style="width:80px;background:#1a1a2e;color:#ccd;border:1px solid #445;border-radius:4px;padding:2px 6px;font-size:13px;">
     </div>
     <div id="pd-dense-status" style="font-size:12px;color:#666;margin-top:2px;min-height:16px;"></div>
   </div>
 
   <button id="pd-generate">Generate Phase Diagram</button>
-  <button id="pd-dense"        disabled title="Generate a Type 1, 2, or 3 diagram first">Dense Tielines</button>
+  <button id="pd-dense"        disabled title="Generate a Type 1, 2, or 3 diagram first">Recompute Tielines</button>
   <button id="pd-dense-export" disabled title="Compute dense tielines first">Export Dense</button>
   <button id="pd-export"       disabled title="Generate a diagram first">Export to Excel</button>
   <div id="pd-status"></div>
@@ -1371,38 +1371,38 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
     }
   }
 
-  // ── Dense tieline overlay (drawn before sparse so sparse stays on top) ──
-  if (denseTl) drawDenseTielines(ctx, denseTl);
-
   // ── Tielines ──
+  // Dense tielines are the primary display; sparse are a fallback for
+  // morphologies where dense computation is not available (type2_fallback).
   if (showTielines) {
-    const DIAG = 0.005;
-
-    // For Type 3, filter out tielines very near the main diagonal before selecting
-    let blue_pool;
-    if (morph === 'type3' || morph === 'type2_fallback') {
-      blue_pool = blue.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >= 0.0125);
+    if (denseTl) {
+      // Dense tielines replace sparse for type 1, 2, and 3
+      drawDenseTielines(ctx, denseTl);
     } else {
-      blue_pool = blue;
+      // Sparse fallback (type2_fallback, or before dense has been computed)
+      const DIAG = 0.005;
+      let blue_pool;
+      if (morph === 'type3' || morph === 'type2_fallback') {
+        blue_pool = blue.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >= 0.0125);
+      } else {
+        blue_pool = blue;
+      }
+      const g_sel = selectN(green,      nAr);
+      const p_sel = selectN(purple,     nAr);
+      const b_sel = selectN(blue_pool,  nRdro);
+      const b_solid = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >  DIAG);
+      const b_dash  = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] <= DIAG);
+      // Lower half
+      for (const tl of g_sel)   drawTl(ctx, tl, T_RD_AROD, false);
+      for (const tl of p_sel)   drawTl(ctx, tl, T_RO_AROD, false);
+      for (const tl of b_solid) drawTl(ctx, tl, T_RD_RO,   false);
+      for (const tl of b_dash)  drawTl(ctx, tl, T_RD_RO,   true);
+      // Upper half (swap φ↔ψ)
+      for (const tl of g_sel)   drawTl(ctx, swapTl(tl), T_RD_ARDO, false);
+      for (const tl of p_sel)   drawTl(ctx, swapTl(tl), T_RO_ARDO, false);
+      for (const tl of b_solid) drawTl(ctx, swapTl(tl), T_RD_RO,   false);
+      for (const tl of b_dash)  drawTl(ctx, swapTl(tl), T_RD_RO,   true);
     }
-
-    const g_sel = selectN(green,      nAr);
-    const p_sel = selectN(purple,     nAr);
-    const b_sel = selectN(blue_pool,  nRdro);
-
-    const b_solid = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >  DIAG);
-    const b_dash  = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] <= DIAG);
-
-    // Lower half
-    for (const tl of g_sel)   drawTl(ctx, tl, T_RD_AROD, false);
-    for (const tl of p_sel)   drawTl(ctx, tl, T_RO_AROD, false);
-    for (const tl of b_solid) drawTl(ctx, tl, T_RD_RO,   false);
-    for (const tl of b_dash)  drawTl(ctx, tl, T_RD_RO,   true);
-    // Upper half (swap φ↔ψ)
-    for (const tl of g_sel)   drawTl(ctx, swapTl(tl), T_RD_ARDO, false);
-    for (const tl of p_sel)   drawTl(ctx, swapTl(tl), T_RO_ARDO, false);
-    for (const tl of b_solid) drawTl(ctx, swapTl(tl), T_RD_RO,   false);
-    for (const tl of b_dash)  drawTl(ctx, swapTl(tl), T_RD_RO,   true);
   }
 
   // ── Spinodal curve ──
@@ -1943,7 +1943,8 @@ genBtn.addEventListener('click', async () => {
   if (chi < 2.05 || chi > 4.0) { setStatus('\u03c7 must be between 2.05 and 4.0', true); return; }
   if (lam <  0   || lam > 1.5) { setStatus('\u039b must be between 0 and 1.5',    true); return; }
 
-  genBtn.disabled = true;
+  genBtn.disabled  = true;
+  denseBtn.disabled = true;
   setStatus('Computing\u2026', false);
   await new Promise(r => setTimeout(r, 30));
 
@@ -1951,21 +1952,54 @@ genBtn.addEventListener('click', async () => {
   try {
     const res = solveBilayer(chi, lam);
     const dt  = ((performance.now() - t0)/1000).toFixed(2);
-    drawDiagram(canvas, res, chi, lam,
-                showTlChk.checked, +nRdroSl.value, +nArSl.value,
-                showSpinChk.checked, showStarChk.checked);
-    legendEl.style.display = 'flex';
-    setStatus('Done in ' + dt + '\u202fs', false);
-    setTimeout(() => setStatus('', false), 3000);
-    // Cache for export / dense tielines
+
+    // Cache immediately so export / recompute buttons work
     _lastRes = res; _lastChi = chi; _lastLam = lam;
-    _denseResult = null;                            // invalidate stale dense result
-    denseStatusEl.textContent = '';
+    _denseResult = null;
     denseExportBtn.disabled = true;
     denseExportBtn.title    = 'Compute dense tielines first';
     exportBtn.disabled = false; exportBtn.title = '';
+
     const denseOk = ((res.morphology === 'type1' || res.morphology === 'type2') && res.V1 !== null)
                  || res.morphology === 'type3';
+
+    // Preliminary draw (no tielines yet while dense is computing)
+    drawDiagram(canvas, res, chi, lam,
+                false, +nRdroSl.value, +nArSl.value,
+                showSpinChk.checked, showStarChk.checked, null);
+    legendEl.style.display = 'flex';
+    setStatus('Done in ' + dt + '\u202fs', false);
+
+    // Auto-compute dense tielines, then redraw
+    if (denseOk) {
+      const density = Math.max(1e-5, +nDenseIn.value || 0.02);
+      denseStatusEl.textContent = 'Computing tielines\u2026';
+      try {
+        const t1 = performance.now();
+        _denseResult = await computeDenseTielines(
+          chi, lam, res, density,
+          msg => { denseStatusEl.textContent = msg; }
+        );
+        const dt2 = ((performance.now() - t1) / 1000).toFixed(2);
+        const n1 = _denseResult.traj1.length, n2 = _denseResult.traj2.length;
+        denseStatusEl.textContent =
+          `Tielines: traj 1\u202f=\u202f${n1}, traj 2\u202f=\u202f${n2} (${dt2}\u202fs)`;
+        denseExportBtn.disabled = false;
+        denseExportBtn.title    = '';
+      } catch (e2) {
+        denseStatusEl.textContent = 'Tieline error: ' + e2.message;
+        console.error(e2);
+      }
+    } else {
+      denseStatusEl.textContent = '';
+    }
+
+    // Final draw — dense tielines used when available, sparse fallback otherwise
+    drawDiagram(canvas, res, chi, lam,
+                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showSpinChk.checked, showStarChk.checked, _denseResult);
+
+    setTimeout(() => setStatus('', false), 3000);
     denseBtn.disabled = !denseOk;
     denseBtn.title    = denseOk ? '' : 'Only available for Type 1, 2, and 3 diagrams';
   } catch (e) {
@@ -1986,7 +2020,7 @@ denseBtn.addEventListener('click', async () => {
   genBtn.disabled   = true;
   denseStatusEl.textContent = 'Starting…';
 
-  const density = Math.max(1e-5, +nDenseIn.value || 0.001);
+  const density = Math.max(1e-5, +nDenseIn.value || 0.02);
   const t0 = performance.now();
   try {
     _denseResult = await computeDenseTielines(
