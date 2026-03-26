@@ -117,7 +117,7 @@ description: >
   }
 
   /* ── Lattice canvas ─────────────────────────────────────── */
-  #mc-lattice-canvas, #mc-scan-canvas {
+  #mc-lattice-canvas {
     display: block; border: 1px solid #2e2e2e; border-radius: 4px;
     background: #fff; width: 100%; height: auto;
   }
@@ -133,9 +133,44 @@ description: >
   .mc-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
 
   /* ── Plotly containers ──────────────────────────────────── */
-  #mc-energy-plot, #mc-gr-plot, #mc-hc-plot {
+  #mc-energy-plot, #mc-gr-plot, #mc-hc-plot, #mc-fret-scan-plot {
     width: 100%; height: 260px;
     border: 1px solid #2e2e2e; border-radius: 4px;
+  }
+
+  /* ── FRET result card ────────────────────────────────────── */
+  .mc-result-card {
+    background: #1a1a1a; border: 1px solid #2e2e2e; border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .mc-result-card h3 {
+    font-size: 12px; color: #999; margin: 0 0 12px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .mc-result-row {
+    display: flex; align-items: baseline; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .mc-result-row:last-child { margin-bottom: 0; }
+  .mc-result-label { font-size: 13px; color: #888; min-width: 70px; }
+  .mc-result-value { font-size: 20px; color: #00C244; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .mc-result-value.mc-orange { color: #E8833A; }
+  .mc-result-unit  { font-size: 12px; color: #666; }
+
+  /* ── Snapshot gallery ────────────────────────────────────── */
+  .mc-gallery {
+    display: flex; gap: 2px; overflow-x: auto;
+    padding: 6px 0; scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+  }
+  .mc-gallery-item {
+    flex-shrink: 0; text-align: center; cursor: default;
+  }
+  .mc-gallery-item canvas {
+    display: block; border: 1px solid #2e2e2e; border-radius: 3px;
+  }
+  .mc-gallery-item .mc-gallery-label {
+    font-size: 9px; color: #888; margin-top: 2px;
   }
 
   /* ── Scan section ─────────────────────────────────────── */
@@ -247,6 +282,50 @@ description: >
     </div>
   </div>
 
+  <div class="mc-panel">
+    <h4>FRET Parameters</h4>
+
+    <div class="mc-row">
+      <span class="mc-sym"><em>R</em><sub>0</sub></span>
+      <input type="range"  class="mc-slider" id="R0-slider"
+             min="1" max="10" step="0.5" value="5.0">
+      <input type="number" class="mc-num" id="R0-input"
+             min="1" max="15" step="0.5" value="5.0">
+      <span class="mc-unit">nm</span>
+      <span class="mc-hint">F&ouml;rster radius</span>
+    </div>
+
+    <div class="mc-row">
+      <span class="mc-sym">Donor</span>
+      <input type="range"  class="mc-slider" id="donor-slider"
+             min="0.1" max="5.0" step="0.1" value="0.5">
+      <input type="number" class="mc-num" id="donor-input"
+             min="0.1" max="10" step="0.1" value="0.5">
+      <span class="mc-unit">mol%</span>
+      <span class="mc-hint">on component A</span>
+    </div>
+
+    <div class="mc-row">
+      <span class="mc-sym">Acceptor</span>
+      <input type="range"  class="mc-slider" id="acceptor-slider"
+             min="0.1" max="5.0" step="0.1" value="0.5">
+      <input type="number" class="mc-num" id="acceptor-input"
+             min="0.1" max="10" step="0.1" value="0.5">
+      <span class="mc-unit">mol%</span>
+      <span class="mc-hint">on component B</span>
+    </div>
+
+    <div class="mc-row">
+      <span class="mc-sym">APL</span>
+      <input type="range"  class="mc-slider" id="apl-slider"
+             min="0.3" max="0.9" step="0.05" value="0.60">
+      <input type="number" class="mc-num" id="apl-input"
+             min="0.2" max="1.2" step="0.05" value="0.60">
+      <span class="mc-unit">nm&sup2;</span>
+      <span class="mc-hint">area per lipid</span>
+    </div>
+  </div>
+
   <!-- ── Run / Stop ───────────────────────────────────────────────────── -->
   <div style="display:flex; gap:10px; align-items:center; margin-bottom:6px;">
     <button id="mc-run">Run Simulation</button>
@@ -284,9 +363,27 @@ description: >
       <div id="mc-energy-plot"></div>
     </div>
 
-    <div class="mc-output-section mc-full-width" id="mc-gr-section" style="display:none;">
+    <div class="mc-output-section" id="mc-gr-section" style="display:none;">
       <h3>Spatial Autocorrelation <em>g</em>(<em>r</em>)</h3>
       <div id="mc-gr-plot"></div>
+    </div>
+
+    <div class="mc-output-section" id="mc-fret-section" style="display:none;">
+      <div class="mc-result-card">
+        <h3>Results</h3>
+        <div class="mc-result-row">
+          <span class="mc-result-label">FRET <em>E</em></span>
+          <span class="mc-result-value mc-orange" id="mc-fret-value">—</span>
+        </div>
+        <div class="mc-result-row">
+          <span class="mc-result-label">&xi;</span>
+          <span class="mc-result-value" id="mc-xi-value">—</span>
+          <span class="mc-result-unit">nm</span>
+        </div>
+        <div class="mc-result-row" style="margin-top:8px;">
+          <span class="mc-result-label" style="font-size:11px; color:#666;" id="mc-fret-detail"></span>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -366,28 +463,21 @@ description: >
   </div>
 
   <!-- ── Dashboard: scan outputs ─────────────────────────────────────── -->
-  <div class="mc-dashboard" id="mc-scan-dashboard" style="display:none;">
+  <div class="mc-output-section mc-full-width" id="mc-scan-gallery-section" style="display:none;">
+    <h3>Lattice Snapshots across &omega;<sub>AB</sub></h3>
+    <div class="mc-gallery" id="mc-scan-gallery"></div>
+  </div>
 
-    <div class="mc-output-section" id="mc-scan-lattice-section">
-      <h3>Current Lattice Snapshot</h3>
-      <div class="mc-canvas-wrap">
-        <canvas id="mc-scan-canvas" width="600" height="520"></canvas>
-        <div class="mc-legend">
-          <div class="mc-legend-item">
-            <div class="mc-swatch" style="background:#E8833A;"></div>
-            <span>Component A</span>
-          </div>
-          <div class="mc-legend-item">
-            <div class="mc-swatch" style="background:#555555;"></div>
-            <span>Component B</span>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="mc-dashboard" id="mc-scan-dashboard" style="display:none;">
 
     <div class="mc-output-section" id="mc-hc-section">
       <h3>Heat Capacity</h3>
       <div id="mc-hc-plot"></div>
+    </div>
+
+    <div class="mc-output-section" id="mc-fret-scan-section">
+      <h3>FRET Efficiency</h3>
+      <div id="mc-fret-scan-plot"></div>
     </div>
 
   </div>
@@ -534,6 +624,82 @@ function computeGr(lattice, L) {
   return grData;
 }
 
+/**
+ * Compute FRET efficiency for the current lattice configuration.
+ * Donors are placed randomly on A sites (lattice=0), acceptors on B sites (lattice=1).
+ * E_i = sum_j (R0/r_ij)^6 / (1 + sum_j (R0/r_ij)^6)   (multi-acceptor Förster)
+ * Uses minimum-image convention and a cutoff at 4*R0.
+ */
+function computeFRET(lattice, L, R0_nm, donorFrac, acceptorFrac, apl) {
+  const N = L * L;
+  const d = Math.sqrt(2 * apl / Math.sqrt(3));  // lattice spacing in nm
+  const R0_lat = R0_nm / d;                      // R0 in lattice units
+  const cutoff = 4 * R0_lat;
+  const cutoff2 = cutoff * cutoff;
+
+  // Place probes randomly
+  const donors = [], acceptors = [];
+  for (let k = 0; k < N; k++) {
+    if (lattice[k] === 0 && Math.random() < donorFrac / 100) donors.push(k);
+    if (lattice[k] === 1 && Math.random() < acceptorFrac / 100) acceptors.push(k);
+  }
+  if (donors.length === 0 || acceptors.length === 0) {
+    return { E: 0, nD: donors.length, nA: acceptors.length };
+  }
+
+  // Precompute coordinates in lattice units
+  const xC = new Float64Array(N), yC = new Float64Array(N);
+  for (let k = 0; k < N; k++) {
+    const r = (k / L) | 0, c = k % L;
+    xC[k] = c + 0.5 * (r % 2);
+    yC[k] = r * Math.sqrt(3) / 2;
+  }
+  const Lx = L, Ly = L * Math.sqrt(3) / 2;
+  const R06 = Math.pow(R0_lat, 6);
+
+  let sumE = 0;
+  for (let di = 0; di < donors.length; di++) {
+    const dk = donors[di];
+    const xd = xC[dk], yd = yC[dk];
+    let sumR6 = 0;
+    for (let ai = 0; ai < acceptors.length; ai++) {
+      const ak = acceptors[ai];
+      let dx = xC[ak] - xd, dy = yC[ak] - yd;
+      if (dy > Ly / 2) dy -= Ly; else if (dy < -Ly / 2) dy += Ly;
+      if (dx > Lx / 2) dx -= Lx; else if (dx < -Lx / 2) dx += Lx;
+      const r2 = dx * dx + dy * dy;
+      if (r2 > 0 && r2 < cutoff2) {
+        const r6 = r2 * r2 * r2;
+        sumR6 += R06 / r6;
+      }
+    }
+    sumE += sumR6 / (1 + sumR6);
+  }
+  return { E: sumE / donors.length, nD: donors.length, nA: acceptors.length };
+}
+
+/**
+ * Fit g(r) to an exponential A * exp(-r/xi) via linear regression on ln(g).
+ * Returns { xi, A } in lattice units, or null if fit fails.
+ */
+function fitCorrelationLength(grData) {
+  // Filter to positive g(r) values and skip first bin (nearest neighbors)
+  const pts = grData.filter(p => p[0] > 1.0 && p[1] > 0.02);
+  if (pts.length < 4) return null;
+
+  let sx = 0, sy = 0, sxx = 0, sxy = 0, n = 0;
+  for (const [r, g] of pts) {
+    const y = Math.log(g);
+    sx += r; sy += y; sxx += r * r; sxy += r * y; n++;
+  }
+  const det = n * sxx - sx * sx;
+  if (Math.abs(det) < 1e-12) return null;
+  const b = (n * sxy - sx * sy) / det;
+  const a = (sy - b * sx) / n;
+  if (b >= 0) return null;
+  return { xi: -1 / b, A: Math.exp(a) };
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    Main thread: UI, canvas rendering, Plotly plots
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -553,8 +719,20 @@ const statusEl   = document.getElementById('mc-status');
 const progWrap   = document.getElementById('mc-progress-wrap');
 const progBar    = document.getElementById('mc-progress-bar');
 const progLabel  = document.getElementById('mc-progress-label');
+const R0slider   = document.getElementById('R0-slider');
+const R0input    = document.getElementById('R0-input');
+const donSlider  = document.getElementById('donor-slider');
+const donInput   = document.getElementById('donor-input');
+const accSlider  = document.getElementById('acceptor-slider');
+const accInput   = document.getElementById('acceptor-input');
+const aplSlider  = document.getElementById('apl-slider');
+const aplInput   = document.getElementById('apl-input');
 const simDash    = document.getElementById('mc-sim-dashboard');
 const grSec      = document.getElementById('mc-gr-section');
+const fretSec    = document.getElementById('mc-fret-section');
+const fretValEl  = document.getElementById('mc-fret-value');
+const xiValEl    = document.getElementById('mc-xi-value');
+const fretDetail = document.getElementById('mc-fret-detail');
 const canvas     = document.getElementById('mc-lattice-canvas');
 const ctx        = canvas.getContext('2d');
 
@@ -574,6 +752,10 @@ sync(Lslider, Linput);
 sync(xAslider, xAinput);
 sync(omSlider, omInput);
 sync(cycSlider, cycInput);
+sync(R0slider, R0input);
+sync(donSlider, donInput);
+sync(accSlider, accInput);
+sync(aplSlider, aplInput);
 
 // ── Status helpers ────────────────────────────────────────────────────────
 function setStatus(msg, isErr) {
@@ -685,9 +867,8 @@ function plotEnergy(history) {
 }
 
 // ── g(r) plot (Plotly) ────────────────────────────────────────────────────
-function plotGr(grData, apl) {
+function plotGr(grData, apl, fit) {
   // Convert r from lattice units to nm
-  // 1 lattice unit = d = sqrt(2 * APL / sqrt(3))  (default APL = 0.6 nm²)
   const d = Math.sqrt(2 * apl / Math.sqrt(3));
   const x = grData.map(p => p[0] * d);
   const y = grData.map(p => p[1]);
@@ -699,10 +880,35 @@ function plotGr(grData, apl) {
     line: { color: '#E8833A', width: 2 },
     name: 'g(r)'
   }];
+
+  // Add exponential fit line if available
+  const annotations = [];
+  if (fit) {
+    const xFit = [], yFit = [];
+    for (let i = 0; i < x.length; i++) {
+      xFit.push(x[i]);
+      yFit.push(fit.A * Math.exp(-grData[i][0] / fit.xi));
+    }
+    data.push({
+      x: xFit, y: yFit,
+      type: 'scatter', mode: 'lines',
+      line: { color: '#00C244', width: 1.5, dash: 'dash' },
+      name: '\u03be = ' + (fit.xi * d).toFixed(1) + ' nm'
+    });
+    annotations.push({
+      x: Math.log10(fit.xi * d * 1.5), xref: 'x',
+      y: 0.85, yref: 'paper',
+      text: '\u03be = ' + (fit.xi * d).toFixed(1) + ' nm',
+      showarrow: false,
+      font: { color: '#00C244', size: 12 }
+    });
+  }
+
   const layout = {
     paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
     font: { color: '#ccc', size: 11 },
     margin: { l: 50, r: 12, t: 20, b: 40 },
+    showlegend: false,
     xaxis: {
       title: 'r / nm',
       gridcolor: '#333', zerolinecolor: '#444',
@@ -716,7 +922,8 @@ function plotGr(grData, apl) {
     shapes: [{
       type: 'line', x0: x[0], x1: x[x.length - 1],
       y0: 0, y1: 0, line: { color: '#666', width: 1, dash: 'dash' }
-    }]
+    }],
+    annotations: annotations
   };
 
   Plotly.newPlot('mc-gr-plot', data, layout, { responsive: true });
@@ -826,15 +1033,34 @@ function startSimulation() {
 
     if (completed) {
       const dt = ((performance.now() - t0) / 1000).toFixed(1);
-      setStatus('Done in ' + dt + ' s.  Computing g(r)\u2026', false);
+      const apl = +aplInput.value;
+      const d_nm = Math.sqrt(2 * apl / Math.sqrt(3));
+      setStatus('Done in ' + dt + ' s.  Computing g(r) & FRET\u2026', false);
 
-      // Compute g(r) after a brief yield so the status message renders
+      // Compute g(r), correlation length, and FRET after a brief yield
       setTimeout(function() {
         const gr = computeGr(lattice, L);
+        let fit = null;
         if (gr.length > 0) {
           grSec.style.display = 'block';
-          plotGr(gr, 0.6);
+          fit = fitCorrelationLength(gr);
+          plotGr(gr, apl, fit);
         }
+
+        // FRET efficiency
+        const R0  = +R0input.value;
+        const dFr = +donInput.value;
+        const aFr = +accInput.value;
+        const fret = computeFRET(lattice, L, R0, dFr, aFr, apl);
+        fretSec.style.display = 'block';
+        fretValEl.textContent = fret.E.toFixed(3);
+        if (fit) {
+          xiValEl.textContent = (fit.xi * d_nm).toFixed(1);
+        } else {
+          xiValEl.textContent = '—';
+        }
+        fretDetail.textContent = fret.nD + ' donors, ' + fret.nA + ' acceptors';
+
         setStatus('Done in ' + dt + ' s', false);
         setTimeout(function() { setStatus('', false); }, 5000);
       }, 50);
@@ -879,8 +1105,9 @@ const scanProgWrap = document.getElementById('mc-scan-progress-wrap');
 const scanProgBar  = document.getElementById('mc-scan-progress-bar');
 const scanProgLbl  = document.getElementById('mc-scan-progress-label');
 const scanDash     = document.getElementById('mc-scan-dashboard');
-const scanCanvas   = document.getElementById('mc-scan-canvas');
-const scanCtx      = scanCanvas.getContext('2d');
+const scanGalSec   = document.getElementById('mc-scan-gallery-section');
+const scanGallery  = document.getElementById('mc-scan-gallery');
+const scanFretSec  = document.getElementById('mc-fret-scan-section');
 
 sync(scanOmMinSl, scanOmMinIn);
 sync(scanOmMaxSl, scanOmMaxIn);
@@ -894,49 +1121,76 @@ function setScanStatus(msg, isErr) {
   scanStatusEl.style.display = msg ? 'block' : 'none';
 }
 
-/** Draw lattice on the scan canvas (reuses logic from drawLattice). */
-function drawScanLattice(lattice, L) {
-  const containerW = scanCanvas.parentElement ? scanCanvas.parentElement.clientWidth : 600;
-  const maxW = Math.min(600, containerW - 2);
-  const maxH = Math.round(maxW * 0.87);
-  const margin = 4;
-  const xSpan = L;
-  const ySpan = (L - 1) * Math.sqrt(3) / 2;
-  const scale = Math.min((maxW - 2 * margin) / xSpan, (maxH - 2 * margin) / ySpan);
-  const cW = Math.ceil(xSpan * scale + 2 * margin);
-  const cH = Math.ceil(ySpan * scale + 2 * margin);
-  scanCanvas.width  = cW;
-  scanCanvas.height = cH;
-  scanCtx.fillStyle = '#ffffff';
-  scanCtx.fillRect(0, 0, cW, cH);
+/** Render a small thumbnail of the lattice into the scan gallery. */
+function addGalleryThumbnail(lattice, L, omega) {
+  const thumbW = 80, thumbH = 70;
+  const item = document.createElement('div');
+  item.className = 'mc-gallery-item';
+  const c = document.createElement('canvas');
+  c.width = thumbW; c.height = thumbH;
+  const tc = c.getContext('2d');
 
-  if (L > 60) {
-    const pw = Math.max(1, Math.ceil(scale));
-    const ph = Math.max(1, Math.ceil(scale * Math.sqrt(3) / 2));
-    for (let k = 0; k < L * L; k++) {
-      const row = (k / L) | 0, col = k % L;
-      const x = margin + (col + 0.5 * (row % 2)) * scale - pw / 2;
-      const y = margin + row * Math.sqrt(3) / 2 * scale - ph / 2;
-      scanCtx.fillStyle = lattice[k] === 0 ? COL_A : COL_B;
-      scanCtx.fillRect(x, y, pw, ph);
-    }
+  // Draw tiny pixel lattice
+  tc.fillStyle = '#ffffff';
+  tc.fillRect(0, 0, thumbW, thumbH);
+  const scale = Math.min(thumbW / L, thumbH / (L * Math.sqrt(3) / 2));
+  for (let k = 0; k < L * L; k++) {
+    const row = (k / L) | 0, col = k % L;
+    const px = (col + 0.5 * (row % 2)) * scale;
+    const py = row * Math.sqrt(3) / 2 * scale;
+    tc.fillStyle = lattice[k] === 0 ? COL_A : COL_B;
+    tc.fillRect(px, py, Math.max(1, scale), Math.max(1, scale * 0.87));
+  }
+
+  const label = document.createElement('div');
+  label.className = 'mc-gallery-label';
+  label.textContent = omega.toFixed(2);
+  item.appendChild(c);
+  item.appendChild(label);
+  scanGallery.appendChild(item);
+}
+
+/** Plot FRET efficiency vs ω. */
+let fretScanPlotInit = false;
+function plotFretScan(results) {
+  const x = results.map(d => d.omega);
+  const y = results.map(d => d.fretE);
+  const omCrit = Math.log(3) / 2;
+
+  const data = [{
+    x, y,
+    type: 'scatter',
+    mode: 'lines+markers',
+    line: { color: '#00C244', width: 2 },
+    marker: { color: '#00C244', size: 5 },
+    name: '\u27e8E\u27e9'
+  }];
+  const layout = {
+    paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
+    font: { color: '#ccc', size: 11 },
+    margin: { l: 50, r: 12, t: 20, b: 40 },
+    xaxis: {
+      title: '\u03c9<sub>AB</sub> / k<sub>B</sub>T',
+      gridcolor: '#333', zerolinecolor: '#444'
+    },
+    yaxis: {
+      title: 'FRET Efficiency \u27e8E\u27e9',
+      gridcolor: '#333', zerolinecolor: '#444',
+      range: [0, Math.max(0.5, Math.max(...y) * 1.15)]
+    },
+    shapes: [{
+      type: 'line',
+      x0: omCrit, x1: omCrit,
+      y0: 0, y1: 1, yref: 'paper',
+      line: { color: '#888', width: 1.5, dash: 'dash' }
+    }]
+  };
+
+  if (!fretScanPlotInit) {
+    Plotly.newPlot('mc-fret-scan-plot', data, layout, { responsive: true });
+    fretScanPlotInit = true;
   } else {
-    const r = scale / Math.sqrt(3);
-    for (let k = 0; k < L * L; k++) {
-      const row = (k / L) | 0, col = k % L;
-      const cx = margin + (col + 0.5 * (row % 2)) * scale;
-      const cy = margin + row * Math.sqrt(3) / 2 * scale;
-      scanCtx.beginPath();
-      for (let a = 0; a < 6; a++) {
-        const angle = Math.PI / 6 + a * Math.PI / 3;
-        const hx = cx + r * Math.cos(angle);
-        const hy = cy + r * Math.sin(angle);
-        if (a === 0) scanCtx.moveTo(hx, hy); else scanCtx.lineTo(hx, hy);
-      }
-      scanCtx.closePath();
-      scanCtx.fillStyle = lattice[k] === 0 ? COL_A : COL_B;
-      scanCtx.fill();
-    }
+    Plotly.react('mc-fret-scan-plot', data, layout);
   }
 }
 
@@ -1003,6 +1257,10 @@ function startHeatCapacityScan() {
   const omegaStep   = +scanOmStepIn.value;
   const eqCycles    = +scanEqIn.value;
   const prodCycles  = +scanProdIn.value;
+  const R0          = +R0input.value;
+  const dFr         = +donInput.value;
+  const aFr         = +accInput.value;
+  const apl         = +aplInput.value;
 
   if (omegaMin >= omegaMax) {
     setScanStatus('\u03c9_min must be less than \u03c9_max', true); return;
@@ -1024,8 +1282,11 @@ function startHeatCapacityScan() {
   scanStopBtn.style.display = 'inline-block';
   scanProgWrap.style.display = 'block';
   scanProgBar.value = 0;
+  scanGalSec.style.display = 'block';
+  scanGallery.innerHTML = '';
   scanDash.style.display = 'grid';
   hcPlotInit = false;
+  fretScanPlotInit = false;
   setScanStatus('Running scan\u2026', false);
   const t0 = performance.now();
 
@@ -1086,10 +1347,16 @@ function startHeatCapacityScan() {
         const meanU = sumU / nSamp;
         const varU  = sumU2 / nSamp - meanU * meanU;
         const C     = omega * omega * varU / N;
-        results.push({ omega: omega, C: C });
 
-        drawScanLattice(lattice, L);
+        // Compute FRET efficiency at this ω
+        const fret = computeFRET(lattice, L, R0, dFr, aFr, apl);
+
+        results.push({ omega: omega, C: C, fretE: fret.E });
+
+        // Gallery thumbnail + plots
+        addGalleryThumbnail(lattice, L, omega);
         plotHeatCapacity(results);
+        plotFretScan(results);
 
         ptIdx++;
         setTimeout(runPoint, 0);
