@@ -1,7 +1,7 @@
 <!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Asymmetric Bilayer Phase Diagram | Heberle Lab </title> <meta name="author" content="Fred A. Heberle"> <meta name="description" content="Interactive phase diagram calculator for asymmetric lipid bilayers using the Bragg–Williams mean-field model. "> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?v=f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?v=62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="/assets/img/favicon.svg?v=1711252639d7fd55f75c1a48ace9036a"> <link rel="stylesheet" href="/assets/css/main.css?v=d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://heberlelab.com/asymmetry/phase-diagram/"> <script src="/assets/js/theme.js?v=5fea5159b787642c1bbc1f334d60f883"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
     initTheme();
     document.documentElement.setAttribute('data-theme', 'dark');
-  </script> <style>#light-toggle{display:none!important}a{color:#00c244!important}a:hover{color:#c0a!important}.page-banner{width:100%;overflow:hidden}.page-banner img{width:100%;height:720px;object-fit:cover;object-position:center;display:block}</style> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand" href="/"> <img src="/assets/img/heberlelab-logo-header.svg" alt="Heberle Lab" style="height: 52px; width: auto;"> </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">Home </a> </li> <li class="nav-item dropdown "> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Research </a> <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> <a class="dropdown-item " href="/overview/">Overview</a> <a class="dropdown-item " href="/domains/">Domains</a> <a class="dropdown-item " href="/asymmetry/">Asymmetry</a> </div> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">Publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/people/">People </a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Asymmetric Bilayer Phase Diagram</h1> <p class="post-description">Interactive phase diagram calculator for asymmetric lipid bilayers using the Bragg–Williams mean-field model. </p> </header> <article> <style>.pd-tool{max-width:840px}.pd-desc{font-size:14px;color:#aaa;margin-bottom:24px;line-height:1.65}.pd-desc a{color:#00c244}.pd-panel{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:8px;padding:16px 20px;margin-bottom:14px}.pd-panel h4{margin:0 0 12px;font-size:12px;color:#777;text-transform:uppercase;letter-spacing:.06em}.pd-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}.pd-row:last-child{margin-bottom:0}.pd-sym{font-size:16px;min-width:22px;font-style:italic}.pd-slider{flex:1;min-width:160px;max-width:320px;accent-color:#00c244;cursor:pointer}.pd-num{width:68px;padding:5px 8px;border:1px solid #555;border-radius:4px;background:#1e1e1e;color:#f0f0f0;font-size:14px}.pd-hint{font-size:12px;color:#666;white-space:nowrap}#pd-morph{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.03em;background:#252525;border:1px solid #444;color:#888;vertical-align:middle;transition:color .2s,border-color .2s}.pd-check-row{display:flex;align-items:center;gap:9px;margin-bottom:10px}.pd-check{accent-color:#00c244;width:14px;height:14px;cursor:pointer}.pd-tl-label{font-size:13px;min-width:130px;color:#bbb}#pd-generate{padding:10px 28px;border:0;border-radius:6px;background:#00c244;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}#pd-generate:hover:not(:disabled){background:#00a838}#pd-generate:disabled{opacity:.4;cursor:default}#pd-export{padding:10px 20px;border:1px solid #444;border-radius:6px;background:#222;color:#ccc;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-left:10px}#pd-export:hover:not(:disabled){background:#333;color:#fff;border-color:#666}#pd-export:disabled{opacity:.35;cursor:default}#pd-dense{padding:10px 20px;border:1px solid #335;border-radius:6px;background:#1a1a2e;color:#9ad;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-left:10px}#pd-dense:hover:not(:disabled){background:#224;color:#bcf;border-color:#557}#pd-dense:disabled{opacity:.35;cursor:default}#pd-dense-export{padding:10px 20px;border:1px solid #335;border-radius:6px;background:#1a1a2e;color:#9ad;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-left:6px}#pd-dense-export:hover:not(:disabled){background:#224;color:#bcf;border-color:#557}#pd-dense-export:disabled{opacity:.35;cursor:default}#pd-status{display:none;padding:9px 14px;border-radius:6px;margin:12px 0 4px;font-size:13px}.pd-err{background:rgba(200,0,0,.12);color:#ff7070;border:1px solid #c22}.pd-ok{background:rgba(0,194,68,.10);color:#00c244;border:1px solid #00c244}#pd-canvas{display:block;border:1px solid #2e2e2e;border-radius:4px;background:#fff;max-width:100%}.pd-diagram-row{display:flex;align-items:flex-start;gap:18px;margin-top:14px}.pd-legend{display:flex;flex-direction:column;gap:10px;font-size:13px;color:#000!important;flex-shrink:0;margin-top:28px;background:#fff!important;border:1px solid #ccc;border-radius:6px;padding:12px 14px;align-self:flex-start}.pd-legend-item{display:flex;align-items:center;gap:6px;color:#000!important}.pd-swatch{width:16px;height:16px;border-radius:3px;flex-shrink:0}</style> <div class="pd-tool"> <p class="pd-desc"> Interactive phase diagram calculator for asymmetric lipid bilayers based on the Bragg–Williams mean-field model: <em>f</em>(φ,ψ) = <em>f</em><sub>BW</sub>(φ) + <em>f</em><sub>BW</sub>(ψ) + Λ(φ−ψ)<sup>2</sup>. Here φ and ψ are the ordered-lipid mole fractions in the upper and lower leaflets, χ is the Flory–Huggins interaction parameter, and Λ is the interleaflet coupling. Three morphology types arise depending on Λ relative to Λ<sub>C</sub> = χ−2 and Λ* = 1.5χ(χ−2)/(2χ−3): <strong>Type 1</strong> (Λ ≤ Λ<sub>C</sub>, T-junction), <strong>Type 2</strong> (Λ<sub>C</sub> &lt; Λ &lt; Λ*, interior lenses), and <strong>Type 3</strong> (Λ ≥ Λ*, R<sub>D</sub>+R<sub>O</sub> only), as described by <a href="https://doi.org/10.1529/biophysj.107.115675" target="_blank" rel="external nofollow noopener">Wagner, Loew &amp; May (2007)</a>. Phase notation follows Kennison et al. (2024). </p> <div class="pd-panel"> <h4>Parameters</h4> <div class="pd-row"> <span class="pd-sym" title="Flory-Huggins interaction parameter">χ</span> <input type="range" class="pd-slider" id="chi-slider" min="2.05" max="4.0" step="0.05" value="2.2"> <input type="number" class="pd-num" id="chi-input" min="2.05" max="4.0" step="0.05" value="2.2"> <span class="pd-hint"> Λ<sub>C</sub> = <span id="lam-c-val">0.200</span>  Λ* = <span id="lam-s-val">0.471</span> </span> </div> <div class="pd-row"> <span class="pd-sym" title="Interleaflet coupling">Λ</span> <input type="range" class="pd-slider" id="lam-slider" min="0" max="1.5" step="0.005" value="0.3"> <input type="number" class="pd-num" id="lam-input" min="0" max="1.5" step="0.005" value="0.3"> <span id="pd-morph">Type 2</span> </div> </div> <div class="pd-panel"> <h4>Tielines</h4> <div class="pd-check-row"> <input type="checkbox" class="pd-check" id="show-tielines" checked> <label for="show-tielines" style="font-size:14px; cursor:pointer;">Show tielines</label> </div> <div class="pd-check-row" style="margin-top:4px;"> <input type="checkbox" class="pd-check" id="show-spinodal"> <label for="show-spinodal" style="font-size:14px; cursor:pointer;">Show spinodal</label> </div> <div class="pd-check-row" style="margin-top:4px;"> <input type="checkbox" class="pd-check" id="show-stars" checked> <label for="show-stars" style="font-size:14px; cursor:pointer;">Show consolute points</label> </div> <div id="pd-tl-rows"> <div class="pd-row"> <span class="pd-tl-label">R<sub>D</sub>+R<sub>O</sub></span> <input type="range" class="pd-slider" id="n-rdro" min="2" max="15" step="1" value="6"> <span id="n-rdro-val" style="min-width:18px;">6</span> </div> <div class="pd-row"> <span class="pd-tl-label">AR-containing</span> <input type="range" class="pd-slider" id="n-ar" min="2" max="15" step="1" value="6"> <span id="n-ar-val" style="min-width:18px;">6</span> </div> </div> </div> <div class="pd-panel"> <h4>Dense Tielines <span style="font-size:11px;color:#555;font-weight:400;text-transform:none;">(Type 2 only)</span> </h4> <div class="pd-row"> <span class="pd-tl-label">Trajectory points</span> <input type="range" class="pd-slider" id="n-dense" min="50" max="2000" step="50" value="500"> <span id="n-dense-val" style="min-width:36px;">500</span> </div> <div id="pd-dense-status" style="font-size:12px;color:#666;margin-top:2px;min-height:16px;"></div> </div> <button id="pd-generate">Generate Phase Diagram</button> <button id="pd-dense" disabled title="Generate a Type 2 diagram first">Dense Tielines</button> <button id="pd-dense-export" disabled title="Compute dense tielines first">Export Dense</button> <button id="pd-export" disabled title="Generate a diagram first">Export to Excel</button> <div id="pd-status"></div> <div class="pd-diagram-row"> <canvas id="pd-canvas" width="500" height="500" style="width:500px; height:500px;"></canvas> <div class="pd-legend" id="pd-legend" style="display:none;"> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#AAAAEE;"></div> R<sub>D</sub> + AR<sub>OD</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#F0D080;"></div> R<sub>D</sub> + AR<sub>DO</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#88CC88;"></div> R<sub>O</sub> + AR<sub>OD</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#CC99CC;"></div> R<sub>O</sub> + AR<sub>DO</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#FFAAAA;"></div> R<sub>D</sub> + R<sub>O</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#CCCCCC; border:1px solid #777;"></div> Three-phase </div> </div> </div> </div> <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> <script>
+  </script> <style>#light-toggle{display:none!important}a{color:#00c244!important}a:hover{color:#c0a!important}.page-banner{width:100%;overflow:hidden}.page-banner img{width:100%;height:720px;object-fit:cover;object-position:center;display:block}</style> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand" href="/"> <img src="/assets/img/heberlelab-logo-header.svg" alt="Heberle Lab" style="height: 52px; width: auto;"> </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">Home </a> </li> <li class="nav-item dropdown "> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Research </a> <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> <a class="dropdown-item " href="/overview/">Overview</a> <a class="dropdown-item " href="/domains/">Domains</a> <a class="dropdown-item " href="/asymmetry/">Asymmetry</a> </div> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">Publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/people/">People </a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Asymmetric Bilayer Phase Diagram</h1> <p class="post-description">Interactive phase diagram calculator for asymmetric lipid bilayers using the Bragg–Williams mean-field model. </p> </header> <article> <style>.pd-tool{max-width:840px}.pd-desc{font-size:14px;color:#aaa;margin-bottom:24px;line-height:1.65}.pd-desc a{color:#00c244}.pd-panel{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:8px;padding:16px 20px;margin-bottom:14px}.pd-panel h4{margin:0 0 12px;font-size:12px;color:#777;text-transform:uppercase;letter-spacing:.06em}.pd-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}.pd-row:last-child{margin-bottom:0}.pd-sym{font-size:16px;min-width:22px;font-style:italic}.pd-slider{flex:1;min-width:160px;max-width:320px;accent-color:#00c244;cursor:pointer}.pd-num{width:68px;padding:5px 8px;border:1px solid #555;border-radius:4px;background:#1e1e1e;color:#f0f0f0;font-size:14px}.pd-hint{font-size:12px;color:#666;white-space:nowrap}#pd-morph{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.03em;background:#252525;border:1px solid #444;color:#888;vertical-align:middle;transition:color .2s,border-color .2s}.pd-check-row{display:flex;align-items:center;gap:9px;margin-bottom:10px}.pd-check{accent-color:#00c244;width:14px;height:14px;cursor:pointer}.pd-tl-label{font-size:13px;min-width:130px;color:#bbb}#pd-generate{padding:10px 28px;border:0;border-radius:6px;background:#00c244;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}#pd-generate:hover:not(:disabled){background:#00a838}#pd-generate:disabled{opacity:.4;cursor:default}#pd-export{padding:10px 20px;border:1px solid #444;border-radius:6px;background:#222;color:#ccc;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-left:10px}#pd-export:hover:not(:disabled){background:#333;color:#fff;border-color:#666}#pd-export:disabled{opacity:.35;cursor:default}#pd-dense{padding:10px 20px;border:1px solid #335;border-radius:6px;background:#1a1a2e;color:#9ad;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-left:10px}#pd-dense:hover:not(:disabled){background:#224;color:#bcf;border-color:#557}#pd-dense:disabled{opacity:.35;cursor:default}#pd-dense-export{padding:10px 20px;border:1px solid #335;border-radius:6px;background:#1a1a2e;color:#9ad;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-left:6px}#pd-dense-export:hover:not(:disabled){background:#224;color:#bcf;border-color:#557}#pd-dense-export:disabled{opacity:.35;cursor:default}#pd-status{display:none;padding:9px 14px;border-radius:6px;margin:12px 0 4px;font-size:13px}.pd-err{background:rgba(200,0,0,.12);color:#ff7070;border:1px solid #c22}.pd-ok{background:rgba(0,194,68,.10);color:#00c244;border:1px solid #00c244}#pd-canvas{display:block;border:1px solid #2e2e2e;border-radius:4px;background:#fff;max-width:100%}.pd-diagram-row{display:flex;align-items:flex-start;gap:18px;margin-top:14px}.pd-legend{display:flex;flex-direction:column;gap:10px;font-size:13px;color:#000!important;flex-shrink:0;margin-top:28px;background:#fff!important;border:1px solid #ccc;border-radius:6px;padding:12px 14px;align-self:flex-start}.pd-legend-item{display:flex;align-items:center;gap:6px;color:#000!important}.pd-swatch{width:16px;height:16px;border-radius:3px;flex-shrink:0}</style> <div class="pd-tool"> <p class="pd-desc"> Interactive phase diagram calculator for asymmetric lipid bilayers based on the Bragg–Williams mean-field model: <em>f</em>(φ,ψ) = <em>f</em><sub>BW</sub>(φ) + <em>f</em><sub>BW</sub>(ψ) + Λ(φ−ψ)<sup>2</sup>. Here φ and ψ are the ordered-lipid mole fractions in the upper and lower leaflets, χ is the Flory–Huggins interaction parameter, and Λ is the interleaflet coupling. Three morphology types arise depending on Λ relative to Λ<sub>C</sub> = χ−2 and Λ* = 1.5χ(χ−2)/(2χ−3): <strong>Type 1</strong> (Λ ≤ Λ<sub>C</sub>, T-junction), <strong>Type 2</strong> (Λ<sub>C</sub> &lt; Λ &lt; Λ*, interior lenses), and <strong>Type 3</strong> (Λ ≥ Λ*, R<sub>D</sub>+R<sub>O</sub> only), as described by <a href="https://doi.org/10.1529/biophysj.107.115675" target="_blank" rel="external nofollow noopener">Wagner, Loew &amp; May (2007)</a>. Phase notation follows Kennison et al. (2024). </p> <div class="pd-panel"> <h4>Parameters</h4> <div class="pd-row"> <span class="pd-sym" title="Flory-Huggins interaction parameter">χ</span> <input type="range" class="pd-slider" id="chi-slider" min="2.05" max="4.0" step="0.05" value="2.2"> <input type="number" class="pd-num" id="chi-input" min="2.05" max="4.0" step="0.05" value="2.2"> <span class="pd-hint"> Λ<sub>C</sub> = <span id="lam-c-val">0.200</span>  Λ* = <span id="lam-s-val">0.471</span> </span> </div> <div class="pd-row"> <span class="pd-sym" title="Interleaflet coupling">Λ</span> <input type="range" class="pd-slider" id="lam-slider" min="0" max="1.5" step="0.005" value="0.3"> <input type="number" class="pd-num" id="lam-input" min="0" max="1.5" step="0.005" value="0.3"> <span id="pd-morph">Type 2</span> </div> </div> <div class="pd-panel"> <h4>Tielines</h4> <div class="pd-check-row"> <input type="checkbox" class="pd-check" id="show-tielines" checked> <label for="show-tielines" style="font-size:14px; cursor:pointer;">Show tielines</label> </div> <div class="pd-check-row" style="margin-top:4px;"> <input type="checkbox" class="pd-check" id="show-spinodal"> <label for="show-spinodal" style="font-size:14px; cursor:pointer;">Show spinodal</label> </div> <div class="pd-check-row" style="margin-top:4px;"> <input type="checkbox" class="pd-check" id="show-stars" checked> <label for="show-stars" style="font-size:14px; cursor:pointer;">Show consolute points</label> </div> <div id="pd-tl-rows"> <div class="pd-row"> <span class="pd-tl-label">R<sub>D</sub>+R<sub>O</sub></span> <input type="range" class="pd-slider" id="n-rdro" min="2" max="15" step="1" value="6"> <span id="n-rdro-val" style="min-width:18px;">6</span> </div> <div class="pd-row"> <span class="pd-tl-label">AR-containing</span> <input type="range" class="pd-slider" id="n-ar" min="2" max="15" step="1" value="6"> <span id="n-ar-val" style="min-width:18px;">6</span> </div> </div> </div> <div class="pd-panel"> <h4>Dense Tielines <span style="font-size:11px;color:#555;font-weight:400;text-transform:none;">(Types 1 &amp; 2)</span> </h4> <div class="pd-row"> <span class="pd-tl-label">Trajectory points</span> <input type="range" class="pd-slider" id="n-dense" min="50" max="2000" step="50" value="500"> <span id="n-dense-val" style="min-width:36px;">500</span> </div> <div id="pd-dense-status" style="font-size:12px;color:#666;margin-top:2px;min-height:16px;"></div> </div> <button id="pd-generate">Generate Phase Diagram</button> <button id="pd-dense" disabled title="Generate a Type 1 or Type 2 diagram first">Dense Tielines</button> <button id="pd-dense-export" disabled title="Compute dense tielines first">Export Dense</button> <button id="pd-export" disabled title="Generate a diagram first">Export to Excel</button> <div id="pd-status"></div> <div class="pd-diagram-row"> <canvas id="pd-canvas" width="500" height="500" style="width:500px; height:500px;"></canvas> <div class="pd-legend" id="pd-legend" style="display:none;"> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#AAAAEE;"></div> R<sub>D</sub> + AR<sub>OD</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#F0D080;"></div> R<sub>D</sub> + AR<sub>DO</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#88CC88;"></div> R<sub>O</sub> + AR<sub>OD</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#CC99CC;"></div> R<sub>O</sub> + AR<sub>DO</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#FFAAAA;"></div> R<sub>D</sub> + R<sub>O</sub> </div> <div class="pd-legend-item"> <div class="pd-swatch" style="background:#CCCCCC; border:1px solid #777;"></div> Three-phase </div> </div> </div> </div> <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> <script>
 'use strict';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1155,23 +1155,27 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Dense tieline computation
-// Two generating trajectories (Type 2 diagrams):
+// Two generating trajectories (Type 1 and Type 2 diagrams):
 //
-//  Traj 1 — R_D+R_O region:
+//  Traj 1 — R_D+R_O region (same for both types):
 //    mid(V1,V2)  →  (0.5, 0.5)
 //    Entire path lies within the R_D+R_O two-phase lens; all probes succeed.
 //    Warm-start walks from the triangle-edge anchor toward the consolute.
 //
 //  Traj 2 — R_D+AR_OD arm:
-//    mid(V1,V3)  →  consolute_pt  →  ψ=0
-//    Starts at the triangle boundary (two-phase), crosses the consolute
-//    critical point, then enters the one-phase region. Nulls in the
-//    one-phase tail are silently skipped; a run of ≥20 consecutive nulls
-//    terminates the search.
+//    Type 2: mid(V1,V3)  →  consolute_pt  →  ψ=0
+//      Starts at the triangle boundary, crosses the consolute critical point,
+//      then enters the one-phase region; ≥20 consecutive nulls terminates.
+//    Type 1: mid(V1,V3)  →  (0.5, 0)  (straight line, no consolute needed)
+//      The arm has no three-phase boundary, so we walk the entire straight
+//      line; ≥20 consecutive nulls terminates early if the 1-phase region
+//      is entered before reaching (0.5, 0).
+//    Both types: traj2 is mirrored via swapTl / reflectTl to cover all four
+//    AR-containing two-phase regions.
 // ═══════════════════════════════════════════════════════════════════════════
 async function computeDenseTielines(chi, lam, res, N, onProgress) {
   const { V1, V2, V3, consolute_pt, morphology: morph } = res;
-  if (morph !== 'type2' || V1 === null) return { traj1: [], traj2: [] };
+  if ((morph !== 'type2' && morph !== 'type1') || V1 === null) return { traj1: [], traj2: [] };
 
   const rng = makePRNG(Date.now() & 0xFFFFFFFF);
   const NR_COLD = 0;   // rely on 50 warm starts — cold restarts waste time here
@@ -1212,46 +1216,59 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
     }
   }
 
-  // ── Trajectory 2: mid(V1,V3) → consolute_pt → ψ=0 ────────────────────
+  // ── Trajectory 2: R_D+AR_OD arm ──────────────────────────────────────
   const midAR = [(V1[0]+V3[0])/2, (V1[1]+V3[1])/2];
   const traj2 = [];
-  if (consolute_pt !== null) {
-    // Line direction: midAR → consolute_pt, extended to ψ=0
-    const dx = consolute_pt[0] - midAR[0];
-    const dy = consolute_pt[1] - midAR[1];
-    // Parameter t where ψ reaches 0:  midAR[1] + t*dy = 0  →  t = -midAR[1]/dy
-    const tPsi0 = (Math.abs(dy) > 1e-9) ? -midAR[1] / dy : 2.5;
+  {
+    let dx, dy, tMax;
+    if (morph === 'type2' && consolute_pt !== null) {
+      // Type 2: midAR → consolute_pt, extended to ψ=0
+      dx   = consolute_pt[0] - midAR[0];
+      dy   = consolute_pt[1] - midAR[1];
+      // t where ψ reaches 0: midAR[1] + t*dy = 0
+      tMax = (Math.abs(dy) > 1e-9) ? Math.max(-midAR[1] / dy, 1.05) : 2.5;
+    } else if (morph === 'type1') {
+      // Type 1: midAR → (0.5, 0)  straight line
+      dx   = 0.5    - midAR[0];
+      dy   = 0      - midAR[1];
+      tMax = 1.0;
+    } else {
+      // type2 without a resolved consolute: skip traj2
+      dx = dy = 0; tMax = 0;
+    }
 
-    const anchor = sortTl([V1.slice(), V3.slice()]);
-    let hL = anchor[0].slice(), hR = anchor[1].slice();
-    let failStreak = 0;
+    if (tMax > 0) {
+      const anchor = sortTl([V1.slice(), V3.slice()]);
+      let hL = anchor[0].slice(), hR = anchor[1].slice();
+      let failStreak = 0;
 
-    for (let i = 0; i < N; i++) {
-      const t    = (i / Math.max(N - 1, 1)) * Math.max(tPsi0, 1.05);
-      const phi_c = midAR[0] + t * dx;
-      const psi_c = midAR[1] + t * dy;
+      for (let i = 0; i < N; i++) {
+        const t     = (i / Math.max(N - 1, 1)) * tMax;
+        const phi_c = midAR[0] + t * dx;
+        const psi_c = midAR[1] + t * dy;
 
-      if (psi_c < GUARD) break;           // reached ψ = 0
-      if (phi_c < GUARD || phi_c > 1 - GUARD || psi_c > 1 - GUARD) continue;
-      if (psi_c >= phi_c - GUARD) continue;  // outside lower triangle
+        if (psi_c < GUARD) break;           // reached ψ ≈ 0
+        if (phi_c < GUARD || phi_c > 1 - GUARD || psi_c > 1 - GUARD) continue;
+        if (psi_c >= phi_c - GUARD) continue;  // outside lower triangle
 
-      let tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, NR_COLD, rng, 0.010);
-      if (tl === null)
-        tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, 15, rng, 0.025);
+        let tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, NR_COLD, rng, 0.010);
+        if (tl === null)
+          tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, 15, rng, 0.025);
 
-      if (tl !== null) {
-        tl = sortTl(tl);
-        hL = tl[0].slice(); hR = tl[1].slice();
-        traj2.push(tl);
-        failStreak = 0;
-      } else {
-        failStreak++;
-        if (failStreak > 20) break;   // solidly in 1-phase region
-      }
+        if (tl !== null) {
+          tl = sortTl(tl);
+          hL = tl[0].slice(); hR = tl[1].slice();
+          traj2.push(tl);
+          failStreak = 0;
+        } else {
+          failStreak++;
+          if (failStreak > 20) break;   // solidly in 1-phase region
+        }
 
-      if (i % 50 === 0) {
-        if (onProgress) onProgress(`Trajectory 2… ${Math.round(i/N*100)} %`);
-        await new Promise(r => setTimeout(r, 0));
+        if (i % 50 === 0) {
+          if (onProgress) onProgress(`Trajectory 2… ${Math.round(i/N*100)} %`);
+          await new Promise(r => setTimeout(r, 0));
+        }
       }
     }
   }
@@ -1342,7 +1359,10 @@ function exportDenseTielines(chi, lam, res, denseTl) {
     [],
     ['Trajectory',           'Description',                         'Tielines found'],
     ['Traj 1',  'mid(V1,V2) → (0.5,0.5)  [R_D+R_O region]',      traj1.length],
-    ['Traj 2',  'mid(V1,V3) → consolute → ψ=0  [R_D+AR_OD; mirrored to all 4 AR regions]', traj2.length],
+    ['Traj 2',  res.morphology === 'type1'
+                  ? 'mid(V1,V3) → (0.5,0)  [R_D+AR_OD arm; mirrored to all 4 AR regions]'
+                  : 'mid(V1,V3) → consolute → ψ=0  [R_D+AR_OD; mirrored to all 4 AR regions]',
+               traj2.length],
     [],
     ['Note: phi_1 ≤ phi_2 in all tieline sheets (sorted by outer-leaflet composition).'],
   ];
@@ -1599,9 +1619,9 @@ genBtn.addEventListener('click', async () => {
     denseExportBtn.disabled = true;
     denseExportBtn.title    = 'Compute dense tielines first';
     exportBtn.disabled = false; exportBtn.title = '';
-    const isType2 = res.morphology === 'type2' && res.V1 !== null;
-    denseBtn.disabled = !isType2;
-    denseBtn.title    = isType2 ? '' : 'Only available for Type 2 diagrams with a resolved three-phase triangle';
+    const denseOk = (res.morphology === 'type2' || res.morphology === 'type1') && res.V1 !== null;
+    denseBtn.disabled = !denseOk;
+    denseBtn.title    = denseOk ? '' : 'Only available for Type 1 and Type 2 diagrams with a resolved tie-triangle';
   } catch (e) {
     setStatus('Error: ' + e.message, true);
     console.error(e);
