@@ -1293,11 +1293,14 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
   }
   } // end isType12 — traj2
 
-  // ── Type 3: single trajectory (0.5,0.5) → (1,0) ─────────────────────
-  // The two-phase region is entered after crossing the consolute point.
-  // Probes in the initial one-phase section (near the diagonal) fail
-  // silently; failStreak counting begins only after the first success.
-  // Seed from the middle of the pre-computed blue tieline array.
+  // ── Type 3: single trajectory (0.5,0.5) → (1,0)  → traj1 ────────────
+  // Type 3 has ONLY the R_D+R_O two-phase region; no AR arms exist.
+  // This trajectory is the Type 3 analogue of traj1 in Types 1 & 2:
+  // it is drawn with T_RD_RO color and mirrored by swapTl for the upper half.
+  // The trajectory crosses the consolute point; probes in the initial
+  // one-phase section (near the diagonal) fail silently — failStreak is
+  // only counted after the first successful tieline is found.
+  // Seeded from the middle of the pre-computed blue tieline array.
   if (isType3) {
     let hL = null, hR = null;
     if (blue && blue.length > 0) {
@@ -1329,7 +1332,7 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
       if (tl !== null) {
         tl = sortTl(tl);
         hL = tl[0].slice(); hR = tl[1].slice();
-        traj2.push(tl);
+        traj1.push(tl);   // R_D+R_O — same array as Types 1 & 2 traj1
         failStreak = 0;
         foundFirst = true;
       } else if (foundFirst) {
@@ -1430,9 +1433,12 @@ function exportDenseTielines(chi, lam, res, denseTl) {
     ['Morphology',            MORPH_LABEL[res.morphology] || res.morphology],
     [],
     ['Trajectory',           'Description',                         'Tielines found'],
-    ['Traj 1',  'mid(V1,V2) → (0.5,0.5)  [R_D+R_O region]',      traj1.length],
+    ['Traj 1',  res.morphology === 'type3'
+                  ? '(0.5,0.5) → (1,0) through consolute  [R_D+R_O region; Type 3 only]'
+                  : 'mid(V1,V2) → (0.5,0.5)  [R_D+R_O region]',
+               traj1.length],
     ['Traj 2',  res.morphology === 'type3'
-                  ? '(0.5,0.5) → (1,0) through consolute  [R_D+AR_OD; mirrored to all 4 AR regions]'
+                  ? '(not applicable — Type 3 has no AR-containing regions)'
                   : res.morphology === 'type1'
                     ? 'mid(V1,V3) → (0.5,0)  [R_D+AR_OD arm; mirrored to all 4 AR regions]'
                     : 'mid(V1,V3) → consolute → ψ=0  [R_D+AR_OD; mirrored to all 4 AR regions]',
