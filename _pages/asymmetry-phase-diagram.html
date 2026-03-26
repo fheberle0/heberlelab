@@ -74,6 +74,15 @@ description: >
   #pd-export:hover:not(:disabled) { background: #333; color: #fff; border-color: #666; }
   #pd-export:disabled { opacity: .35; cursor: default; }
 
+  #pd-dense {
+    padding: 10px 20px; border: 1px solid #335; border-radius: 6px;
+    background: #1a1a2e; color: #99aadd;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: .15s;
+    margin-left: 10px;
+  }
+  #pd-dense:hover:not(:disabled) { background: #222244; color: #bbccff; border-color: #557; }
+  #pd-dense:disabled { opacity: .35; cursor: default; }
+
   /* ── Status bar ─────────────────────────────────────────── */
   #pd-status {
     display: none; padding: 9px 14px; border-radius: 6px;
@@ -188,7 +197,19 @@ description: >
     </div>
   </div>
 
+  <!-- ── Dense tieline controls ────────────────────────────────────────── -->
+  <div class="pd-panel">
+    <h4>Dense Tielines <span style="font-size:11px;color:#555;font-weight:400;text-transform:none;">(Type 2 only)</span></h4>
+    <div class="pd-row">
+      <span class="pd-tl-label">Trajectory points</span>
+      <input type="range" class="pd-slider" id="n-dense" min="50" max="2000" step="50" value="500">
+      <span id="n-dense-val" style="min-width:36px;">500</span>
+    </div>
+    <div id="pd-dense-status" style="font-size:12px;color:#666;margin-top:2px;min-height:16px;"></div>
+  </div>
+
   <button id="pd-generate">Generate Phase Diagram</button>
+  <button id="pd-dense"  disabled title="Generate a Type 2 diagram first">Dense Tielines</button>
   <button id="pd-export" disabled title="Generate a diagram first">Export to Excel</button>
   <div id="pd-status"></div>
 
@@ -1268,7 +1289,7 @@ function drawAxes(ctx, chi, lam, morph) {
   ctx.restore();
 }
 
-function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinodal, showStars) {
+function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinodal, showStars, denseTl) {
   const dpr = window.devicePixelRatio || 1;
   canvas.width  = CSZ  * dpr;
   canvas.height = CSZH * dpr;
@@ -1330,6 +1351,9 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
     }
   }
 
+  // ── Dense tieline overlay (drawn before sparse so sparse stays on top) ──
+  if (denseTl) drawDenseTielines(ctx, denseTl);
+
   // ── Tielines ──
   if (showTielines) {
     const DIAG = 0.005;
@@ -1374,6 +1398,147 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
                  ML + PSZ / 2, MT + PSZ - 10);
     ctx.restore();
   }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Dense tieline computation
+// Two generating trajectories (Type 2 diagrams):
+//
+//  Traj 1 — R_D+R_O region:
+//    mid(V1,V2)  →  (0.5, 0.5)
+//    Entire path lies within the R_D+R_O two-phase lens; all probes succeed.
+//    Warm-start walks from the triangle-edge anchor toward the consolute.
+//
+//  Traj 2 — R_D+AR_OD arm:
+//    mid(V1,V3)  →  consolute_pt  →  ψ=0
+//    Starts at the triangle boundary (two-phase), crosses the consolute
+//    critical point, then enters the one-phase region. Nulls in the
+//    one-phase tail are silently skipped; a run of ≥20 consecutive nulls
+//    terminates the search.
+// ═══════════════════════════════════════════════════════════════════════════
+async function computeDenseTielines(chi, lam, res, N, onProgress) {
+  const { V1, V2, V3, consolute_pt, morphology: morph } = res;
+  if (morph !== 'type2' || V1 === null) return { traj1: [], traj2: [] };
+
+  const rng = makePRNG(Date.now() & 0xFFFFFFFF);
+  const NR_COLD = 0;   // rely on 50 warm starts — cold restarts waste time here
+
+  // ── Trajectory 1: mid(V1,V2) → (0.5,0.5) ─────────────────────────────
+  const midR = [(V1[0]+V2[0])/2, (V1[1]+V2[1])/2];
+  const traj1 = [];
+  {
+    const anchor = sortTl([V1.slice(), V2.slice()]);
+    let hL = anchor[0].slice(), hR = anchor[1].slice();
+    let failStreak = 0;
+
+    for (let i = 0; i < N; i++) {
+      const t    = i / Math.max(N - 1, 1);
+      const phi_c = midR[0] * (1 - t) + 0.5 * t;
+      const psi_c = midR[1] * (1 - t) + 0.5 * t;
+
+      if (phi_c < GUARD || psi_c < GUARD || psi_c >= phi_c - GUARD) { failStreak++; continue; }
+
+      let tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, NR_COLD, rng, 0.010);
+      if (tl === null)
+        tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, 15, rng, 0.025);
+
+      if (tl !== null) {
+        tl = sortTl(tl);
+        hL = tl[0].slice(); hR = tl[1].slice();
+        traj1.push(tl);
+        failStreak = 0;
+      } else {
+        failStreak++;
+        if (failStreak > 20) break;   // reached the consolute / 1-phase region
+      }
+
+      if (i % 50 === 0) {
+        if (onProgress) onProgress(`Trajectory 1… ${Math.round(i/N*100)} %`);
+        await new Promise(r => setTimeout(r, 0));
+      }
+    }
+  }
+
+  // ── Trajectory 2: mid(V1,V3) → consolute_pt → ψ=0 ────────────────────
+  const midAR = [(V1[0]+V3[0])/2, (V1[1]+V3[1])/2];
+  const traj2 = [];
+  if (consolute_pt !== null) {
+    // Line direction: midAR → consolute_pt, extended to ψ=0
+    const dx = consolute_pt[0] - midAR[0];
+    const dy = consolute_pt[1] - midAR[1];
+    // Parameter t where ψ reaches 0:  midAR[1] + t*dy = 0  →  t = -midAR[1]/dy
+    const tPsi0 = (Math.abs(dy) > 1e-9) ? -midAR[1] / dy : 2.5;
+
+    const anchor = sortTl([V1.slice(), V3.slice()]);
+    let hL = anchor[0].slice(), hR = anchor[1].slice();
+    let failStreak = 0;
+
+    for (let i = 0; i < N; i++) {
+      const t    = (i / Math.max(N - 1, 1)) * Math.max(tPsi0, 1.05);
+      const phi_c = midAR[0] + t * dx;
+      const psi_c = midAR[1] + t * dy;
+
+      if (psi_c < GUARD) break;           // reached ψ = 0
+      if (phi_c < GUARD || phi_c > 1 - GUARD || psi_c > 1 - GUARD) continue;
+      if (psi_c >= phi_c - GUARD) continue;  // outside lower triangle
+
+      let tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, NR_COLD, rng, 0.010);
+      if (tl === null)
+        tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, 15, rng, 0.025);
+
+      if (tl !== null) {
+        tl = sortTl(tl);
+        hL = tl[0].slice(); hR = tl[1].slice();
+        traj2.push(tl);
+        failStreak = 0;
+      } else {
+        failStreak++;
+        if (failStreak > 20) break;   // solidly in 1-phase region
+      }
+
+      if (i % 50 === 0) {
+        if (onProgress) onProgress(`Trajectory 2… ${Math.round(i/N*100)} %`);
+        await new Promise(r => setTimeout(r, 0));
+      }
+    }
+  }
+
+  return { traj1, traj2 };
+}
+
+// Draw the dense tieline overlay — thin, semi-transparent, same palette as sparse tielines
+function drawDenseTielines(ctx, denseTl) {
+  if (!denseTl) return;
+  const { traj1, traj2 } = denseTl;
+  ctx.save();
+  ctx.lineWidth  = 0.55;
+  ctx.globalAlpha = 0.22;
+
+  // Trajectory 1 → R_D+R_O color (both lower and upper halves)
+  ctx.strokeStyle = T_RD_RO;
+  for (const tl of traj1) {
+    const stl = swapTl(tl);
+    for (const t of [tl, stl]) {
+      ctx.beginPath();
+      const [x1,y1] = toCanvas(t[0][0], t[0][1]);
+      const [x2,y2] = toCanvas(t[1][0], t[1][1]);
+      ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    }
+  }
+
+  // Trajectory 2 → R_D+AR_OD color (both halves)
+  ctx.strokeStyle = T_RD_AROD;
+  for (const tl of traj2) {
+    const stl = swapTl(tl);
+    for (const t of [tl, stl]) {
+      ctx.beginPath();
+      const [x1,y1] = toCanvas(t[0][0], t[0][1]);
+      const [x2,y2] = toCanvas(t[1][0], t[1][1]);
+      ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    }
+  }
+
+  ctx.restore();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1501,12 +1666,17 @@ const nRdroSl    = document.getElementById('n-rdro');
 const nRdroVal   = document.getElementById('n-rdro-val');
 const nArSl      = document.getElementById('n-ar');
 const nArVal     = document.getElementById('n-ar-val');
-const genBtn     = document.getElementById('pd-generate');
-const exportBtn  = document.getElementById('pd-export');
-const statusEl   = document.getElementById('pd-status');
+const genBtn       = document.getElementById('pd-generate');
+const exportBtn    = document.getElementById('pd-export');
+const denseBtn     = document.getElementById('pd-dense');
+const nDenseSl     = document.getElementById('n-dense');
+const nDenseVal    = document.getElementById('n-dense-val');
+const denseStatusEl = document.getElementById('pd-dense-status');
+const statusEl     = document.getElementById('pd-status');
 
-// Cache the most-recently computed result for export
+// Cache the most-recently computed result for export / dense tielines
 let _lastRes = null, _lastChi = null, _lastLam = null;
+let _denseResult = null;   // { traj1, traj2 } from computeDenseTielines
 const canvas     = document.getElementById('pd-canvas');
 const legendEl   = document.getElementById('pd-legend');
 const morphBadge = document.getElementById('pd-morph');
@@ -1540,6 +1710,7 @@ sync(lamSlider, lamInput);
 
 nRdroSl.addEventListener('input', () => { nRdroVal.textContent = nRdroSl.value; });
 nArSl.addEventListener('input',   () => { nArVal.textContent   = nArSl.value; });
+nDenseSl.addEventListener('input', () => { nDenseVal.textContent = nDenseSl.value; });
 
 showTlChk.addEventListener('change', () => {
   tlRows.style.display = showTlChk.checked ? '' : 'none';
@@ -1570,10 +1741,14 @@ genBtn.addEventListener('click', async () => {
     legendEl.style.display = 'flex';
     setStatus('Done in ' + dt + '\u202fs', false);
     setTimeout(() => setStatus('', false), 3000);
-    // Cache for export
+    // Cache for export / dense tielines
     _lastRes = res; _lastChi = chi; _lastLam = lam;
-    exportBtn.disabled = false;
-    exportBtn.title    = '';
+    _denseResult = null;                            // invalidate stale dense result
+    denseStatusEl.textContent = '';
+    exportBtn.disabled = false; exportBtn.title = '';
+    const isType2 = res.morphology === 'type2' && res.V1 !== null;
+    denseBtn.disabled = !isType2;
+    denseBtn.title    = isType2 ? '' : 'Only available for Type 2 diagrams with a resolved three-phase triangle';
   } catch (e) {
     setStatus('Error: ' + e.message, true);
     console.error(e);
@@ -1584,6 +1759,36 @@ genBtn.addEventListener('click', async () => {
 exportBtn.addEventListener('click', () => {
   if (_lastRes === null) return;
   exportToExcel(_lastChi, _lastLam, _lastRes);
+});
+
+denseBtn.addEventListener('click', async () => {
+  if (_lastRes === null) return;
+  denseBtn.disabled = true;
+  genBtn.disabled   = true;
+  denseStatusEl.textContent = 'Starting…';
+
+  const N = +nDenseSl.value;
+  const t0 = performance.now();
+  try {
+    _denseResult = await computeDenseTielines(
+      _lastChi, _lastLam, _lastRes, N,
+      msg => { denseStatusEl.textContent = msg; }
+    );
+    const dt = ((performance.now() - t0) / 1000).toFixed(2);
+    const n1 = _denseResult.traj1.length, n2 = _denseResult.traj2.length;
+    denseStatusEl.textContent =
+      `Done in ${dt}\u202fs — traj 1: ${n1} tielines, traj 2: ${n2} tielines`;
+
+    // Redraw with dense overlay
+    drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
+                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showSpinChk.checked, showStarChk.checked, _denseResult);
+  } catch (e) {
+    denseStatusEl.textContent = 'Error: ' + e.message;
+    console.error(e);
+  }
+  denseBtn.disabled = false;
+  genBtn.disabled   = false;
 });
 
 // Initialise badge on load
