@@ -1017,6 +1017,39 @@ function solveBilayer(chi, lam) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// Post-solve refinement for Type 2:
+//   After computeDenseTielines, traj2 systematically sweeps the arm from
+//   T_b all the way to ψ=0, at fixed Euclidean spacing.  Its tieline
+//   endpoints give a more accurate arm boundary than the coarse
+//   findConsolutePoint / sampleLensTrajectory pass, and the midpoint of
+//   the shortest traj2 tieline is a better consolute estimate.
+// ═══════════════════════════════════════════════════════════════════════════
+function refineType2FromDenseTielines(res, denseTl) {
+  if (!denseTl || res.morphology !== 'type2') return;
+  const { traj2 } = denseTl;
+  if (!traj2 || traj2.length < 2) return;
+
+  // Refined consolute: midpoint of the shortest tieline found in traj2.
+  let minLen = Infinity, bestTl = null;
+  for (const tl of traj2) {
+    const len = d2(tl[0], tl[1]);
+    if (len < minLen) { minLen = len; bestTl = tl; }
+  }
+  if (bestTl !== null) {
+    res.consolute_pt = [
+      (bestTl[0][0] + bestTl[1][0]) / 2,
+      (bestTl[0][1] + bestTl[1][1]) / 2
+    ];
+  }
+
+  // Refined arm boundary: replace res.green (and the derived res.purple)
+  // with the traj2 tielines.  traj2[0] ≈ T_b and traj2[-1] ≈ consolute tip,
+  // matching the direction expected by buildPolygons for Type 2.
+  res.green  = traj2.slice();
+  res.purple = res.green.map(reflectTl);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Build fill polygons  (translated from Python _build_polygons)
 // ═══════════════════════════════════════════════════════════════════════════
 function buildPolygons(res) {
@@ -2042,6 +2075,8 @@ genBtn.addEventListener('click', async () => {
           `Tielines: traj 1\u202f=\u202f${n1}, traj 2\u202f=\u202f${n2} (${dt2}\u202fs)`;
         denseExportBtn.disabled = false;
         denseExportBtn.title    = '';
+        // Refine Type 2 arm boundary & consolute using the dense traj2 sweep
+        refineType2FromDenseTielines(res, _denseResult);
       } catch (e2) {
         denseStatusEl.textContent = 'Tieline error: ' + e2.message;
         console.error(e2);
@@ -2089,6 +2124,8 @@ denseBtn.addEventListener('click', async () => {
       `Done in ${dt}\u202fs — traj 1: ${n1} tielines, traj 2: ${n2} tielines`;
     denseExportBtn.disabled = false;
     denseExportBtn.title    = '';
+    // Refine Type 2 arm boundary & consolute using the dense traj2 sweep
+    refineType2FromDenseTielines(_lastRes, _denseResult);
 
     // Redraw with dense overlay
     drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
