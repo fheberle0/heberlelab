@@ -114,9 +114,58 @@ description: >
   .mc-swatch { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; }
 
   /* ── Plotly containers ──────────────────────────────────── */
-  #mc-energy-plot, #mc-gr-plot {
+  #mc-energy-plot, #mc-gr-plot, #mc-hc-plot {
     width: 100%; height: 360px;
     border: 1px solid #2e2e2e; border-radius: 4px;
+  }
+
+  /* ── Scan section ─────────────────────────────────────── */
+  .mc-divider {
+    border: none; border-top: 1px solid #2e2e2e;
+    margin: 28px 0 20px;
+  }
+  .mc-section-title {
+    font-size: 16px; color: #ccc; margin-bottom: 6px; font-weight: 600;
+  }
+  .mc-section-desc {
+    font-size: 13px; color: #888; margin-bottom: 16px; line-height: 1.5;
+  }
+
+  #mc-scan-run {
+    padding: 10px 28px; border: none; border-radius: 6px;
+    background: #E8833A; color: #fff;
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: .15s;
+  }
+  #mc-scan-run:hover:not(:disabled) { background: #d0732a; }
+  #mc-scan-run:disabled { opacity: .4; cursor: default; }
+
+  #mc-scan-stop {
+    padding: 10px 20px; border: 1px solid #c44; border-radius: 6px;
+    background: #2a1515; color: #f88;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: .15s;
+    display: none;
+  }
+  #mc-scan-stop:hover { background: #3a2020; }
+
+  #mc-scan-status {
+    display: none; padding: 9px 14px; border-radius: 6px;
+    margin: 12px 0 4px; font-size: 13px;
+  }
+  #mc-scan-progress-wrap {
+    display: none; margin: 10px 0;
+  }
+  #mc-scan-progress-bar {
+    width: 100%; height: 6px; border-radius: 3px;
+    appearance: none; -webkit-appearance: none;
+  }
+  #mc-scan-progress-bar::-webkit-progress-bar {
+    background: #2e2e2e; border-radius: 3px;
+  }
+  #mc-scan-progress-bar::-webkit-progress-value {
+    background: #E8833A; border-radius: 3px; transition: width 0.2s;
+  }
+  #mc-scan-progress-label {
+    font-size: 12px; color: #888; margin-top: 4px;
   }
 </style>
 
@@ -219,6 +268,104 @@ description: >
   <div class="mc-output-section" id="mc-gr-section" style="display:none;">
     <h3>Spatial Autocorrelation <em>g</em>(<em>r</em>)</h3>
     <div id="mc-gr-plot"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <hr class="mc-divider">
+  <div class="mc-section-title">Heat Capacity Scan</div>
+  <p class="mc-section-desc">
+    Sweep &omega;<sub>AB</sub> across a range of values and compute the heat
+    capacity <em>C</em>/<em>k</em><sub>B</sub> from energy fluctuations at
+    each point.  The triangular Ising model has a critical point at
+    &omega;<sub>AB</sub>&nbsp;=&nbsp;ln(3)/2&nbsp;&approx;&nbsp;0.55&nbsp;<em>k</em><sub>B</sub><em>T</em>,
+    where the heat capacity diverges.
+    Uses the same lattice size <em>L</em> and composition
+    <em>x</em><sub>A</sub> set above.
+  </p>
+
+  <div class="mc-panel">
+    <h4>Scan Parameters</h4>
+
+    <div class="mc-row">
+      <span class="mc-sym">&omega;<sub>min</sub></span>
+      <input type="range"  class="mc-slider" id="scan-omega-min-slider"
+             min="0.00" max="0.70" step="0.05" value="0.10">
+      <input type="number" class="mc-num" id="scan-omega-min"
+             min="0.00" max="0.70" step="0.05" value="0.10">
+      <span class="mc-unit"><em>k</em><sub>B</sub><em>T</em></span>
+    </div>
+
+    <div class="mc-row">
+      <span class="mc-sym">&omega;<sub>max</sub></span>
+      <input type="range"  class="mc-slider" id="scan-omega-max-slider"
+             min="0.10" max="0.90" step="0.05" value="0.80">
+      <input type="number" class="mc-num" id="scan-omega-max"
+             min="0.10" max="0.90" step="0.05" value="0.80">
+      <span class="mc-unit"><em>k</em><sub>B</sub><em>T</em></span>
+    </div>
+
+    <div class="mc-row">
+      <span class="mc-sym">&Delta;&omega;</span>
+      <input type="range"  class="mc-slider" id="scan-omega-step-slider"
+             min="0.01" max="0.10" step="0.005" value="0.025">
+      <input type="number" class="mc-num" id="scan-omega-step"
+             min="0.005" max="0.10" step="0.005" value="0.025">
+      <span class="mc-unit"><em>k</em><sub>B</sub><em>T</em></span>
+      <span class="mc-hint">step size</span>
+    </div>
+
+    <div class="mc-row">
+      <span class="mc-sym">Equil.</span>
+      <input type="range"  class="mc-slider" id="scan-eq-slider"
+             min="100" max="10000" step="100" value="1000">
+      <input type="number" class="mc-num" id="scan-eq-input"
+             min="100" max="50000" step="100" value="1000">
+      <span class="mc-hint">equilibration cycles per point</span>
+    </div>
+
+    <div class="mc-row">
+      <span class="mc-sym">Prod.</span>
+      <input type="range"  class="mc-slider" id="scan-prod-slider"
+             min="100" max="20000" step="100" value="2000">
+      <input type="number" class="mc-num" id="scan-prod-input"
+             min="100" max="50000" step="100" value="2000">
+      <span class="mc-hint">production cycles per point</span>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:10px; align-items:center; margin-bottom:6px;">
+    <button id="mc-scan-run">Run Heat Capacity Scan</button>
+    <button id="mc-scan-stop">Stop</button>
+  </div>
+
+  <div id="mc-scan-status"></div>
+  <div id="mc-scan-progress-wrap">
+    <progress id="mc-scan-progress-bar" value="0" max="100"></progress>
+    <div id="mc-scan-progress-label"></div>
+  </div>
+
+  <!-- ── Lattice snapshot during scan ──────────────────────────────────── -->
+  <div class="mc-output-section" id="mc-scan-lattice-section" style="display:none;">
+    <h3>Current Lattice Snapshot</h3>
+    <div class="mc-canvas-row">
+      <canvas id="mc-scan-canvas" width="600" height="520"></canvas>
+      <div class="mc-legend">
+        <div class="mc-legend-item">
+          <div class="mc-swatch" style="background:#E8833A;"></div>
+          <span>Component A</span>
+        </div>
+        <div class="mc-legend-item">
+          <div class="mc-swatch" style="background:#555555;"></div>
+          <span>Component B</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Heat capacity plot ────────────────────────────────────────────── -->
+  <div class="mc-output-section" id="mc-hc-section" style="display:none;">
+    <h3>Heat Capacity</h3>
+    <div id="mc-hc-plot"></div>
   </div>
 
 </div><!-- .mc-tool -->
@@ -682,5 +829,274 @@ stopBtn.addEventListener('click', function() {
   if (simRunning) {
     simStopped = true;
   }
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Heat Capacity Scan
+   C/k_B per site = ω² · Var(U) / N
+   where U = total unlike-neighbor count (energy in units of ω)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+// ── Scan DOM refs ────────────────────────────────────────────────────────
+const scanOmMinSl  = document.getElementById('scan-omega-min-slider');
+const scanOmMinIn  = document.getElementById('scan-omega-min');
+const scanOmMaxSl  = document.getElementById('scan-omega-max-slider');
+const scanOmMaxIn  = document.getElementById('scan-omega-max');
+const scanOmStepSl = document.getElementById('scan-omega-step-slider');
+const scanOmStepIn = document.getElementById('scan-omega-step');
+const scanEqSl     = document.getElementById('scan-eq-slider');
+const scanEqIn     = document.getElementById('scan-eq-input');
+const scanProdSl   = document.getElementById('scan-prod-slider');
+const scanProdIn   = document.getElementById('scan-prod-input');
+const scanRunBtn   = document.getElementById('mc-scan-run');
+const scanStopBtn  = document.getElementById('mc-scan-stop');
+const scanStatusEl = document.getElementById('mc-scan-status');
+const scanProgWrap = document.getElementById('mc-scan-progress-wrap');
+const scanProgBar  = document.getElementById('mc-scan-progress-bar');
+const scanProgLbl  = document.getElementById('mc-scan-progress-label');
+const scanLattSec  = document.getElementById('mc-scan-lattice-section');
+const scanCanvas   = document.getElementById('mc-scan-canvas');
+const scanCtx      = scanCanvas.getContext('2d');
+const hcSec        = document.getElementById('mc-hc-section');
+
+sync(scanOmMinSl, scanOmMinIn);
+sync(scanOmMaxSl, scanOmMaxIn);
+sync(scanOmStepSl, scanOmStepIn);
+sync(scanEqSl, scanEqIn);
+sync(scanProdSl, scanProdIn);
+
+function setScanStatus(msg, isErr) {
+  scanStatusEl.textContent = msg;
+  scanStatusEl.className   = isErr ? 'mc-err' : 'mc-ok';
+  scanStatusEl.style.display = msg ? 'block' : 'none';
+}
+
+/** Draw lattice on the scan canvas (reuses logic from drawLattice). */
+function drawScanLattice(lattice, L) {
+  const maxW = 600, maxH = 520, margin = 4;
+  const xSpan = L;
+  const ySpan = (L - 1) * Math.sqrt(3) / 2;
+  const scale = Math.min((maxW - 2 * margin) / xSpan, (maxH - 2 * margin) / ySpan);
+  const cW = Math.ceil(xSpan * scale + 2 * margin);
+  const cH = Math.ceil(ySpan * scale + 2 * margin);
+  scanCanvas.width  = cW;
+  scanCanvas.height = cH;
+  scanCtx.fillStyle = '#ffffff';
+  scanCtx.fillRect(0, 0, cW, cH);
+
+  if (L > 60) {
+    const pw = Math.max(1, Math.ceil(scale));
+    const ph = Math.max(1, Math.ceil(scale * Math.sqrt(3) / 2));
+    for (let k = 0; k < L * L; k++) {
+      const row = (k / L) | 0, col = k % L;
+      const x = margin + (col + 0.5 * (row % 2)) * scale - pw / 2;
+      const y = margin + row * Math.sqrt(3) / 2 * scale - ph / 2;
+      scanCtx.fillStyle = lattice[k] === 0 ? COL_A : COL_B;
+      scanCtx.fillRect(x, y, pw, ph);
+    }
+  } else {
+    const r = scale / Math.sqrt(3);
+    for (let k = 0; k < L * L; k++) {
+      const row = (k / L) | 0, col = k % L;
+      const cx = margin + (col + 0.5 * (row % 2)) * scale;
+      const cy = margin + row * Math.sqrt(3) / 2 * scale;
+      scanCtx.beginPath();
+      for (let a = 0; a < 6; a++) {
+        const angle = Math.PI / 6 + a * Math.PI / 3;
+        const hx = cx + r * Math.cos(angle);
+        const hy = cy + r * Math.sin(angle);
+        if (a === 0) scanCtx.moveTo(hx, hy); else scanCtx.lineTo(hx, hy);
+      }
+      scanCtx.closePath();
+      scanCtx.fillStyle = lattice[k] === 0 ? COL_A : COL_B;
+      scanCtx.fill();
+    }
+  }
+}
+
+/** Plot heat capacity vs ω with a vertical dashed line at the critical point. */
+let hcPlotInit = false;
+function plotHeatCapacity(results) {
+  const x = results.map(d => d.omega);
+  const y = results.map(d => d.C);
+  const omCrit = Math.log(3) / 2;
+
+  const data = [{
+    x, y,
+    type: 'scatter',
+    mode: 'lines+markers',
+    line: { color: '#E8833A', width: 2 },
+    marker: { color: '#E8833A', size: 5 },
+    name: 'C / k<sub>B</sub>'
+  }];
+  const layout = {
+    paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
+    font: { color: '#ccc', size: 12 },
+    margin: { l: 60, r: 20, t: 30, b: 50 },
+    xaxis: {
+      title: '\u03c9<sub>AB</sub> / k<sub>B</sub>T',
+      gridcolor: '#333', zerolinecolor: '#444'
+    },
+    yaxis: {
+      title: 'C / k<sub>B</sub>  (per site)',
+      gridcolor: '#333', zerolinecolor: '#444'
+    },
+    shapes: [{
+      type: 'line',
+      x0: omCrit, x1: omCrit,
+      y0: 0, y1: 1, yref: 'paper',
+      line: { color: '#888', width: 1.5, dash: 'dash' }
+    }],
+    annotations: [{
+      x: omCrit, y: 1.02, yref: 'paper',
+      text: 'ln(3)/2',
+      showarrow: false,
+      font: { color: '#aaa', size: 11 }
+    }]
+  };
+
+  if (!hcPlotInit) {
+    Plotly.newPlot('mc-hc-plot', data, layout, { responsive: true });
+    hcPlotInit = true;
+  } else {
+    Plotly.react('mc-hc-plot', data, layout);
+  }
+}
+
+// ── Scan execution ───────────────────────────────────────────────────────
+let scanRunning = false;
+let scanStopped = false;
+
+function startHeatCapacityScan() {
+  if (simRunning || scanRunning) return;
+
+  const L           = +Linput.value;
+  const xA          = +xAinput.value;
+  const omegaMin    = +scanOmMinIn.value;
+  const omegaMax    = +scanOmMaxIn.value;
+  const omegaStep   = +scanOmStepIn.value;
+  const eqCycles    = +scanEqIn.value;
+  const prodCycles  = +scanProdIn.value;
+
+  if (omegaMin >= omegaMax) {
+    setScanStatus('\u03c9_min must be less than \u03c9_max', true); return;
+  }
+
+  // Build list of ω values
+  const omegaValues = [];
+  for (let w = omegaMin; w <= omegaMax + 1e-9; w += omegaStep) {
+    omegaValues.push(Math.round(w * 10000) / 10000);
+  }
+  const nPoints = omegaValues.length;
+  const N = L * L;
+  const nn = buildNeighborTable(L);
+
+  // UI state
+  scanRunning = true; scanStopped = false;
+  scanRunBtn.disabled = true;
+  runBtn.disabled = true;
+  scanStopBtn.style.display = 'inline-block';
+  scanProgWrap.style.display = 'block';
+  scanProgBar.value = 0;
+  scanLattSec.style.display = 'block';
+  hcSec.style.display = 'block';
+  hcPlotInit = false;
+  setScanStatus('Running scan\u2026', false);
+  const t0 = performance.now();
+
+  const results = [];
+  let ptIdx = 0;
+
+  function runPoint() {
+    if (scanStopped || ptIdx >= nPoints) { finishScan(); return; }
+
+    const omega = omegaValues[ptIdx];
+    const lattice = makeRandomLattice(L, xA);
+    const aIdx = [], bIdx = [];
+    for (let k = 0; k < N; k++) {
+      if (lattice[k] === 0) aIdx.push(k); else bIdx.push(k);
+    }
+    const nA = aIdx.length, nB = bIdx.length;
+    let energy = totalEnergy(lattice, nn, L);
+
+    const totalCyc = eqCycles + prodCycles;
+    let cycle = 0;
+    let sumU = 0, sumU2 = 0, nSamp = 0;
+    const chunkSize = Math.max(1, Math.min(40, Math.ceil(totalCyc / 30)));
+
+    function runScanChunk() {
+      if (scanStopped) { finishScan(); return; }
+
+      const chunkEnd = Math.min(cycle + chunkSize, totalCyc);
+      while (cycle < chunkEnd) {
+        for (let ex = 0; ex < N; ex++) {
+          const ia = (Math.random() * nA) | 0;
+          const ib = (Math.random() * nB) | 0;
+          const iA = aIdx[ia], iB = bIdx[ib];
+          const dE = computeDeltaE(lattice, nn, iA, iB);
+          const dEkBT = dE * omega;
+          if (dEkBT <= 0 || Math.random() < Math.exp(-dEkBT)) {
+            lattice[iA] = 1; lattice[iB] = 0;
+            energy += dE;
+            aIdx[ia] = iB; bIdx[ib] = iA;
+          }
+        }
+        cycle++;
+        if (cycle > eqCycles) {
+          sumU  += energy;
+          sumU2 += energy * energy;
+          nSamp++;
+        }
+      }
+
+      // Progress
+      const pct = ((ptIdx + cycle / totalCyc) / nPoints) * 100;
+      scanProgBar.value = pct;
+      scanProgLbl.textContent = '\u03c9 = ' + omega.toFixed(3) +
+        '  (point ' + (ptIdx + 1) + '/' + nPoints +
+        ', cycle ' + cycle + '/' + totalCyc + ')';
+
+      if (cycle >= totalCyc) {
+        // Compute C/k_B per site = ω² Var(U) / N
+        const meanU = sumU / nSamp;
+        const varU  = sumU2 / nSamp - meanU * meanU;
+        const C     = omega * omega * varU / N;
+        results.push({ omega: omega, C: C });
+
+        drawScanLattice(lattice, L);
+        plotHeatCapacity(results);
+
+        ptIdx++;
+        setTimeout(runPoint, 0);
+      } else {
+        setTimeout(runScanChunk, 0);
+      }
+    }
+
+    setTimeout(runScanChunk, 0);
+  }
+
+  function finishScan() {
+    scanRunning = false;
+    scanRunBtn.disabled = false;
+    runBtn.disabled = false;
+    scanStopBtn.style.display = 'none';
+
+    if (scanStopped) {
+      setScanStatus('Scan stopped by user', true);
+    } else {
+      const dt = ((performance.now() - t0) / 1000).toFixed(1);
+      setScanStatus('Scan complete in ' + dt + ' s  (' + results.length + ' points)', false);
+      setTimeout(function() { setScanStatus('', false); }, 8000);
+    }
+  }
+
+  setTimeout(runPoint, 0);
+}
+
+scanRunBtn.addEventListener('click', startHeatCapacityScan);
+
+scanStopBtn.addEventListener('click', function() {
+  if (scanRunning) scanStopped = true;
 });
 </script>
