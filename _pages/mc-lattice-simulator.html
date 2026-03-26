@@ -89,33 +89,52 @@ description: >
     font-size: 12px; color: #888; margin-top: 4px;
   }
 
-  /* ── Lattice canvas ─────────────────────────────────────── */
+  /* ── Dashboard grid ────────────────────────────────────── */
+  .mc-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .mc-dashboard.mc-three-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mc-dashboard .mc-output-section { margin: 0; }
+  .mc-dashboard .mc-full-width {
+    grid-column: 1 / -1;
+  }
+  @media (max-width: 700px) {
+    .mc-dashboard { grid-template-columns: 1fr; }
+  }
+
+  /* ── Output sections ─────────────────────────────────────── */
   .mc-output-section {
-    margin-top: 20px; margin-bottom: 20px;
+    margin-top: 16px; margin-bottom: 8px;
   }
   .mc-output-section h3 {
-    font-size: 14px; color: #999; margin-bottom: 10px;
+    font-size: 12px; color: #999; margin-bottom: 6px;
     text-transform: uppercase; letter-spacing: 0.05em;
   }
-  #mc-lattice-canvas {
+
+  /* ── Lattice canvas ─────────────────────────────────────── */
+  #mc-lattice-canvas, #mc-scan-canvas {
     display: block; border: 1px solid #2e2e2e; border-radius: 4px;
-    background: #fff; max-width: 100%;
+    background: #fff; width: 100%; height: auto;
   }
-  .mc-canvas-row {
-    display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap;
-  }
+  .mc-canvas-wrap { position: relative; }
   .mc-legend {
-    display: flex; flex-direction: column; gap: 8px;
-    font-size: 13px; color: #000; flex-shrink: 0;
-    background: #fff; border: 1px solid #ccc; border-radius: 6px;
-    padding: 10px 14px; margin-top: 4px;
+    position: absolute; top: 8px; right: 8px;
+    display: flex; flex-direction: column; gap: 6px;
+    font-size: 12px; color: #fff; flex-shrink: 0;
+    background: rgba(0,0,0,0.6); border-radius: 5px;
+    padding: 8px 10px; backdrop-filter: blur(4px);
   }
   .mc-legend-item { display: flex; align-items: center; gap: 6px; }
-  .mc-swatch { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; }
+  .mc-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
 
   /* ── Plotly containers ──────────────────────────────────── */
   #mc-energy-plot, #mc-gr-plot, #mc-hc-plot {
-    width: 100%; height: 360px;
+    width: 100%; height: 260px;
     border: 1px solid #2e2e2e; border-radius: 4px;
   }
 
@@ -240,34 +259,36 @@ description: >
     <div id="mc-progress-label"></div>
   </div>
 
-  <!-- ── Lattice snapshot ─────────────────────────────────────────────── -->
-  <div class="mc-output-section" id="mc-lattice-section" style="display:none;">
-    <h3>Lattice Snapshot</h3>
-    <div class="mc-canvas-row">
-      <canvas id="mc-lattice-canvas" width="600" height="520"></canvas>
-      <div class="mc-legend" id="mc-legend">
-        <div class="mc-legend-item">
-          <div class="mc-swatch" style="background:#E8833A;"></div>
-          <span>Component A</span>
-        </div>
-        <div class="mc-legend-item">
-          <div class="mc-swatch" style="background:#555555;"></div>
-          <span>Component B</span>
+  <!-- ── Dashboard: simulation outputs ──────────────────────────────── -->
+  <div class="mc-dashboard mc-three-panel" id="mc-sim-dashboard" style="display:none;">
+
+    <div class="mc-output-section" id="mc-lattice-section">
+      <h3>Lattice Snapshot</h3>
+      <div class="mc-canvas-wrap">
+        <canvas id="mc-lattice-canvas" width="600" height="520"></canvas>
+        <div class="mc-legend" id="mc-legend">
+          <div class="mc-legend-item">
+            <div class="mc-swatch" style="background:#E8833A;"></div>
+            <span>Component A</span>
+          </div>
+          <div class="mc-legend-item">
+            <div class="mc-swatch" style="background:#555555;"></div>
+            <span>Component B</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ── Energy plot ──────────────────────────────────────────────────── -->
-  <div class="mc-output-section" id="mc-energy-section" style="display:none;">
-    <h3>Energy Evolution</h3>
-    <div id="mc-energy-plot"></div>
-  </div>
+    <div class="mc-output-section" id="mc-energy-section">
+      <h3>Energy Evolution</h3>
+      <div id="mc-energy-plot"></div>
+    </div>
 
-  <!-- ── g(r) plot ────────────────────────────────────────────────────── -->
-  <div class="mc-output-section" id="mc-gr-section" style="display:none;">
-    <h3>Spatial Autocorrelation <em>g</em>(<em>r</em>)</h3>
-    <div id="mc-gr-plot"></div>
+    <div class="mc-output-section mc-full-width" id="mc-gr-section" style="display:none;">
+      <h3>Spatial Autocorrelation <em>g</em>(<em>r</em>)</h3>
+      <div id="mc-gr-plot"></div>
+    </div>
+
   </div>
 
   <!-- ════════════════════════════════════════════════════════════════════ -->
@@ -344,28 +365,31 @@ description: >
     <div id="mc-scan-progress-label"></div>
   </div>
 
-  <!-- ── Lattice snapshot during scan ──────────────────────────────────── -->
-  <div class="mc-output-section" id="mc-scan-lattice-section" style="display:none;">
-    <h3>Current Lattice Snapshot</h3>
-    <div class="mc-canvas-row">
-      <canvas id="mc-scan-canvas" width="600" height="520"></canvas>
-      <div class="mc-legend">
-        <div class="mc-legend-item">
-          <div class="mc-swatch" style="background:#E8833A;"></div>
-          <span>Component A</span>
-        </div>
-        <div class="mc-legend-item">
-          <div class="mc-swatch" style="background:#555555;"></div>
-          <span>Component B</span>
+  <!-- ── Dashboard: scan outputs ─────────────────────────────────────── -->
+  <div class="mc-dashboard" id="mc-scan-dashboard" style="display:none;">
+
+    <div class="mc-output-section" id="mc-scan-lattice-section">
+      <h3>Current Lattice Snapshot</h3>
+      <div class="mc-canvas-wrap">
+        <canvas id="mc-scan-canvas" width="600" height="520"></canvas>
+        <div class="mc-legend">
+          <div class="mc-legend-item">
+            <div class="mc-swatch" style="background:#E8833A;"></div>
+            <span>Component A</span>
+          </div>
+          <div class="mc-legend-item">
+            <div class="mc-swatch" style="background:#555555;"></div>
+            <span>Component B</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ── Heat capacity plot ────────────────────────────────────────────── -->
-  <div class="mc-output-section" id="mc-hc-section" style="display:none;">
-    <h3>Heat Capacity</h3>
-    <div id="mc-hc-plot"></div>
+    <div class="mc-output-section" id="mc-hc-section">
+      <h3>Heat Capacity</h3>
+      <div id="mc-hc-plot"></div>
+    </div>
+
   </div>
 
 </div><!-- .mc-tool -->
@@ -529,8 +553,7 @@ const statusEl   = document.getElementById('mc-status');
 const progWrap   = document.getElementById('mc-progress-wrap');
 const progBar    = document.getElementById('mc-progress-bar');
 const progLabel  = document.getElementById('mc-progress-label');
-const lattSec    = document.getElementById('mc-lattice-section');
-const energySec  = document.getElementById('mc-energy-section');
+const simDash    = document.getElementById('mc-sim-dashboard');
 const grSec      = document.getElementById('mc-gr-section');
 const canvas     = document.getElementById('mc-lattice-canvas');
 const ctx        = canvas.getContext('2d');
@@ -565,8 +588,10 @@ const COL_B = '#555555';   // gray for component B
 
 // ── Hexagonal lattice rendering on Canvas ─────────────────────────────────
 function drawLattice(lattice, L) {
-  // Compute pixel size to fit in canvas
-  const maxW = 600, maxH = 520;
+  // Fit canvas to container width (for dashboard grid)
+  const containerW = canvas.parentElement ? canvas.parentElement.clientWidth : 600;
+  const maxW = Math.min(600, containerW - 2);
+  const maxH = Math.round(maxW * 0.87);
   // Lattice spans: x from 0 to L-0.5 (in lattice units), y from 0 to (L-1)*sqrt(3)/2
   const xSpan = L;
   const ySpan = (L - 1) * Math.sqrt(3) / 2;
@@ -638,15 +663,15 @@ function plotEnergy(history) {
   }];
   const layout = {
     paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
-    font: { color: '#ccc', size: 12 },
-    margin: { l: 60, r: 20, t: 30, b: 50 },
+    font: { color: '#ccc', size: 11 },
+    margin: { l: 50, r: 12, t: 20, b: 40 },
     xaxis: {
       title: 'MC cycle',
       gridcolor: '#333', zerolinecolor: '#444',
       type: x.length > 200 ? 'log' : 'linear'
     },
     yaxis: {
-      title: 'Energy per site / k<sub>B</sub>T',
+      title: 'E / site (k<sub>B</sub>T)',
       gridcolor: '#333', zerolinecolor: '#444'
     }
   };
@@ -676,8 +701,8 @@ function plotGr(grData, apl) {
   }];
   const layout = {
     paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
-    font: { color: '#ccc', size: 12 },
-    margin: { l: 60, r: 20, t: 30, b: 50 },
+    font: { color: '#ccc', size: 11 },
+    margin: { l: 50, r: 12, t: 20, b: 40 },
     xaxis: {
       title: 'r / nm',
       gridcolor: '#333', zerolinecolor: '#444',
@@ -721,8 +746,7 @@ function startSimulation() {
   stopBtn.style.display = 'inline-block';
   progWrap.style.display = 'block';
   progBar.value = 0;
-  lattSec.style.display = 'block';
-  energySec.style.display = 'block';
+  simDash.style.display = 'grid';
   grSec.style.display = 'none';
   energyPlotInit = false;
   setStatus('Running\u2026', false);
@@ -854,10 +878,9 @@ const scanStatusEl = document.getElementById('mc-scan-status');
 const scanProgWrap = document.getElementById('mc-scan-progress-wrap');
 const scanProgBar  = document.getElementById('mc-scan-progress-bar');
 const scanProgLbl  = document.getElementById('mc-scan-progress-label');
-const scanLattSec  = document.getElementById('mc-scan-lattice-section');
+const scanDash     = document.getElementById('mc-scan-dashboard');
 const scanCanvas   = document.getElementById('mc-scan-canvas');
 const scanCtx      = scanCanvas.getContext('2d');
-const hcSec        = document.getElementById('mc-hc-section');
 
 sync(scanOmMinSl, scanOmMinIn);
 sync(scanOmMaxSl, scanOmMaxIn);
@@ -873,7 +896,10 @@ function setScanStatus(msg, isErr) {
 
 /** Draw lattice on the scan canvas (reuses logic from drawLattice). */
 function drawScanLattice(lattice, L) {
-  const maxW = 600, maxH = 520, margin = 4;
+  const containerW = scanCanvas.parentElement ? scanCanvas.parentElement.clientWidth : 600;
+  const maxW = Math.min(600, containerW - 2);
+  const maxH = Math.round(maxW * 0.87);
+  const margin = 4;
   const xSpan = L;
   const ySpan = (L - 1) * Math.sqrt(3) / 2;
   const scale = Math.min((maxW - 2 * margin) / xSpan, (maxH - 2 * margin) / ySpan);
@@ -931,8 +957,8 @@ function plotHeatCapacity(results) {
   }];
   const layout = {
     paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
-    font: { color: '#ccc', size: 12 },
-    margin: { l: 60, r: 20, t: 30, b: 50 },
+    font: { color: '#ccc', size: 11 },
+    margin: { l: 50, r: 12, t: 20, b: 40 },
     xaxis: {
       title: '\u03c9<sub>AB</sub> / k<sub>B</sub>T',
       gridcolor: '#333', zerolinecolor: '#444'
@@ -998,8 +1024,7 @@ function startHeatCapacityScan() {
   scanStopBtn.style.display = 'inline-block';
   scanProgWrap.style.display = 'block';
   scanProgBar.value = 0;
-  scanLattSec.style.display = 'block';
-  hcSec.style.display = 'block';
+  scanDash.style.display = 'grid';
   hcPlotInit = false;
   setScanStatus('Running scan\u2026', false);
   const t0 = performance.now();
