@@ -192,18 +192,6 @@ description: >
       <label for="show-stars" style="font-size:14px; cursor:pointer;">Show consolute points</label>
     </div>
 
-    <div id="pd-tl-rows">
-      <div class="pd-row">
-        <span class="pd-tl-label">R<sub>D</sub>+R<sub>O</sub></span>
-        <input type="range" class="pd-slider" id="n-rdro" min="2" max="15" step="1" value="6">
-        <span id="n-rdro-val" style="min-width:18px;">6</span>
-      </div>
-      <div class="pd-row">
-        <span class="pd-tl-label">AR-containing</span>
-        <input type="range" class="pd-slider" id="n-ar" min="2" max="15" step="1" value="6">
-        <span id="n-ar-val" style="min-width:18px;">6</span>
-      </div>
-    </div>
   </div>
 
   <!-- ── Dense tieline controls ────────────────────────────────────────── -->
@@ -1314,7 +1302,7 @@ function drawAxes(ctx, chi, lam, morph) {
   ctx.restore();
 }
 
-function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinodal, showStars, denseTl, tlAlpha) {
+function drawDiagram(canvas, res, chi, lam, showTielines, showSpinodal, showStars, denseTl, tlAlpha) {
   const dpr = window.devicePixelRatio || 1;
   canvas.width  = CSZ  * dpr;
   canvas.height = CSZH * dpr;
@@ -1392,9 +1380,9 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
       } else {
         blue_pool = blue;
       }
-      const g_sel = selectN(green,      nAr);
-      const p_sel = selectN(purple,     nAr);
-      const b_sel = selectN(blue_pool,  nRdro);
+      const g_sel = selectN(green,      6);
+      const p_sel = selectN(purple,     6);
+      const b_sel = selectN(blue_pool,  6);
       const b_solid = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] >  DIAG);
       const b_dash  = b_sel.filter(tl => lr(tl)[0][0] - lr(tl)[0][1] <= DIAG);
       // Lower half
@@ -1882,11 +1870,6 @@ const lamInput   = document.getElementById('lam-input');
 const showTlChk   = document.getElementById('show-tielines');
 const showSpinChk = document.getElementById('show-spinodal');
 const showStarChk = document.getElementById('show-stars');
-const tlRows      = document.getElementById('pd-tl-rows');
-const nRdroSl    = document.getElementById('n-rdro');
-const nRdroVal   = document.getElementById('n-rdro-val');
-const nArSl      = document.getElementById('n-ar');
-const nArVal     = document.getElementById('n-ar-val');
 const genBtn       = document.getElementById('pd-generate');
 const exportBtn    = document.getElementById('pd-export');
 const denseBtn       = document.getElementById('pd-dense');
@@ -1931,31 +1914,28 @@ function sync(slider, input) {
 sync(chiSlider, chiInput);
 sync(lamSlider, lamInput);
 
-nRdroSl.addEventListener('input', () => { nRdroVal.textContent = nRdroSl.value; });
-nArSl.addEventListener('input',   () => { nArVal.textContent   = nArSl.value; });
 // nDenseIn is a plain number input — no separate display element needed
 tlAlphaSl.addEventListener('input', () => {
   tlAlphaVal.textContent = (+tlAlphaSl.value).toFixed(2);
   if (_lastRes !== null) {
     drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
-                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showTlChk.checked,
                 showSpinChk.checked, showStarChk.checked,
                 _denseResult, +tlAlphaSl.value);
   }
 });
 
 showTlChk.addEventListener('change', () => {
-  tlRows.style.display = showTlChk.checked ? '' : 'none';
   if (_lastRes !== null)
     drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
-                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showTlChk.checked,
                 showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
 });
 [showSpinChk, showStarChk].forEach(chk => {
   chk.addEventListener('change', () => {
     if (_lastRes !== null)
       drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
-                  showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                  showTlChk.checked,
                   showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
   });
 });
@@ -1993,7 +1973,7 @@ genBtn.addEventListener('click', async () => {
 
     // Preliminary draw (no tielines yet while dense is computing)
     drawDiagram(canvas, res, chi, lam,
-                false, +nRdroSl.value, +nArSl.value,
+                false,
                 showSpinChk.checked, showStarChk.checked, null);
     legendEl.style.display = 'flex';
     setStatus('Done in ' + dt + '\u202fs', false);
@@ -2024,7 +2004,7 @@ genBtn.addEventListener('click', async () => {
 
     // Final draw — dense tielines used when available, sparse fallback otherwise
     drawDiagram(canvas, res, chi, lam,
-                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showTlChk.checked,
                 showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
 
     setTimeout(() => setStatus('', false), 3000);
@@ -2064,7 +2044,7 @@ denseBtn.addEventListener('click', async () => {
 
     // Redraw with dense overlay
     drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
-                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showTlChk.checked,
                 showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
   } catch (e) {
     denseStatusEl.textContent = 'Error: ' + e.message;
