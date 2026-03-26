@@ -1047,23 +1047,32 @@ function buildPolygons(res) {
   let poly_rd_arod = [], poly_ro_arod = [];
 
   if (morph === 'type1') {
+    // V3r = anti-diagonal reflection of V3; needed for the purple polygon
+    // (purple = green.map(reflectTl), so the purple arm meets the triangle at
+    //  reflectTl(V1)=V2 and reflectTl(V3)=V3r, NOT at the original V3)
+    const V3r = [1 - V3[1], 1 - V3[0]];
+
     if (green.length > 0) {
+      // Explicitly include V1 then V3 at the top so the polygon shares the
+      // exact T_b edge with the three-phase triangle (no white gap).
       if (type1_taper && type1_consolute_pt !== null) {
         const cp1 = [type1_consolute_pt[0], 0];
-        poly_rd_arod = [cp1, ...rd_branch, V3, ...[...arod_branch].reverse(), cp1];
+        poly_rd_arod = [cp1, ...rd_branch, V1, V3, ...[...arod_branch].reverse(), cp1];
       } else {
-        poly_rd_arod = [[rd_branch[0][0], 0], ...rd_branch, V3,
+        poly_rd_arod = [[rd_branch[0][0], 0], ...rd_branch, V1, V3,
                         ...[...arod_branch].reverse(), [arod_branch[0][0], 0]];
       }
     }
     if (purple.length > 0) {
+      // Explicitly include V2 at the start and V3r at the end so the polygon
+      // shares the exact reflected-T_b edge with the triangle (no white gap).
       if (type1_taper && type1_consolute_pt !== null) {
         const cp1r = [1, 1 - type1_consolute_pt[0]];
-        poly_ro_arod = [...[...ro_branch].reverse(), cp1r, ...arod_branch2];
+        poly_ro_arod = [V2, ...[...ro_branch].reverse(), cp1r, ...arod_branch2, V3r];
       } else {
-        poly_ro_arod = [...[...ro_branch].reverse(),
+        poly_ro_arod = [V2, ...[...ro_branch].reverse(),
                         [1, ro_branch[0][1]], [1, arod_branch2[0][1]],
-                        ...arod_branch2];
+                        ...arod_branch2, V3r];
       }
     }
 
