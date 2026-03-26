@@ -1053,8 +1053,9 @@ function buildPolygons(res) {
         const cp1 = [type1_consolute_pt[0], 0];
         poly_rd_arod = [cp1, ...rd_branch, V1, V3, ...[...arod_branch].reverse(), cp1];
       } else {
-        poly_rd_arod = [[rd_branch[0][0], 0], ...rd_branch, V1, V3,
-                        ...[...arod_branch].reverse(), [arod_branch[0][0], 0]];
+        // Close directly via the first tieline (rd_branch[0] → arod_branch[0])
+        // rather than rectangular axis-corners, which produce an unnatural stalk.
+        poly_rd_arod = [...rd_branch, V1, V3, ...[...arod_branch].reverse()];
       }
     }
     if (purple.length > 0) {
@@ -1064,9 +1065,9 @@ function buildPolygons(res) {
         const cp1r = [1, 1 - type1_consolute_pt[0]];
         poly_ro_arod = [V2, ...[...ro_branch].reverse(), cp1r, ...arod_branch2, V3r];
       } else {
-        poly_ro_arod = [V2, ...[...ro_branch].reverse(),
-                        [1, ro_branch[0][1]], [1, arod_branch2[0][1]],
-                        ...arod_branch2, V3r];
+        // Close directly via the first tieline (ro_branch[0] → arod_branch2[0])
+        // rather than axis-corner points that create a rectangular stalk.
+        poly_ro_arod = [V2, ...[...ro_branch].reverse(), ...arod_branch2, V3r];
       }
     }
 
