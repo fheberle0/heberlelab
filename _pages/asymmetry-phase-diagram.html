@@ -83,6 +83,15 @@ description: >
   #pd-dense:hover:not(:disabled) { background: #222244; color: #bbccff; border-color: #557; }
   #pd-dense:disabled { opacity: .35; cursor: default; }
 
+  #pd-dense-export {
+    padding: 10px 20px; border: 1px solid #335; border-radius: 6px;
+    background: #1a1a2e; color: #99aadd;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: .15s;
+    margin-left: 6px;
+  }
+  #pd-dense-export:hover:not(:disabled) { background: #222244; color: #bbccff; border-color: #557; }
+  #pd-dense-export:disabled { opacity: .35; cursor: default; }
+
   /* ── Status bar ─────────────────────────────────────────── */
   #pd-status {
     display: none; padding: 9px 14px; border-radius: 6px;
@@ -209,8 +218,9 @@ description: >
   </div>
 
   <button id="pd-generate">Generate Phase Diagram</button>
-  <button id="pd-dense"  disabled title="Generate a Type 2 diagram first">Dense Tielines</button>
-  <button id="pd-export" disabled title="Generate a diagram first">Export to Excel</button>
+  <button id="pd-dense"        disabled title="Generate a Type 2 diagram first">Dense Tielines</button>
+  <button id="pd-dense-export" disabled title="Compute dense tielines first">Export Dense</button>
+  <button id="pd-export"       disabled title="Generate a diagram first">Export to Excel</button>
   <div id="pd-status"></div>
 
   <div class="pd-diagram-row">
@@ -1526,19 +1536,116 @@ function drawDenseTielines(ctx, denseTl) {
     }
   }
 
-  // Trajectory 2 → R_D+AR_OD color (both halves)
-  ctx.strokeStyle = T_RD_AROD;
-  for (const tl of traj2) {
-    const stl = swapTl(tl);
-    for (const t of [tl, stl]) {
+  // Trajectory 2 → all four AR-containing regions via two symmetry operations:
+  //   traj2              → R_D + AR_OD  (original, lower half)
+  //   swapTl             → R_D + AR_DO  (φ↔ψ diagonal mirror, upper half)
+  //   reflectTl          → R_O + AR_OD  (anti-diagonal mirror of original)
+  //   reflectTl(swapTl)  → R_O + AR_DO  (anti-diagonal mirror of upper half)
+  const drawSet = (tls, color) => {
+    ctx.strokeStyle = color;
+    for (const tl of tls) {
       ctx.beginPath();
-      const [x1,y1] = toCanvas(t[0][0], t[0][1]);
-      const [x2,y2] = toCanvas(t[1][0], t[1][1]);
+      const [x1,y1] = toCanvas(tl[0][0], tl[0][1]);
+      const [x2,y2] = toCanvas(tl[1][0], tl[1][1]);
       ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
     }
-  }
+  };
+  const traj2_diag  = traj2.map(swapTl);
+  const traj2_anti  = traj2.map(reflectTl);
+  const traj2_both  = traj2_diag.map(reflectTl);
+  drawSet(traj2,       T_RD_AROD);
+  drawSet(traj2_diag,  T_RD_ARDO);
+  drawSet(traj2_anti,  T_RO_AROD);
+  drawSet(traj2_both,  T_RO_ARDO);
 
   ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Dense tieline Excel export
+// Sheets:
+//   Summary          — parameters, vertex coords, tieline counts
+//   Traj1_RD+RO      — dense R_D+R_O tielines (lower half)
+//   Traj1_RD+RO_up   — φ↔ψ mirror (upper half)
+//   Traj2_RD+AR_OD   — computed arm tielines (R_D+AR_OD, lower half)
+//   Traj2_RD+AR_DO   — diagonal mirror → R_D+AR_DO (upper half)
+//   Traj2_RO+AR_OD   — anti-diagonal mirror → R_O+AR_OD
+//   Traj2_RO+AR_DO   — diagonal + anti-diagonal mirror → R_O+AR_DO
+// Each tieline row: phi_1, psi_1, phi_2, psi_2  (phi_1 ≤ phi_2)
+// ═══════════════════════════════════════════════════════════════════════════
+function exportDenseTielines(chi, lam, res, denseTl) {
+  if (typeof XLSX === 'undefined') {
+    alert('SheetJS library not loaded — please try again in a moment.');
+    return;
+  }
+  const { traj1, traj2 } = denseTl;
+  const wb = XLSX.utils.book_new();
+  const lc = lamCritical(chi), ls = lamStar(chi);
+  const MORPH_LABEL = {
+    type1: 'Type 1', type2: 'Type 2',
+    type3: 'Type 3', type2_fallback: 'Type 2 (arm regions unresolved near Λ*)'
+  };
+
+  // ── Summary ──────────────────────────────────────────────────────────────
+  const sum = [
+    ['Asymmetric Bilayer Phase Diagram — Dense Tielines'],
+    [],
+    ['Parameter',             'Value'],
+    ['χ (chi)',               chi],
+    ['Λ (lambda)',            lam],
+    ['Λ_C (lambda_critical)', +lc.toFixed(6)],
+    ['Λ* (lambda_star)',      +ls.toFixed(6)],
+    ['Morphology',            MORPH_LABEL[res.morphology] || res.morphology],
+    [],
+    ['Trajectory',           'Description',                         'Tielines found'],
+    ['Traj 1',  'mid(V1,V2) → (0.5,0.5)  [R_D+R_O region]',      traj1.length],
+    ['Traj 2',  'mid(V1,V3) → consolute → ψ=0  [R_D+AR_OD; mirrored to all 4 AR regions]', traj2.length],
+    [],
+    ['Note: phi_1 ≤ phi_2 in all tieline sheets (sorted by outer-leaflet composition).'],
+  ];
+
+  if (res.V1 !== null) {
+    sum.push([]);
+    sum.push(['Three-phase triangle vertices']);
+    sum.push(['Vertex', 'φ', 'ψ']);
+    sum.push(['V1', res.V1[0], res.V1[1]]);
+    sum.push(['V2', res.V2[0], res.V2[1]]);
+    sum.push(['V3', res.V3[0], res.V3[1]]);
+  }
+  if (res.consolute_pt !== null) {
+    sum.push([]);
+    sum.push(['Consolute point (R_D+AR_OD)', 'φ', res.consolute_pt[0], 'ψ', res.consolute_pt[1]]);
+  }
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sum), 'Summary');
+
+  // ── Tieline sheet helper ──────────────────────────────────────────────────
+  const tlRows = tls => {
+    const rows = [['phi_1', 'psi_1', 'phi_2', 'psi_2']];
+    for (const tl of tls) {
+      const [p1, p2] = lr(tl);
+      rows.push([p1[0], p1[1], p2[0], p2[1]]);
+    }
+    return rows;
+  };
+  const addSheet = (tls, name) => {
+    if (tls.length > 0)
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tlRows(tls)), name);
+  };
+
+  // Traj 1 — R_D+R_O (lower half + φ↔ψ mirror)
+  addSheet(traj1,                             'Traj1_RD+RO');
+  addSheet(traj1.map(swapTl),                 'Traj1_RD+RO_up');
+
+  // Traj 2 — all four AR-containing regions:
+  //   step 1: diagonal mirror   → R_D+AR_DO
+  //   step 2: anti-diag mirror of merged pair → R_O+AR_OD + R_O+AR_DO
+  addSheet(traj2,                             'Traj2_RD+AR_OD');
+  addSheet(traj2.map(swapTl),                 'Traj2_RD+AR_DO');
+  addSheet(traj2.map(reflectTl),              'Traj2_RO+AR_OD');
+  addSheet(traj2.map(swapTl).map(reflectTl),  'Traj2_RO+AR_DO');
+
+  const fname = `bilayer_dense_tielines_chi${chi.toFixed(2)}_lam${lam.toFixed(3)}.xlsx`;
+  XLSX.writeFile(wb, fname);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1668,8 +1775,9 @@ const nArSl      = document.getElementById('n-ar');
 const nArVal     = document.getElementById('n-ar-val');
 const genBtn       = document.getElementById('pd-generate');
 const exportBtn    = document.getElementById('pd-export');
-const denseBtn     = document.getElementById('pd-dense');
-const nDenseSl     = document.getElementById('n-dense');
+const denseBtn       = document.getElementById('pd-dense');
+const denseExportBtn = document.getElementById('pd-dense-export');
+const nDenseSl       = document.getElementById('n-dense');
 const nDenseVal    = document.getElementById('n-dense-val');
 const denseStatusEl = document.getElementById('pd-dense-status');
 const statusEl     = document.getElementById('pd-status');
@@ -1745,6 +1853,8 @@ genBtn.addEventListener('click', async () => {
     _lastRes = res; _lastChi = chi; _lastLam = lam;
     _denseResult = null;                            // invalidate stale dense result
     denseStatusEl.textContent = '';
+    denseExportBtn.disabled = true;
+    denseExportBtn.title    = 'Compute dense tielines first';
     exportBtn.disabled = false; exportBtn.title = '';
     const isType2 = res.morphology === 'type2' && res.V1 !== null;
     denseBtn.disabled = !isType2;
@@ -1778,6 +1888,8 @@ denseBtn.addEventListener('click', async () => {
     const n1 = _denseResult.traj1.length, n2 = _denseResult.traj2.length;
     denseStatusEl.textContent =
       `Done in ${dt}\u202fs — traj 1: ${n1} tielines, traj 2: ${n2} tielines`;
+    denseExportBtn.disabled = false;
+    denseExportBtn.title    = '';
 
     // Redraw with dense overlay
     drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
@@ -1789,6 +1901,11 @@ denseBtn.addEventListener('click', async () => {
   }
   denseBtn.disabled = false;
   genBtn.disabled   = false;
+});
+
+denseExportBtn.addEventListener('click', () => {
+  if (_denseResult === null || _lastRes === null) return;
+  exportDenseTielines(_lastChi, _lastLam, _lastRes, _denseResult);
 });
 
 // Initialise badge on load
