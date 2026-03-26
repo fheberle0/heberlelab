@@ -210,9 +210,10 @@ description: >
   <div class="pd-panel">
     <h4>Dense Tielines <span style="font-size:11px;color:#555;font-weight:400;text-transform:none;">(Types 1, 2 &amp; 3)</span></h4>
     <div class="pd-row">
-      <span class="pd-tl-label">Trajectory points</span>
-      <input type="range" class="pd-slider" id="n-dense" min="50" max="2000" step="50" value="500">
-      <span id="n-dense-val" style="min-width:36px;">500</span>
+      <span class="pd-tl-label">Point spacing</span>
+      <input type="number" id="n-dense"
+             min="0.0001" max="0.05" step="0.0001" value="0.001"
+             style="width:80px;background:#1a1a2e;color:#ccd;border:1px solid #445;border-radius:4px;padding:2px 6px;font-size:13px;">
     </div>
     <div id="pd-dense-status" style="font-size:12px;color:#666;margin-top:2px;min-height:16px;"></div>
   </div>
@@ -1444,7 +1445,9 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
 //    All types: traj2 is mirrored via swapTl / reflectTl to cover all four
 //    AR-containing two-phase regions.
 // ═══════════════════════════════════════════════════════════════════════════
-async function computeDenseTielines(chi, lam, res, N, onProgress) {
+// density — Euclidean spacing between consecutive probe points (in diagram units).
+// Each trajectory computes its own point count: N = round(arcLength / density) + 1
+async function computeDenseTielines(chi, lam, res, density, onProgress) {
   const { V1, V2, V3, consolute_pt, blue, morphology: morph } = res;
   const isType12 = (morph === 'type1' || morph === 'type2') && V1 !== null;
   const isType3  = morph === 'type3';
@@ -1458,6 +1461,8 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
   if (isType12) {
   const midR = [(V1[0]+V2[0])/2, (V1[1]+V2[1])/2];
   {
+    const len1 = Math.hypot(0.5 - midR[0], 0.5 - midR[1]);
+    const N    = Math.max(2, Math.round(len1 / density) + 1);
     const anchor = sortTl([V1.slice(), V2.slice()]);
     let hL = anchor[0].slice(), hR = anchor[1].slice();
     let failStreak = 0;
@@ -1514,7 +1519,9 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
     }
 
     if (tMax > 0) {
-      const anchor = sortTl([V1.slice(), V3.slice()]);
+      const arcLen2 = tMax * Math.hypot(dx, dy);
+      const N       = Math.max(2, Math.round(arcLen2 / density) + 1);
+      const anchor  = sortTl([V1.slice(), V3.slice()]);
       let hL = anchor[0].slice(), hR = anchor[1].slice();
       let failStreak = 0;
 
@@ -1559,6 +1566,8 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
   // only counted after the first successful tieline is found.
   // Seeded from the middle of the pre-computed blue tieline array.
   if (isType3) {
+    // (0.5,0.5) → (1,0): arc length = √(0.5²+0.5²) = √0.5
+    const N3 = Math.max(2, Math.round(Math.hypot(0.5, 0.5) / density) + 1);
     let hL = null, hR = null;
     if (blue && blue.length > 0) {
       const seed = sortTl(blue[Math.floor(blue.length / 2)]);
@@ -1566,8 +1575,8 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
     }
     let foundFirst = false, failStreak = 0;
 
-    for (let i = 0; i < N; i++) {
-      const t     = i / Math.max(N - 1, 1);
+    for (let i = 0; i < N3; i++) {
+      const t     = i / Math.max(N3 - 1, 1);
       const phi_c = 0.5 + t * 0.5;   // 0.5 → 1.0
       const psi_c = 0.5 - t * 0.5;   // 0.5 → 0.0
 
@@ -1599,7 +1608,7 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
       // Before first success: silent skip (one-phase region near diagonal)
 
       if (i % 50 === 0) {
-        if (onProgress) onProgress(`Trajectory… ${Math.round(i/N*100)} %`);
+        if (onProgress) onProgress(`Trajectory… ${Math.round(i/N3*100)} %`);
         await new Promise(r => setTimeout(r, 0));
       }
     }
@@ -1877,8 +1886,7 @@ const genBtn       = document.getElementById('pd-generate');
 const exportBtn    = document.getElementById('pd-export');
 const denseBtn       = document.getElementById('pd-dense');
 const denseExportBtn = document.getElementById('pd-dense-export');
-const nDenseSl       = document.getElementById('n-dense');
-const nDenseVal    = document.getElementById('n-dense-val');
+const nDenseIn       = document.getElementById('n-dense');
 const denseStatusEl = document.getElementById('pd-dense-status');
 const statusEl     = document.getElementById('pd-status');
 
@@ -1918,7 +1926,7 @@ sync(lamSlider, lamInput);
 
 nRdroSl.addEventListener('input', () => { nRdroVal.textContent = nRdroSl.value; });
 nArSl.addEventListener('input',   () => { nArVal.textContent   = nArSl.value; });
-nDenseSl.addEventListener('input', () => { nDenseVal.textContent = nDenseSl.value; });
+// nDenseIn is a plain number input — no separate display element needed
 
 showTlChk.addEventListener('change', () => {
   tlRows.style.display = showTlChk.checked ? '' : 'none';
@@ -1978,11 +1986,11 @@ denseBtn.addEventListener('click', async () => {
   genBtn.disabled   = true;
   denseStatusEl.textContent = 'Starting…';
 
-  const N = +nDenseSl.value;
+  const density = Math.max(1e-5, +nDenseIn.value || 0.001);
   const t0 = performance.now();
   try {
     _denseResult = await computeDenseTielines(
-      _lastChi, _lastLam, _lastRes, N,
+      _lastChi, _lastLam, _lastRes, density,
       msg => { denseStatusEl.textContent = msg; }
     );
     const dt = ((performance.now() - t0) / 1000).toFixed(2);
