@@ -215,6 +215,11 @@ description: >
              min="0.0001" max="0.05" step="0.0001" value="0.02"
              style="width:80px;background:#1a1a2e;color:#ccd;border:1px solid #445;border-radius:4px;padding:2px 6px;font-size:13px;">
     </div>
+    <div class="pd-row">
+      <span class="pd-tl-label">Opacity</span>
+      <input type="range" class="pd-slider" id="tl-alpha" min="0.05" max="1.0" step="0.05" value="0.4">
+      <span id="tl-alpha-val" style="min-width:30px;">0.40</span>
+    </div>
     <div id="pd-dense-status" style="font-size:12px;color:#666;margin-top:2px;min-height:16px;"></div>
   </div>
 
@@ -1309,7 +1314,7 @@ function drawAxes(ctx, chi, lam, morph) {
   ctx.restore();
 }
 
-function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinodal, showStars, denseTl) {
+function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinodal, showStars, denseTl, tlAlpha) {
   const dpr = window.devicePixelRatio || 1;
   canvas.width  = CSZ  * dpr;
   canvas.height = CSZH * dpr;
@@ -1377,7 +1382,7 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
   if (showTielines) {
     if (denseTl) {
       // Dense tielines replace sparse for type 1, 2, and 3
-      drawDenseTielines(ctx, denseTl);
+      drawDenseTielines(ctx, denseTl, tlAlpha);
     } else {
       // Sparse fallback (type2_fallback, or before dense has been computed)
       const DIAG = 0.005;
@@ -1618,12 +1623,12 @@ async function computeDenseTielines(chi, lam, res, density, onProgress) {
 }
 
 // Draw the dense tieline overlay — thin, semi-transparent, same palette as sparse tielines
-function drawDenseTielines(ctx, denseTl) {
+function drawDenseTielines(ctx, denseTl, alpha) {
   if (!denseTl) return;
   const { traj1, traj2 } = denseTl;
   ctx.save();
-  ctx.lineWidth  = 0.55;
-  ctx.globalAlpha = 0.22;
+  ctx.lineWidth   = 0.55;
+  ctx.globalAlpha = (alpha != null) ? alpha : 0.4;
 
   // Trajectory 1 → R_D+R_O color (both lower and upper halves)
   ctx.strokeStyle = T_RD_RO;
@@ -1887,6 +1892,8 @@ const exportBtn    = document.getElementById('pd-export');
 const denseBtn       = document.getElementById('pd-dense');
 const denseExportBtn = document.getElementById('pd-dense-export');
 const nDenseIn       = document.getElementById('n-dense');
+const tlAlphaSl      = document.getElementById('tl-alpha');
+const tlAlphaVal     = document.getElementById('tl-alpha-val');
 const denseStatusEl = document.getElementById('pd-dense-status');
 const statusEl     = document.getElementById('pd-status');
 
@@ -1927,9 +1934,30 @@ sync(lamSlider, lamInput);
 nRdroSl.addEventListener('input', () => { nRdroVal.textContent = nRdroSl.value; });
 nArSl.addEventListener('input',   () => { nArVal.textContent   = nArSl.value; });
 // nDenseIn is a plain number input — no separate display element needed
+tlAlphaSl.addEventListener('input', () => {
+  tlAlphaVal.textContent = (+tlAlphaSl.value).toFixed(2);
+  if (_lastRes !== null) {
+    drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
+                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showSpinChk.checked, showStarChk.checked,
+                _denseResult, +tlAlphaSl.value);
+  }
+});
 
 showTlChk.addEventListener('change', () => {
   tlRows.style.display = showTlChk.checked ? '' : 'none';
+  if (_lastRes !== null)
+    drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
+                showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
+});
+[showSpinChk, showStarChk].forEach(chk => {
+  chk.addEventListener('change', () => {
+    if (_lastRes !== null)
+      drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
+                  showTlChk.checked, +nRdroSl.value, +nArSl.value,
+                  showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
+  });
 });
 
 function setStatus(msg, isErr) {
@@ -1997,7 +2025,7 @@ genBtn.addEventListener('click', async () => {
     // Final draw — dense tielines used when available, sparse fallback otherwise
     drawDiagram(canvas, res, chi, lam,
                 showTlChk.checked, +nRdroSl.value, +nArSl.value,
-                showSpinChk.checked, showStarChk.checked, _denseResult);
+                showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
 
     setTimeout(() => setStatus('', false), 3000);
     denseBtn.disabled = !denseOk;
@@ -2037,7 +2065,7 @@ denseBtn.addEventListener('click', async () => {
     // Redraw with dense overlay
     drawDiagram(canvas, _lastRes, _lastChi, _lastLam,
                 showTlChk.checked, +nRdroSl.value, +nArSl.value,
-                showSpinChk.checked, showStarChk.checked, _denseResult);
+                showSpinChk.checked, showStarChk.checked, _denseResult, +tlAlphaSl.value);
   } catch (e) {
     denseStatusEl.textContent = 'Error: ' + e.message;
     console.error(e);
