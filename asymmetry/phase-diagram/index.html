@@ -1198,13 +1198,38 @@ function drawDiagram(canvas, res, chi, lam, showTielines, showSpinodal, showStar
 // density — Euclidean spacing between consecutive probe points (in diagram units).
 // Each trajectory computes its own point count: N = round(arcLength / density) + 1
 async function computeDenseTielines(chi, lam, res, density, onProgress) {
-  const { V1, V2, V3, consolute_pt, blue, morphology: morph } = res;
+  const { V1, V2, V3, consolute_pt, blue, morphology: morph,
+          type1_consolute_pt, type1_taper } = res;
   const isType12 = (morph === 'type1' || morph === 'type2') && V1 !== null;
   const isType3  = morph === 'type3';
   if (!isType12 && !isType3) return { traj1: [], traj2: [] };
 
-  const rng = makePRNG(Date.now() & 0xFFFFFFFF);
-  const NR_COLD = 0;   // rely on 50 warm starts — cold restarts waste time here
+  // Deterministic seed keeps first-generate and recompute consistent.
+  const rng = makePRNG(Math.round(chi * 1e4) ^ Math.round(lam * 1e4));
+  const NR_COLD = 0;   // rely on warm starts — cold restarts waste time here
+
+  // Pre-compute a warm-start lookup from the solver's green arm tielines.
+  // These are the best possible seeds for the traj2 near-tip region, far
+  // better than the V1/V3 anchor once the probe moves away from T_b.
+  const greenSeeds = [];
+  if (res.green && res.green.length > 0) {
+    for (const tl of res.green) {
+      const stl = sortTl(tl);
+      const psi_mid = (stl[0][1] + stl[1][1]) / 2;
+      greenSeeds.push({ psi_mid, hL: stl[0].slice(), hR: stl[1].slice() });
+    }
+    greenSeeds.sort((a, b) => a.psi_mid - b.psi_mid);
+  }
+  // Return the green-seed entry whose psi_mid is closest to psi_c.
+  function nearestGreenSeed(psi_c) {
+    if (greenSeeds.length === 0) return null;
+    let best = greenSeeds[0], bestD = Math.abs(greenSeeds[0].psi_mid - psi_c);
+    for (const s of greenSeeds) {
+      const d = Math.abs(s.psi_mid - psi_c);
+      if (d < bestD) { best = s; bestD = d; }
+    }
+    return bestD < 0.20 ? best : null;
+  }
 
   // ── Trajectory 1: mid(V1,V2) → (0.5,0.5)  [Types 1 & 2 only] ─────────
   const traj1 = [];
@@ -1258,8 +1283,16 @@ async function computeDenseTielines(chi, lam, res, density, onProgress) {
       dy   = consolute_pt[1] - midAR[1];
       // t where ψ reaches 0: midAR[1] + t*dy = 0
       tMax = (Math.abs(dy) > 1e-9) ? Math.max(-midAR[1] / dy, 1.05) : 2.5;
+    } else if (morph === 'type1' && type1_taper && type1_consolute_pt !== null) {
+      // Type 1 taper: arm closes at consolute_pt (not necessarily on axis).
+      // Use the analytically-known consolute as the exact endpoint so that
+      // (a) the trajectory doesn't overshoot into the one-phase region and
+      // (b) at the boundary case (consolute = (0.5,0)) the direction is exact.
+      dx   = type1_consolute_pt[0] - midAR[0];
+      dy   = type1_consolute_pt[1] - midAR[1];
+      tMax = 1.0;   // t=1 reaches consolute; beyond that is one-phase
     } else if (morph === 'type1') {
-      // Type 1: midAR → (0.5, 0)  straight line
+      // Type 1 non-taper: arm reaches the ψ=0 axis with nonzero width
       dx   = 0.5    - midAR[0];
       dy   = 0      - midAR[1];
       tMax = 1.0;
@@ -1287,6 +1320,13 @@ async function computeDenseTielines(chi, lam, res, density, onProgress) {
         let tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, NR_COLD, rng, 0.010);
         if (tl === null)
           tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, 15, rng, 0.025);
+        // Fallback: try the nearest pre-computed green-arm tieline as seed.
+        // This dramatically helps the near-consolute region where the standard
+        // warm-start chain can stall due to shrinking tieline lengths.
+        if (tl === null) {
+          const gs = nearestGreenSeed(psi_c);
+          if (gs) tl = findTielineWarm(phi_c, psi_c, chi, lam, gs.hL, gs.hR, 15, rng, 0.030);
+        }
 
         if (tl !== null) {
           tl = sortTl(tl);
