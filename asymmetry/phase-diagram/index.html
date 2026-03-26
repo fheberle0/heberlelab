@@ -718,6 +718,13 @@ function solveBilayer(chi, lam) {
     if (ext.extra.length > 0) green = [...ext.extra.reverse(), ...green];
     type1_cp = ext.consolute; type1_taper = ext.taper;
   }
+  // Special case: at the Type 1/Type 2 boundary (Λ ≈ Λ_C = χ−2) the arm
+  // consolute point is analytically exactly (0.5, 0).  The numerical solver
+  // may miss the taper or place the consolute above the axis, so we override.
+  if (morph === 'type1' && Math.abs(lam - lamCritical(chi)) < 5e-3) {
+    type1_cp = [0.5, 0];
+    type1_taper = true;
+  }
 
   // Triangle vertices
   const V1 = T_b[0].slice(), V3 = T_b[1].slice();
