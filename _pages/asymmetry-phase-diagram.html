@@ -208,7 +208,7 @@ description: >
 
   <!-- ── Dense tieline controls ────────────────────────────────────────── -->
   <div class="pd-panel">
-    <h4>Dense Tielines <span style="font-size:11px;color:#555;font-weight:400;text-transform:none;">(Types 1 &amp; 2)</span></h4>
+    <h4>Dense Tielines <span style="font-size:11px;color:#555;font-weight:400;text-transform:none;">(Types 1, 2 &amp; 3)</span></h4>
     <div class="pd-row">
       <span class="pd-tl-label">Trajectory points</span>
       <input type="range" class="pd-slider" id="n-dense" min="50" max="2000" step="50" value="500">
@@ -218,7 +218,7 @@ description: >
   </div>
 
   <button id="pd-generate">Generate Phase Diagram</button>
-  <button id="pd-dense"        disabled title="Generate a Type 1 or Type 2 diagram first">Dense Tielines</button>
+  <button id="pd-dense"        disabled title="Generate a Type 1, 2, or 3 diagram first">Dense Tielines</button>
   <button id="pd-dense-export" disabled title="Compute dense tielines first">Export Dense</button>
   <button id="pd-export"       disabled title="Generate a diagram first">Export to Excel</button>
   <div id="pd-status"></div>
@@ -1421,34 +1421,42 @@ function drawDiagram(canvas, res, chi, lam, showTielines, nRdro, nAr, showSpinod
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Dense tieline computation
-// Two generating trajectories (Type 1 and Type 2 diagrams):
+// Generating trajectories by morphology type:
 //
-//  Traj 1 — R_D+R_O region (same for both types):
+//  Traj 1 — R_D+R_O region (Types 1 & 2 only):
 //    mid(V1,V2)  →  (0.5, 0.5)
 //    Entire path lies within the R_D+R_O two-phase lens; all probes succeed.
 //    Warm-start walks from the triangle-edge anchor toward the consolute.
 //
-//  Traj 2 — R_D+AR_OD arm:
+//  Traj 2 — R_D+AR_OD arm (all types):
 //    Type 2: mid(V1,V3)  →  consolute_pt  →  ψ=0
 //      Starts at the triangle boundary, crosses the consolute critical point,
 //      then enters the one-phase region; ≥20 consecutive nulls terminates.
 //    Type 1: mid(V1,V3)  →  (0.5, 0)  (straight line, no consolute needed)
-//      The arm has no three-phase boundary, so we walk the entire straight
-//      line; ≥20 consecutive nulls terminates early if the 1-phase region
-//      is entered before reaching (0.5, 0).
-//    Both types: traj2 is mirrored via swapTl / reflectTl to cover all four
+//      ≥20 consecutive nulls terminates early if the 1-phase region is
+//      entered before reaching (0.5, 0).
+//    Type 3: (0.5, 0.5)  →  (1, 0)
+//      No three-phase triangle; trajectory enters the R_D+AR_OD two-phase
+//      region after crossing the consolute point. Probes in the initial
+//      one-phase section (near the diagonal) fail silently; failStreak is
+//      only counted after the first successful tieline is found.
+//      Seeded from the pre-computed blue tieline array.
+//    All types: traj2 is mirrored via swapTl / reflectTl to cover all four
 //    AR-containing two-phase regions.
 // ═══════════════════════════════════════════════════════════════════════════
 async function computeDenseTielines(chi, lam, res, N, onProgress) {
-  const { V1, V2, V3, consolute_pt, morphology: morph } = res;
-  if ((morph !== 'type2' && morph !== 'type1') || V1 === null) return { traj1: [], traj2: [] };
+  const { V1, V2, V3, consolute_pt, blue, morphology: morph } = res;
+  const isType12 = (morph === 'type1' || morph === 'type2') && V1 !== null;
+  const isType3  = morph === 'type3';
+  if (!isType12 && !isType3) return { traj1: [], traj2: [] };
 
   const rng = makePRNG(Date.now() & 0xFFFFFFFF);
   const NR_COLD = 0;   // rely on 50 warm starts — cold restarts waste time here
 
-  // ── Trajectory 1: mid(V1,V2) → (0.5,0.5) ─────────────────────────────
-  const midR = [(V1[0]+V2[0])/2, (V1[1]+V2[1])/2];
+  // ── Trajectory 1: mid(V1,V2) → (0.5,0.5)  [Types 1 & 2 only] ─────────
   const traj1 = [];
+  if (isType12) {
+  const midR = [(V1[0]+V2[0])/2, (V1[1]+V2[1])/2];
   {
     const anchor = sortTl([V1.slice(), V2.slice()]);
     let hL = anchor[0].slice(), hR = anchor[1].slice();
@@ -1481,10 +1489,12 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
       }
     }
   }
+  } // end isType12 — traj1
 
   // ── Trajectory 2: R_D+AR_OD arm ──────────────────────────────────────
-  const midAR = [(V1[0]+V3[0])/2, (V1[1]+V3[1])/2];
   const traj2 = [];
+  if (isType12) {
+  const midAR = [(V1[0]+V3[0])/2, (V1[1]+V3[1])/2];
   {
     let dx, dy, tMax;
     if (morph === 'type2' && consolute_pt !== null) {
@@ -1535,6 +1545,59 @@ async function computeDenseTielines(chi, lam, res, N, onProgress) {
           if (onProgress) onProgress(`Trajectory 2… ${Math.round(i/N*100)} %`);
           await new Promise(r => setTimeout(r, 0));
         }
+      }
+    }
+  }
+  } // end isType12 — traj2
+
+  // ── Type 3: single trajectory (0.5,0.5) → (1,0) ─────────────────────
+  // The two-phase region is entered after crossing the consolute point.
+  // Probes in the initial one-phase section (near the diagonal) fail
+  // silently; failStreak counting begins only after the first success.
+  // Seed from the middle of the pre-computed blue tieline array.
+  if (isType3) {
+    let hL = null, hR = null;
+    if (blue && blue.length > 0) {
+      const seed = sortTl(blue[Math.floor(blue.length / 2)]);
+      hL = seed[0].slice(); hR = seed[1].slice();
+    }
+    let foundFirst = false, failStreak = 0;
+
+    for (let i = 0; i < N; i++) {
+      const t     = i / Math.max(N - 1, 1);
+      const phi_c = 0.5 + t * 0.5;   // 0.5 → 1.0
+      const psi_c = 0.5 - t * 0.5;   // 0.5 → 0.0
+
+      if (psi_c < GUARD) break;
+      if (psi_c >= phi_c - GUARD) continue;   // on or above diagonal
+
+      let tl;
+      if (hL !== null) {
+        tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, NR_COLD, rng, 0.010);
+        if (tl === null)
+          tl = findTielineWarm(phi_c, psi_c, chi, lam, hL, hR, 15, rng, 0.025);
+      } else {
+        // No anchor yet — use cold restarts for the first successful tieline
+        tl = findTielineWarm(phi_c, psi_c, chi, lam,
+                             [phi_c - 0.15, psi_c], [phi_c + 0.15, psi_c],
+                             30, rng, 0.025);
+      }
+
+      if (tl !== null) {
+        tl = sortTl(tl);
+        hL = tl[0].slice(); hR = tl[1].slice();
+        traj2.push(tl);
+        failStreak = 0;
+        foundFirst = true;
+      } else if (foundFirst) {
+        failStreak++;
+        if (failStreak > 20) break;   // solidly in 1-phase region
+      }
+      // Before first success: silent skip (one-phase region near diagonal)
+
+      if (i % 50 === 0) {
+        if (onProgress) onProgress(`Trajectory… ${Math.round(i/N*100)} %`);
+        await new Promise(r => setTimeout(r, 0));
       }
     }
   }
@@ -1625,9 +1688,11 @@ function exportDenseTielines(chi, lam, res, denseTl) {
     [],
     ['Trajectory',           'Description',                         'Tielines found'],
     ['Traj 1',  'mid(V1,V2) → (0.5,0.5)  [R_D+R_O region]',      traj1.length],
-    ['Traj 2',  res.morphology === 'type1'
-                  ? 'mid(V1,V3) → (0.5,0)  [R_D+AR_OD arm; mirrored to all 4 AR regions]'
-                  : 'mid(V1,V3) → consolute → ψ=0  [R_D+AR_OD; mirrored to all 4 AR regions]',
+    ['Traj 2',  res.morphology === 'type3'
+                  ? '(0.5,0.5) → (1,0) through consolute  [R_D+AR_OD; mirrored to all 4 AR regions]'
+                  : res.morphology === 'type1'
+                    ? 'mid(V1,V3) → (0.5,0)  [R_D+AR_OD arm; mirrored to all 4 AR regions]'
+                    : 'mid(V1,V3) → consolute → ψ=0  [R_D+AR_OD; mirrored to all 4 AR regions]',
                traj2.length],
     [],
     ['Note: phi_1 ≤ phi_2 in all tieline sheets (sorted by outer-leaflet composition).'],
@@ -1885,9 +1950,10 @@ genBtn.addEventListener('click', async () => {
     denseExportBtn.disabled = true;
     denseExportBtn.title    = 'Compute dense tielines first';
     exportBtn.disabled = false; exportBtn.title = '';
-    const denseOk = (res.morphology === 'type2' || res.morphology === 'type1') && res.V1 !== null;
+    const denseOk = ((res.morphology === 'type1' || res.morphology === 'type2') && res.V1 !== null)
+                 || res.morphology === 'type3';
     denseBtn.disabled = !denseOk;
-    denseBtn.title    = denseOk ? '' : 'Only available for Type 1 and Type 2 diagrams with a resolved tie-triangle';
+    denseBtn.title    = denseOk ? '' : 'Only available for Type 1, 2, and 3 diagrams';
   } catch (e) {
     setStatus('Error: ' + e.message, true);
     console.error(e);
