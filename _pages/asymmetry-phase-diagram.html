@@ -605,7 +605,9 @@ function findV3(chi, lam) {
     if (Math.abs(pp2 - pp1) < 1e-6) continue;
 
     const [sol, res] = newtonRaphson3(fn, x0);
-    if (res < bestRes && Math.abs(sol[2] - sol[0]) > 1e-8) {
+    // Reject degenerate: phi2 ≈ phi1, or V1 on anti-diagonal (trivial solution)
+    if (res < bestRes && Math.abs(sol[2] - sol[0]) > 1e-8
+        && Math.abs(sol[0] + sol[1] - 1) > 0.01) {
       bestRes = res; bestSol = sol;
     }
   }
@@ -980,7 +982,9 @@ async function solveBilayer(chi, lam, spacing, onProgress) {
   if (onProgress) onProgress('Finding three-phase vertices…');
   await new Promise(r => setTimeout(r, 0));
 
-  const { V3, V1 } = findV3(chi, lam);
+  let { V3, V1 } = findV3(chi, lam);
+  // Normalise: V1 below anti-diagonal (phi+psi < 1), V2 above
+  if (V1[0] + V1[1] > 1) V1 = [1 - V1[1], 1 - V1[0]];
   const V2 = [1 - V1[1], 1 - V1[0]];
 
   let cstar = null;
