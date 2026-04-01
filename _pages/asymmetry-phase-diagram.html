@@ -784,14 +784,16 @@ function _traceNR(probeAt, chi, lam, x0, kStart, kEnd, step) {
     if (phi_c <= EPS || phi_c >= 1-EPS || psi_c <= EPS || psi_c >= 1-EPS) { nFail++; if (nFail >= MAX_FAIL) break; continue; }
 
     let [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, xCur);
-    let ok = tl !== null && res < 1e-8;
+    let ok = tl !== null && res < 1e-8
+             && Math.hypot(tl.t1[0]-tl.t2[0], tl.t1[1]-tl.t2[1]) > 0.005;
 
-    // NM fallback when NR fails (reseed the chain)
+    // NM fallback when NR fails or returns degenerate tieline (reseed the chain)
     if (!ok) {
       const nmTl = findTielineNM(phi_c, psi_c, chi, lam, 500, 42 + Math.abs(k));
       if (nmTl !== null) {
         [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, [nmTl.t1[0], nmTl.t1[1], nmTl.x1]);
-        ok = tl !== null && res < 1e-8;
+        ok = tl !== null && res < 1e-8
+             && Math.hypot(tl.t1[0]-tl.t2[0], tl.t1[1]-tl.t2[1]) > 0.005;
       }
     }
 
@@ -1286,7 +1288,8 @@ function drawDiagram(canvas, res, chi, lam, showTielines, showSpinodal, showStar
   fillPoly(ctx, swapPoly(polys.poly_ro_arod), C_RO_ARDO, 0.55);
 
   // ── Three-phase triangles ──
-  if (V1 !== null) {
+  // Skip when V1≈V2 (Type 1) — the triangle degenerates to a line
+  if (V1 !== null && V2 !== null && d2(V1, V2) > 0.01) {
     for (const tri of [[V1, V2, V3], swapPoly([V1, V2, V3])]) {
       fillPoly(ctx, tri, C_3PH, 0.85);
       strokePoly(ctx, tri, '#555', 0.9);
