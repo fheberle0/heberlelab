@@ -1052,10 +1052,12 @@ function drawDiagram(canvas, res, chi, lam, showTielines, showSpinodal, showStar
   const polys = buildPolygons(res);
 
   // ── Filled regions ──
-  const full_rdro = polys.poly_rdro.length >= 3
-    ? [...polys.poly_rdro, ...swapPoly([...polys.poly_rdro].reverse())]
-    : [];
-  fillPoly(ctx, full_rdro,                    C_RD_RO,   0.55);
+  // Draw lower and upper R_D+R_O halves separately to avoid
+  // self-intersecting polygon path (which causes white gaps).
+  if (polys.poly_rdro.length >= 3) {
+    fillPoly(ctx, polys.poly_rdro,                C_RD_RO, 0.55);
+    fillPoly(ctx, swapPoly(polys.poly_rdro),      C_RD_RO, 0.55);
+  }
   fillPoly(ctx, polys.poly_rd_arod,           C_RD_AROD, 0.55);
   fillPoly(ctx, polys.poly_ro_arod,           C_RO_AROD, 0.55);
   fillPoly(ctx, swapPoly(polys.poly_rd_arod), C_RD_ARDO, 0.55);
