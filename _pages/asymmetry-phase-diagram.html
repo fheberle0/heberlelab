@@ -759,7 +759,73 @@ function findCStar(V1, V3, chi, lam) {
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Tieline sampling trajectories (warm-start NR chains)
+//
+// Strategy: "seed-in-middle, trace-both-ways"
+//   1. Use NM to find a reliable seed at the trajectory midpoint.
+//   2. NR-refine the seed.
+//   3. Trace forward (toward endpoint) with NR warm starts.
+//   4. Trace backward (toward start) with NR warm starts.
+//   5. Combine both traces, sorted by arc position.
+//
+// This avoids the fragile near-triangle region where the tieline
+// geometry changes rapidly and the V1↔V2 warm start goes stale.
 // ═══════════════════════════════════════════════════════════════════════════
+
+// Helper: NR chain trace along a trajectory from index kStart, stepping by +1 or -1.
+// Returns array of {k, tl} objects.  Stops after MAX_FAIL consecutive NR failures.
+function _traceNR(probeAt, chi, lam, x0, kStart, kEnd, step) {
+  const MAX_FAIL = 5;
+  const results = [];
+  let xCur = x0.slice();
+  let nFail = 0;
+
+  for (let k = kStart; step > 0 ? k <= kEnd : k >= kEnd; k += step) {
+    const [phi_c, psi_c] = probeAt(k);
+    if (phi_c <= EPS || phi_c >= 1-EPS || psi_c <= EPS || psi_c >= 1-EPS) { nFail++; if (nFail >= MAX_FAIL) break; continue; }
+
+    let [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, xCur);
+    let ok = tl !== null && res < 1e-8;
+
+    // NM fallback when NR fails (reseed the chain)
+    if (!ok) {
+      const nmTl = findTielineNM(phi_c, psi_c, chi, lam, 500, 42 + Math.abs(k));
+      if (nmTl !== null) {
+        [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, [nmTl.t1[0], nmTl.t1[1], nmTl.x1]);
+        ok = tl !== null && res < 1e-8;
+      }
+    }
+
+    if (ok) {
+      xCur = [tl.t1[0], tl.t1[1], tl.x1];
+      results.push({k, tl});
+      nFail = 0;
+    } else {
+      nFail++;
+      if (nFail >= MAX_FAIL) break;
+    }
+  }
+  return results;
+}
+
+// Helper: find an NM seed at a candidate probe, NR-refine it.
+// Tries the candidate first, then a few neighbours.
+function _findSeed(probeAt, nPts, chi, lam) {
+  // Try several fractions along the trajectory
+  for (const frac of [0.5, 0.3, 0.7, 0.15, 0.85, 0.05]) {
+    const k = Math.round(frac * (nPts - 1));
+    const [phi_c, psi_c] = probeAt(k);
+    if (phi_c <= EPS || phi_c >= 1-EPS || psi_c <= EPS || psi_c >= 1-EPS) continue;
+
+    const nmTl = findTielineNM(phi_c, psi_c, chi, lam, 1000, 42);
+    if (nmTl === null) continue;
+
+    const [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, [nmTl.t1[0], nmTl.t1[1], nmTl.x1]);
+    if (tl !== null && res < 1e-8) {
+      return { k, x0: [tl.t1[0], tl.t1[1], tl.x1], tl };
+    }
+  }
+  return null;
+}
 
 // Sample tgt1: R_D + AR_OD arm — mid(V1,V3) → C* (or (0.5,0) for Type 1)
 function sampleTgt1(V1, V3, cEndpoint, chi, lam, spacing) {
@@ -770,23 +836,32 @@ function sampleTgt1(V1, V3, cEndpoint, chi, lam, spacing) {
   const unit = [d[0]/L, d[1]/L];
   const nPts = Math.floor(L / spacing) + 1;
 
-  const results = [];
-  let x0 = [V1[0], V1[1], 0.5]; // warm start: at midpoint, exact solution is V1↔V3
-
-  for (let k = 0; k < nPts; k++) {
+  const probeAt = k => {
     const s = Math.min(k * spacing, L);
-    const phi_c = M[0] + s * unit[0];
-    const psi_c = M[1] + s * unit[1];
+    return [M[0] + s*unit[0], M[1] + s*unit[1]];
+  };
 
-    const [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, x0);
-    const ok = tl !== null && res < 1e-8;
+  // At k=0 the exact tieline is V1↔V3, so start with that warm start
+  const x0_start = [V1[0], V1[1], 0.5];
 
-    if (ok) {
-      x0 = [tl.t1[0], tl.t1[1], tl.x1];
-      results.push(tl);
-    }
+  // Try direct forward chain first (works when geometry varies smoothly)
+  const fwd = _traceNR(probeAt, chi, lam, x0_start, 0, nPts - 1, +1);
+  if (fwd.length > nPts * 0.5) {
+    return fwd.map(r => r.tl);
   }
-  return results;
+
+  // If forward chain breaks, use bidirectional seeding
+  const seed = _findSeed(probeAt, nPts, chi, lam);
+  if (seed === null) return fwd.map(r => r.tl); // return whatever we got
+
+  const back = _traceNR(probeAt, chi, lam, seed.x0, seed.k - 1, 0, -1);
+  const fwd2 = _traceNR(probeAt, chi, lam, seed.x0, seed.k, nPts - 1, +1);
+
+  // Combine, sort by k, deduplicate
+  const all = [...back, {k: seed.k, tl: seed.tl}, ...fwd2];
+  all.sort((a, b) => a.k - b.k);
+  const seen = new Set();
+  return all.filter(r => { if (seen.has(r.k)) return false; seen.add(r.k); return true; }).map(r => r.tl);
 }
 
 // Sample tgt2: R_D + R_O — mid(V1,V2) → (0.5, 0.5)
@@ -799,28 +874,31 @@ function sampleTgt2(V1, V2, chi, lam, spacing) {
   const unit = [d[0]/L, d[1]/L];
   const nPts = Math.floor(L / spacing) + 1;
 
-  const results = [];
-  let x0 = [V1[0], V1[1], 0.5];
-  let nFail = 0;
-
-  for (let k = 0; k < nPts; k++) {
+  const probeAt = k => {
     const s = Math.min(k * spacing, L);
-    const phi_c = M[0] + s * unit[0];
-    const psi_c = M[1] + s * unit[1];
+    return [M[0] + s*unit[0], M[1] + s*unit[1]];
+  };
 
-    const [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, x0);
-    const ok = tl !== null && res < 1e-8;
+  // At k=0 the exact tieline is V1↔V2, so start with that warm start
+  const x0_start = [V1[0], V1[1], 0.5];
 
-    if (ok) {
-      x0 = [tl.t1[0], tl.t1[1], tl.x1];
-      results.push(tl);
-      nFail = 0;
-    } else {
-      nFail++;
-    }
-    if (nFail >= 3) break;
+  // Try direct forward chain first
+  const fwd = _traceNR(probeAt, chi, lam, x0_start, 0, nPts - 1, +1);
+  if (fwd.length > nPts * 0.5) {
+    return fwd.map(r => r.tl);
   }
-  return results;
+
+  // Bidirectional seeding
+  const seed = _findSeed(probeAt, nPts, chi, lam);
+  if (seed === null) return fwd.map(r => r.tl);
+
+  const back = _traceNR(probeAt, chi, lam, seed.x0, seed.k - 1, 0, -1);
+  const fwd2 = _traceNR(probeAt, chi, lam, seed.x0, seed.k, nPts - 1, +1);
+
+  const all = [...back, {k: seed.k, tl: seed.tl}, ...fwd2];
+  all.sort((a, b) => a.k - b.k);
+  const seen = new Set();
+  return all.filter(r => { if (seen.has(r.k)) return false; seen.add(r.k); return true; }).map(r => r.tl);
 }
 
 // Sample Type 3: (0.5,0.5) → C* on antidiagonal
@@ -832,34 +910,22 @@ function sampleType3(cStar, chi, lam, spacing) {
   const unit = [d[0]/L, d[1]/L];
   const nPts = Math.floor(L / spacing) + 1;
 
-  // Need a seed tieline near (0.5, 0.5).
-  // Use NM at a point slightly off-diagonal.
-  const seedProbe = [start[0] + 3*spacing*unit[0], start[1] + 3*spacing*unit[1]];
-  const seedTl = findTielineNM(seedProbe[0], seedProbe[1], chi, lam, 1000, 42);
-  if (seedTl === null) return [];
-
-  let x0 = [seedTl.t1[0], seedTl.t1[1], 0.5];
-  const results = [];
-  let nFail = 0;
-
-  for (let k = 0; k < nPts; k++) {
+  const probeAt = k => {
     const s = Math.min(k * spacing, L);
-    const phi_c = start[0] + s * unit[0];
-    const psi_c = start[1] + s * unit[1];
+    return [start[0] + s*unit[0], start[1] + s*unit[1]];
+  };
 
-    const [tl, res] = findTielineNR(phi_c, psi_c, chi, lam, x0);
-    const ok = tl !== null && res < 1e-8;
+  // Use bidirectional seeding (near diagonal the chain can struggle)
+  const seed = _findSeed(probeAt, nPts, chi, lam);
+  if (seed === null) return [];
 
-    if (ok) {
-      x0 = [tl.t1[0], tl.t1[1], tl.x1];
-      results.push(tl);
-      nFail = 0;
-    } else {
-      nFail++;
-    }
-    if (nFail >= 3) break;
-  }
-  return results;
+  const back = _traceNR(probeAt, chi, lam, seed.x0, seed.k - 1, 0, -1);
+  const fwd  = _traceNR(probeAt, chi, lam, seed.x0, seed.k, nPts - 1, +1);
+
+  const all = [...back, {k: seed.k, tl: seed.tl}, ...fwd];
+  all.sort((a, b) => a.k - b.k);
+  const seen = new Set();
+  return all.filter(r => { if (seen.has(r.k)) return false; seen.add(r.k); return true; }).map(r => r.tl);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
