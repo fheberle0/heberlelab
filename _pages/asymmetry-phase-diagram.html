@@ -1471,6 +1471,17 @@ function updateBadge() {
   morphBadge.textContent    = MORPH_LABEL[m];
   morphBadge.style.color    = MORPH_COLOR[m];
   morphBadge.style.borderColor = MORPH_COLOR[m];
+
+  // Type 1 has no consolute points — disable the checkbox
+  const starLabel = document.querySelector('label[for="show-stars"]');
+  if (m === 'type1') {
+    showStarChk.checked  = false;
+    showStarChk.disabled = true;
+    if (starLabel) starLabel.style.opacity = '0.4';
+  } else {
+    showStarChk.disabled = false;
+    if (starLabel) starLabel.style.opacity = '1';
+  }
 }
 
 function sync(slider, input) {
