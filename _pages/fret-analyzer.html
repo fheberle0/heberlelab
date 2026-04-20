@@ -10,139 +10,291 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
 <style>
-  .fa-tool { max-width: 820px; }
-  .fa-desc  { font-size: 14px; color: #aaa; margin-bottom: 24px; line-height: 1.6; }
-  .fa-desc a { color: #00C244; }
+  .fa-tool {
+    max-width: 820px;
+  }
+  .fa-desc {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .fa-desc a {
+    color: #00c244;
+  }
 
   /* Upload */
   .fa-drop {
-    border: 2px dashed #555; border-radius: 8px;
-    padding: 36px; text-align: center; cursor: pointer;
-    transition: all .2s; margin-bottom: 20px;
+    border: 2px dashed #555;
+    border-radius: 8px;
+    padding: 36px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
   }
-  .fa-drop:hover, .fa-drop.over { border-color: #00C244; background: rgba(0,194,68,.06); }
-  .fa-drop input { display: none; }
-  .fa-drop p   { margin: 4px 0; }
-  .fa-drop .fa-hint { font-size: 13px; color: #777; }
+  .fa-drop:hover,
+  .fa-drop.over {
+    border-color: #00c244;
+    background: rgba(0, 194, 68, 0.06);
+  }
+  .fa-drop input {
+    display: none;
+  }
+  .fa-drop p {
+    margin: 4px 0;
+  }
+  .fa-drop .fa-hint {
+    font-size: 13px;
+    color: #777;
+  }
 
   /* Settings row */
   .fa-settings {
-    display: flex; gap: 24px; align-items: center;
-    flex-wrap: wrap; margin-bottom: 20px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
   }
-  .fa-settings label { font-size: 14px; }
+  .fa-settings label {
+    font-size: 14px;
+  }
   .fa-num {
-    width: 64px; padding: 5px 8px;
-    border: 1px solid #555; border-radius: 4px;
-    background: #1e1e1e; color: #f0f0f0; font-size: 14px;
+    width: 64px;
+    padding: 5px 8px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #1e1e1e;
+    color: #f0f0f0;
+    font-size: 14px;
   }
   .fa-txt {
-    width: 240px; padding: 5px 8px;
-    border: 1px solid #555; border-radius: 4px;
-    background: #1e1e1e; color: #f0f0f0; font-size: 14px;
+    width: 240px;
+    padding: 5px 8px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #1e1e1e;
+    color: #f0f0f0;
+    font-size: 14px;
   }
 
   /* Buttons */
   .fa-btn {
-    padding: 9px 22px; border: none; border-radius: 6px;
-    font-size: 14px; font-weight: 600; cursor: pointer; transition: .15s;
+    padding: 9px 22px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
   }
-  .fa-btn:disabled { opacity: .4; cursor: default; }
-  .fa-primary { background: #00C244; color: #fff; }
-  .fa-primary:hover:not(:disabled) { background: #00a838; }
-  .fa-secondary { background: #2a2a2a; color: #ddd; border: 1px solid #444; }
-  .fa-secondary:hover:not(:disabled) { background: #383838; }
+  .fa-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .fa-primary {
+    background: #00c244;
+    color: #fff;
+  }
+  .fa-primary:hover:not(:disabled) {
+    background: #00a838;
+  }
+  .fa-secondary {
+    background: #2a2a2a;
+    color: #ddd;
+    border: 1px solid #444;
+  }
+  .fa-secondary:hover:not(:disabled) {
+    background: #383838;
+  }
 
   /* Status */
   #fa-status {
-    display: none; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 14px;
+    display: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
   }
-  .fa-err  { background: rgba(200,0,0,.12); color: #ff7070; border: 1px solid #cc2222; }
-  .fa-info { background: rgba(0,194,68,.1);  color: #00C244;  border: 1px solid #00C244; }
+  .fa-err {
+    background: rgba(200, 0, 0, 0.12);
+    color: #ff7070;
+    border: 1px solid #cc2222;
+  }
+  .fa-info {
+    background: rgba(0, 194, 68, 0.1);
+    color: #00c244;
+    border: 1px solid #00c244;
+  }
 
   /* AICc cards */
-  .fa-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
-  .fa-card {
-    background: #1a1a1a; border: 1px solid #2e2e2e; border-radius: 8px;
-    padding: 14px 16px; text-align: center;
+  .fa-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
   }
-  .fa-card h4 { margin: 0 0 6px; font-size: 13px; color: #888; }
-  .fa-card .cv { font-size: 20px; font-weight: 700; }
-  .fa-card .cl { font-size: 12px; color: #777; margin-top: 3px; }
-  .fa-bar { height: 7px; border-radius: 4px; background: #2e2e2e; margin-top: 8px; overflow: hidden; }
-  .fa-fill { height: 100%; border-radius: 4px; }
-  .uniform-col { color: #1A73E8; }
-  .phsep-col   { color: #CC00AA; }
+  .fa-card {
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .fa-card h4 {
+    margin: 0 0 6px;
+    font-size: 13px;
+    color: #888;
+  }
+  .fa-card .cv {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .fa-card .cl {
+    font-size: 12px;
+    color: #777;
+    margin-top: 3px;
+  }
+  .fa-bar {
+    height: 7px;
+    border-radius: 4px;
+    background: #2e2e2e;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .fa-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .uniform-col {
+    color: #1a73e8;
+  }
+  .phsep-col {
+    color: #cc00aa;
+  }
 
   /* Tmix table */
-  .fa-tbl { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 20px; }
-  .fa-tbl th {
-    background: #222; padding: 9px 12px; text-align: center;
-    border: 1px solid #333; font-size: 13px; color: #bbb; font-weight: 600;
+  .fa-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 20px;
   }
-  .fa-tbl td { padding: 8px 12px; border: 1px solid #2e2e2e; text-align: center; }
-  .fa-tbl tr:nth-child(even) { background: #1a1a1a; }
+  .fa-tbl th {
+    background: #222;
+    padding: 9px 12px;
+    text-align: center;
+    border: 1px solid #333;
+    font-size: 13px;
+    color: #bbb;
+    font-weight: 600;
+  }
+  .fa-tbl td {
+    padding: 8px 12px;
+    border: 1px solid #2e2e2e;
+    text-align: center;
+  }
+  .fa-tbl tr:nth-child(even) {
+    background: #1a1a1a;
+  }
 
   /* Download bar */
-  .fa-dbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .fa-dbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
 
   /* Plot container */
-  #fa-plot { background: white; border-radius: 6px; display: inline-block; }
+  #fa-plot {
+    background: white;
+    border-radius: 6px;
+    display: inline-block;
+  }
 
   /* Refinement panel */
   #fa-refine {
-    margin-bottom: 20px; padding: 14px 16px;
-    background: #1a1a1a; border: 1px solid #2e2e2e; border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
   }
   .fa-refine-row {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
   }
-  .fa-refine-label { width: 72px; font-size: 13px; color: #ccc; }
-  .fa-refine-slider { width: 180px; accent-color: #00C244; cursor: pointer; }
+  .fa-refine-label {
+    width: 72px;
+    font-size: 13px;
+    color: #ccc;
+  }
+  .fa-refine-slider {
+    width: 180px;
+    accent-color: #00c244;
+    cursor: pointer;
+  }
   .fa-refine-num {
-    width: 58px; padding: 4px 6px; border: 1px solid #555; border-radius: 4px;
-    background: #252525; color: #f0f0f0; font-size: 13px;
+    width: 58px;
+    padding: 4px 6px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #252525;
+    color: #f0f0f0;
+    font-size: 13px;
   }
-  .fa-refine-auto { font-size: 11px; color: #666; }
-  .fa-refine-check { accent-color: #CC00AA; width: 14px; height: 14px; cursor: pointer; }
+  .fa-refine-auto {
+    font-size: 11px;
+    color: #666;
+  }
+  .fa-refine-check {
+    accent-color: #cc00aa;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
 </style>
 
 <div class="fa-tool">
-
   <p class="fa-desc">
-    Upload an Excel file containing fluorescence intensity data for 2 FRET probe pairs
-    (Nap/DiD and TFPC/DiD) measured across a temperature range. Each worksheet is treated
-    as one experimental replicate. The tool fits the data to uniform-mixing and
-    phase-separation models and uses AICc model selection to determine whether a
-    miscibility transition exists, following
-    <a href="https://doi.org/10.1016/j.bbamem.2026.184505" target="_blank">Chaisson et al. (2026)</a>.
-    <br><br>
-    <strong>Required column order</strong> (headers are ignored — columns are read by position):<br>
-    col 1: <code>Temperature</code> &nbsp; col 2: <code>FRET1</code> &nbsp; col 3: <code>FRET2</code> &nbsp;
-    col 4: <code>nap</code> &nbsp; col 5: <code>tfpc</code> &nbsp; col 6: <code>did</code>
+    Upload an Excel file containing fluorescence intensity data for 2 FRET probe pairs (Nap/DiD and TFPC/DiD) measured across a temperature range.
+    Each worksheet is treated as one experimental replicate. The tool fits the data to uniform-mixing and phase-separation models and uses AICc model
+    selection to determine whether a miscibility transition exists, following
+    <a href="https://doi.org/10.1016/j.bbamem.2026.184505" target="_blank">Chaisson et al. (2026)</a>. <br /><br />
+    <strong>Required column order</strong> (headers are ignored — columns are read by position):<br />
+    col 1: <code>Temperature</code> &nbsp; col 2: <code>FRET1</code> &nbsp; col 3: <code>FRET2</code> &nbsp; col 4: <code>nap</code> &nbsp; col 5:
+    <code>tfpc</code> &nbsp; col 6: <code>did</code>
   </p>
 
   <!-- Upload zone -->
   <div class="fa-drop" id="fa-drop">
-    <input type="file" id="fa-file" accept=".xlsx,.xls">
-    <p style="font-size:17px; margin:0 0 6px;">📂 Drop Excel file here or click to browse</p>
+    <input type="file" id="fa-file" accept=".xlsx,.xls" />
+    <p style="font-size: 17px; margin: 0 0 6px">📂 Drop Excel file here or click to browse</p>
     <p class="fa-hint">Each sheet = one replicate &nbsp;·&nbsp; Multiple replicates recommended</p>
-    <p class="fa-hint" id="fa-filename" style="color:#00C244; margin-top:8px;"></p>
+    <p class="fa-hint" id="fa-filename" style="color: #00c244; margin-top: 8px"></p>
   </div>
 
   <!-- Settings -->
   <div class="fa-settings">
-    <label>Fit range:
-      <input class="fa-num" type="number" id="fa-tmin" value="20" step="1"> °C &nbsp;to&nbsp;
-      <input class="fa-num" type="number" id="fa-tmax" value="70" step="1"> °C
+    <label
+      >Fit range: <input class="fa-num" type="number" id="fa-tmin" value="20" step="1" /> °C &nbsp;to&nbsp;
+      <input class="fa-num" type="number" id="fa-tmax" value="70" step="1" /> °C
     </label>
-    <label>Sample name:
-      <input class="fa-txt" type="text" id="fa-name" placeholder="e.g. DPPC/DOPC/Chol 40/40/20 mol%">
+    <label
+      >Sample name:
+      <input class="fa-txt" type="text" id="fa-name" placeholder="e.g. DPPC/DOPC/Chol 40/40/20 mol%" />
     </label>
-    <label>Fit weights:
-      <select id="fa-weighted"
-              style="background:#1e1e1e; border:1px solid #555; color:#f0f0f0; border-radius:4px;
-                     padding:5px 8px; font-size:14px; cursor:pointer;">
+    <label
+      >Fit weights:
+      <select
+        id="fa-weighted"
+        style="background: #1e1e1e; border: 1px solid #555; color: #f0f0f0; border-radius: 4px; padding: 5px 8px; font-size: 14px; cursor: pointer"
+      >
         <option value="wls" selected>Error-weighted (1/σ²)</option>
         <option value="ols">Unweighted (OLS)</option>
       </select>
@@ -153,35 +305,44 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
   <div id="fa-status"></div>
 
   <!-- Results -->
-  <div id="fa-results" style="display:none">
-
-    <h3 style="margin:0 0 14px; font-size:15px; color:#ccc;">Model selection (AICc)</h3>
+  <div id="fa-results" style="display: none">
+    <h3 style="margin: 0 0 14px; font-size: 15px; color: #ccc">Model selection (AICc)</h3>
     <div class="fa-cards" id="fa-cards"></div>
 
     <div id="fa-tmix-section"></div>
 
     <!-- Tmix refinement panel -->
-    <div id="fa-refine" style="display:none">
-      <h3 style="margin:0 0 6px; font-size:14px; color:#ccc;">Refine T<sub>mix</sub></h3>
-      <p style="font-size:12px; color:#888; margin:0 0 12px;">
-        If the automatic fit found the wrong transition temperature, check a series,
-        set its T<sub>mix</sub> to a better starting value, and click Refit.
+    <div id="fa-refine" style="display: none">
+      <h3 style="margin: 0 0 6px; font-size: 14px; color: #ccc">Refine T<sub>mix</sub></h3>
+      <p style="font-size: 12px; color: #888; margin: 0 0 12px">
+        If the automatic fit found the wrong transition temperature, check a series, set its T<sub>mix</sub> to a better starting value, and click
+        Refit.
       </p>
       <div id="fa-refine-rows"></div>
-      <button class="fa-btn fa-secondary" style="margin-top:10px;" onclick="refitWithHints()">↺ Refit with adjusted T<sub>mix</sub></button>
+      <button class="fa-btn fa-secondary" style="margin-top: 10px" onclick="refitWithHints()">↺ Refit with adjusted T<sub>mix</sub></button>
     </div>
 
     <div class="fa-dbar">
       <button class="fa-btn fa-secondary" onclick="dlPlot('svg')">⬇ SVG (vector)</button>
       <button class="fa-btn fa-secondary" onclick="dlPlot('png')">⬇ PNG (300 DPI)</button>
       <button class="fa-btn fa-secondary" onclick="dlXLSX()">⬇ Results XLSX</button>
-      <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#bbb; margin-left:6px;">
+      <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #bbb; margin-left: 6px">
         Error bars:
-        <select id="fa-errbar" onchange="if(RES) makePlot(RES)"
-                style="background:#252525; border:1px solid #555; color:#f0f0f0; border-radius:4px; padding:4px 8px; font-size:13px; cursor:pointer;">
+        <select
+          id="fa-errbar"
+          onchange="if (RES) makePlot(RES);"
+          style="background: #252525; border: 1px solid #555; color: #f0f0f0; border-radius: 4px; padding: 4px 8px; font-size: 13px; cursor: pointer"
+        >
           <option value="sd" selected>SD</option>
           <option value="sem">SEM</option>
         </select>
+      </label>
+      <label
+        id="fa-show-reps-label"
+        style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #bbb; margin-left: 6px; cursor: pointer"
+      >
+        <input type="checkbox" id="fa-show-reps" onchange="if (RES) makePlot(RES);" style="accent-color: #00c244; cursor: pointer" />
+        Show replicate fits
       </label>
     </div>
 
@@ -190,398 +351,527 @@ description: Quantify nanoscopic miscibility transitions in lipid bilayers from 
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// Linear algebra helpers
-// ═══════════════════════════════════════════════════════
-function solveLS(A, b) {
-  // Gaussian elimination with partial pivoting
-  const n = b.length;
-  const M = A.map((row, i) => [...row, b[i]]);
-  for (let c = 0; c < n; c++) {
-    let mx = c;
-    for (let r = c+1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[mx][c])) mx = r;
-    [M[c], M[mx]] = [M[mx], M[c]];
-    for (let r = c+1; r < n; r++) {
-      const f = M[r][c] / M[c][c];
-      for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k];
+  // ═══════════════════════════════════════════════════════
+  // Linear algebra helpers
+  // ═══════════════════════════════════════════════════════
+  function solveLS(A, b) {
+    // Gaussian elimination with partial pivoting
+    const n = b.length;
+    const M = A.map((row, i) => [...row, b[i]]);
+    for (let c = 0; c < n; c++) {
+      let mx = c;
+      for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[mx][c])) mx = r;
+      [M[c], M[mx]] = [M[mx], M[c]];
+      for (let r = c + 1; r < n; r++) {
+        const f = M[r][c] / M[c][c];
+        for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k];
+      }
     }
-  }
-  const x = new Array(n).fill(0);
-  for (let i = n-1; i >= 0; i--) {
-    x[i] = M[i][n];
-    for (let j = i+1; j < n; j++) x[i] -= M[i][j] * x[j];
-    x[i] /= M[i][i];
-  }
-  return x;
-}
-
-function wls(X, y, w) {
-  // Weighted least squares: minimize sum_i w_i*(y_i - X_i·β)²
-  const n = X.length, p = X[0].length;
-  const XtWX = Array.from({length:p}, () => new Array(p).fill(0));
-  const XtWy = new Array(p).fill(0);
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < p; j++) {
-      for (let k = 0; k < p; k++) XtWX[j][k] += w[i]*X[i][j]*X[i][k];
-      XtWy[j] += w[i]*X[i][j]*y[i];
+    const x = new Array(n).fill(0);
+    for (let i = n - 1; i >= 0; i--) {
+      x[i] = M[i][n];
+      for (let j = i + 1; j < n; j++) x[i] -= M[i][j] * x[j];
+      x[i] /= M[i][i];
     }
+    return x;
   }
-  return solveLS(XtWX, XtWy);
-}
 
-function goldenMin(f, a, b, tol=0.02) {
-  const gr = (Math.sqrt(5)+1)/2;
-  let c = b-(b-a)/gr, d = a+(b-a)/gr;
-  let fc = f(c), fd = f(d);
-  while (b-a > tol) {
-    if (fc < fd) { b=d; d=c; fd=fc; c=b-(b-a)/gr; fc=f(c); }
-    else         { a=c; c=d; fc=fd; d=a+(b-a)/gr; fd=f(d); }
+  function wls(X, y, w) {
+    // Weighted least squares: minimize sum_i w_i*(y_i - X_i·β)²
+    const n = X.length,
+      p = X[0].length;
+    const XtWX = Array.from({ length: p }, () => new Array(p).fill(0));
+    const XtWy = new Array(p).fill(0);
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < p; j++) {
+        for (let k = 0; k < p; k++) XtWX[j][k] += w[i] * X[i][j] * X[i][k];
+        XtWy[j] += w[i] * X[i][j] * y[i];
+      }
+    }
+    return solveLS(XtWX, XtWy);
   }
-  return (a+b)/2;
-}
 
-// ═══════════════════════════════════════════════════════
-// Statistics helpers
-// ═══════════════════════════════════════════════════════
-const mean = arr => arr.reduce((s,v)=>s+v,0)/arr.length;
-const stdev = arr => {
-  if (arr.length < 2) return 0;
-  const m = mean(arr);
-  return Math.sqrt(arr.reduce((s,v)=>s+(v-m)**2,0)/(arr.length-1));
-};
-const sem = arr => stdev(arr)/Math.sqrt(arr.length);
-
-// ═══════════════════════════════════════════════════════
-// FRET computation (Eq. 1, Chaisson et al. 2026)
-//   FRET_ND = F_FRET1 / sqrt(F_nap * F_did)
-//   FRET_TD = F_FRET2 / sqrt(F_tfpc * F_did)
-//   FRET_R  = FRET_TD / FRET_ND
-// ═══════════════════════════════════════════════════════
-function calcFRET(sheet) {
-  // parseExcel lowercases all keys, so use lowercase column names here
-  return sheet
-    .filter(r => [r.temperature,r.fret1,r.fret2,r.nap,r.tfpc,r.did].every(isFinite))
-    .map(r => {
-      const ND = r.fret1 / Math.sqrt(r.nap  * r.did);
-      const TD = r.fret2 / Math.sqrt(r.tfpc * r.did);
-      return { T: r.temperature, ND, TD, R: TD/ND };
-    });
-}
-
-// ═══════════════════════════════════════════════════════
-// Replicate scaling (scaleCurves, Chaisson Mathematica code)
-//   s_i = sum(y_i · ȳ) / sum(y_i²)
-// ═══════════════════════════════════════════════════════
-function scaleReps(arrs) {
-  const n = arrs[0].length;
-  const avg = arrs[0].map((_,j) => mean(arrs.map(a=>a[j])));
-  return arrs.map(a => {
-    const sf = a.reduce((s,y,j)=>s+y*avg[j],0) / a.reduce((s,y)=>s+y*y,0);
-    return a.map(y=>sf*y);
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-// Models
-// ═══════════════════════════════════════════════════════
-// model3: FRET = a·T² + b·T + c   (uniform mixing)
-const m3eval = (t,a,b,c)       => a*t*t + b*t + c;
-
-// model5 (Eq. 4): piecewise — quadratic below Tmix, linear above
-//   T < Tmix:  a(T²−Tm²) + b(T−Tm) + ymix
-//   T ≥ Tmix:  m2(T−Tm) + ymix
-const m5eval = (t,a,b,m2,ymix,tm) =>
-  t < tm ? a*(t*t-tm*tm) + b*(t-tm) + ymix
-         : m2*(t-tm) + ymix;
-
-// ═══════════════════════════════════════════════════════
-// Fitting
-// ═══════════════════════════════════════════════════════
-function fitM3(T, F, W) {
-  const X = T.map(t=>[t*t,t,1]);
-  const [a,b,c] = wls(X, F, W);
-  const resids = F.map((f,i)=>f-m3eval(T[i],a,b,c));
-  const ssrRaw   = resids.reduce((s,r)=>s+r*r,0);
-  const ssr      = resids.reduce((s,r,i)=>s+W[i]*r*r,0);
-  const chiSqRed = ssr / (T.length - 3);   // reduced chi² = weighted SSR / DOF
-  return {model:'3p', a,b,c, resids, ssrRaw, ssr, chiSqRed, n:T.length, p:3};
-}
-
-function fitM5atTm(T, F, W, tm) {
-  // For fixed Tmix, model is linear in [a, b, m2, ymix]
-  // Design matrix: T<tm → [T²-tm², T-tm, 0, 1]; T≥tm → [0, 0, T-tm, 1]
-  const X = T.map(t=> t<tm ? [t*t-tm*tm, t-tm, 0, 1]
-                            : [0, 0, t-tm, 1]);
-  const [a,b,m2,ymix] = wls(X, F, W);
-  const resids   = F.map((f,i)=>f-m5eval(T[i],a,b,m2,ymix,tm));
-  const ssrRaw   = resids.reduce((s,r)=>s+r*r,0);
-  const ssr      = resids.reduce((s,r,i)=>s+W[i]*r*r,0);
-  const chiSqRed = ssr / (T.length - 5);   // reduced chi² = weighted SSR / DOF
-  return {model:'5p', a,b,m2,ymix,tmix:tm, resids, ssrRaw, ssr, chiSqRed, n:T.length, p:5};
-}
-
-function fitM5(T, F, W, tMin, tMax, tmixHint) {
-  // Grid bounds must ensure ≥2 data points STRICTLY BELOW and ≥2 STRICTLY ABOVE Tmix.
-  // With only 1 point on one side, design-matrix columns 1 & 2 become linearly
-  // dependent (both collapse to a scalar multiple of the same unit vector), making
-  // XtWX singular → NaN from Gaussian elimination → NaN SSR → NaN poisons the
-  // entire grid because NaN < any_finite is always false.
-  // Fix: use the actual sorted data T values.
-  const Tsorted = [...T].sort((a,b)=>a-b);
-  if (Tsorted.length < 7) return null;   // need ≥7 pts overall for p=5 + DOF
-  // lo > T[1]  →  T[0] and T[1] are both below lo (≥2 points below)
-  // hi < T[n-2] → T[n-2] and T[n-1] are both above hi (≥2 points above)
-  const lo = Math.ceil( Tsorted[1]             + 0.001);
-  const hi = Math.floor(Tsorted[Tsorted.length-2] - 0.001);
-  if (lo > hi) return null;
-
-  // Full grid search — guard against any residual NaN/Inf with isFinite check
-  let best = null;
-  for (let tm=lo; tm<=hi; tm++) {
-    const r = fitM5atTm(T,F,W,tm);
-    if (isFinite(r.ssr) &&
-        (!best || !isFinite(best.ssr) || r.ssr < best.ssr)) best = r;
+  function goldenMin(f, a, b, tol = 0.02) {
+    const gr = (Math.sqrt(5) + 1) / 2;
+    let c = b - (b - a) / gr,
+      d = a + (b - a) / gr;
+    let fc = f(c),
+      fd = f(d);
+    while (b - a > tol) {
+      if (fc < fd) {
+        b = d;
+        d = c;
+        fd = fc;
+        c = b - (b - a) / gr;
+        fc = f(c);
+      } else {
+        a = c;
+        c = d;
+        fc = fd;
+        d = a + (b - a) / gr;
+        fd = f(d);
+      }
+    }
+    return (a + b) / 2;
   }
-  if (!best) return null;
 
-  // Helper: golden-section refinement within ±1 °C of a centre, staying in
-  // the same safe region (T[1] < rLo ≤ rHi < T[n-2]).
-  const safeL = Tsorted[1]             + 0.001;
-  const safeH = Tsorted[Tsorted.length-2] - 0.001;
-  const refine = center => {
-    const rLo = Math.max(safeL, center - 1);
-    const rHi = Math.min(safeH, center + 1);
-    if (rLo >= rHi) return fitM5atTm(T,F,W,center);
-    const tmRef = goldenMin(tm => fitM5atTm(T,F,W,tm).ssr, rLo, rHi, 0.02);
-    return fitM5atTm(T,F,W,tmRef);
+  // ═══════════════════════════════════════════════════════
+  // Statistics helpers
+  // ═══════════════════════════════════════════════════════
+  const mean = (arr) => arr.reduce((s, v) => s + v, 0) / arr.length;
+  const stdev = (arr) => {
+    if (arr.length < 2) return 0;
+    const m = mean(arr);
+    return Math.sqrt(arr.reduce((s, v) => s + (v - m) ** 2, 0) / (arr.length - 1));
   };
+  const sem = (arr) => stdev(arr) / Math.sqrt(arr.length);
 
-  // Refine around global minimum
-  let result = refine(best.tmix);
-
-  // If a hint is given, also refine near the user-specified value and keep
-  // whichever gives lower SSR — hint can only improve, never worsen the fit.
-  if (tmixHint != null) {
-    const hintClamp = Math.max(safeL, Math.min(safeH, tmixHint));
-    const hintResult = refine(hintClamp);
-    if (isFinite(hintResult.ssr) &&
-        (!isFinite(result.ssr) || hintResult.ssr < result.ssr)) result = hintResult;
-  }
-
-  return result;
-}
-
-// ═══════════════════════════════════════════════════════
-// AICc (Eq. 5a, Chaisson et al. 2026)
-//   AICc = N·ln(SSR/N) + 2pN/(N−p−1)
-// ═══════════════════════════════════════════════════════
-function aicc(ssrRaw, n, p) {
-  return n*Math.log(ssrRaw/n) + 2*p*n/(n-p-1);
-}
-function akaikeW(vals) {
-  const mn = Math.min(...vals);
-  const L  = vals.map(v=>Math.exp(-(v-mn)/2));
-  const S  = L.reduce((s,l)=>s+l,0);
-  return L.map(l=>l/S);
-}
-
-// ═══════════════════════════════════════════════════════
-// Main analysis
-// ═══════════════════════════════════════════════════════
-let RES = null;  // global results
-
-// hint = { tmix: <number|null>, force: <bool> }
-// useWeights: true → WLS with 1/σ², false → OLS (all weights = 1)
-function analyzeSeries(scaledArrs, label, temps, tMin, tMax, hint, useWeights=true) {
-  const nReps = scaledArrs.length, nT = temps.length;
-  // Mean and SD at each temperature point
-  const avg = temps.map((_,j) => mean(scaledArrs.map(a=>a[j])));
-  const sd  = nReps>1 ? temps.map((_,j) => stdev(scaledArrs.map(a=>a[j])))
-                      : temps.map(()=>1e-10);
-
-  // Fit range indices
-  const idx = temps.map((_,i)=>i).filter(i=>temps[i]>=tMin && temps[i]<=tMax);
-  if (idx.length < 7) throw new Error('Too few points in fit range.');
-
-  const T = idx.map(i=>temps[i]);
-  const F = idx.map(i=>avg[i]);
-  const W = idx.map(i=> (useWeights && sd[i]>0) ? 1/(sd[i]*sd[i]) : 1);
-
-  const tmixHint = hint?.tmix ?? null;
-  const m3 = fitM3(T,F,W);
-  const m5 = fitM5(T,F,W,tMin,tMax,tmixHint);
-
-  const a3 = aicc(m3.ssrRaw, m3.n, m3.p);
-  const a5 = m5 ? aicc(m5.ssrRaw, m5.n, m5.p) : Infinity;
-  const [w3,w5] = akaikeW([a3, a5]);
-  // Use AICc selection, but override if user forces phase-sep model
-  const best = (hint?.force && m5) ? m5 : (w3 >= w5 ? m3 : m5);
-
-  // Individual replicate Tmix values (use same W and hint for per-rep fits)
-  const repTmix = scaledArrs.map(rep => {
-    const Frep = idx.map(i=>rep[i]);
-    const r5 = fitM5(T,Frep,W,tMin,tMax,tmixHint);
-    return r5 ? r5.tmix : null;
-  }).filter(v=>v!==null);
-
-  return { label, temps, avg, sd, T, F, W, m3, m5, a3, a5, w3, w5, best, repTmix, useWeights };
-}
-
-// hints = { nd:{tmix,force}, td:{tmix,force}, r:{tmix,force} }
-// useWeights: true → WLS (1/σ²), false → OLS
-function runAnalysis(sheets, tMin, tMax, sampleName, hints={}, useWeights=true) {
-  const rawFRET = sheets.map(calcFRET);
-  // Sort all replicates by temperature ascending
-  rawFRET.forEach(r=>r.sort((a,b)=>a.T-b.T));
-  const temps = rawFRET[0].map(r=>r.T);
-
-  // Scale replicates for each FRET type
-  const NDsc = scaleReps(rawFRET.map(r=>r.map(p=>p.ND)));
-  const TDsc = scaleReps(rawFRET.map(r=>r.map(p=>p.TD)));
-  const Rsc  = scaleReps(rawFRET.map(r=>r.map(p=>p.R)));
-
-  const nd = analyzeSeries(NDsc, 'FRET_ND', temps, tMin, tMax, hints.nd, useWeights);
-  const td = analyzeSeries(TDsc, 'FRET_TD', temps, tMin, tMax, hints.td, useWeights);
-  const r  = analyzeSeries(Rsc,  'FRET_R',  temps, tMin, tMax, hints.r,  useWeights);
-
-  return { sampleName, temps, tMin, tMax, nReps:sheets.length, nd, td, r };
-}
-
-// ═══════════════════════════════════════════════════════
-// Plotting
-// ═══════════════════════════════════════════════════════
-const C = { ND:'#1565C0', TD:'#E65100', R:'#212121' };
-
-function fitCurve(res, tMin, tMax) {
-  const Ts=[], Fs=[];
-  for (let t=tMin; t<=tMax; t+=0.5) {
-    Ts.push(t);
-    const m=res.best;
-    Fs.push(m.model==='3p'
-      ? m3eval(t,m.a,m.b,m.c)
-      : m5eval(t,m.a,m.b,m.m2,m.ymix,m.tmix));
-  }
-  return {Ts,Fs};
-}
-
-function makePlot(res) {
-  const {temps, tMin, tMax, sampleName, nd, td, r} = res;
-  const tRange = [Math.min(...temps)-1, Math.max(...temps)+1];
-  // SD vs SEM toggle
-  const useSEM = (document.getElementById('fa-errbar')?.value === 'sem');
-  const errArr = ser => useSEM
-    ? ser.sd.map((s,j) => s / Math.sqrt(res.nReps))   // SEM = SD / √n
-    : ser.sd;
-
-  function traces(ser, color, symbol, yax, xax) {
-    const {Ts,Fs} = fitCurve(ser, tMin, tMax);
-    const chiStr = isFinite(ser.best.chiSqRed)
-      ? `  χ²ᵣ = ${ser.best.chiSqRed.toFixed(3)}` : '';
-    const out = [
-      // Legend-only dummy trace: shows both marker+line in legend box
-      { type:'scatter', mode:'lines+markers', name: ser.label + chiStr,
-        x:[null], y:[null],
-        marker:{ symbol, size:8, color:'rgba(0,0,0,0)', line:{color, width:2} },
-        line:{color, width:2.5},
-        xaxis:xax, yaxis:yax,
-        legendgroup:ser.label, showlegend:true, hoverinfo:'none' },
-      // Data + error bars (no legend entry — covered by dummy above)
-      { type:'scatter', mode:'markers', name:ser.label,
-        x:temps, y:ser.avg,
-        error_y:{ type:'data', array:errArr(ser), visible:true,
-                  thickness:1.5, width:4, color },
-        marker:{ symbol, size:8, color:'rgba(0,0,0,0)',
-                 line:{color,width:2} },
-        xaxis:xax, yaxis:yax, legendgroup:ser.label, showlegend:false },
-      // Fit line
-      { type:'scatter', mode:'lines', name:ser.label+' fit',
-        x:Ts, y:Fs, line:{color,width:2.5},
-        xaxis:xax, yaxis:yax,
-        legendgroup:ser.label, showlegend:false },
-    ];
-    // Vertical dashed line at Tmix
-    if (ser.best.model==='5p') {
-      const tm=ser.best.tmix;
-      const yVals=ser.avg;
-      const ylo=Math.min(...yVals)-0.02*Math.abs(Math.min(...yVals));
-      const yhi=Math.max(...yVals)+0.02*Math.abs(Math.max(...yVals));
-      out.push({
-        type:'scatter', mode:'lines',
-        x:[tm,tm], y:[ylo,yhi],
-        line:{color, width:1.5, dash:'dash'},
-        xaxis:xax, yaxis:yax,
-        legendgroup:ser.label, showlegend:false, hoverinfo:'none'
+  // ═══════════════════════════════════════════════════════
+  // FRET computation (Eq. 1, Chaisson et al. 2026)
+  //   FRET_ND = F_FRET1 / sqrt(F_nap * F_did)
+  //   FRET_TD = F_FRET2 / sqrt(F_tfpc * F_did)
+  //   FRET_R  = FRET_TD / FRET_ND
+  // ═══════════════════════════════════════════════════════
+  function calcFRET(sheet) {
+    // parseExcel lowercases all keys, so use lowercase column names here
+    return sheet
+      .filter((r) => [r.temperature, r.fret1, r.fret2, r.nap, r.tfpc, r.did].every(isFinite))
+      .map((r) => {
+        const ND = r.fret1 / Math.sqrt(r.nap * r.did);
+        const TD = r.fret2 / Math.sqrt(r.tfpc * r.did);
+        return { T: r.temperature, ND, TD, R: TD / ND };
       });
-    }
-    return out;
   }
 
-  const allTraces = [
-    ...traces(nd, C.ND, 'triangle-up-open', 'y',  'x'),
-    ...traces(td, C.TD, 'square-open',       'y',  'x'),
-    ...traces(r,  C.R,  'circle-open',       'y2', 'x2'),
-  ];
+  // ═══════════════════════════════════════════════════════
+  // Replicate scaling (scaleCurves, Chaisson Mathematica code)
+  //   s_i = sum(y_i · ȳ) / sum(y_i²)
+  // ═══════════════════════════════════════════════════════
+  function scaleReps(arrs) {
+    const n = arrs[0].length;
+    const avg = arrs[0].map((_, j) => mean(arrs.map((a) => a[j])));
+    return arrs.map((a) => {
+      const sf = a.reduce((s, y, j) => s + y * avg[j], 0) / a.reduce((s, y) => s + y * y, 0);
+      return a.map((y) => sf * y);
+    });
+  }
 
-  const axBase = {
-    linecolor:'#333', linewidth:1.5, mirror:true,
-    ticks:'outside', tickcolor:'#333', ticklen:5,
-    gridcolor:'#eee', gridwidth:0.5, zeroline:false,
-    showline:true,
-    tickfont:{size:12, family:'Arial'}, title:{font:{size:13,family:'Arial'}}
-  };
+  // ═══════════════════════════════════════════════════════
+  // Models
+  // ═══════════════════════════════════════════════════════
+  // model3: FRET = a·T² + b·T + c   (uniform mixing)
+  const m3eval = (t, a, b, c) => a * t * t + b * t + c;
 
-  const layout = {
-    paper_bgcolor:'white', plot_bgcolor:'white',
-    font:{family:'Arial, sans-serif', size:12, color:'#333'},
-    title:{text: sampleName||'', font:{size:13}, x:0.5, xanchor:'center'},
-    xaxis:  {...axBase, domain:[0,1], range:tRange, showticklabels:false, anchor:'y'},
-    xaxis2: {...axBase, domain:[0,1], range:tRange,
-             title:{text:'Temperature / °C', font:{size:13,family:'Arial'}},
-             anchor:'y2'},
-    yaxis:  {...axBase, domain:[0.38,1.0], anchor:'x',
-             title:{text:'FRET', font:{size:13,family:'Arial'}}},
-    yaxis2: {...axBase, domain:[0,0.30], anchor:'x2',
-             title:{text:'FRET ratio', font:{size:13,family:'Arial'}}},
-    legend:{
-      x:0.99, y:0.99, xanchor:'right', yanchor:'top',
-      bgcolor:'rgba(255,255,255,0.88)', bordercolor:'#ccc', borderwidth:1,
-      font:{size:11, family:'Arial'},
-      tracegroupgap: 4,
-    },
-    margin:{l:70, r:30, t:50, b:55},
-    width:520, height:580,
-    showlegend:true,
-  };
+  // model5 (Eq. 4): piecewise — quadratic below Tmix, linear above
+  //   T < Tmix:  a(T²−Tm²) + b(T−Tm) + ymix
+  //   T ≥ Tmix:  m2(T−Tm) + ymix
+  const m5eval = (t, a, b, m2, ymix, tm) => (t < tm ? a * (t * t - tm * tm) + b * (t - tm) + ymix : m2 * (t - tm) + ymix);
 
-  Plotly.react('fa-plot', allTraces, layout,
-    {responsive:false, displayModeBar:false, staticPlot:false});
-}
+  // ═══════════════════════════════════════════════════════
+  // Fitting
+  // ═══════════════════════════════════════════════════════
+  function fitM3(T, F, W) {
+    const X = T.map((t) => [t * t, t, 1]);
+    const [a, b, c] = wls(X, F, W);
+    const resids = F.map((f, i) => f - m3eval(T[i], a, b, c));
+    const ssrRaw = resids.reduce((s, r) => s + r * r, 0);
+    const ssr = resids.reduce((s, r, i) => s + W[i] * r * r, 0);
+    const chiSqRed = ssr / (T.length - 3); // reduced chi² = weighted SSR / DOF
+    return { model: "3p", a, b, c, resids, ssrRaw, ssr, chiSqRed, n: T.length, p: 3 };
+  }
 
-// ═══════════════════════════════════════════════════════
-// UI rendering
-// ═══════════════════════════════════════════════════════
-function modelLabel(ser) {
-  if (ser.best.model==='3p') return '<span style="color:#1A73E8;font-weight:700;">Uniform mixing</span>';
-  return `<span style="color:#CC00AA;font-weight:700;">Phase separation</span>`;
-}
+  function fitM5atTm(T, F, W, tm) {
+    // For fixed Tmix, model is linear in [a, b, m2, ymix]
+    // Design matrix: T<tm → [T²-tm², T-tm, 0, 1]; T≥tm → [0, 0, T-tm, 1]
+    const X = T.map((t) => (t < tm ? [t * t - tm * tm, t - tm, 0, 1] : [0, 0, t - tm, 1]));
+    const [a, b, m2, ymix] = wls(X, F, W);
+    const resids = F.map((f, i) => f - m5eval(T[i], a, b, m2, ymix, tm));
+    const ssrRaw = resids.reduce((s, r) => s + r * r, 0);
+    const ssr = resids.reduce((s, r, i) => s + W[i] * r * r, 0);
+    const chiSqRed = ssr / (T.length - 5); // reduced chi² = weighted SSR / DOF
+    return { model: "5p", a, b, m2, ymix, tmix: tm, resids, ssrRaw, ssr, chiSqRed, n: T.length, p: 5 };
+  }
 
-function renderCards(res) {
-  const cards = document.getElementById('fa-cards');
-  cards.innerHTML = '';
-  [res.nd, res.td, res.r].forEach(ser => {
-    const isPhSep = ser.best.model==='5p';
-    const pct = Math.round(ser.w3*100);
-    const fillColor = isPhSep ? '#CC00AA' : '#1A73E8';
+  function fitM5(T, F, W, tMin, tMax, tmixHint) {
+    // Grid bounds must ensure ≥2 data points STRICTLY BELOW and ≥2 STRICTLY ABOVE Tmix.
+    // With only 1 point on one side, design-matrix columns 1 & 2 become linearly
+    // dependent (both collapse to a scalar multiple of the same unit vector), making
+    // XtWX singular → NaN from Gaussian elimination → NaN SSR → NaN poisons the
+    // entire grid because NaN < any_finite is always false.
+    // Fix: use the actual sorted data T values.
+    const Tsorted = [...T].sort((a, b) => a - b);
+    if (Tsorted.length < 7) return null; // need ≥7 pts overall for p=5 + DOF
+    // lo > T[1]  →  T[0] and T[1] are both below lo (≥2 points below)
+    // hi < T[n-2] → T[n-2] and T[n-1] are both above hi (≥2 points above)
+    const lo = Math.ceil(Tsorted[1] + 0.001);
+    const hi = Math.floor(Tsorted[Tsorted.length - 2] - 0.001);
+    if (lo > hi) return null;
 
-    // χ²_red for each model (with ★ on selected)
-    const chi3 = ser.m3 ? ser.m3.chiSqRed.toFixed(3) : '—';
-    const chi5 = ser.m5 ? ser.m5.chiSqRed.toFixed(3) : '—';
-    const star3 = !isPhSep ? ' ★' : '';
-    const star5 =  isPhSep ? ' ★' : '';
+    // Full grid search — guard against any residual NaN/Inf with isFinite check
+    let best = null;
+    for (let tm = lo; tm <= hi; tm++) {
+      const r = fitM5atTm(T, F, W, tm);
+      if (isFinite(r.ssr) && (!best || !isFinite(best.ssr) || r.ssr < best.ssr)) best = r;
+    }
+    if (!best) return null;
 
-    const card = document.createElement('div');
-    card.className = 'fa-card';
-    card.innerHTML = `
+    // Helper: golden-section refinement within ±1 °C of a centre, staying in
+    // the same safe region (T[1] < rLo ≤ rHi < T[n-2]).
+    const safeL = Tsorted[1] + 0.001;
+    const safeH = Tsorted[Tsorted.length - 2] - 0.001;
+    const refine = (center) => {
+      const rLo = Math.max(safeL, center - 1);
+      const rHi = Math.min(safeH, center + 1);
+      if (rLo >= rHi) return fitM5atTm(T, F, W, center);
+      const tmRef = goldenMin((tm) => fitM5atTm(T, F, W, tm).ssr, rLo, rHi, 0.02);
+      return fitM5atTm(T, F, W, tmRef);
+    };
+
+    // Refine around global minimum
+    let result = refine(best.tmix);
+
+    // If a hint is given, also refine near the user-specified value and keep
+    // whichever gives lower SSR — hint can only improve, never worsen the fit.
+    if (tmixHint != null) {
+      const hintClamp = Math.max(safeL, Math.min(safeH, tmixHint));
+      const hintResult = refine(hintClamp);
+      if (isFinite(hintResult.ssr) && (!isFinite(result.ssr) || hintResult.ssr < result.ssr)) result = hintResult;
+    }
+
+    return result;
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // AICc (Eq. 5a, Chaisson et al. 2026)
+  //   AICc = N·ln(SSR/N) + 2pN/(N−p−1)
+  // ═══════════════════════════════════════════════════════
+  function aicc(ssrRaw, n, p) {
+    return n * Math.log(ssrRaw / n) + (2 * p * n) / (n - p - 1);
+  }
+  function akaikeW(vals) {
+    const mn = Math.min(...vals);
+    const L = vals.map((v) => Math.exp(-(v - mn) / 2));
+    const S = L.reduce((s, l) => s + l, 0);
+    return L.map((l) => l / S);
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // Main analysis
+  // ═══════════════════════════════════════════════════════
+  let RES = null; // global results
+
+  // hint = { tmix: <number|null>, force: <bool> }
+  // useWeights: true → WLS with 1/σ², false → OLS (all weights = 1)
+  function analyzeSeries(scaledArrs, label, temps, tMin, tMax, hint, useWeights = true) {
+    const nReps = scaledArrs.length,
+      nT = temps.length;
+    // Mean and SD at each temperature point
+    const avg = temps.map((_, j) => mean(scaledArrs.map((a) => a[j])));
+    const sd = nReps > 1 ? temps.map((_, j) => stdev(scaledArrs.map((a) => a[j]))) : temps.map(() => 1e-10);
+
+    // Fit range indices
+    const idx = temps.map((_, i) => i).filter((i) => temps[i] >= tMin && temps[i] <= tMax);
+    if (idx.length < 7) throw new Error("Too few points in fit range.");
+
+    const T = idx.map((i) => temps[i]);
+    const F = idx.map((i) => avg[i]);
+    const W = idx.map((i) => (useWeights && sd[i] > 0 ? 1 / (sd[i] * sd[i]) : 1));
+
+    const tmixHint = hint?.tmix ?? null;
+    const m3 = fitM3(T, F, W);
+    const m5 = fitM5(T, F, W, tMin, tMax, tmixHint);
+
+    const a3 = aicc(m3.ssrRaw, m3.n, m3.p);
+    const a5 = m5 ? aicc(m5.ssrRaw, m5.n, m5.p) : Infinity;
+    const [w3, w5] = akaikeW([a3, a5]);
+    // Use AICc selection, but override if user forces phase-sep model
+    const best = hint?.force && m5 ? m5 : w3 >= w5 ? m3 : m5;
+
+    // Individual replicate fits — retain full fit objects (both models) so the
+    // overlay plot can draw replicate curves that match whichever model the
+    // series itself was classified as. Uses the same W and Tmix hint as the
+    // mean-fit so per-rep results are comparable.
+    const repFits = scaledArrs.map((rep) => {
+      const Frep = idx.map((i) => rep[i]);
+      const r3 = fitM3(T, Frep, W);
+      const r5 = fitM5(T, Frep, W, tMin, tMax, tmixHint);
+      return { m3: r3, m5: r5 };
+    });
+    const repTmix = repFits.map((r) => r.m5?.tmix).filter((v) => v != null);
+
+    return { label, temps, avg, sd, T, F, W, m3, m5, a3, a5, w3, w5, best, repTmix, repFits, useWeights };
+  }
+
+  // hints = { nd:{tmix,force}, td:{tmix,force}, r:{tmix,force} }
+  // useWeights: true → WLS (1/σ²), false → OLS
+  function runAnalysis(sheets, tMin, tMax, sampleName, hints = {}, useWeights = true) {
+    const rawFRET = sheets.map(calcFRET);
+    // Sort all replicates by temperature ascending
+    rawFRET.forEach((r) => r.sort((a, b) => a.T - b.T));
+    const temps = rawFRET[0].map((r) => r.T);
+
+    // Scale replicates for each FRET type
+    const NDsc = scaleReps(rawFRET.map((r) => r.map((p) => p.ND)));
+    const TDsc = scaleReps(rawFRET.map((r) => r.map((p) => p.TD)));
+    const Rsc = scaleReps(rawFRET.map((r) => r.map((p) => p.R)));
+
+    const nd = analyzeSeries(NDsc, "FRET_ND", temps, tMin, tMax, hints.nd, useWeights);
+    const td = analyzeSeries(TDsc, "FRET_TD", temps, tMin, tMax, hints.td, useWeights);
+    const r = analyzeSeries(Rsc, "FRET_R", temps, tMin, tMax, hints.r, useWeights);
+
+    return { sampleName, temps, tMin, tMax, nReps: sheets.length, nd, td, r };
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // Plotting
+  // ═══════════════════════════════════════════════════════
+  const C = { ND: "#1565C0", TD: "#E65100", R: "#212121" };
+
+  // Convert #rrggbb → rgba(r,g,b,a). Used for semi-transparent replicate overlays.
+  function hexToRgba(hex, a) {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+  }
+
+  // Evaluate any fit object (m3 or m5) on a dense temperature grid.
+  function evalFit(fit, tMin, tMax) {
+    const Ts = [],
+      Fs = [];
+    for (let t = tMin; t <= tMax; t += 0.5) {
+      Ts.push(t);
+      Fs.push(fit.model === "3p" ? m3eval(t, fit.a, fit.b, fit.c) : m5eval(t, fit.a, fit.b, fit.m2, fit.ymix, fit.tmix));
+    }
+    return { Ts, Fs };
+  }
+
+  function fitCurve(res, tMin, tMax) {
+    return evalFit(res.best, tMin, tMax);
+  }
+
+  function makePlot(res) {
+    const { temps, tMin, tMax, sampleName, nd, td, r } = res;
+    const tRange = [Math.min(...temps) - 1, Math.max(...temps) + 1];
+    // SD vs SEM toggle
+    const useSEM = document.getElementById("fa-errbar")?.value === "sem";
+    const errArr = (ser) =>
+      useSEM
+        ? ser.sd.map((s, j) => s / Math.sqrt(res.nReps)) // SEM = SD / √n
+        : ser.sd;
+
+    // Replicate overlay toggle — only meaningful when nReps > 1.
+    const showReps = res.nReps > 1 && !!document.getElementById("fa-show-reps")?.checked;
+
+    // Per-panel data ranges — used so rug-style Tmix ticks for series sharing
+    // a panel (ND + TD in the top panel) are placed at a common baseline.
+    const topAll = [...nd.avg, ...td.avg];
+    const topYMin = Math.min(...topAll),
+      topYMax = Math.max(...topAll);
+    const botYMin = Math.min(...r.avg),
+      botYMax = Math.max(...r.avg);
+
+    // traces() — `tickLane` stacks rug ticks vertically so ND/TD don't overlap.
+    function traces(ser, color, symbol, yax, xax, panelYMin, panelYMax, tickLane = 0) {
+      const { Ts, Fs } = fitCurve(ser, tMin, tMax);
+      const chiStr = isFinite(ser.best.chiSqRed) ? `  χ²ᵣ = ${ser.best.chiSqRed.toFixed(3)}` : "";
+      const out = [
+        // Legend-only dummy trace: shows both marker+line in legend box
+        {
+          type: "scatter",
+          mode: "lines+markers",
+          name: ser.label + chiStr,
+          x: [null],
+          y: [null],
+          marker: { symbol, size: 8, color: "rgba(0,0,0,0)", line: { color, width: 2 } },
+          line: { color, width: 2.5 },
+          xaxis: xax,
+          yaxis: yax,
+          legendgroup: ser.label,
+          showlegend: true,
+          hoverinfo: "none",
+        },
+        // Data + error bars (no legend entry — covered by dummy above)
+        {
+          type: "scatter",
+          mode: "markers",
+          name: ser.label,
+          x: temps,
+          y: ser.avg,
+          error_y: { type: "data", array: errArr(ser), visible: true, thickness: 1.5, width: 4, color },
+          marker: { symbol, size: 8, color: "rgba(0,0,0,0)", line: { color, width: 2 } },
+          xaxis: xax,
+          yaxis: yax,
+          legendgroup: ser.label,
+          showlegend: false,
+        },
+        // Fit line
+        {
+          type: "scatter",
+          mode: "lines",
+          name: ser.label + " fit",
+          x: Ts,
+          y: Fs,
+          line: { color, width: 2.5 },
+          xaxis: xax,
+          yaxis: yax,
+          legendgroup: ser.label,
+          showlegend: false,
+        },
+      ];
+      // Vertical dashed line at Tmix
+      if (ser.best.model === "5p") {
+        const tm = ser.best.tmix;
+        const yVals = ser.avg;
+        const ylo = Math.min(...yVals) - 0.02 * Math.abs(Math.min(...yVals));
+        const yhi = Math.max(...yVals) + 0.02 * Math.abs(Math.max(...yVals));
+        out.push({
+          type: "scatter",
+          mode: "lines",
+          x: [tm, tm],
+          y: [ylo, yhi],
+          line: { color, width: 1.5, dash: "dash" },
+          xaxis: xax,
+          yaxis: yax,
+          legendgroup: ser.label,
+          showlegend: false,
+          hoverinfo: "none",
+        });
+      }
+
+      // Replicate overlays: thin semi-transparent fit curves + rug-style Tmix
+      // ticks below the data. Only drawn when the toggle is on and we have
+      // more than one replicate.
+      if (showReps && ser.repFits && ser.repFits.length > 1) {
+        const rgba = hexToRgba(color, 0.38);
+        const seriesModel = ser.best.model;
+
+        // Per-replicate fit curves — match whichever model the series is using.
+        ser.repFits.forEach((rf, i) => {
+          const fit = seriesModel === "3p" ? rf.m3 : rf.m5;
+          if (!fit) return;
+          const ev = evalFit(fit, tMin, tMax);
+          out.push({
+            type: "scatter",
+            mode: "lines",
+            x: ev.Ts,
+            y: ev.Fs,
+            line: { color: rgba, width: 1.2 },
+            xaxis: xax,
+            yaxis: yax,
+            legendgroup: ser.label,
+            showlegend: false,
+            hoverinfo: "skip",
+            name: ser.label + " rep" + (i + 1),
+          });
+        });
+
+        // Per-replicate Tmix rug ticks — only meaningful for phase-sep series.
+        // Stack ND (lane 0) and TD (lane 1) so they don't collide in the top panel.
+        if (seriesModel === "5p") {
+          const span = panelYMax - panelYMin;
+          const gap = 0.015 * span; // small gap below the lowest data point
+          const laneH = 0.035 * span; // height of one tick lane
+          const yHi = panelYMin - gap - tickLane * laneH;
+          const yLo = yHi - laneH * 0.9;
+          ser.repFits.forEach((rf) => {
+            if (!rf.m5) return;
+            out.push({
+              type: "scatter",
+              mode: "lines",
+              x: [rf.m5.tmix, rf.m5.tmix],
+              y: [yLo, yHi],
+              line: { color: rgba, width: 1.5 },
+              xaxis: xax,
+              yaxis: yax,
+              legendgroup: ser.label,
+              showlegend: false,
+              hoverinfo: "skip",
+            });
+          });
+        }
+      }
+
+      return out;
+    }
+
+    const allTraces = [
+      ...traces(nd, C.ND, "triangle-up-open", "y", "x", topYMin, topYMax, 0),
+      ...traces(td, C.TD, "square-open", "y", "x", topYMin, topYMax, 1),
+      ...traces(r, C.R, "circle-open", "y2", "x2", botYMin, botYMax, 0),
+    ];
+
+    const axBase = {
+      linecolor: "#333",
+      linewidth: 1.5,
+      mirror: true,
+      ticks: "outside",
+      tickcolor: "#333",
+      ticklen: 5,
+      gridcolor: "#eee",
+      gridwidth: 0.5,
+      zeroline: false,
+      showline: true,
+      tickfont: { size: 12, family: "Arial" },
+      title: { font: { size: 13, family: "Arial" } },
+    };
+
+    const layout = {
+      paper_bgcolor: "white",
+      plot_bgcolor: "white",
+      font: { family: "Arial, sans-serif", size: 12, color: "#333" },
+      title: { text: sampleName || "", font: { size: 13 }, x: 0.5, xanchor: "center" },
+      xaxis: { ...axBase, domain: [0, 1], range: tRange, showticklabels: false, anchor: "y" },
+      xaxis2: { ...axBase, domain: [0, 1], range: tRange, title: { text: "Temperature / °C", font: { size: 13, family: "Arial" } }, anchor: "y2" },
+      yaxis: { ...axBase, domain: [0.38, 1.0], anchor: "x", title: { text: "FRET", font: { size: 13, family: "Arial" } } },
+      yaxis2: { ...axBase, domain: [0, 0.3], anchor: "x2", title: { text: "FRET ratio", font: { size: 13, family: "Arial" } } },
+      legend: {
+        x: 0.99,
+        y: 0.99,
+        xanchor: "right",
+        yanchor: "top",
+        bgcolor: "rgba(255,255,255,0.88)",
+        bordercolor: "#ccc",
+        borderwidth: 1,
+        font: { size: 11, family: "Arial" },
+        tracegroupgap: 4,
+      },
+      margin: { l: 70, r: 30, t: 50, b: 55 },
+      width: 520,
+      height: 580,
+      showlegend: true,
+    };
+
+    Plotly.react("fa-plot", allTraces, layout, { responsive: false, displayModeBar: false, staticPlot: false });
+
+    // Hide the "Show replicate fits" control when it has nothing to show.
+    const repsLbl = document.getElementById("fa-show-reps-label");
+    if (repsLbl) repsLbl.style.display = res.nReps > 1 ? "" : "none";
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // UI rendering
+  // ═══════════════════════════════════════════════════════
+  function modelLabel(ser) {
+    if (ser.best.model === "3p") return '<span style="color:#1A73E8;font-weight:700;">Uniform mixing</span>';
+    return `<span style="color:#CC00AA;font-weight:700;">Phase separation</span>`;
+  }
+
+  function renderCards(res) {
+    const cards = document.getElementById("fa-cards");
+    cards.innerHTML = "";
+    [res.nd, res.td, res.r].forEach((ser) => {
+      const isPhSep = ser.best.model === "5p";
+      const pct = Math.round(ser.w3 * 100);
+      const fillColor = isPhSep ? "#CC00AA" : "#1A73E8";
+
+      // χ²_red for each model (with ★ on selected)
+      const chi3 = ser.m3 ? ser.m3.chiSqRed.toFixed(3) : "—";
+      const chi5 = ser.m5 ? ser.m5.chiSqRed.toFixed(3) : "—";
+      const star3 = !isPhSep ? " ★" : "";
+      const star5 = isPhSep ? " ★" : "";
+
+      const card = document.createElement("div");
+      card.className = "fa-card";
+      card.innerHTML = `
       <h4>${ser.label}</h4>
       <div class="cv">${modelLabel(ser)}</div>
       <div class="cl">w<sub>uniform</sub>(AICc) = ${ser.w3.toFixed(3)}</div>
@@ -589,76 +879,75 @@ function renderCards(res) {
         <div class="fa-fill" style="width:${pct}%;background:${fillColor}"></div>
       </div>
       <div class="cl" style="margin-top:4px;font-size:11px;">
-        ${pct}% → uniform &nbsp;|&nbsp; ${100-pct}% → phase sep.
+        ${pct}% → uniform &nbsp;|&nbsp; ${100 - pct}% → phase sep.
       </div>
       <div class="cl" style="margin-top:8px;font-size:11px;line-height:1.7;border-top:1px solid #2e2e2e;padding-top:6px;">
         χ²<sub>red</sub> (uniform): ${chi3}${star3}<br>
         χ²<sub>red</sub> (phase sep): ${chi5}${star5}
       </div>`;
-    cards.appendChild(card);
-  });
-}
-
-function renderTmixTable(res) {
-  const sec = document.getElementById('fa-tmix-section');
-  const phSepSeries = [res.nd,res.td,res.r].filter(s=>s.best.model==='5p');
-  if (phSepSeries.length===0) {
-    sec.innerHTML = '<p style="color:#aaa;font-size:14px;margin-bottom:16px;">'+
-      'No phase separation detected in any dataset.</p>';
-    return;
+      cards.appendChild(card);
+    });
   }
-  let html = '<h3 style="margin:0 0 12px;font-size:15px;color:#ccc;">Miscibility transition temperature (T<sub>mix</sub>)</h3>';
-  html += '<table class="fa-tbl"><thead><tr>'+
-    '<th>Dataset</th><th>T<sub>mix</sub> from avg. fit / °C</th>'+
-    `<th>T<sub>mix</sub> mean ± SEM / °C<br><small style="font-weight:400">(${res.nReps} replicates)</small></th>`+
-    `<th>T<sub>mix</sub> mean ± SD / °C<br><small style="font-weight:400">(${res.nReps} replicates)</small></th>`+
-    '</tr></thead><tbody>';
 
-  phSepSeries.forEach(ser => {
-    const tmAvg = ser.best.tmix.toFixed(1);
-    const reps  = ser.repTmix;
-    const tmMean = reps.length>0 ? mean(reps).toFixed(1) : '—';
-    const tmSEM  = reps.length>1 ? sem(reps).toFixed(1)  : '—';
-    const tmSD   = reps.length>1 ? stdev(reps).toFixed(1): '—';
-    html += `<tr>
+  function renderTmixTable(res) {
+    const sec = document.getElementById("fa-tmix-section");
+    const phSepSeries = [res.nd, res.td, res.r].filter((s) => s.best.model === "5p");
+    if (phSepSeries.length === 0) {
+      sec.innerHTML = '<p style="color:#aaa;font-size:14px;margin-bottom:16px;">' + "No phase separation detected in any dataset.</p>";
+      return;
+    }
+    let html = '<h3 style="margin:0 0 12px;font-size:15px;color:#ccc;">Miscibility transition temperature (T<sub>mix</sub>)</h3>';
+    html +=
+      '<table class="fa-tbl"><thead><tr>' +
+      "<th>Dataset</th><th>T<sub>mix</sub> from avg. fit / °C</th>" +
+      `<th>T<sub>mix</sub> mean ± SEM / °C<br><small style="font-weight:400">(${res.nReps} replicates)</small></th>` +
+      `<th>T<sub>mix</sub> mean ± SD / °C<br><small style="font-weight:400">(${res.nReps} replicates)</small></th>` +
+      "</tr></thead><tbody>";
+
+    phSepSeries.forEach((ser) => {
+      const tmAvg = ser.best.tmix.toFixed(1);
+      const reps = ser.repTmix;
+      const tmMean = reps.length > 0 ? mean(reps).toFixed(1) : "—";
+      const tmSEM = reps.length > 1 ? sem(reps).toFixed(1) : "—";
+      const tmSD = reps.length > 1 ? stdev(reps).toFixed(1) : "—";
+      html += `<tr>
       <td>${ser.label}</td>
       <td>${tmAvg}</td>
-      <td>${reps.length>1 ? tmMean+' ± '+tmSEM : tmMean}</td>
-      <td>${reps.length>1 ? tmMean+' ± '+tmSD  : tmMean}</td>
+      <td>${reps.length > 1 ? tmMean + " ± " + tmSEM : tmMean}</td>
+      <td>${reps.length > 1 ? tmMean + " ± " + tmSD : tmMean}</td>
     </tr>`;
-  });
-  html += '</tbody></table>';
-  sec.innerHTML = html;
-}
+    });
+    html += "</tbody></table>";
+    sec.innerHTML = html;
+  }
 
-// ═══════════════════════════════════════════════════════
-// Refinement panel (manual Tmix initial values)
-// ═══════════════════════════════════════════════════════
-const REFINE_IDS = [
-  {label:'FRET_ND', key:'nd', id:'ref-nd'},
-  {label:'FRET_TD', key:'td', id:'ref-td'},
-  {label:'FRET_R',  key:'r',  id:'ref-r' },
-];
+  // ═══════════════════════════════════════════════════════
+  // Refinement panel (manual Tmix initial values)
+  // ═══════════════════════════════════════════════════════
+  const REFINE_IDS = [
+    { label: "FRET_ND", key: "nd", id: "ref-nd" },
+    { label: "FRET_TD", key: "td", id: "ref-td" },
+    { label: "FRET_R", key: "r", id: "ref-r" },
+  ];
 
-function renderRefinePanel(res) {
-  const tMin = res.tMin, tMax = res.tMax;
-  const container = document.getElementById('fa-refine-rows');
-  container.innerHTML = '';
+  function renderRefinePanel(res) {
+    const tMin = res.tMin,
+      tMax = res.tMax;
+    const container = document.getElementById("fa-refine-rows");
+    container.innerHTML = "";
 
-  REFINE_IDS.forEach(({label, key, id}) => {
-    const ser = res[key];
-    const isPhSep = ser.best.model === '5p';
-    const autoTmix = isPhSep ? +ser.best.tmix.toFixed(1) : +((tMin+tMax)/2).toFixed(1);
-    const autoLabel = isPhSep
-      ? `auto: ${autoTmix}°C`
-      : 'auto: uniform';
+    REFINE_IDS.forEach(({ label, key, id }) => {
+      const ser = res[key];
+      const isPhSep = ser.best.model === "5p";
+      const autoTmix = isPhSep ? +ser.best.tmix.toFixed(1) : +((tMin + tMax) / 2).toFixed(1);
+      const autoLabel = isPhSep ? `auto: ${autoTmix}°C` : "auto: uniform";
 
-    const row = document.createElement('div');
-    row.className = 'fa-refine-row';
-    row.innerHTML = `
+      const row = document.createElement("div");
+      row.className = "fa-refine-row";
+      row.innerHTML = `
       <span class="fa-refine-label">${label}</span>
       <input type="checkbox" class="fa-refine-check" id="${id}-force"
-             ${isPhSep ? 'checked' : ''}>
+             ${isPhSep ? "checked" : ""}>
       <label for="${id}-force" style="font-size:12px;color:#aaa;cursor:pointer;">phase sep</label>
       <input type="range" class="fa-refine-slider" id="${id}-slider"
              min="${tMin}" max="${tMax}" step="0.5" value="${autoTmix}"
@@ -668,228 +957,238 @@ function renderRefinePanel(res) {
              oninput="document.getElementById('${id}-slider').value=this.value">
       <span style="font-size:12px;color:#888;">°C &nbsp;<span class="fa-refine-auto">(${autoLabel})</span></span>
     `;
-    container.appendChild(row);
-  });
+      container.appendChild(row);
+    });
 
-  document.getElementById('fa-refine').style.display = '';
-}
-
-function refitWithHints() {
-  if (!loadedSheets) return;
-  const tMin = parseFloat(document.getElementById('fa-tmin').value);
-  const tMax = parseFloat(document.getElementById('fa-tmax').value);
-  const name = document.getElementById('fa-name').value.trim();
-
-  const hints = {};
-  REFINE_IDS.forEach(({key, id}) => {
-    const force  = document.getElementById(id+'-force')?.checked;
-    const tmix   = parseFloat(document.getElementById(id+'-num')?.value);
-    hints[key] = { tmix: isFinite(tmix) ? tmix : null, force: !!force };
-  });
-
-  const useWeights = (document.getElementById('fa-weighted')?.value !== 'ols');
-  showStatus('Refitting…', false);
-  setTimeout(() => {
-    try {
-      RES = runAnalysis(loadedSheets, tMin, tMax, name, hints, useWeights);
-      renderCards(RES);
-      renderTmixTable(RES);
-      renderRefinePanel(RES);
-      makePlot(RES);
-      document.getElementById('fa-results').style.display = '';
-      document.getElementById('fa-status').style.display  = 'none';
-    } catch(err) {
-      showStatus('Refit error: ' + err.message, true);
-    }
-  }, 50);
-}
-
-// ═══════════════════════════════════════════════════════
-// Download helpers
-// ═══════════════════════════════════════════════════════
-function dlPlot(fmt) {
-  const name = (document.getElementById('fa-name').value||'fret-analysis')
-    .replace(/[^a-zA-Z0-9_-]/g,'_');
-  // Use Plotly.toImage + programmatic anchor — more reliable than downloadImage
-  // across browsers / Jekyll/CSP environments.
-  const cfg = fmt === 'svg'
-    ? {format:'svg', width:560,  height:580,  scale:1}
-    : {format:'png', width:1120, height:1160, scale:2};   // ~300 DPI at 3.5 in wide
-  Plotly.toImage('fa-plot', cfg)
-    .then(dataUrl => {
-      const a = document.createElement('a');
-      a.href     = dataUrl;
-      a.download = name + '.' + fmt;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    })
-    .catch(err => alert(fmt.toUpperCase() + ' export failed: ' + err.message));
-}
-
-function dlXLSX() {
-  if (!RES) return;
-  const wb_out = XLSX.utils.book_new();
-  const baseName = (document.getElementById('fa-name').value||'fret-analysis')
-    .replace(/[^a-zA-Z0-9_\-]/g,'_');
-
-  // Helper: evaluate best-fit model at temperature t
-  function evalModel(ser, t) {
-    const m = ser.best;
-    return m.model==='3p'
-      ? m3eval(t, m.a, m.b, m.c)
-      : m5eval(t, m.a, m.b, m.m2, m.ymix, m.tmix);
+    document.getElementById("fa-refine").style.display = "";
   }
 
-  // --- Three data sheets (one per FRET series) ---
-  [RES.nd, RES.td, RES.r].forEach(ser => {
-    const header = [
-      'Temperature (°C)',
-      `${ser.label}_avg`,
-      `${ser.label}_SD`,
-      `${ser.label}_pred`,
-    ];
-    const dataRows = RES.temps.map((t, i) => {
-      const inRange = t >= RES.tMin && t <= RES.tMax;
-      return [
-        t,
-        ser.avg[i],
-        ser.sd[i],
-        inRange ? evalModel(ser, t) : null,   // blank outside fit range
-      ];
+  function refitWithHints() {
+    if (!loadedSheets) return;
+    const tMin = parseFloat(document.getElementById("fa-tmin").value);
+    const tMax = parseFloat(document.getElementById("fa-tmax").value);
+    const name = document.getElementById("fa-name").value.trim();
+
+    const hints = {};
+    REFINE_IDS.forEach(({ key, id }) => {
+      const force = document.getElementById(id + "-force")?.checked;
+      const tmix = parseFloat(document.getElementById(id + "-num")?.value);
+      hints[key] = { tmix: isFinite(tmix) ? tmix : null, force: !!force };
     });
-    const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows]);
-    XLSX.utils.book_append_sheet(wb_out, ws, ser.label);
-  });
 
-  // --- Summary sheet (fitting results) ---
-  const summaryRows = [[
-    'Dataset','Model','Fit_weights',
-    'chiSqRed_uniform','chiSqRed_phasesep','chiSqRed_best',
-    'Tmix_avg_fit','Tmix_repMean','Tmix_repSEM','Tmix_repSD',
-    'w_uniform','w_phsep','N_replicates',
-  ]];
-  [RES.nd, RES.td, RES.r].forEach(ser => {
-    const reps = ser.repTmix;
-    summaryRows.push([
-      ser.label,
-      ser.best.model==='3p' ? 'Uniform mixing' : 'Phase separation',
-      ser.useWeights ? 'Error-weighted (1/σ²)' : 'Unweighted (OLS)',
-      ser.m3 ? +ser.m3.chiSqRed.toFixed(6) : '',
-      ser.m5 ? +ser.m5.chiSqRed.toFixed(6) : '',
-      +ser.best.chiSqRed.toFixed(6),
-      ser.best.model==='5p' ? +ser.best.tmix.toFixed(4) : '',
-      reps.length>0 ? +mean(reps).toFixed(4)  : '',
-      reps.length>1 ? +sem(reps).toFixed(4)   : '',
-      reps.length>1 ? +stdev(reps).toFixed(4) : '',
-      +ser.w3.toFixed(6), +ser.w5.toFixed(6),
-      RES.nReps,
-    ]);
-  });
-  const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
-  XLSX.utils.book_append_sheet(wb_out, wsSummary, baseName+'_results');
-
-  XLSX.writeFile(wb_out, baseName+'_results.xlsx');
-}
-
-// ═══════════════════════════════════════════════════════
-// File loading with SheetJS — positional column parsing
-//   Col 0: Temperature, 1: FRET1, 2: FRET2, 3: nap, 4: tfpc, 5: did
-//   Header row is always skipped; column names are ignored.
-// ═══════════════════════════════════════════════════════
-function parseExcel(ab) {
-  const wb = XLSX.read(new Uint8Array(ab), {type:'array'});
-  return wb.SheetNames.map(name=>{
-    // header:1 returns arrays (rows) instead of objects, preserving column order
-    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], {header:1, defval:null});
-    // rows[0] is the header row — always skip it
-    return rows.slice(1).filter(row => row.length >= 6).map(row => ({
-      temperature: row[0],
-      fret1:       row[1],
-      fret2:       row[2],
-      nap:         row[3],
-      tfpc:        row[4],
-      did:         row[5],
-    }));
-  });
-}
-
-function showStatus(msg, isErr) {
-  const el = document.getElementById('fa-status');
-  el.textContent = msg; el.style.display='block';
-  el.className = isErr ? 'fa-err' : 'fa-info';
-}
-
-// ─── Wire up UI ──────────────────────────────────────
-let loadedSheets = null;
-
-function handleFile(file) {
-  if (!file) return;
-  document.getElementById('fa-filename').textContent = '✓ ' + file.name;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const raw = parseExcel(e.target.result);
-      // Compute valid FRET rows per sheet for diagnostic
-      const validCounts = raw.map(sheet =>
-        sheet.filter(r=>[r.temperature,r.fret1,r.fret2,r.nap,r.tfpc,r.did].every(isFinite)).length
-      );
-      const badSheets = validCounts.filter(n=>n===0).length;
-      loadedSheets = raw;
-
-      // Auto-populate fit range from actual data temperature extent
-      const allT = raw.flatMap(s => s.map(r=>r.temperature).filter(isFinite));
-      if (allT.length > 0) {
-        document.getElementById('fa-tmin').value = Math.min(...allT);
-        document.getElementById('fa-tmax').value = Math.max(...allT);
+    const useWeights = document.getElementById("fa-weighted")?.value !== "ols";
+    showStatus("Refitting…", false);
+    setTimeout(() => {
+      try {
+        RES = runAnalysis(loadedSheets, tMin, tMax, name, hints, useWeights);
+        renderCards(RES);
+        renderTmixTable(RES);
+        renderRefinePanel(RES);
+        makePlot(RES);
+        document.getElementById("fa-results").style.display = "";
+        document.getElementById("fa-status").style.display = "none";
+      } catch (err) {
+        showStatus("Refit error: " + err.message, true);
       }
+    }, 50);
+  }
 
-      if (badSheets > 0) {
-        showStatus(`⚠ Loaded ${raw.length} sheets but ${badSheets} had 0 valid rows — check column order (col 1=Temperature, 2=FRET1, 3=FRET2, 4=nap, 5=tfpc, 6=did).`, true);
-      } else {
-        showStatus(`Loaded ${raw.length} sheet(s) — valid rows per sheet: ${validCounts.join(', ')}.`, false);
+  // ═══════════════════════════════════════════════════════
+  // Download helpers
+  // ═══════════════════════════════════════════════════════
+  function dlPlot(fmt) {
+    const name = (document.getElementById("fa-name").value || "fret-analysis").replace(/[^a-zA-Z0-9_-]/g, "_");
+    // Use Plotly.toImage + programmatic anchor — more reliable than downloadImage
+    // across browsers / Jekyll/CSP environments.
+    const cfg = fmt === "svg" ? { format: "svg", width: 560, height: 580, scale: 1 } : { format: "png", width: 1120, height: 1160, scale: 2 }; // ~300 DPI at 3.5 in wide
+    Plotly.toImage("fa-plot", cfg)
+      .then((dataUrl) => {
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = name + "." + fmt;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+      .catch((err) => alert(fmt.toUpperCase() + " export failed: " + err.message));
+  }
+
+  function dlXLSX() {
+    if (!RES) return;
+    const wb_out = XLSX.utils.book_new();
+    const baseName = (document.getElementById("fa-name").value || "fret-analysis").replace(/[^a-zA-Z0-9_\-]/g, "_");
+
+    // Helper: evaluate best-fit model at temperature t
+    function evalModel(ser, t) {
+      const m = ser.best;
+      return m.model === "3p" ? m3eval(t, m.a, m.b, m.c) : m5eval(t, m.a, m.b, m.m2, m.ymix, m.tmix);
+    }
+
+    // --- Three data sheets (one per FRET series) ---
+    [RES.nd, RES.td, RES.r].forEach((ser) => {
+      const header = ["Temperature (°C)", `${ser.label}_avg`, `${ser.label}_SD`, `${ser.label}_pred`];
+      const dataRows = RES.temps.map((t, i) => {
+        const inRange = t >= RES.tMin && t <= RES.tMax;
+        return [
+          t,
+          ser.avg[i],
+          ser.sd[i],
+          inRange ? evalModel(ser, t) : null, // blank outside fit range
+        ];
+      });
+      const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows]);
+      XLSX.utils.book_append_sheet(wb_out, ws, ser.label);
+    });
+
+    // --- Summary sheet (fitting results) ---
+    const summaryRows = [
+      [
+        "Dataset",
+        "Model",
+        "Fit_weights",
+        "chiSqRed_uniform",
+        "chiSqRed_phasesep",
+        "chiSqRed_best",
+        "Tmix_avg_fit",
+        "Tmix_repMean",
+        "Tmix_repSEM",
+        "Tmix_repSD",
+        "w_uniform",
+        "w_phsep",
+        "N_replicates",
+      ],
+    ];
+    [RES.nd, RES.td, RES.r].forEach((ser) => {
+      const reps = ser.repTmix;
+      summaryRows.push([
+        ser.label,
+        ser.best.model === "3p" ? "Uniform mixing" : "Phase separation",
+        ser.useWeights ? "Error-weighted (1/σ²)" : "Unweighted (OLS)",
+        ser.m3 ? +ser.m3.chiSqRed.toFixed(6) : "",
+        ser.m5 ? +ser.m5.chiSqRed.toFixed(6) : "",
+        +ser.best.chiSqRed.toFixed(6),
+        ser.best.model === "5p" ? +ser.best.tmix.toFixed(4) : "",
+        reps.length > 0 ? +mean(reps).toFixed(4) : "",
+        reps.length > 1 ? +sem(reps).toFixed(4) : "",
+        reps.length > 1 ? +stdev(reps).toFixed(4) : "",
+        +ser.w3.toFixed(6),
+        +ser.w5.toFixed(6),
+        RES.nReps,
+      ]);
+    });
+    const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+    XLSX.utils.book_append_sheet(wb_out, wsSummary, baseName + "_results");
+
+    XLSX.writeFile(wb_out, baseName + "_results.xlsx");
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // File loading with SheetJS — positional column parsing
+  //   Col 0: Temperature, 1: FRET1, 2: FRET2, 3: nap, 4: tfpc, 5: did
+  //   Header row is always skipped; column names are ignored.
+  // ═══════════════════════════════════════════════════════
+  function parseExcel(ab) {
+    const wb = XLSX.read(new Uint8Array(ab), { type: "array" });
+    return wb.SheetNames.map((name) => {
+      // header:1 returns arrays (rows) instead of objects, preserving column order
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: null });
+      // rows[0] is the header row — always skip it
+      return rows
+        .slice(1)
+        .filter((row) => row.length >= 6)
+        .map((row) => ({
+          temperature: row[0],
+          fret1: row[1],
+          fret2: row[2],
+          nap: row[3],
+          tfpc: row[4],
+          did: row[5],
+        }));
+    });
+  }
+
+  function showStatus(msg, isErr) {
+    const el = document.getElementById("fa-status");
+    el.textContent = msg;
+    el.style.display = "block";
+    el.className = isErr ? "fa-err" : "fa-info";
+  }
+
+  // ─── Wire up UI ──────────────────────────────────────
+  let loadedSheets = null;
+
+  function handleFile(file) {
+    if (!file) return;
+    document.getElementById("fa-filename").textContent = "✓ " + file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const raw = parseExcel(e.target.result);
+        // Compute valid FRET rows per sheet for diagnostic
+        const validCounts = raw.map((sheet) => sheet.filter((r) => [r.temperature, r.fret1, r.fret2, r.nap, r.tfpc, r.did].every(isFinite)).length);
+        const badSheets = validCounts.filter((n) => n === 0).length;
+        loadedSheets = raw;
+
+        // Auto-populate fit range from actual data temperature extent
+        const allT = raw.flatMap((s) => s.map((r) => r.temperature).filter(isFinite));
+        if (allT.length > 0) {
+          document.getElementById("fa-tmin").value = Math.min(...allT);
+          document.getElementById("fa-tmax").value = Math.max(...allT);
+        }
+
+        if (badSheets > 0) {
+          showStatus(
+            `⚠ Loaded ${raw.length} sheets but ${badSheets} had 0 valid rows — check column order (col 1=Temperature, 2=FRET1, 3=FRET2, 4=nap, 5=tfpc, 6=did).`,
+            true
+          );
+        } else {
+          showStatus(`Loaded ${raw.length} sheet(s) — valid rows per sheet: ${validCounts.join(", ")}.`, false);
+        }
+        document.getElementById("fa-run").disabled = false;
+      } catch (err) {
+        showStatus("Error reading file: " + err.message, true);
       }
-      document.getElementById('fa-run').disabled = false;
-    } catch(err) {
-      showStatus('Error reading file: ' + err.message, true);
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
+    };
+    reader.readAsArrayBuffer(file);
+  }
 
-// Drop zone
-const drop = document.getElementById('fa-drop');
-drop.addEventListener('dragover', e=>{ e.preventDefault(); drop.classList.add('over'); });
-drop.addEventListener('dragleave', ()=>drop.classList.remove('over'));
-drop.addEventListener('drop', e=>{
-  e.preventDefault(); drop.classList.remove('over');
-  handleFile(e.dataTransfer.files[0]);
-});
-drop.addEventListener('click', ()=>document.getElementById('fa-file').click());
-document.getElementById('fa-file').addEventListener('change', e=>handleFile(e.target.files[0]));
+  // Drop zone
+  const drop = document.getElementById("fa-drop");
+  drop.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    drop.classList.add("over");
+  });
+  drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+  drop.addEventListener("drop", (e) => {
+    e.preventDefault();
+    drop.classList.remove("over");
+    handleFile(e.dataTransfer.files[0]);
+  });
+  drop.addEventListener("click", () => document.getElementById("fa-file").click());
+  document.getElementById("fa-file").addEventListener("change", (e) => handleFile(e.target.files[0]));
 
-// Analyze button
-document.getElementById('fa-run').addEventListener('click', ()=>{
-  if (!loadedSheets) return;
-  const tMin = parseFloat(document.getElementById('fa-tmin').value);
-  const tMax = parseFloat(document.getElementById('fa-tmax').value);
-  const name = document.getElementById('fa-name').value.trim();
+  // Analyze button
+  document.getElementById("fa-run").addEventListener("click", () => {
+    if (!loadedSheets) return;
+    const tMin = parseFloat(document.getElementById("fa-tmin").value);
+    const tMax = parseFloat(document.getElementById("fa-tmax").value);
+    const name = document.getElementById("fa-name").value.trim();
 
-  const useWeights = (document.getElementById('fa-weighted')?.value !== 'ols');
-  showStatus('Analyzing…', false);
-  // Defer to let browser repaint
-  setTimeout(()=>{
-    try {
-      RES = runAnalysis(loadedSheets, tMin, tMax, name, {}, useWeights);
-      renderCards(RES);
-      renderTmixTable(RES);
-      renderRefinePanel(RES);
-      makePlot(RES);
-      document.getElementById('fa-results').style.display = '';
-      document.getElementById('fa-status').style.display  = 'none';
-    } catch(err) {
-      showStatus('Analysis error: ' + err.message, true);
-    }
-  }, 50);
-});
+    const useWeights = document.getElementById("fa-weighted")?.value !== "ols";
+    showStatus("Analyzing…", false);
+    // Defer to let browser repaint
+    setTimeout(() => {
+      try {
+        RES = runAnalysis(loadedSheets, tMin, tMax, name, {}, useWeights);
+        renderCards(RES);
+        renderTmixTable(RES);
+        renderRefinePanel(RES);
+        makePlot(RES);
+        document.getElementById("fa-results").style.display = "";
+        document.getElementById("fa-status").style.display = "none";
+      } catch (err) {
+        showStatus("Analysis error: " + err.message, true);
+      }
+    }, 50);
+  });
 </script>
