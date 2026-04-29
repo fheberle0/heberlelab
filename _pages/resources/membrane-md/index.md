@@ -18,7 +18,7 @@ A "test" bilayer of pure 1,2-dioleoyl-sn-glycero-3-phosphocholine (DOPC) is used
 **[Part 1: Setting up your Mac for MD simulations →]({{ '/resources/membrane-md/01-mac-setup/' | relative_url }})**
 A gentle introduction to the command line, followed by step-by-step installation of NAMD and VMD on an Apple Silicon Mac. By the end you'll have both programs working and ready to run simulations.
 
-**Part 2: Building a lipid bilayer with CHARMM-GUI** *(coming soon)*
+**[Part 2: Building a lipid bilayer with CHARMM-GUI →]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})**
 Walking through the CHARMM-GUI Membrane Builder interface to construct a fully-hydrated DOPC bilayer with explicit ions. We'll discuss the choices CHARMM-GUI offers and explain what each one does.
 
 **Part 3: Running your first simulation in NAMD** *(coming soon)*

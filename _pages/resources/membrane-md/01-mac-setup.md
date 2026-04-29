@@ -335,4 +335,4 @@ Some users have aggressive autocomplete or AI-shell plugins installed (e.g., War
 
 ---
 
-*Next: [Part 2 — Building a lipid bilayer with CHARMM-GUI →]({{ '/resources/membrane-md/' | relative_url }})* (coming soon)
+*Next: [Part 2 — Building a lipid bilayer with CHARMM-GUI →]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})*
