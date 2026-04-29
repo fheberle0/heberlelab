@@ -337,6 +337,6 @@ If you lose your Job ID and want to revisit a job: log into CHARMM-GUI, click yo
 
 ---
 
-*Next: Part 3 — Running your first simulation in NAMD (coming soon)*
+*Next: [Part 3 — Running your first simulation in NAMD →]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})*
 
 *Previous: [Part 1 — Setting up your Mac for MD simulations]({{ '/resources/membrane-md/01-mac-setup/' | relative_url }})*

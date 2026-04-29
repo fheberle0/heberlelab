@@ -21,7 +21,7 @@ A gentle introduction to the command line, followed by step-by-step installation
 **[Part 2: Building a lipid bilayer with CHARMM-GUI →]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})**
 Walking through the CHARMM-GUI Membrane Builder interface to construct a fully-hydrated DOPC bilayer with explicit ions. We'll discuss the choices CHARMM-GUI offers and explain what each one does.
 
-**Part 3: Running your first simulation in NAMD** *(coming soon)*
+**[Part 3: Running your first simulation in NAMD →]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})**
 Equilibrating and running a production MD trajectory. Covers the multi-step CHARMM-GUI equilibration protocol, common gotchas with parameter files, and how to set up a simple launcher script for chunked production runs.
 
 **Part 4: Visualization and analysis in VMD** *(coming soon)*
