@@ -463,6 +463,6 @@ Verify caffeinate is actually running with `ps aux | grep caffeinate | grep -v g
 
 ---
 
-*Next: Part 4 — Visualization and analysis in VMD (coming soon)*
+*Next: [Part 4 — Visualization and analysis in VMD →]({{ '/resources/membrane-md/04-vmd-analysis/' | relative_url }})*
 
 *Previous: [Part 2 — Building a lipid bilayer with CHARMM-GUI]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})*

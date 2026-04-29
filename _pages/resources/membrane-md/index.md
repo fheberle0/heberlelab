@@ -24,7 +24,7 @@ Walking through the CHARMM-GUI Membrane Builder interface to construct a fully-h
 **[Part 3: Running your first simulation in NAMD →]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})**
 Equilibrating and running a production MD trajectory. Covers the multi-step CHARMM-GUI equilibration protocol, common gotchas with parameter files, and how to set up a simple launcher script for chunked production runs.
 
-**Part 4: Visualization and analysis in VMD** *(coming soon)*
+**[Part 4: Visualization and analysis in VMD →]({{ '/resources/membrane-md/04-vmd-analysis/' | relative_url }})**
 Loading a simulation in VMD, creating useful representations, rendering high-quality images, and running basic analyses (area per lipid, bilayer thickness) using the Tk Console.
 
 ---
