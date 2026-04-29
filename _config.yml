@@ -219,6 +219,7 @@ plugins:
   - jekyll-cache-bust
   - jekyll-email-protect
   - jekyll-feed
+  - jekyll-redirect-from
   - jekyll-get-json
   - jekyll-imagemagick
   - jekyll-jupyter-notebook

@@ -118,5 +118,5 @@ Nguyen MHL, DiPasquale M, Rickeard BW, Doktorova M, Heberle FA, Scott HL, Barrer
 
 ## Interactive tools
 
-**[Asymmetric Bilayer Phase Diagram →]({{ '/asymmetry/phase-diagram/' | relative_url }})**
+**[Asymmetric Bilayer Phase Diagram →]({{ '/resources/phase-diagram/' | relative_url }})**
 Compute and visualize the phase diagram of an asymmetric lipid bilayer using the Bragg–Williams mean-field model. Enter values for the Flory–Huggins interaction parameter χ and the interleaflet coupling Λ to see registered and anti-registered coexistence regions, tielines, and consolute points.
