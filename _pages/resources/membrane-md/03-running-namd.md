@@ -387,7 +387,11 @@ caffeinate -i &
 nohup ./run_production.sh > production_master.log 2>&1 &
 ```
 
-10 chunks × ~85 minutes/chunk ≈ **14 hours wall-clock** for 10 ns of simulation.
+10 chunks × ~2h 50min/chunk ≈ **28 hours wall-clock** for 10 ns of simulation. Effective throughput on the M1 Ultra at +p8 for this DOPC system is roughly **8.5 ns/day**.
+
+A practical note: NAMD on Apple Silicon occasionally segfaults at startup — Charm++ initialization fails, NAMD exits before reading the input file. This isn't a problem with your simulation; it's a known transient issue. If a chunk fails this way (the launcher will report `exit code 139`), just edit `run_production.sh` to start at the failed chunk number and re-launch. Your earlier completed chunks remain valid.
+
+Also worth knowing for context: 10 ns is a *short* production run by modern standards. Equilibrium properties of bilayers (APL, thickness, lipid order parameters) have intrinsic correlation times of ~1-10 ns, so a 10 ns trajectory provides only a handful of effectively independent samples — enough to verify the workflow runs end-to-end and produce structures roughly in the right range, but not enough to converge averages well. Production runs in published bilayer studies typically range from 100 ns to several microseconds. If you're planning to publish from your simulation, plan for at least 100-500 ns and budget compute time accordingly.
 
 ---
 
@@ -444,6 +448,10 @@ The production trajectory (`step7_production_*.dcd`) is what you'll analyze — 
 **NAMD hangs at startup with no error**
 
 Sometimes happens when `+p` is set higher than the machine can handle, or when the macOS Gatekeeper hasn't yet fully approved a NAMD subbinary. Try `+p4` first as a defensive test; if that runs cleanly, work back up. If you see Gatekeeper warnings, follow the same "Open Anyway" workflow from Part 1.
+
+**A chunk exits with exit code 139 immediately at startup**
+
+Code 139 = segmentation fault. On Apple Silicon, NAMD occasionally fails at the Charm++ initialization stage with no useful error in the log — it just dies. This appears to be a transient issue, not a problem with your simulation. The fix: edit `run_production.sh` to change the loop start to the failed chunk number (e.g., `for i in $(seq 7 $NCHUNKS)` if chunk 7 failed), re-launch the launcher, and the simulation resumes cleanly from the last good chunk's output.
 
 **`FATAL ERROR: UNKNOWN PARAMETER IN CHARMM PARAMETER FILE`**
 
