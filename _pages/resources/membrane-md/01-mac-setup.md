@@ -15,6 +15,16 @@ If you've used a terminal before and just want the install steps, skip ahead to 
 
 ---
 
+## In this series
+
+- **Part 1: Setting up your Mac for MD simulations** *(this page)*
+- [Part 2: Building a lipid bilayer with CHARMM-GUI]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})
+- [Part 3: Running your first simulation in NAMD]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})
+- [Part 4: Visualization and analysis in VMD]({{ '/resources/membrane-md/04-vmd-analysis/' | relative_url }})
+- [Part 5: Switching to GROMACS for higher throughput]({{ '/resources/membrane-md/05-switching-to-gromacs/' | relative_url }})
+
+---
+
 ## A short tour of the macOS terminal
 
 The terminal is where almost everything in MD simulation happens — running simulations, organizing files, editing scripts, checking results. Most macOS users rarely open it, but for our purposes you'll need to be comfortable with a few basic commands. Don't worry: the things you'll need are simple, and they become natural with a few hours of use.
