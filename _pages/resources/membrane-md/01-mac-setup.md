@@ -2,6 +2,8 @@
 layout: page
 title: "Part 1: Setting up your Mac for MD simulations"
 permalink: /resources/membrane-md/01-mac-setup/
+toc:
+  sidebar: left
 nav: false
 ---
 
