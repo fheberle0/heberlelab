@@ -11,6 +11,8 @@ nav_order: 2
 
 ## 2026
 
+Kennison-Cook KB, Cooper AM, Heberle FA. 2026. Quantifying interleaflet coupling of phase behavior and observing anti-registered phases in asymmetric lipid bilayers. *Biophysical Journal* (in press).
+
 Sharma K, Heberle FA, Doktorova M. 2026. From molecular dynamics to cryo-EM: Imaging liposomes in silico. In *Methods in Enzymology (MIE)* Vol. 727: Lipids and Membranes: Dynamics and Interorganelle Lipid Transport. J. M. Baskin, editor. Academic Press. Cambridge, MA, pp. 291-319.
 
 Mehta D, Chaisson EC, Cooper AM, Ahmed M, Waxham MN, Heberle FA. 2026. Nanodomain formation in lipid bilayers II: The influence of mixed-chain saturated lipids. *Biochimica et Biophysica Acta Biomembranes* 1868:184507.
