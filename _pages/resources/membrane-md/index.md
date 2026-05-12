@@ -27,6 +27,9 @@ Equilibrating and running a production MD trajectory. Covers the multi-step CHAR
 **[Part 4: Visualization and analysis in VMD →]({{ '/resources/membrane-md/04-vmd-analysis/' | relative_url }})**
 Loading a simulation in VMD, creating useful representations, rendering high-quality images, and running basic analyses (area per lipid, bilayer thickness) using the Tk Console.
 
+**[Part 5: Switching to GROMACS for higher throughput →]({{ '/resources/membrane-md/05-switching-to-gromacs/' | relative_url }})**
+NAMD is great for learning but tops out around 8.5 ns/day on Apple Silicon. GROMACS with OpenCL GPU acceleration runs the same simulations 3.5× faster, making longer production runs tractable. This part covers installing GROMACS on a Mac, building the same system in CHARMM-GUI's GROMACS-output mode, and running the equivalent workflow — with a head-to-head benchmark showing both engines produce equivalent physics.
+
 ---
 
 ## What you'll need

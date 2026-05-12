@@ -471,6 +471,6 @@ Make sure you're using *only the equilibrated portion* of the trajectory. The ea
 
 ---
 
-*End of series. Comments, corrections, and feedback welcome — please reach out to the lab.*
+*Next: [Part 5 — Switching to GROMACS for higher throughput →]({{ '/resources/membrane-md/05-switching-to-gromacs/' | relative_url }})*
 
 *Previous: [Part 3 — Running your first simulation in NAMD]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})*
