@@ -350,12 +350,18 @@ for {set i $start_frame} {$i < $nframes} {incr i} {
 puts "Average thickness: [expr $thick_sum / $count] A"
 ```
 
-For our test bilayer (200 lipids, ~12 ns total trajectory), expect roughly:
+For our test bilayer (200 lipids, 10 ns of production), expect roughly:
 
-- APL: 65–67 Å² (slightly below the experimental value but well within typical CHARMM36 range)
-- Thickness: 39–40 Å (slightly above the experimental upper bound, again within typical CHARMM36 range)
+- APL: 67-69 Å² (right at the experimental value of ~67.5 Å²)
+- Thickness: 38-39 Å (squarely in the experimental range of 37-39 Å)
 
 The fact that both metrics fall within the experimental range — without you tuning anything — is a powerful validation. Decades of careful neutron-scattering and X-ray-scattering experiments have constrained DOPC's structural parameters, and your simulation independently reproduces them.
+
+### A statistical caveat
+
+The "average over the last half" approach above is fine for a quick sanity check that your simulation is in the right ballpark. But it understates an important issue when it comes to publishing results: membrane structural properties have intrinsic correlation times of roughly 1-10 ns, so a 10 ns trajectory contains only ~1-10 effectively independent samples (see the discussion in [Part 3]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})). With so few independent samples, the averages we just computed could easily shift by 1-2 Å² if we ran the simulation for another 10 ns — well outside the "5 Å² agreement with experiment" we'd want for publication.
+
+If you're using this workflow for a real research project, plan to run 100-500 ns of production, discard the first 50-100 ns as extended equilibration, and compute averages over the well-sampled remainder. Block averaging (computing averages over non-overlapping chunks of the trajectory and reporting the standard deviation of those chunk-averages) is a simple way to estimate statistical uncertainty that accounts for correlation between consecutive frames.
 
 ---
 

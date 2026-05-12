@@ -391,7 +391,20 @@ nohup ./run_production.sh > production_master.log 2>&1 &
 
 A practical note: NAMD on Apple Silicon occasionally segfaults at startup — Charm++ initialization fails, NAMD exits before reading the input file. This isn't a problem with your simulation; it's a known transient issue. If a chunk fails this way (the launcher will report `exit code 139`), just edit `run_production.sh` to start at the failed chunk number and re-launch. Your earlier completed chunks remain valid.
 
-Also worth knowing for context: 10 ns is a *short* production run by modern standards. Equilibrium properties of bilayers (APL, thickness, lipid order parameters) have intrinsic correlation times of ~1-10 ns, so a 10 ns trajectory provides only a handful of effectively independent samples — enough to verify the workflow runs end-to-end and produce structures roughly in the right range, but not enough to converge averages well. Production runs in published bilayer studies typically range from 100 ns to several microseconds. If you're planning to publish from your simulation, plan for at least 100-500 ns and budget compute time accordingly.
+### Why 10 ns is just a starting point
+
+A note worth pausing on: 10 ns is a *short* production run by modern standards. To explain why, we need to distinguish two concepts that are easy to conflate:
+
+- **Equilibrium** means the system is sampling its steady-state distribution. The bilayer's mean APL, mean thickness, and other ensemble averages exist and would be the same if you ran for any longer time.
+- **Convergence of estimates** means we've sampled enough independent configurations from that distribution that our computed averages are statistically reliable.
+
+These are different things. A system can be perfectly at equilibrium while a finite-time average wanders by ±1 Å² over a few nanoseconds — because membrane structural properties have intrinsic **correlation times** (τ) of roughly 1-10 ns. Configurations that are less than τ apart in time aren't statistically independent; they're essentially the same sample with thermal noise.
+
+This gives us a back-of-envelope rule: a trajectory of length T contains roughly T/τ effectively independent samples. A 10 ns trajectory with τ ≈ 1-10 ns gives only 1-10 truly independent samples — enough to verify the workflow runs end-to-end and produce equilibrium values that are *roughly* right, but not enough to compute averages with publishable statistical confidence.
+
+In practice, published bilayer simulation studies typically run for **100 ns to several microseconds** of production, discarding the first 50-100 ns as additional equilibration and computing averages over the remainder. This typically gives standard errors of mean that are small compared to natural fluctuations. If you're planning to publish results from your simulation, budget for at least 100-500 ns of production and plan for compute time accordingly.
+
+(This is also one reason GPU-accelerated MD on dedicated hardware matters: on NAMD CPU-only at 8.5 ns/day, a 500 ns trajectory takes two months; on GROMACS with Apple GPU acceleration at 30 ns/day, the same trajectory takes 17 days; on NAMD on a Linux machine with an NVIDIA GPU at 200 ns/day, just 2.5 days. We discuss GROMACS as an alternative in [Part 5]({{ '/resources/membrane-md/05-switching-to-gromacs/' | relative_url }}).)
 
 ---
 
