@@ -2,6 +2,8 @@
 layout: page
 title: "Part 2: Building a lipid bilayer with CHARMM-GUI"
 permalink: /resources/membrane-md/02-charmm-gui-bilayer/
+toc:
+  sidebar: left
 nav: false
 ---
 
@@ -10,6 +12,16 @@ nav: false
 In [Part 1]({{ '/resources/membrane-md/01-mac-setup/' | relative_url }}) you installed NAMD and VMD. Now we'll use [CHARMM-GUI](https://www.charmm-gui.org/) — a free web-based system builder — to construct an all-atom DOPC bilayer with explicit water and ions. By the end of this tutorial you'll have a fully-prepared simulation system ready to run in NAMD.
 
 CHARMM-GUI handles a lot of complexity behind the scenes: placing lipids in two leaflets, solvating with water, neutralizing charge with counter-ions, and generating force-field-compatible structure files plus equilibration scripts. We'll walk through the interface step by step, explaining every choice we make.
+
+---
+
+## In this series
+
+- [Part 1: Setting up your Mac for MD simulations]({{ '/resources/membrane-md/01-mac-setup/' | relative_url }})
+- **Part 2: Building a lipid bilayer with CHARMM-GUI** *(this page)*
+- [Part 3: Running your first simulation in NAMD]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})
+- [Part 4: Visualization and analysis in VMD]({{ '/resources/membrane-md/04-vmd-analysis/' | relative_url }})
+- [Part 5: Switching to GROMACS for higher throughput]({{ '/resources/membrane-md/05-switching-to-gromacs/' | relative_url }})
 
 ---
 

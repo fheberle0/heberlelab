@@ -2,6 +2,8 @@
 layout: page
 title: "Part 4: Visualization and analysis in VMD"
 permalink: /resources/membrane-md/04-vmd-analysis/
+toc:
+  sidebar: left
 nav: false
 ---
 
@@ -10,6 +12,16 @@ nav: false
 After [Part 3]({{ '/resources/membrane-md/03-running-namd/' | relative_url }}), you have a real MD trajectory: a starting structure, six equilibration segments, and however many production chunks you've run. Now we'll make use of it: loading the trajectory in VMD, rendering high-quality images, computing the two most important bilayer metrics (area per lipid and bilayer thickness), and validating against published experimental values.
 
 This is also the most rewarding part — there's something genuinely satisfying about watching your simulated bilayer self-correct to its physically-correct equilibrium structure, and seeing the data match decades of careful experimental measurements.
+
+---
+
+## In this series
+
+- [Part 1: Setting up your Mac for MD simulations]({{ '/resources/membrane-md/01-mac-setup/' | relative_url }})
+- [Part 2: Building a lipid bilayer with CHARMM-GUI]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})
+- [Part 3: Running your first simulation in NAMD]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})
+- **Part 4: Visualization and analysis in VMD** *(this page)*
+- [Part 5: Switching to GROMACS for higher throughput]({{ '/resources/membrane-md/05-switching-to-gromacs/' | relative_url }})
 
 ---
 

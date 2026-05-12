@@ -2,6 +2,8 @@
 layout: page
 title: "Part 5: Switching to GROMACS for higher throughput"
 permalink: /resources/membrane-md/05-switching-to-gromacs/
+toc:
+  sidebar: left
 nav: false
 ---
 
@@ -12,6 +14,16 @@ The previous parts of this series got you running and analyzing membrane simulat
 [GROMACS](https://www.gromacs.org/) is a different MD engine with the same scientific lineage as NAMD (both implement standard force fields like CHARMM36, both produce equivalent physics) but with much better performance on a wider variety of hardware. Notably, GROMACS 2025 has working OpenCL support for Apple Silicon GPUs, which gives roughly a **3.5× speedup** over NAMD on the same hardware. The same 500 ns trajectory now takes about two weeks instead of two months — bringing publication-quality work within reach on a single Mac.
 
 This part of the series covers everything needed to switch: building a GROMACS-format system in CHARMM-GUI, installing GROMACS on Apple Silicon (with a small but unavoidable Xcode quirk), and running the equivalent of the workflow from [Part 3]({{ '/resources/membrane-md/03-running-namd/' | relative_url }}). We finish with a quantitative head-to-head comparison.
+
+---
+
+## In this series
+
+- [Part 1: Setting up your Mac for MD simulations]({{ '/resources/membrane-md/01-mac-setup/' | relative_url }})
+- [Part 2: Building a lipid bilayer with CHARMM-GUI]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})
+- [Part 3: Running your first simulation in NAMD]({{ '/resources/membrane-md/03-running-namd/' | relative_url }})
+- [Part 4: Visualization and analysis in VMD]({{ '/resources/membrane-md/04-vmd-analysis/' | relative_url }})
+- **Part 5: Switching to GROMACS for higher throughput** *(this page)*
 
 ---
 

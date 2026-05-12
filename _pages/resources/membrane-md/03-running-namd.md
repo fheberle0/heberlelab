@@ -2,6 +2,8 @@
 layout: page
 title: "Part 3: Running your first simulation in NAMD"
 permalink: /resources/membrane-md/03-running-namd/
+toc:
+  sidebar: left
 nav: false
 ---
 
@@ -10,6 +12,16 @@ nav: false
 In [Part 2]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }}) you used CHARMM-GUI to build a fully-prepared DOPC bilayer system. Now we'll actually run the simulation: minimization, multi-step equilibration with relaxing restraints, and chunked production. By the end of this tutorial you'll have a real MD trajectory you can analyze.
 
 This is the longest tutorial of the series because there's the most to cover — and because CHARMM-GUI's NAMD output requires some patching before it runs cleanly on a fresh install. Don't worry: we'll explain *why* each fix is needed so you'll be equipped to debug similar issues on future systems.
+
+---
+
+## In this series
+
+- [Part 1: Setting up your Mac for MD simulations]({{ '/resources/membrane-md/01-mac-setup/' | relative_url }})
+- [Part 2: Building a lipid bilayer with CHARMM-GUI]({{ '/resources/membrane-md/02-charmm-gui-bilayer/' | relative_url }})
+- **Part 3: Running your first simulation in NAMD** *(this page)*
+- [Part 4: Visualization and analysis in VMD]({{ '/resources/membrane-md/04-vmd-analysis/' | relative_url }})
+- [Part 5: Switching to GROMACS for higher throughput]({{ '/resources/membrane-md/05-switching-to-gromacs/' | relative_url }})
 
 ---
 
