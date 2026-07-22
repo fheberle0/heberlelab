@@ -3,15 +3,13 @@ layout: page
 title: Publications
 permalink: /publications/
 banner: banner-publications.webp
-banner_height: 450px
-banner_position: center
 nav: true
 nav_order: 2
 ---
 
 ## 2026
 
-Kennison-Cook KB, Cooper AM, Heberle FA. 2026. Quantifying interleaflet coupling of phase behavior and observing anti-registered phases in asymmetric lipid bilayers. *Biophysical Journal* (in press).
+Kennison-Cook KB, Cooper AM, Heberle FA. 2026. Quantifying interleaflet coupling of phase behavior and observing anti-registered phases in asymmetric lipid bilayers. *Biophysical Journal* 125:3419.
 
 Sharma K, Heberle FA, Doktorova M. 2026. From molecular dynamics to cryo-EM: Imaging liposomes in silico. In *Methods in Enzymology (MIE)* Vol. 727: Lipids and Membranes: Dynamics and Interorganelle Lipid Transport. J. M. Baskin, editor. Academic Press. Cambridge, MA, pp. 291-319.
 
