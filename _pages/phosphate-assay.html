@@ -408,6 +408,65 @@ description: Determine phospholipid stock concentration and its uncertainty from
   .pa-planner summary::before {
     content: "🎯 ";
   }
+  .pa-plan-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 4px 0 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1f4030;
+  }
+  .pa-plan-controls label {
+    font-size: 13px;
+    color: #bbb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pa-plan-controls select {
+    background: #1e1e1e;
+    border: 1px solid #555;
+    color: #f0f0f0;
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .pa-explain > summary {
+    cursor: pointer;
+    color: #7fd0a0;
+    font-size: 12.5px;
+    list-style: none;
+  }
+  .pa-explain > summary::-webkit-details-marker {
+    display: none;
+  }
+  .pa-explain > summary::before {
+    content: "ⓘ ";
+  }
+  .pa-explain-body {
+    font-size: 12.5px;
+    color: #b8c4bd;
+    line-height: 1.6;
+    margin-top: 8px;
+    max-width: 620px;
+  }
+  .pa-explain-body table {
+    border-collapse: collapse;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .pa-explain-body th,
+  .pa-explain-body td {
+    border: 1px solid #2a4636;
+    padding: 3px 12px;
+    text-align: center;
+    color: #cdd;
+  }
+  .pa-explain-body th {
+    background: #16241b;
+  }
   .pa-plan-out {
     font-size: 13px;
     color: #cdd;
@@ -597,6 +656,58 @@ description: Determine phospholipid stock concentration and its uncertainty from
   <!-- ── Pre-assay planner ───────────────────────────────── -->
   <details class="pa-planner" id="pa-planner">
     <summary>Plan my assay &nbsp;— design the standard curve <em>before</em> you start</summary>
+    <div class="pa-plan-controls">
+      <label
+        >Standard curve size:
+        <select id="pa-nstd" onchange="updatePlanner()">
+          <option value="compact">Compact — 8 (2 blanks + 6 levels)</option>
+          <option value="standard" selected>Standard — 10 (3 blanks + 7 levels)</option>
+          <option value="robust">Robust — 12 (3 blanks + 9 levels)</option>
+        </select>
+      </label>
+      <details class="pa-explain">
+        <summary>Why this many standards?</summary>
+        <div class="pa-explain-body">
+          Choosing the number of standards is a balance, not a fixed rule.<br /><br />
+          <strong>More standards help two ways.</strong> Each one adds a degree of freedom to the curve's error estimate, which lowers the 95%
+          <em>t</em>-multiplier — steeply at first, then flattening — and the 1/<em>n</em> term in the calibration uncertainty shrinks. You also need
+          enough distinct levels to confirm the response is linear and to survive discarding one bad standard.
+          <table>
+            <thead>
+              <tr>
+                <th>standards</th>
+                <th>df</th>
+                <th>95% <em>t</em></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>8 (compact)</td>
+                <td>6</td>
+                <td>2.45</td>
+              </tr>
+              <tr>
+                <td>10 (standard)</td>
+                <td>8</td>
+                <td>2.31</td>
+              </tr>
+              <tr>
+                <td>12 (robust)</td>
+                <td>10</td>
+                <td>2.23</td>
+              </tr>
+            </tbody>
+          </table>
+          Moving compact → standard → robust tightens the calibration part of your final CI by roughly <strong>14%</strong> then
+          <strong>26%</strong> (same curve quality assumed).<br /><br />
+          <strong>Fewer standards save real effort.</strong> Every standard is a full tube through the ~3-hour ash-and-develop cycle, and it competes
+          with your replicate samples for space on the heat block.<br /><br />
+          <strong>Rule of thumb:</strong> compact (8) when time or tubes are tight; standard (10) for routine work; robust (12) when you want the
+          tightest, most outlier-proof curve. Beyond ~12 the <em>t</em>-multiplier and 1/<em>n</em> have mostly flattened — better to spend the effort
+          centering and spreading your standards, which attacks the leverage term directly.
+        </div>
+      </details>
+    </div>
     <div class="pa-plan-out" id="pa-plan-out">
       Enter your <strong>expected concentration</strong> above (you usually know it to within a few percent from weighing out the lipid). The planner
       will recommend a sample volume and a standard curve that put your reading in the best-determined part of the curve — where the standard-curve
@@ -969,10 +1080,24 @@ description: Determine phospholipid stock concentration and its uncertainty from
     return tInv(1 - (1 - R.CL) / 2, dfEff) * uComb;
   }
 
-  function recommendedStandards(centerNmol, stdConc) {
-    // levels bracketing and roughly centering on the sample amount, + 2 blanks
-    const levels = [0, 0, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75];
-    return levels.map((f) => {
+  // Standard-curve design presets (fractions of the sample amount).
+  //  compact  = 2 blanks + 6 levels (8 total)
+  //  standard = 3 blanks + 7 levels (10 total)
+  //  robust   = 3 blanks + 9 levels (12 total)
+  function standardLevels(mode) {
+    const lin = (a, b, m) => Array.from({ length: m }, (_, i) => a + ((b - a) * i) / (m - 1));
+    if (mode === "compact") return { zeros: 2, nz: lin(0.5, 1.75, 6) };
+    if (mode === "robust") return { zeros: 3, nz: lin(0.5, 1.75, 9) };
+    return { zeros: 3, nz: lin(0.5, 1.75, 7) }; // standard (default)
+  }
+  function planMode() {
+    return document.getElementById("pa-nstd")?.value || "standard";
+  }
+  function recommendedStandards(centerNmol, stdConc, mode) {
+    // levels bracketing and roughly centering on the sample amount, + blanks
+    const { zeros, nz } = standardLevels(mode);
+    const fracs = Array(zeros).fill(0).concat(nz);
+    return fracs.map((f) => {
       const nmol = f * centerNmol;
       const vol = Math.max(0, Math.round((nmol / stdConc) * 2) / 2); // round to 0.5 µL
       return { vol, nmol: vol * stdConc };
@@ -1060,7 +1185,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
     proj += "</tbody></table>";
 
     // ── Concrete recommended standard set
-    const rec = recommendedStandards(sCent, R.stdConc);
+    const rec = recommendedStandards(sCent, R.stdConc, planMode());
     let recTxt = `<div style="font-size:13px;color:#ccc;margin:6px 0 2px"><b>A curve centered on your samples</b> (with your ${R.stdConc} mM standard) — e.g. these volumes:</div>`;
     recTxt +=
       `<div style="font-size:13px;color:#9c9">` + rec.map((s) => `${s.vol} µL (${s.nmol.toFixed(0)} nmol)`).join(" &nbsp;·&nbsp; ") + `</div>`;
@@ -1583,8 +1708,11 @@ description: Determine phospholipid stock concentration and its uncertainty from
     V = Math.min(Math.max(V, 0.5), 20);
     const A = C * V; // expected sample amount, nmol
     const clicks = Math.round(V / 0.5);
-    const rec = recommendedStandards(A, stdConc);
+    const mode = planMode();
+    const { zeros } = standardLevels(mode);
+    const rec = recommendedStandards(A, stdConc, mode);
     PLAN = { stdVols: rec.map((s) => s.vol), sampleVol: V };
+    const blankWord = zeros === 2 ? "Two" : "Three";
 
     let tbl = '<table class="pa-plan-std"><thead><tr><th>Std vol (µL)</th>' + rec.map((s) => `<th>${s.vol}</th>`).join("") + "</tr></thead>";
     tbl += "<tbody><tr><th>nmol Pi</th>" + rec.map((s) => `<td>${s.nmol.toFixed(0)}</td>`).join("") + "</tr></tbody></table>";
@@ -1593,9 +1721,9 @@ description: Determine phospholipid stock concentration and its uncertainty from
       `Aim your sample reading near <span class="big">${A.toFixed(0)} nmol</span>. ` +
       `Dispense <span class="big">${V} µL</span> (${clicks} click${clicks === 1 ? "" : "s"} of the 25 µL Hamilton) of your ~${C} mM stock per tube.` +
       (V >= 20 ? ' <span style="color:#e0a020">That is a large organic volume — dry under N₂ before ashing per the SOP.</span>' : "") +
-      `<div style="margin-top:8px">Set up a standard curve that brackets and centers on that amount:</div>` +
+      `<div style="margin-top:8px">Set up a <strong>${rec.length}-point</strong> standard curve that brackets and centers on that amount:</div>` +
       tbl +
-      `<div style="font-size:12px;color:#9aa;margin-bottom:8px">Two blanks (0 µL) fix the intercept; the rest span below and above your sample so it lands mid-curve, where (x₀−x̄)²/Sₓₓ ≈ 0 and the calibration adds the least uncertainty.</div>` +
+      `<div style="font-size:12px;color:#9aa;margin-bottom:8px">${blankWord} blanks (0 µL) fix the intercept; the rest span below and above your sample so it lands mid-curve, where (x₀−x̄)²/Sₓₓ ≈ 0 and the calibration adds the least uncertainty. Volumes are rounded to 0.5 µL (one Hamilton click); if two land on the same volume, just run that one in duplicate.</div>` +
       `<button class="pa-mini" type="button" onclick="applyDesign()">Fill the tables with this design →</button>`;
   }
   function applyDesign() {
