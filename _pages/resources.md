@@ -25,6 +25,9 @@ Interactive phase diagram calculator for asymmetric lipid bilayers based on the 
 **[FRET Analyzer →]({{ '/resources/fret-analyzer/' | relative_url }})**
 Quantify nanoscopic miscibility transitions in lipid bilayers from FRET vs. temperature data. Upload an Excel file with fluorescence intensity data and the tool fits uniform-mixing and phase-separation models, using AICc model selection to determine whether a transition exists.
 
+**[Phosphate Assay Analyzer →]({{ '/resources/phosphate-assay/' | relative_url }})**
+Determine the concentration and uncertainty of a phospholipid stock solution from a Bartlett inorganic-phosphate assay. Enter standard-curve and replicate absorbance readings and the tool fits the calibration curve, converts each sample to nmol phosphate, and reports the stock concentration with a 95% confidence interval that combines replicate scatter and standard-curve uncertainty.
+
 **[Monte Carlo Lattice Simulator →]({{ '/resources/mc-simulator/' | relative_url }})**
 Interactive 2D Monte Carlo simulation of lipid mixing on a triangular lattice with periodic boundary conditions and nearest-neighbor pairwise interactions. A binary A/B mixture evolves via Kawasaki exchange dynamics with the Metropolis acceptance criterion.
 
