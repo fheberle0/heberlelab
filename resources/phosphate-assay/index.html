@@ -1,0 +1,950 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Phosphate Assay Analyzer | Heberle Lab </title> <meta name="author" content="Fred A. Heberle"> <meta name="description" content="Determine phospholipid stock concentration and its uncertainty from a Bartlett inorganic-phosphate assay (Heberle Lab SOP-PIASSAY-001)."> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?v=f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?v=62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="/assets/img/favicon.svg?v=1711252639d7fd55f75c1a48ace9036a"> <link rel="stylesheet" href="/assets/css/main.css?v=d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://heberlelab.com/resources/phosphate-assay/"> <script src="/assets/js/theme.js?v=5fea5159b787642c1bbc1f334d60f883"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+    document.documentElement.setAttribute('data-theme', 'dark');
+  </script> <style>#light-toggle{display:none!important}a{color:#00c244!important}a:hover{color:#c0a!important}.page-banner{width:100%;overflow:hidden}.page-banner img{width:100%;height:720px;object-fit:cover;object-position:center;display:block}</style> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand" href="/"> <img src="/assets/img/heberlelab-logo-header.svg" alt="Heberle Lab" style="height: 52px; width: auto;"> </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">Home </a> </li> <li class="nav-item dropdown "> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Research </a> <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> <a class="dropdown-item " href="/overview/">Overview</a> <a class="dropdown-item " href="/domains/">Domains</a> <a class="dropdown-item " href="/asymmetry/">Asymmetry</a> </div> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">Publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/people/">People </a> </li> <li class="nav-item active"> <a class="nav-link" href="/resources/">Resources <span class="sr-only">(current)</span> </a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Phosphate Assay Analyzer</h1> <p class="post-description">Determine phospholipid stock concentration and its uncertainty from a Bartlett inorganic-phosphate assay (Heberle Lab SOP-PIASSAY-001).</p> </header> <article> <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script> <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script> <style>.pa-tool{max-width:860px}.pa-desc{font-size:14px;color:#aaa;margin-bottom:24px;line-height:1.6}.pa-desc a{color:#00c244}.pa-desc code{background:#1e1e1e;padding:1px 5px;border-radius:3px}.pa-h{font-size:15px;color:#ccc;margin:26px 0 10px;font-weight:600}.pa-sub{font-size:12px;color:#888;margin:0 0 12px;line-height:1.5}.pa-settings{display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px}.pa-field{display:flex;flex-direction:column;gap:4px}.pa-field label{font-size:12px;color:#bbb}.pa-num{width:110px;padding:6px 8px;border:1px solid #555;border-radius:4px;background:#1e1e1e;color:#f0f0f0;font-size:14px}.pa-txt{width:260px;padding:6px 8px;border:1px solid #555;border-radius:4px;background:#1e1e1e;color:#f0f0f0;font-size:14px}.pa-num-sm{width:62px;padding:5px 6px;border:1px solid #555;border-radius:4px;background:#1e1e1e;color:#f0f0f0;font-size:14px}select.pa-num{width:90px;cursor:pointer}.pa-conv{font-size:12px;color:#888;margin:8px 0 0}.pa-conv summary{cursor:pointer;color:#00c244;width:fit-content}.pa-conv-row{display:flex;gap:14px;align-items:flex-end;margin-top:8px;flex-wrap:wrap}.pa-btn{padding:9px 22px;border:0;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}.pa-btn:disabled{opacity:.4;cursor:default}.pa-primary{background:#00c244;color:#fff}.pa-primary:hover:not(:disabled){background:#00a838}.pa-secondary{background:#2a2a2a;color:#ddd;border:1px solid #444}.pa-secondary:hover:not(:disabled){background:#383838}.pa-mini{padding:5px 12px;font-size:13px;background:#2a2a2a;color:#ddd;border:1px solid #444;border-radius:5px;cursor:pointer}.pa-mini:hover{background:#383838}.pa-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:24px 0 8px}.pa-two{display:grid;grid-template-columns:1fr 1fr;gap:26px}@media(max-width:760px){.pa-two{grid-template-columns:1fr}}table.pa-input{width:100%;border-collapse:collapse;font-size:13px}table.pa-input th{background:#222;padding:7px 6px;border:1px solid #333;color:#bbb;font-weight:600;font-size:12px}table.pa-input td{padding:3px 5px;border:1px solid #2a2a2a;text-align:center}table.pa-input input[type="number"]{width:74px;padding:4px 5px;border:1px solid #444;border-radius:3px;background:#1a1a1a;color:#f0f0f0;font-size:13px;text-align:right}table.pa-input input.pa-bad{border-color:#c22}.pa-auto{color:#888;font-size:12px}.pa-flag{font-size:11px;font-weight:600}.pa-flag.ok{color:#00c244}.pa-flag.warn{color:#e0a020}.pa-del{background:0;border:0;color:#a55;cursor:pointer;font-size:15px;line-height:1;padding:2px 6px}.pa-del:hover{color:#f66}.pa-addrow{margin-top:6px}#pa-status{display:none;padding:10px 14px;border-radius:6px;margin:16px 0;font-size:14px}.pa-err{background:rgba(200,0,0,0.12);color:#ff7070;border:1px solid #c22}.pa-info{background:rgba(0,194,68,0.1);color:#00c244;border:1px solid #00c244}.pa-hero{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:22px 24px;margin-bottom:18px;text-align:center}.pa-hero .lbl{font-size:13px;color:#888;margin-bottom:6px}.pa-hero .val{font-size:30px;font-weight:700;color:#f0f0f0}.pa-hero .val .pm{color:#00c244}.pa-hero .rel{font-size:13px;color:#999;margin-top:6px}.pa-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}@media(max-width:640px){.pa-cards{grid-template-columns:1fr}}.pa-card{background:#1a1a1a;border:1px solid #2e2e2e;border-radius:8px;padding:14px 16px}.pa-card h4{margin:0 0 8px;font-size:13px;color:#888;text-align:center}.pa-card .krow{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:#ccc}.pa-card .krow span:last-child{color:#f0f0f0;font-weight:600}.pa-ubar{height:10px;border-radius:5px;overflow:hidden;display:flex;margin:6px 0 4px;background:#2e2e2e}.pa-ubar .rep{background:#1a73e8;height:100%}.pa-ubar .cal{background:#c0a;height:100%}.pa-ulegend{display:flex;gap:16px;font-size:12px;color:#aaa;justify-content:center;margin-top:4px}.pa-swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}.pa-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}.pa-tbl th{background:#222;padding:8px 10px;border:1px solid #333;color:#bbb;font-weight:600;font-size:12px}.pa-tbl td{padding:7px 10px;border:1px solid #2a2a2a;text-align:center}.pa-tbl tr:nth-child(even){background:#191919}.pa-tbl tr.excluded td{color:#666;text-decoration:line-through}.pa-dbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}#pa-plot{background:white;border-radius:6px;display:inline-block}.pa-planner{background:#15201a;border:1px solid #1f4030;border-radius:8px;padding:4px 16px 16px;margin:6px 0 4px}.pa-planner summary{cursor:pointer;color:#00c244;font-weight:600;font-size:14px;padding:10px 0;list-style:none}.pa-planner summary::-webkit-details-marker{display:none}.pa-planner summary::before{content:"🎯 "}.pa-plan-out{font-size:13px;color:#cdd;line-height:1.6}.pa-plan-out .big{color:#00c244;font-weight:700}
+.pa-plan-std{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}.pa-plan-std th,.pa-plan-std td{border:1px solid #24402f;padding:5px 8px;text-align:center}.pa-plan-std th{background:#16241b;color:#9cc}.pa-coach{border:1px solid #2e2e2e;border-radius:10px;padding:18px 20px;margin-bottom:20px;background:#171717}.pa-banner{border-radius:8px;padding:12px 14px;font-size:14px;font-weight:600;margin-bottom:14px;line-height:1.5}.pa-banner.cal{background:rgba(204,0,170,0.12);border:1px solid #c0a;color:#f0a8e0}.pa-banner.rep{background:rgba(26,115,232,0.12);border:1px solid #1a73e8;color:#a8c8f0}.pa-banner.mix{background:rgba(224,160,32,0.12);border:1px solid #e0a020;color:#e8cd90}.pa-coach ul{margin:0 0 14px;padding-left:20px;font-size:13.5px;color:#ccc;line-height:1.65}.pa-coach li{margin-bottom:5px}.pa-coach b{color:#f0f0f0}.pa-proj{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 12px}.pa-proj th{background:#222;padding:8px 10px;border:1px solid #333;color:#bbb;font-size:12px}.pa-proj td{padding:7px 10px;border:1px solid #2a2a2a;text-align:center;color:#ddd}.pa-proj tr.best td{background:rgba(0,194,68,0.08);color:#cfeecf}.pa-proj td:first-child{text-align:left}.pa-floor{font-size:13px;color:#f0a8e0;background:rgba(204,0,170,0.08);border-left:3px solid #c0a;padding:8px 12px;border-radius:4px;margin:10px 0}.pa-qc{font-size:13.5px;padding:10px 14px;border-radius:6px;margin-top:12px;line-height:1.5}.pa-qc.ok{background:rgba(0,194,68,0.1);border:1px solid #00c244;color:#bfeccf}.pa-qc.bad{background:rgba(224,160,32,0.12);border:1px solid #e0a020;color:#e8cd90}</style> <div class="pa-tool"> <p class="pa-desc"> Determine the concentration and uncertainty of a phospholipid stock solution from a Bartlett inorganic-phosphate assay, following Heberle Lab <strong>SOP-PIASSAY-001</strong>. Enter the absorbance readings for your standard curve and your replicate samples below, then click <strong>Analyze</strong>. The tool fits a linear standard curve (floating intercept from your blanks), converts each sample's absorbance to phosphate, and reports the stock concentration with a 95% confidence interval that combines <em>replicate scatter</em> and <em>standard-curve uncertainty</em>. For most phospholipids (PC, PE, PS, PG, PI, PA, SM) there is <code>1</code> phosphate per lipid; cardiolipin has <code>2</code>. </p> <div class="pa-h">Assay parameters</div> <div class="pa-settings"> <div class="pa-field"> <label>Phosphate standard (mM)</label> <input class="pa-num" type="number" id="pa-stdconc" value="5.805" step="0.001" min="0"> </div> <div class="pa-field"> <label>Phosphates per lipid</label> <input class="pa-num-sm" type="number" id="pa-ppl" value="1" step="1" min="0.5"> </div> <div class="pa-field"> <label>Confidence level</label> <select class="pa-num" id="pa-cl"> <option value="0.90">90%</option> <option value="0.95" selected>95%</option> <option value="0.99">99%</option> </select> </div> <div class="pa-field"> <label title="From gravimetric prep — enables planning and a QC check">Expected conc (mM)</label> <input class="pa-num" type="number" id="pa-expconc" step="0.1" min="0" placeholder="optional" oninput="updatePlanner()"> </div> <div class="pa-field"> <label>Gravimetric ±%</label> <input class="pa-num-sm" type="number" id="pa-grav" value="5" step="1" min="0"> </div> <div class="pa-field" style="flex: 1; min-width: 220px"> <label>Sample name (optional)</label> <input class="pa-txt" style="width: 100%" type="text" id="pa-name" placeholder="e.g. POPC stock, 2026-07-22"> </div> </div> <details class="pa-conv"> <summary>Compute standard concentration from mg/mL</summary> <div class="pa-conv-row"> <div class="pa-field"> <label>Standard (mg/mL)</label> <input class="pa-num-sm" type="number" id="pa-mgml" step="0.001" placeholder="0.5"> </div> <div class="pa-field"> <label>Formula weight (g/mol)</label> <input class="pa-num-sm" type="number" id="pa-fw" step="0.0001" placeholder="94.9714"> </div> <button class="pa-mini" type="button" onclick="convMgml()">→ set mM</button> <span class="pa-auto" id="pa-conv-out"></span> </div> </details> <p class="pa-sub" style="margin-top: 8px"> Note: 1 mM = 1 nmol phosphate per µL of standard, so nmol Pi in each standard tube = (standard volume in µL) × (standard mM). </p> <details class="pa-planner" id="pa-planner"> <summary>Plan my assay  — design the standard curve <em>before</em> you start</summary> <div class="pa-plan-out" id="pa-plan-out"> Enter your <strong>expected concentration</strong> above (you usually know it to within a few percent from weighing out the lipid). The planner will recommend a sample volume and a standard curve that put your reading in the best-determined part of the curve — where the standard-curve contribution to your uncertainty is smallest. </div> </details> <div class="pa-two"> <div> <div class="pa-h">Calibration standards</div> <p class="pa-sub">Include ≥2 blanks (0 µL) for the intercept. Uncheck a row to drop it from the fit.</p> <table class="pa-input"> <thead> <tr> <th style="width: 34px">use</th> <th>Std vol (µL)</th> <th>Absorbance</th> <th>nmol Pi</th> <th style="width: 30px"></th> </tr> </thead> <tbody id="pa-std-body"></tbody> </table> <button class="pa-mini pa-addrow" type="button" onclick="addStdRow()">+ add standard</button> </div> <div> <div class="pa-h">Replicate samples (unknowns)</div> <p class="pa-sub">One row per tube. Volumes are typically multiples of 0.5 µL (25 µL Hamilton, 50 clicks).</p> <table class="pa-input"> <thead> <tr> <th style="width: 34px">use</th> <th>Sample vol (µL)</th> <th>Absorbance</th> <th>status</th> <th style="width: 30px"></th> </tr> </thead> <tbody id="pa-unk-body"></tbody> </table> <button class="pa-mini pa-addrow" type="button" onclick="addUnkRow()">+ add sample</button> </div> </div> <div class="pa-actions"> <button class="pa-btn pa-primary" id="pa-run">Analyze</button> <button class="pa-btn pa-secondary" type="button" onclick="loadExample()">Load example data</button> <button class="pa-btn pa-secondary" type="button" onclick="clearAll()">Clear</button> </div> <div id="pa-status"></div> <div id="pa-results" style="display: none"> <div class="pa-h" style="margin-top: 28px">Result</div> <div class="pa-hero" id="pa-hero"></div> <div class="pa-cards" id="pa-cards"></div> <div class="pa-h">Coaching — how to tighten this result</div> <div class="pa-coach" id="pa-coach"></div> <div class="pa-h">Per-replicate concentrations</div> <div id="pa-reptable"></div> <div class="pa-h">Plots</div> <div class="pa-dbar"> <button class="pa-btn pa-secondary" onclick="dlPlot('svg')">⬇ SVG (vector)</button> <button class="pa-btn pa-secondary" onclick="dlPlot('png')">⬇ PNG (300 DPI)</button> <button class="pa-btn pa-secondary" onclick="dlXLSX()">⬇ Results XLSX</button> </div> <div id="pa-plot"></div> </div> </div> <script>
+  // ══════════════════════════════════════════════════════════
+  //  Statistics helpers
+  // ══════════════════════════════════════════════════════════
+  const mean = (a) => a.reduce((s, v) => s + v, 0) / a.length;
+  const stdev = (a) => {
+    if (a.length < 2) return 0;
+    const m = mean(a);
+    return Math.sqrt(a.reduce((s, v) => s + (v - m) ** 2, 0) / (a.length - 1));
+  };
+
+  // log-gamma (Lanczos)
+  function logGamma(z) {
+    const g = [
+      676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012,
+      9.9843695780195716e-6, 1.5056327351493116e-7,
+    ];
+    if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - logGamma(1 - z);
+    z -= 1;
+    let x = 0.99999999999980993;
+    for (let i = 0; i < g.length; i++) x += g[i] / (z + i + 1);
+    const t = z + g.length - 0.5;
+    return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+  }
+
+  // regularized incomplete beta I_x(a,b) (Numerical Recipes)
+  function betacf(a, b, x) {
+    const FPMIN = 1e-30;
+    let qab = a + b,
+      qap = a + 1,
+      qam = a - 1;
+    let c = 1,
+      d = 1 - (qab * x) / qap;
+    if (Math.abs(d) < FPMIN) d = FPMIN;
+    d = 1 / d;
+    let h = d;
+    for (let m = 1; m <= 200; m++) {
+      const m2 = 2 * m;
+      let aa = (m * (b - m) * x) / ((qam + m2) * (a + m2));
+      d = 1 + aa * d;
+      if (Math.abs(d) < FPMIN) d = FPMIN;
+      c = 1 + aa / c;
+      if (Math.abs(c) < FPMIN) c = FPMIN;
+      d = 1 / d;
+      h *= d * c;
+      aa = (-(a + m) * (qab + m) * x) / ((a + m2) * (qap + m2));
+      d = 1 + aa * d;
+      if (Math.abs(d) < FPMIN) d = FPMIN;
+      c = 1 + aa / c;
+      if (Math.abs(c) < FPMIN) c = FPMIN;
+      d = 1 / d;
+      const del = d * c;
+      h *= del;
+      if (Math.abs(del - 1) < 1e-12) break;
+    }
+    return h;
+  }
+  function ibeta(a, b, x) {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    const bt = Math.exp(logGamma(a + b) - logGamma(a) - logGamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+    if (x < (a + 1) / (a + b + 2)) return (bt * betacf(a, b, x)) / a;
+    return 1 - (bt * betacf(b, a, 1 - x)) / b;
+  }
+  // Student-t CDF
+  function tCDF(t, df) {
+    const x = df / (df + t * t);
+    const ib = 0.5 * ibeta(df / 2, 0.5, x);
+    return t > 0 ? 1 - ib : ib;
+  }
+  // Student-t quantile (inverse CDF) via bisection
+  function tInv(p, df) {
+    if (!isFinite(df) || df <= 0) return NaN;
+    if (p === 0.5) return 0;
+    const target = p > 0.5 ? p : 1 - p;
+    let lo = 0,
+      hi = 1e4;
+    for (let i = 0; i < 200; i++) {
+      const mid = (lo + hi) / 2;
+      if (tCDF(mid, df) < target) lo = mid;
+      else hi = mid;
+    }
+    const t = (lo + hi) / 2;
+    return p > 0.5 ? t : -t;
+  }
+
+  // Ordinary least squares  y = a + b*x
+  function linreg(x, y) {
+    const n = x.length;
+    const xb = mean(x),
+      yb = mean(y);
+    let Sxx = 0,
+      Sxy = 0,
+      Syy = 0;
+    for (let i = 0; i < n; i++) {
+      Sxx += (x[i] - xb) ** 2;
+      Sxy += (x[i] - xb) * (y[i] - yb);
+      Syy += (y[i] - yb) ** 2;
+    }
+    const b = Sxy / Sxx;
+    const a = yb - b * xb;
+    let sse = 0;
+    for (let i = 0; i < n; i++) sse += (y[i] - (a + b * x[i])) ** 2;
+    const s = n > 2 ? Math.sqrt(sse / (n - 2)) : 0; // residual standard error (STEYX)
+    const r2 = Syy > 0 ? 1 - sse / Syy : 0;
+    return { a, b, n, xbar: xb, Sxx, s, r2 };
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Analysis
+  // ══════════════════════════════════════════════════════════
+  let RES = null;
+
+  function analyze(stds, unks, stdConc, ppl, CL) {
+    // stds: [{vol, abs}], unks: [{vol, abs}]  (already filtered to "included")
+    if (stds.length < 3) throw new Error("Need at least 3 included standards (including blanks) to fit the curve.");
+    const nmolStd = stds.map((s) => s.vol * stdConc);
+    const absStd = stds.map((s) => s.abs);
+    if (new Set(nmolStd).size < 2) throw new Error("Standards must span at least two different phosphate amounts.");
+
+    const cal = linreg(nmolStd, absStd); // abs = a + b*nmol
+    if (!(cal.b > 0) || !isFinite(cal.b)) throw new Error("Standard curve slope is not positive — check the absorbance/volume columns.");
+
+    if (unks.length < 1) throw new Error("Enter at least one replicate sample.");
+
+    // Per-replicate: nmol = (abs - a)/b ; conc(mM) = nmol/vol/ppl
+    const absMin = Math.min(...absStd),
+      absMax = Math.max(...absStd);
+    const reps = unks.map((u, i) => {
+      const nmol = (u.abs - cal.a) / cal.b;
+      const conc = nmol / u.vol / ppl;
+      const inRange = u.abs >= absMin - 1e-9 && u.abs <= absMax + 1e-9;
+      // calibration-line SE of this nmol (line-estimation part only; 1/m reading
+      // noise is captured empirically by the replicate scatter, so it is omitted
+      // here to avoid double-counting).
+      const seNmolCal = (cal.s / Math.abs(cal.b)) * Math.sqrt(1 / cal.n + (nmol - cal.xbar) ** 2 / cal.Sxx);
+      const uCalConc = seNmolCal / u.vol / ppl;
+      return { idx: i + 1, vol: u.vol, abs: u.abs, nmol, conc, inRange, uCalConc };
+    });
+
+    const m = reps.length;
+    const concs = reps.map((r) => r.conc);
+    const cbar = mean(concs);
+    const sd = stdev(concs);
+    const uRep = m > 1 ? sd / Math.sqrt(m) : 0; // replicate SEM (random)
+    // Calibration term is a shared/systematic error → perfectly correlated across
+    // replicates, so its contribution to the mean is the (linear) average of the
+    // per-replicate calibration SEs, not a 1/√m reduction.
+    const uCal = mean(reps.map((r) => r.uCalConc));
+    const uComb = Math.sqrt(uRep * uRep + uCal * uCal);
+
+    // Welch–Satterthwaite effective df for the combined uncertainty
+    const dfRep = m - 1,
+      dfCal = cal.n - 2;
+    let dfEff;
+    if (uRep === 0) dfEff = dfCal;
+    else if (uCal === 0) dfEff = dfRep;
+    else dfEff = uComb ** 4 / (uRep ** 4 / dfRep + uCal ** 4 / dfCal);
+
+    const tstar = tInv(1 - (1 - CL) / 2, dfEff);
+    const ci = tstar * uComb;
+
+    // replicate-only CI (for reference / continuity with the old spreadsheet)
+    const ciRepOnly = m > 1 ? tInv(1 - (1 - CL) / 2, dfRep) * uRep : NaN;
+
+    const cv = m > 1 ? sd / cbar : NaN; // replicate coefficient of variation
+
+    return {
+      cal,
+      reps,
+      m,
+      cbar,
+      sd,
+      cv,
+      uRep,
+      uCal,
+      uComb,
+      dfEff,
+      tstar,
+      ci,
+      ciRepOnly,
+      CL,
+      stdConc,
+      ppl,
+      absMin,
+      absMax,
+      name: document.getElementById("pa-name").value.trim(),
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Rendering
+  // ══════════════════════════════════════════════════════════
+  function fmt(v, d = 3) {
+    return isFinite(v) ? v.toFixed(d) : "—";
+  }
+
+  function renderResults(R) {
+    const clPct = Math.round(R.CL * 100);
+
+    // Hero
+    document.getElementById("pa-hero").innerHTML = `
+      <div class="lbl">Stock concentration</div>
+      <div class="val">${fmt(R.cbar, 2)} <span class="pm">± ${fmt(R.ci, 2)}</span> mM</div>
+      <div class="rel">${clPct}% confidence interval &nbsp;·&nbsp; relative error ${fmt((R.ci / R.cbar) * 100, 2)}% &nbsp;·&nbsp; ${R.m} replicate${
+        R.m > 1 ? "s" : ""
+      }</div>`;
+
+    // Cards
+    const c = R.cal;
+    const repPct = R.uComb > 0 ? (R.uRep ** 2 / R.uComb ** 2) * 100 : 0;
+    const calPct = 100 - repPct;
+    const cvFlag = !isFinite(R.cv)
+      ? ""
+      : R.cv <= 0.01
+        ? '<span class="pa-flag ok">&lt;1%</span>'
+        : R.cv <= 0.02
+          ? '<span class="pa-flag warn">1–2%</span>'
+          : '<span class="pa-flag warn">&gt;2%</span>';
+
+    document.getElementById("pa-cards").innerHTML = `
+      <div class="pa-card">
+        <h4>Standard curve</h4>
+        <div class="krow"><span>slope</span><span>${fmt(c.b, 5)}</span></div>
+        <div class="krow"><span>intercept</span><span>${fmt(c.a, 5)}</span></div>
+        <div class="krow"><span>R²</span><span>${fmt(c.r2, 5)}</span></div>
+        <div class="krow"><span>resid. SE</span><span>${fmt(c.s, 5)}</span></div>
+        <div class="krow"><span># standards</span><span>${c.n}</span></div>
+      </div>
+      <div class="pa-card">
+        <h4>Replicate scatter</h4>
+        <div class="krow"><span>mean</span><span>${fmt(R.cbar, 3)} mM</span></div>
+        <div class="krow"><span>SD</span><span>${fmt(R.sd, 3)} mM</span></div>
+        <div class="krow"><span>CV</span><span>${isFinite(R.cv) ? fmt(R.cv * 100, 2) + "% " : "—"}${cvFlag}</span></div>
+        <div class="krow"><span>SEM</span><span>${fmt(R.uRep, 3)} mM</span></div>
+        <div class="krow"><span>n</span><span>${R.m}</span></div>
+      </div>
+      <div class="pa-card">
+        <h4>Uncertainty budget</h4>
+        <div class="krow"><span>replicate</span><span>${fmt(R.uRep, 3)} mM</span></div>
+        <div class="krow"><span>calibration</span><span>${fmt(R.uCal, 3)} mM</span></div>
+        <div class="krow"><span>combined</span><span>${fmt(R.uComb, 3)} mM</span></div>
+        <div class="pa-ubar">
+          <div class="rep" style="width:${repPct}%"></div>
+          <div class="cal" style="width:${calPct}%"></div>
+        </div>
+        <div class="pa-ulegend">
+          <span><span class="pa-swatch" style="background:#1a73e8"></span>replicate ${Math.round(repPct)}%</span>
+          <span><span class="pa-swatch" style="background:#cc00aa"></span>calib. ${Math.round(calPct)}%</span>
+        </div>
+        <div class="krow" style="margin-top:6px"><span>t (df≈${fmt(R.dfEff, 1)})</span><span>${fmt(R.tstar, 3)}</span></div>
+      </div>`;
+
+    // Per-replicate table
+    let html =
+      '<table class="pa-tbl"><thead><tr><th>#</th><th>Vol (µL)</th><th>Absorbance</th><th>nmol Pi</th><th>Conc (mM)</th><th>In range?</th></tr></thead><tbody>';
+    R.reps.forEach((r) => {
+      html += `<tr${r.inRange ? "" : ' class="excluded"'}>
+        <td>${r.idx}</td><td>${fmt(r.vol, 2)}</td><td>${fmt(r.abs, 4)}</td>
+        <td>${fmt(r.nmol, 2)}</td><td>${fmt(r.conc, 3)}</td>
+        <td>${r.inRange ? '<span class="pa-flag ok">yes</span>' : '<span class="pa-flag warn">extrapolated</span>'}</td></tr>`;
+    });
+    html += `<tr style="font-weight:700;background:#151515"><td colspan="4" style="text-align:right">Mean ± ${clPct}% CI</td><td colspan="2">${fmt(
+      R.cbar,
+      3
+    )} ± ${fmt(R.ci, 3)} mM</td></tr>`;
+    html += "</tbody></table>";
+    const outRange = R.reps.filter((r) => !r.inRange).length;
+    if (outRange > 0)
+      html += `<p class="pa-sub">⚠ ${outRange} sample${outRange > 1 ? "s fall" : " falls"} outside the standard curve's absorbance range (${fmt(
+        R.absMin,
+        3
+      )}–${fmt(R.absMax, 3)}); those points are extrapolated. Uncheck them above and re-analyze, or extend your standard curve.</p>`;
+    document.getElementById("pa-reptable").innerHTML = html;
+
+    renderCoaching(R);
+    makePlot(R);
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Coaching  (diagnose + quantified projections + QC)
+  // ══════════════════════════════════════════════════════════
+  // Recompute the combined 95% CI for a hypothetical (u_rep, u_cal) pair,
+  // reusing the same replicate/calibration degrees of freedom.
+  function projectCI(R, uRep, uCal) {
+    const dfRep = R.m - 1,
+      dfCal = R.cal.n - 2;
+    const uComb = Math.sqrt(uRep * uRep + uCal * uCal);
+    let dfEff;
+    if (uRep === 0) dfEff = dfCal;
+    else if (uCal === 0) dfEff = dfRep;
+    else dfEff = uComb ** 4 / (uRep ** 4 / dfRep + uCal ** 4 / dfCal);
+    return tInv(1 - (1 - R.CL) / 2, dfEff) * uComb;
+  }
+
+  function recommendedStandards(centerNmol, stdConc) {
+    // levels bracketing and roughly centering on the sample amount, + 2 blanks
+    const levels = [0, 0, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75];
+    return levels.map((f) => {
+      const nmol = f * centerNmol;
+      const vol = Math.max(0, Math.round((nmol / stdConc) * 2) / 2); // round to 0.5 µL
+      return { vol, nmol: vol * stdConc };
+    });
+  }
+
+  function renderCoaching(R) {
+    const c = R.cal;
+    const clPct = Math.round(R.CL * 100);
+    const calFrac = R.uComb > 0 ? R.uCal ** 2 / R.uComb ** 2 : 0;
+    const sCent = mean(R.reps.map((r) => r.nmol)); // sample centroid (nmol)
+    const Vmean = mean(R.reps.map((r) => r.vol));
+    const sweetHalf = Math.sqrt(c.Sxx / c.n); // "sweet spot" half-width around x̄
+    const stdMaxNmol = Math.max(...R._stdRows.map((s) => s.nmol));
+    const stdMinNmol = Math.min(...R._stdRows.map((s) => s.nmol));
+    const sMax = Math.max(...R.reps.map((r) => r.nmol));
+    const sMin = Math.min(...R.reps.map((r) => r.nmol));
+    const nAbove = R._stdRows.filter((s) => s.nmol > sMax).length;
+    const nBelow = R._stdRows.filter((s) => s.nmol < sMin).length;
+    const nExtrap = R.reps.filter((r) => !r.inRange).length;
+
+    // ── Banner: which term limits precision
+    let banner, bClass;
+    if (calFrac >= 0.55) {
+      bClass = "cal";
+      banner = `Your precision is <b>limited by the standard curve</b>, not by your replicates — about ${Math.round(
+        calFrac * 100
+      )}% of the variance comes from the calibration. Running more sample tubes will barely help; the win is in <b>where you place your standards</b>.`;
+    } else if (calFrac <= 0.35) {
+      bClass = "rep";
+      banner = `Your precision is <b>limited by tube-to-tube scatter</b> (${Math.round(
+        (1 - calFrac) * 100
+      )}% of the variance). Your standard curve is well placed — improve by tightening dispensing technique or running more replicates.`;
+    } else {
+      bClass = "mix";
+      banner = `Replicate scatter and the standard curve contribute about equally here (${Math.round(
+        (1 - calFrac) * 100
+      )}% / ${Math.round(calFrac * 100)}%). Both levers are worth pulling.`;
+    }
+
+    // ── Observations
+    const obs = [];
+    obs.push(
+      `Your samples sit at <b>~${sCent.toFixed(0)} nmol</b>; your standards are centered at <b>~${c.xbar.toFixed(
+        0
+      )} nmol</b> (best-determined zone ≈ ${Math.max(0, c.xbar - sweetHalf).toFixed(0)}–${(c.xbar + sweetHalf).toFixed(0)} nmol).`
+    );
+    if (nExtrap > 0)
+      obs.push(
+        `<b style="color:#e0a020">${nExtrap} sample${nExtrap > 1 ? "s are" : " is"} outside your standard range</b> (${stdMinNmol.toFixed(
+          0
+        )}–${stdMaxNmol.toFixed(0)} nmol) — those points are extrapolated, which inflates error sharply. Add standards that bracket them.`
+      );
+    else if (nAbove === 0)
+      obs.push(
+        `You have <b>no standards above your samples</b> — the curve is unconstrained on the high side. Add one or two standards above ~${sMax.toFixed(0)} nmol.`
+      );
+    if (Math.abs(sCent - c.xbar) > sweetHalf)
+      obs.push(
+        `Your samples are <b>off-center</b> from the curve by ${Math.abs(sCent - c.xbar).toFixed(
+          0
+        )} nmol — more than the curve's sweet-spot half-width (${sweetHalf.toFixed(0)} nmol). This is the (x₀−x̄)²/Sₓₓ penalty at work.`
+      );
+
+    // ── Projections
+    const uCalCentered = mean(R.reps.map((r) => ((c.s / Math.abs(c.b)) * Math.sqrt(1 / c.n + (r.nmol - sCent) ** 2 / c.Sxx)) / r.vol / R.ppl));
+    const ciCurrent = R.ci;
+    const ciDouble = R.m > 1 ? projectCI(R, R.sd / Math.sqrt(2 * R.m), R.uCal) : NaN;
+    const ciCentered = projectCI(R, R.uRep, uCalCentered);
+    const ciBoth = projectCI(R, R.m > 1 ? R.sd / Math.sqrt(2 * R.m) : 0, uCalCentered);
+    // Calibration floor: unlimited replicates on THIS curve → CI approaches t·u_cal
+    const floorNow = tInv(1 - (1 - R.CL) / 2, Math.max(1, c.n - 2)) * R.uCal;
+    const floorCentered = tInv(1 - (1 - R.CL) / 2, Math.max(1, c.n - 2)) * uCalCentered;
+
+    let proj = `<table class="pa-proj"><thead><tr><th>Scenario</th><th>calibration u (mM)</th><th>${clPct}% CI (mM)</th></tr></thead><tbody>`;
+    proj += `<tr><td>Current design (${R.m} replicates)</td><td>${R.uCal.toFixed(3)}</td><td>±${ciCurrent.toFixed(3)}</td></tr>`;
+    if (isFinite(ciDouble))
+      proj += `<tr><td>Double the replicates (${2 * R.m}) — same curve</td><td>${R.uCal.toFixed(3)}</td><td>±${ciDouble.toFixed(3)}</td></tr>`;
+    proj += `<tr class="best"><td>Center standards on your samples (~${sCent.toFixed(0)} nmol)</td><td>${uCalCentered.toFixed(
+      3
+    )}</td><td>±${ciCentered.toFixed(3)}</td></tr>`;
+    proj += `<tr class="best"><td>Centered standards <em>and</em> ${2 * R.m} replicates</td><td>${uCalCentered.toFixed(3)}</td><td>±${ciBoth.toFixed(
+      3
+    )}</td></tr>`;
+    proj += "</tbody></table>";
+
+    // ── Concrete recommended standard set
+    const rec = recommendedStandards(sCent, R.stdConc);
+    let recTxt = `<div style="font-size:13px;color:#ccc;margin:6px 0 2px"><b>A curve centered on your samples</b> (with your ${R.stdConc} mM standard) — e.g. these volumes:</div>`;
+    recTxt +=
+      `<div style="font-size:13px;color:#9c9">` + rec.map((s) => `${s.vol} µL (${s.nmol.toFixed(0)} nmol)`).join(" &nbsp;·&nbsp; ") + `</div>`;
+
+    // ── Floor callout
+    const floorLine = `<div class="pa-floor">Even with <b>unlimited</b> replicates, this standard curve limits you to about <b>±${floorNow.toFixed(
+      2
+    )} mM</b>. Center the standards on your samples and that floor drops to about <b>±${floorCentered.toFixed(2)} mM</b>.</div>`;
+
+    // ── QC vs gravimetric
+    let qc = "";
+    if (R.expectedConc) {
+      const rel = (R.cbar - R.expectedConc) / R.expectedConc;
+      const relPct = (rel * 100).toFixed(1);
+      if (Math.abs(rel) <= R.gravPct / 100)
+        qc = `<div class="pa-qc ok">✓ Measured <b>${R.cbar.toFixed(2)} mM</b> agrees with your gravimetric estimate of ${R.expectedConc.toFixed(
+          2
+        )} mM (${rel >= 0 ? "+" : ""}${relPct}%), within your stated ±${R.gravPct}%.</div>`;
+      else
+        qc = `<div class="pa-qc bad">⚠ Measured <b>${R.cbar.toFixed(2)} mM</b> differs from your gravimetric estimate of ${R.expectedConc.toFixed(
+          2
+        )} mM by ${rel >= 0 ? "+" : ""}${relPct}% — larger than your ±${R.gravPct}%. Worth checking: dispensed volume accuracy, incomplete solvent evaporation before ashing, an error in the standard, or a curve problem.</div>`;
+    }
+
+    document.getElementById("pa-coach").innerHTML =
+      `<div class="pa-banner ${bClass}">${banner}</div>` +
+      `<ul><li>${obs.join("</li><li>")}</li></ul>` +
+      `<div style="font-size:13.5px;color:#bbb;margin-bottom:4px"><b>What would tighten it</b> (same curve quality assumed):</div>` +
+      proj +
+      recTxt +
+      floorLine +
+      qc;
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Plot
+  // ══════════════════════════════════════════════════════════
+  function makePlot(R) {
+    const c = R.cal;
+    const nmolStdMax = Math.max(...R.reps.map((r) => r.nmol), (R.absMax - c.a) / c.b);
+    const xhi = nmolStdMax * 1.08;
+    const tBand = tInv(1 - (1 - R.CL) / 2, Math.max(1, c.n - 2));
+
+    // fit line + confidence band
+    const xs = [],
+      yfit = [],
+      yUp = [],
+      yLo = [];
+    const steps = 80;
+    for (let i = 0; i <= steps; i++) {
+      const x = (xhi * i) / steps;
+      const yf = c.a + c.b * x;
+      const half = tBand * c.s * Math.sqrt(1 / c.n + (x - c.xbar) ** 2 / c.Sxx);
+      xs.push(x);
+      yfit.push(yf);
+      yUp.push(yf + half);
+      yLo.push(yf - half);
+    }
+
+    const stdIn = RES._stdRows; // {nmol, abs} used in the fit
+    const traces = [
+      // confidence band
+      {
+        x: xs.concat([...xs].reverse()),
+        y: yUp.concat([...yLo].reverse()),
+        fill: "toself",
+        fillcolor: "rgba(204,0,170,0.10)",
+        line: { color: "rgba(0,0,0,0)" },
+        hoverinfo: "skip",
+        showlegend: true,
+        name: `${Math.round(R.CL * 100)}% curve band`,
+        xaxis: "x",
+        yaxis: "y",
+      },
+      // fit line
+      {
+        x: xs,
+        y: yfit,
+        mode: "lines",
+        line: { color: "#00963a", width: 2.5 },
+        name: "standard curve",
+        xaxis: "x",
+        yaxis: "y",
+      },
+      // standard points
+      {
+        x: stdIn.map((s) => s.nmol),
+        y: stdIn.map((s) => s.abs),
+        mode: "markers",
+        marker: { symbol: "circle", size: 8, color: "#1565C0" },
+        name: "standards",
+        xaxis: "x",
+        yaxis: "y",
+      },
+      // unknown samples placed on the curve
+      {
+        x: R.reps.filter((r) => r.inRange).map((r) => r.nmol),
+        y: R.reps.filter((r) => r.inRange).map((r) => r.abs),
+        mode: "markers",
+        marker: { symbol: "diamond", size: 8, color: "#E65100", line: { color: "#fff", width: 0.5 } },
+        name: "samples",
+        xaxis: "x",
+        yaxis: "y",
+      },
+    ];
+    // extrapolated samples (hollow)
+    const ext = R.reps.filter((r) => !r.inRange);
+    if (ext.length)
+      traces.push({
+        x: ext.map((r) => r.nmol),
+        y: ext.map((r) => r.abs),
+        mode: "markers",
+        marker: { symbol: "diamond-open", size: 8, color: "#E65100" },
+        name: "extrapolated",
+        xaxis: "x",
+        yaxis: "y",
+      });
+
+    // ── bottom panel: per-replicate concentrations with mean ± CI band
+    const idxs = R.reps.map((r) => r.idx);
+    const xr = [0.5, R.m + 0.5];
+    traces.push(
+      // CI band
+      {
+        x: [xr[0], xr[1], xr[1], xr[0]],
+        y: [R.cbar - R.ci, R.cbar - R.ci, R.cbar + R.ci, R.cbar + R.ci],
+        fill: "toself",
+        fillcolor: "rgba(0,150,58,0.12)",
+        line: { color: "rgba(0,0,0,0)" },
+        hoverinfo: "skip",
+        showlegend: false,
+        xaxis: "x2",
+        yaxis: "y2",
+      },
+      // mean line
+      {
+        x: xr,
+        y: [R.cbar, R.cbar],
+        mode: "lines",
+        line: { color: "#00963a", width: 2 },
+        showlegend: false,
+        xaxis: "x2",
+        yaxis: "y2",
+      },
+      // replicate points
+      {
+        x: idxs,
+        y: R.reps.map((r) => r.conc),
+        mode: "markers",
+        marker: { symbol: "circle", size: 7, color: "#212121" },
+        showlegend: false,
+        xaxis: "x2",
+        yaxis: "y2",
+      }
+    );
+
+    // Aim zone: the best-determined region of the curve (x̄ ± √(Sxx/n)),
+    // where the standard-curve contribution to uncertainty is smallest.
+    const sweetHalf = Math.sqrt(c.Sxx / c.n);
+    const bandLo = Math.max(0, c.xbar - sweetHalf),
+      bandHi = c.xbar + sweetHalf;
+    const shapes = [
+      {
+        type: "rect",
+        xref: "x",
+        yref: "y domain",
+        x0: bandLo,
+        x1: bandHi,
+        y0: 0,
+        y1: 1,
+        fillcolor: "rgba(0,194,68,0.09)",
+        line: { width: 0 },
+        layer: "below",
+      },
+      {
+        type: "line",
+        xref: "x",
+        yref: "y domain",
+        x0: c.xbar,
+        x1: c.xbar,
+        y0: 0,
+        y1: 1,
+        line: { color: "rgba(0,150,58,0.55)", width: 1, dash: "dot" },
+      },
+    ];
+    const annotations = [
+      {
+        xref: "x",
+        yref: "y domain",
+        x: c.xbar,
+        y: 1.02,
+        text: "aim here",
+        showarrow: false,
+        font: { size: 10, color: "#00963a" },
+        xanchor: "center",
+        yanchor: "bottom",
+      },
+    ];
+    if (R.expectedConc) {
+      const targetNmol = R.expectedConc * mean(R.reps.map((r) => r.vol)) * R.ppl;
+      shapes.push({
+        type: "line",
+        xref: "x",
+        yref: "y domain",
+        x0: targetNmol,
+        x1: targetNmol,
+        y0: 0,
+        y1: 1,
+        line: { color: "#E65100", width: 1.2, dash: "dash" },
+      });
+      annotations.push({
+        xref: "x",
+        yref: "y domain",
+        x: targetNmol,
+        y: 0.08,
+        text: "expected",
+        showarrow: false,
+        font: { size: 10, color: "#E65100" },
+        xanchor: "left",
+        yanchor: "bottom",
+      });
+    }
+
+    const axBase = {
+      linecolor: "#333",
+      linewidth: 1.5,
+      mirror: true,
+      ticks: "outside",
+      tickcolor: "#333",
+      ticklen: 5,
+      gridcolor: "#eee",
+      zeroline: false,
+      showline: true,
+      tickfont: { size: 12, family: "Arial" },
+    };
+
+    const layout = {
+      paper_bgcolor: "white",
+      plot_bgcolor: "white",
+      font: { family: "Arial, sans-serif", size: 12, color: "#333" },
+      title: { text: R.name || "", font: { size: 13 }, x: 0.5, xanchor: "center" },
+      xaxis: { ...axBase, domain: [0, 1], anchor: "y", title: { text: "nmol phosphate", font: { size: 13, family: "Arial" } } },
+      yaxis: { ...axBase, domain: [0.4, 1.0], anchor: "x", title: { text: "Absorbance", font: { size: 13, family: "Arial" } } },
+      xaxis2: {
+        ...axBase,
+        domain: [0, 1],
+        anchor: "y2",
+        title: { text: "Replicate #", font: { size: 13, family: "Arial" } },
+        dtick: 1,
+        range: [0.5, R.m + 0.5],
+      },
+      yaxis2: { ...axBase, domain: [0, 0.28], anchor: "x2", title: { text: "Conc (mM)", font: { size: 12, family: "Arial" } } },
+      legend: {
+        x: 0.02,
+        y: 0.99,
+        xanchor: "left",
+        yanchor: "top",
+        bgcolor: "rgba(255,255,255,0.85)",
+        bordercolor: "#ccc",
+        borderwidth: 1,
+        font: { size: 11, family: "Arial" },
+      },
+      margin: { l: 66, r: 24, t: 42, b: 52 },
+      width: 640,
+      height: 620,
+      showlegend: true,
+      shapes: shapes,
+      annotations: annotations,
+    };
+
+    Plotly.react("pa-plot", traces, layout, { responsive: false, displayModeBar: false });
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Downloads
+  // ══════════════════════════════════════════════════════════
+  function safeName() {
+    return (document.getElementById("pa-name").value || "phosphate-assay").replace(/[^a-zA-Z0-9_-]/g, "_");
+  }
+  function dlPlot(fmt) {
+    const cfg = fmt === "svg" ? { format: "svg", width: 660, height: 620, scale: 1 } : { format: "png", width: 1320, height: 1240, scale: 2 };
+    Plotly.toImage("pa-plot", cfg)
+      .then((url) => {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = safeName() + "." + fmt;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+      .catch((e) => alert(fmt.toUpperCase() + " export failed: " + e.message));
+  }
+  function dlXLSX() {
+    if (!RES) return;
+    const wb = XLSX.utils.book_new();
+    const c = RES.cal;
+
+    const stdRows = [["Std vol (µL)", "nmol Pi", "Absorbance", "Fit Abs", "Residual"]];
+    RES._stdRows.forEach((s) => {
+      const fit = c.a + c.b * s.nmol;
+      stdRows.push([s.vol, s.nmol, s.abs, fit, s.abs - fit]);
+    });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(stdRows), "standards");
+
+    const unkRows = [["#", "Sample vol (µL)", "Absorbance", "nmol Pi", "Conc (mM)", "In range"]];
+    RES.reps.forEach((r) => unkRows.push([r.idx, r.vol, r.abs, r.nmol, r.conc, r.inRange ? "yes" : "extrapolated"]));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(unkRows), "samples");
+
+    const clPct = Math.round(RES.CL * 100);
+    const sum = [
+      ["Quantity", "Value", "Unit"],
+      ["Sample name", RES.name || "", ""],
+      ["Phosphate standard", RES.stdConc, "mM"],
+      ["Phosphates per lipid", RES.ppl, ""],
+      ["Curve slope", c.b, "Abs / nmol"],
+      ["Curve intercept", c.a, "Abs"],
+      ["Curve R²", c.r2, ""],
+      ["Curve residual SE", c.s, "Abs"],
+      ["# standards", c.n, ""],
+      ["Mean concentration", RES.cbar, "mM"],
+      ["Replicate SD", RES.sd, "mM"],
+      ["Replicate CV", isFinite(RES.cv) ? RES.cv : "", "fraction"],
+      ["u (replicate)", RES.uRep, "mM"],
+      ["u (calibration)", RES.uCal, "mM"],
+      ["u (combined)", RES.uComb, "mM"],
+      ["Effective df", RES.dfEff, ""],
+      ["t*", RES.tstar, ""],
+      [`${clPct}% CI half-width`, RES.ci, "mM"],
+      ["Relative error", RES.ci / RES.cbar, "fraction"],
+      [`${clPct}% CI (replicate only)`, RES.ciRepOnly, "mM"],
+      ["N replicates", RES.m, ""],
+    ];
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sum), "summary");
+    XLSX.writeFile(wb, safeName() + "_results.xlsx");
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Row management
+  // ══════════════════════════════════════════════════════════
+  function stdRowHTML(vol, abs) {
+    return `
+      <td><input type="checkbox" class="pa-use" checked></td>
+      <td><input type="number" class="pa-vol" step="0.5" min="0" value="${vol}" oninput="updNmol(this)"></td>
+      <td><input type="number" class="pa-abs" step="0.0001" value="${abs}"></td>
+      <td class="pa-nmol pa-auto">—</td>
+      <td><button class="pa-del" onclick="this.closest('tr').remove()" title="delete">✕</button></td>`;
+  }
+  function unkRowHTML(vol, abs) {
+    return `
+      <td><input type="checkbox" class="pa-use" checked></td>
+      <td><input type="number" class="pa-vol" step="0.5" min="0" value="${vol}"></td>
+      <td><input type="number" class="pa-abs" step="0.0001" value="${abs}"></td>
+      <td class="pa-stat pa-auto">—</td>
+      <td><button class="pa-del" onclick="this.closest('tr').remove()" title="delete">✕</button></td>`;
+  }
+  function addStdRow(vol = "", abs = "") {
+    const tr = document.createElement("tr");
+    tr.innerHTML = stdRowHTML(vol, abs);
+    document.getElementById("pa-std-body").appendChild(tr);
+    updNmol(tr.querySelector(".pa-vol"));
+  }
+  function addUnkRow(vol = "1.5", abs = "") {
+    const tr = document.createElement("tr");
+    tr.innerHTML = unkRowHTML(vol, abs);
+    document.getElementById("pa-unk-body").appendChild(tr);
+  }
+  function updNmol(volInput) {
+    const tr = volInput.closest("tr");
+    const cell = tr.querySelector(".pa-nmol");
+    const v = parseFloat(volInput.value);
+    const sc = parseFloat(document.getElementById("pa-stdconc").value);
+    cell.textContent = isFinite(v) && isFinite(sc) ? (v * sc).toFixed(2) : "—";
+  }
+  function refreshAllNmol() {
+    document.querySelectorAll("#pa-std-body .pa-vol").forEach(updNmol);
+  }
+
+  function readRows(bodyId) {
+    const rows = [];
+    document.querySelectorAll(`#${bodyId} tr`).forEach((tr) => {
+      const use = tr.querySelector(".pa-use").checked;
+      const vol = parseFloat(tr.querySelector(".pa-vol").value);
+      const abs = parseFloat(tr.querySelector(".pa-abs").value);
+      rows.push({ use, vol, abs, valid: isFinite(vol) && isFinite(abs) });
+    });
+    return rows;
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Example data (from the lab's reference spreadsheet)
+  // ══════════════════════════════════════════════════════════
+  function clearAll() {
+    document.getElementById("pa-std-body").innerHTML = "";
+    document.getElementById("pa-unk-body").innerHTML = "";
+    document.getElementById("pa-results").style.display = "none";
+    document.getElementById("pa-status").style.display = "none";
+    seedDefault();
+  }
+  function seedDefault() {
+    [0, 0, 2, 4, 5, 6, 8, 10, 12].forEach((v) => addStdRow(v, ""));
+    for (let i = 0; i < 10; i++) addUnkRow("1.5", "");
+  }
+  function loadExample() {
+    document.getElementById("pa-std-body").innerHTML = "";
+    document.getElementById("pa-unk-body").innerHTML = "";
+    document.getElementById("pa-stdconc").value = "5.264743";
+    document.getElementById("pa-ppl").value = "1";
+    document.getElementById("pa-name").value = "POPC stock (example)";
+    const ex = [
+      [0, 0.00324],
+      [0, 0.00332],
+      [0, 0.00244],
+      [1, 0.1497],
+      [2, 0.25828],
+      [2.5, 0.32511],
+      [3, 0.38035],
+      [3.5, 0.41294],
+      [4, 0.45823],
+      [5, 0.57913],
+      [6, 0.79888],
+      [12, 1.53704],
+    ];
+    ex.forEach(([v, a]) => addStdRow(v, a));
+    [0.99517, 1.09484, 1.02889, 1.02191, 1.10822, 1.03661, 0.98561, 1.05019, 1.07216].forEach((a) => addUnkRow("1.5", a));
+    refreshAllNmol();
+    runAnalysis();
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Status + run
+  // ══════════════════════════════════════════════════════════
+  function showStatus(msg, isErr) {
+    const el = document.getElementById("pa-status");
+    el.textContent = msg;
+    el.style.display = "block";
+    el.className = isErr ? "pa-err" : "pa-info";
+  }
+
+  function runAnalysis() {
+    try {
+      const stdConc = parseFloat(document.getElementById("pa-stdconc").value);
+      const ppl = parseFloat(document.getElementById("pa-ppl").value);
+      const CL = parseFloat(document.getElementById("pa-cl").value);
+      if (!isFinite(stdConc) || stdConc <= 0) throw new Error("Enter a valid phosphate standard concentration (mM).");
+      if (!isFinite(ppl) || ppl <= 0) throw new Error("Enter a valid number of phosphates per lipid.");
+
+      const stdRows = readRows("pa-std-body").filter((r) => r.use);
+      const unkRows = readRows("pa-unk-body").filter((r) => r.use);
+      const badStd = stdRows.filter((r) => !r.valid).length;
+      const badUnk = unkRows.filter((r) => !r.valid).length;
+      const stds = stdRows.filter((r) => r.valid).map((r) => ({ vol: r.vol, abs: r.abs }));
+      const unks = unkRows.filter((r) => r.valid && r.vol > 0).map((r) => ({ vol: r.vol, abs: r.abs }));
+
+      RES = analyze(stds, unks, stdConc, ppl, CL);
+      RES._stdRows = stds.map((s) => ({ vol: s.vol, nmol: s.vol * stdConc, abs: s.abs }));
+      const ec = parseFloat(document.getElementById("pa-expconc").value);
+      RES.expectedConc = isFinite(ec) && ec > 0 ? ec : null;
+      const gp = parseFloat(document.getElementById("pa-grav").value);
+      RES.gravPct = isFinite(gp) && gp > 0 ? gp : 5;
+
+      // annotate the unknown rows with in-range status
+      const bodies = document.querySelectorAll("#pa-unk-body tr");
+      let ri = 0;
+      const usedFlags = [];
+      readRows("pa-unk-body").forEach((r, i) => {
+        const statCell = bodies[i].querySelector(".pa-stat");
+        if (!r.use || !r.valid || !(r.vol > 0)) {
+          statCell.textContent = "—";
+          statCell.className = "pa-stat pa-auto";
+          return;
+        }
+        const rep = RES.reps[ri++];
+        statCell.innerHTML = rep.inRange ? '<span class="pa-flag ok">in range</span>' : '<span class="pa-flag warn">extrapolated</span>';
+      });
+
+      renderResults(RES);
+      document.getElementById("pa-results").style.display = "";
+      let note = `Analyzed ${RES.m} replicate(s) against ${RES.cal.n} standards.`;
+      if (badStd || badUnk) note += ` (${badStd + badUnk} incomplete row(s) skipped.)`;
+      showStatus(note, false);
+    } catch (err) {
+      document.getElementById("pa-results").style.display = "none";
+      showStatus(err.message, true);
+    }
+  }
+
+  function convMgml() {
+    const mg = parseFloat(document.getElementById("pa-mgml").value);
+    const fw = parseFloat(document.getElementById("pa-fw").value);
+    if (isFinite(mg) && isFinite(fw) && fw > 0) {
+      const mM = (mg / fw) * 1e3;
+      document.getElementById("pa-stdconc").value = mM.toFixed(4);
+      document.getElementById("pa-conv-out").textContent = `= ${mM.toFixed(4)} mM`;
+      refreshAllNmol();
+    } else {
+      document.getElementById("pa-conv-out").textContent = "enter mg/mL and g/mol";
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Pre-assay planner
+  // ══════════════════════════════════════════════════════════
+  let PLAN = null;
+  function updatePlanner() {
+    const out = document.getElementById("pa-plan-out");
+    const C = parseFloat(document.getElementById("pa-expconc").value);
+    const stdConc = parseFloat(document.getElementById("pa-stdconc").value);
+    if (!isFinite(C) || C <= 0 || !isFinite(stdConc) || stdConc <= 0) {
+      PLAN = null;
+      out.innerHTML =
+        "Enter your <strong>expected concentration</strong> above (you usually know it to within a few percent from weighing out the lipid). " +
+        "The planner will recommend a sample volume and a standard curve that put your reading in the best-determined part of the curve — " +
+        "where the standard-curve contribution to your uncertainty is smallest.";
+      return;
+    }
+    // Target the sample near the upper-middle of the SOP working range (0–60 nmol)
+    // for strong signal, then bracket/center the curve on it.
+    const TARGET_NMOL = 40;
+    let V = Math.round((TARGET_NMOL / C) * 2) / 2; // → 0.5 µL steps (Hamilton clicks)
+    V = Math.min(Math.max(V, 0.5), 20);
+    const A = C * V; // expected sample amount, nmol
+    const clicks = Math.round(V / 0.5);
+    const rec = recommendedStandards(A, stdConc);
+    PLAN = { stdVols: rec.map((s) => s.vol), sampleVol: V };
+
+    let tbl = '<table class="pa-plan-std"><thead><tr><th>Std vol (µL)</th>' + rec.map((s) => `<th>${s.vol}</th>`).join("") + "</tr></thead>";
+    tbl += "<tbody><tr><th>nmol Pi</th>" + rec.map((s) => `<td>${s.nmol.toFixed(0)}</td>`).join("") + "</tr></tbody></table>";
+
+    out.innerHTML =
+      `Aim your sample reading near <span class="big">${A.toFixed(0)} nmol</span>. ` +
+      `Dispense <span class="big">${V} µL</span> (${clicks} click${clicks === 1 ? "" : "s"} of the 25 µL Hamilton) of your ~${C} mM stock per tube.` +
+      (V >= 20 ? ' <span style="color:#e0a020">That is a large organic volume — dry under N₂ before ashing per the SOP.</span>' : "") +
+      `<div style="margin-top:8px">Set up a standard curve that brackets and centers on that amount:</div>` +
+      tbl +
+      `<div style="font-size:12px;color:#9aa;margin-bottom:8px">Two blanks (0 µL) fix the intercept; the rest span below and above your sample so it lands mid-curve, where (x₀−x̄)²/Sₓₓ ≈ 0 and the calibration adds the least uncertainty.</div>` +
+      `<button class="pa-mini" type="button" onclick="applyDesign()">Fill the tables with this design →</button>`;
+  }
+  function applyDesign() {
+    if (!PLAN) return;
+    document.getElementById("pa-std-body").innerHTML = "";
+    document.getElementById("pa-unk-body").innerHTML = "";
+    PLAN.stdVols.forEach((v) => addStdRow(v, ""));
+    for (let i = 0; i < 10; i++) addUnkRow(String(PLAN.sampleVol), "");
+    refreshAllNmol();
+    document.getElementById("pa-planner").open = false;
+    document.getElementById("pa-std-body").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  // ── Wire up ─────────────────────────────────────────────
+  document.getElementById("pa-run").addEventListener("click", runAnalysis);
+  document.getElementById("pa-stdconc").addEventListener("input", () => {
+    refreshAllNmol();
+    updatePlanner();
+  });
+  seedDefault();
+  updatePlanner();
+</script> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Fred A. Heberle. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?v=85ddb88934d28b74e78031fd54cf8308"></script> <script src="/assets/js/no_defer.js?v=2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?v=c15de51d4bb57887caa2c21988d97279"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/js/mathjax-setup.js?v=a5bb4e6a542c546dd929b24b8b236dfd"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script defer src="/assets/js/progress-bar.js?v=2f30e0e6801ea8f5036fa66e1ab0a71a" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?v=f40d453793ff4f64e238e420181a1d17"></script> <script>
+    addBackToTop();
+  </script> </body> </html>
