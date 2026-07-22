@@ -757,6 +757,25 @@ description: Determine phospholipid stock concentration and its uncertainty from
   <div class="pa-actions">
     <button class="pa-btn pa-primary" id="pa-run">Analyze</button>
     <button class="pa-btn pa-secondary" type="button" onclick="loadExample()">Load example data</button>
+    <button
+      class="pa-btn pa-secondary"
+      type="button"
+      onclick="simulateReadings()"
+      title="Generate synthetic readings from your expected concentration"
+    >
+      🎲 Simulate readings
+    </button>
+    <label style="font-size: 13px; color: #bbb; display: flex; align-items: center; gap: 6px"
+      >technique:
+      <select
+        id="pa-simnoise"
+        style="background: #1e1e1e; border: 1px solid #555; color: #f0f0f0; border-radius: 4px; padding: 5px 8px; font-size: 13px; cursor: pointer"
+      >
+        <option value="clean">clean (~1%)</option>
+        <option value="typical" selected>typical (~2%)</option>
+        <option value="noisy">noisy (~4%)</option>
+      </select>
+    </label>
     <button class="pa-btn pa-secondary" type="button" onclick="clearAll()">Clear</button>
   </div>
 
@@ -1735,6 +1754,94 @@ description: Determine phospholipid stock concentration and its uncertainty from
     refreshAllNmol();
     document.getElementById("pa-planner").open = false;
     document.getElementById("pa-std-body").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  Simulate an assay  (synthetic readings from expected conc)
+  //  Noise model grounded on the lab's real data:
+  //   Abs = A0 + B0·nmol + reading noise;  nmol carries pipetting error.
+  //   B0 = 0.02409 Abs/nmol and A0 ≈ 0.003 are the real curve's slope/blank;
+  //   presets reproduce the observed STEYX (~0.011 / 0.021 / 0.040) and
+  //   replicate CV (~1% / 2% / 4%).
+  // ══════════════════════════════════════════════════════════
+  const SIM = {
+    B0: 0.02409,
+    A0: 0.003,
+    noise: {
+      clean: { cv: 0.008, read: 0.008 },
+      typical: { cv: 0.015, read: 0.016 },
+      noisy: { cv: 0.03, read: 0.028 },
+    },
+  };
+  function gauss() {
+    // Box–Muller standard normal
+    let u = 0,
+      v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+  function simulateReadings() {
+    const C = parseFloat(document.getElementById("pa-expconc").value);
+    const stdConc = parseFloat(document.getElementById("pa-stdconc").value);
+    const ppl = parseFloat(document.getElementById("pa-ppl").value) || 1;
+    if (!isFinite(C) || C <= 0) {
+      showStatus("Enter an expected concentration first — the simulation draws readings around that “true” value.", true);
+      document.getElementById("pa-expconc").focus();
+      return;
+    }
+    if (!isFinite(stdConc) || stdConc <= 0) {
+      showStatus("Enter a valid phosphate standard concentration (mM).", true);
+      return;
+    }
+    const lvl = document.getElementById("pa-simnoise")?.value || "typical";
+    const np = SIM.noise[lvl];
+    const targetV = Math.min(Math.max(Math.round((40 / C) * 2) / 2, 0.5), 20);
+
+    // If the standards table has < 3 usable volumes, lay down the planner design.
+    let stdRows = [...document.querySelectorAll("#pa-std-body tr")];
+    const usableStd = stdRows.filter((tr) => isFinite(parseFloat(tr.querySelector(".pa-vol").value))).length;
+    if (usableStd < 3) {
+      document.getElementById("pa-std-body").innerHTML = "";
+      recommendedStandards(C * targetV * ppl, stdConc, planMode()).forEach((s) => addStdRow(s.vol, ""));
+      stdRows = [...document.querySelectorAll("#pa-std-body tr")];
+    }
+    // Ensure at least a couple of replicate rows.
+    let unkRows = [...document.querySelectorAll("#pa-unk-body tr")];
+    const usableUnk = unkRows.filter((tr) => parseFloat(tr.querySelector(".pa-vol").value) > 0).length;
+    if (usableUnk < 2) {
+      document.getElementById("pa-unk-body").innerHTML = "";
+      for (let i = 0; i < 10; i++) addUnkRow(String(targetV), "");
+      unkRows = [...document.querySelectorAll("#pa-unk-body tr")];
+    }
+
+    // Fill standard absorbances
+    stdRows.forEach((tr) => {
+      const v = parseFloat(tr.querySelector(".pa-vol").value);
+      if (!isFinite(v)) return;
+      const nmol = v === 0 ? 0 : v * (1 + gauss() * np.cv) * stdConc;
+      const abs = SIM.A0 + SIM.B0 * nmol + gauss() * np.read;
+      tr.querySelector(".pa-abs").value = Math.max(0, abs).toFixed(4);
+      tr.querySelector(".pa-use").checked = true;
+    });
+    // Fill replicate absorbances
+    unkRows.forEach((tr) => {
+      const v = parseFloat(tr.querySelector(".pa-vol").value);
+      if (!(v > 0)) return;
+      const nmol = C * v * ppl * (1 + gauss() * np.cv);
+      const abs = SIM.A0 + SIM.B0 * nmol + gauss() * np.read;
+      tr.querySelector(".pa-abs").value = Math.max(0, abs).toFixed(4);
+      tr.querySelector(".pa-use").checked = true;
+    });
+    refreshAllNmol();
+    const nameEl = document.getElementById("pa-name");
+    if (!nameEl.value.trim()) nameEl.value = `Simulated · ${lvl} · ${C} mM`;
+    runAnalysis();
+    if (document.getElementById("pa-results").style.display !== "none")
+      showStatus(
+        `Simulated a ${lvl}-technique assay drawn around a true ${C} mM stock. Click “🎲 Simulate readings” again for a fresh random draw, edit any value by hand, or change the technique to see how curve quality moves the result.`,
+        false
+      );
   }
 
   // ── Wire up ─────────────────────────────────────────────
