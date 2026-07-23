@@ -1844,13 +1844,21 @@ description: Determine phospholipid stock concentration and its uncertainty from
       b.textContent = "Saving…";
     }
     try {
-      const resp = await fetch(SUPA.url + "/phosphate_assays?on_conflict=assay_hash", {
+      // Plain INSERT (works cleanly under the private RLS setup). The unique
+      // assay_hash enforces "store once": a repeat save of the same readings
+      // comes back as 409 and is treated as already-stored.
+      const resp = await fetch(SUPA.url + "/phosphate_assays", {
         method: "POST",
-        headers: supaHeaders({ Prefer: "resolution=merge-duplicates,return=minimal" }),
+        headers: supaHeaders({ Prefer: "return=minimal" }),
         body: JSON.stringify(row),
       });
+      if (resp.status === 409) {
+        showDlStatus("This assay is already in the lab database (saved earlier) — it's stored once, so it wasn't added again.", false);
+        if (b) b.textContent = "✓ Already in database";
+        return;
+      }
       if (!resp.ok) throw new Error((resp.status + " " + (await resp.text())).trim());
-      showDlStatus("Saved to the lab database ✓  Re-saving the same assay just updates this one row (no duplicates).", false);
+      showDlStatus("Saved to the lab database ✓  Each assay is stored once — a repeat save of the same readings is skipped.", false);
       if (b) b.textContent = "✓ Saved to lab database";
       loadProvenanceOptions();
     } catch (e) {
