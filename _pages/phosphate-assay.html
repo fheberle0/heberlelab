@@ -628,10 +628,6 @@ description: Determine phospholipid stock concentration and its uncertainty from
       <label>Gravimetric ±%</label>
       <input class="pa-num-sm" type="number" id="pa-grav" value="5" step="1" min="0" />
     </div>
-    <div class="pa-field">
-      <label>Operator</label>
-      <input class="pa-num" style="width: 90px" type="text" id="pa-operator" placeholder="initials" />
-    </div>
     <div class="pa-field" style="flex: 1; min-width: 220px">
       <label>Sample name (optional)</label>
       <input class="pa-txt" style="width: 100%" type="text" id="pa-name" placeholder="e.g. POPC stock, 2026-07-22" />
@@ -656,6 +652,59 @@ description: Determine phospholipid stock concentration and its uncertainty from
     Note: 1&nbsp;mM&nbsp;=&nbsp;1&nbsp;nmol&nbsp;phosphate&nbsp;per&nbsp;µL of standard, so nmol&nbsp;Pi in each standard tube = (standard volume in
     µL)&nbsp;×&nbsp;(standard mM).
   </p>
+
+  <!-- ── Provenance (saved with each record) ─────────────── -->
+  <div class="pa-h" style="margin-top: 18px">
+    Provenance <span style="font-weight: 400; color: #777; font-size: 12px">— saved with each assay record</span>
+  </div>
+  <div class="pa-settings">
+    <div class="pa-field">
+      <label>Operator</label>
+      <input class="pa-num" style="width: 90px" type="text" id="pa-operator" placeholder="initials" />
+    </div>
+    <div class="pa-field">
+      <label>Lab</label>
+      <input class="pa-txt" style="width: 150px" list="pa-labs" id="pa-lab" placeholder="e.g. Heberle" />
+    </div>
+    <div class="pa-field">
+      <label>Location</label>
+      <input class="pa-txt" style="width: 210px" list="pa-locs" id="pa-loc" placeholder="e.g. University of Tennessee" />
+    </div>
+    <div class="pa-field">
+      <label>UV/Vis instrument</label>
+      <input class="pa-txt" style="width: 210px" list="pa-insts" id="pa-inst" value="Mettler Toledo UV5" placeholder="start typing…" />
+    </div>
+  </div>
+  <p class="pa-sub" style="margin-top: 6px">Pick from the suggestions or just type your own — whatever you enter is saved with the record.</p>
+  <datalist id="pa-labs">
+    <option value="Heberle"></option>
+    <option value="Doktorova"></option>
+  </datalist>
+  <datalist id="pa-locs">
+    <option value="University of Tennessee, Knoxville"></option>
+    <option value="Stockholm University"></option>
+  </datalist>
+  <datalist id="pa-insts">
+    <option value="Mettler Toledo UV5"></option>
+    <option value="Mettler Toledo UV7"></option>
+    <option value="Agilent Cary 60"></option>
+    <option value="Agilent Cary 3500"></option>
+    <option value="Agilent Cary 100/300"></option>
+    <option value="Thermo Scientific NanoDrop One / OneC"></option>
+    <option value="Thermo Scientific Evolution 220"></option>
+    <option value="Thermo Scientific GENESYS 150"></option>
+    <option value="Shimadzu UV-1900i"></option>
+    <option value="Shimadzu UV-1800"></option>
+    <option value="Shimadzu UV-2600i"></option>
+    <option value="PerkinElmer Lambda 365"></option>
+    <option value="PerkinElmer Lambda 650"></option>
+    <option value="Jasco V-730"></option>
+    <option value="Beckman Coulter DU 800"></option>
+    <option value="Eppendorf BioSpectrometer"></option>
+    <option value="Molecular Devices SpectraMax (plate reader)"></option>
+    <option value="BioTek Synergy (plate reader)"></option>
+    <option value="Tecan Infinite (plate reader)"></option>
+  </datalist>
 
   <!-- ── Pre-assay planner ───────────────────────────────── -->
   <details class="pa-planner" id="pa-planner">
@@ -1575,6 +1624,35 @@ description: Determine phospholipid stock concentration and its uncertainty from
   // ══════════════════════════════════════════════════════════
   const r6 = (v) => (isFinite(v) ? +v.toFixed(6) : null);
 
+  // Fast 53-bit string hash (cyrb53). Used to fingerprint the RAW readings so
+  // the database can keep one row per physical assay.
+  function cyrb53(str, seed = 0) {
+    let h1 = 0xdeadbeef ^ seed,
+      h2 = 0x41c6ce57 ^ seed;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+    h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+    h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, "0");
+  }
+  // Order-independent fingerprint of the entered (vol:abs) readings only.
+  // Invariant to re-analysis choices (included flags, phosphates-per-lipid, CI,
+  // fit range) → re-analyzing the same data yields the same hash. To exclude a
+  // point, UNCHECK it (don't delete/clear it) so the assay identity is preserved.
+  function assayFingerprint() {
+    const pack = (bodyId) =>
+      readRows(bodyId)
+        .filter((r) => isFinite(r.vol) && isFinite(r.abs))
+        .map((r) => `${r.vol}:${r.abs}`)
+        .sort();
+    return cyrb53("v1|S|" + pack("pa-std-body").join(",") + "|U|" + pack("pa-unk-body").join(","));
+  }
+
   function buildRecord() {
     if (!RES) return null;
     const calFrac = RES.uComb > 0 ? RES.uCal ** 2 / RES.uComb ** 2 : 0;
@@ -1585,7 +1663,11 @@ description: Determine phospholipid stock concentration and its uncertainty from
       schema_version: 1,
       app: "phosphate-assay-analyzer",
       saved_at: new Date().toISOString(),
+      assay_hash: assayFingerprint(),
       operator: document.getElementById("pa-operator").value.trim() || null,
+      lab: document.getElementById("pa-lab").value.trim() || null,
+      location: document.getElementById("pa-loc").value.trim() || null,
+      instrument: document.getElementById("pa-inst").value.trim() || null,
       sample_name: RES.name || null,
       simulated: RES.simulated || null,
       expected_conc_mM: RES.expectedConc,
