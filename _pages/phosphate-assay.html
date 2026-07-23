@@ -8,6 +8,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
 
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
   .pa-tool {
@@ -851,6 +852,9 @@ description: Determine phospholipid stock concentration and its uncertainty from
     <div class="pa-dbar">
       <button class="pa-btn pa-secondary" onclick="saveRecord()" title="Download a standardized one-assay record (JSON + CSV)">
         💾 Save assay record
+      </button>
+      <button class="pa-btn pa-secondary" id="pa-db-btn" onclick="submitToDatabase()" title="Submit this real assay to the shared lab database">
+        ⬆ Save to lab database
       </button>
       <button class="pa-btn pa-secondary" onclick="dlPlot('svg')">⬇ SVG (vector)</button>
       <button class="pa-btn pa-secondary" onclick="dlPlot('png')">⬇ PNG (300 DPI)</button>
@@ -1735,6 +1739,136 @@ description: Determine phospholipid stock concentration and its uncertainty from
   }
 
   // ══════════════════════════════════════════════════════════
+  //  Lab database (Supabase) — submit real assays + grow dropdowns
+  // ══════════════════════════════════════════════════════════
+  const SUPA = {
+    url: "https://cweuydobzmzjkrsbyjys.supabase.co",
+    key: "sb_publishable_X1m8FOKIgd6Bv5IrMaKqCA_1MF51_Wc", // publishable key — safe to embed (RLS-protected)
+  };
+  let sbClient = null;
+  function getDB() {
+    if (!sbClient && window.supabase && window.supabase.createClient) sbClient = window.supabase.createClient(SUPA.url, SUPA.key);
+    return sbClient;
+  }
+  // Map the human-friendly record (mM casing) to the DB column names (lowercase _mm).
+  function recordToDbRow(r) {
+    return {
+      schema_version: r.schema_version,
+      app: r.app,
+      assay_hash: r.assay_hash,
+      saved_at: r.saved_at,
+      lab: r.lab,
+      location: r.location,
+      instrument: r.instrument,
+      operator: r.operator,
+      sample_name: r.sample_name,
+      simulated: r.simulated,
+      expected_conc_mm: r.expected_conc_mM,
+      gravimetric_pct: r.gravimetric_pct,
+      phosphates_per_lipid: r.phosphates_per_lipid,
+      standard_conc_mm: r.standard_conc_mM,
+      confidence_level: r.confidence_level,
+      n_standards: r.n_standards,
+      curve_slope: r.curve_slope,
+      curve_intercept: r.curve_intercept,
+      curve_r2: r.curve_r2,
+      curve_steyx: r.curve_steyx,
+      n_replicates: r.n_replicates,
+      mean_conc_mm: r.mean_conc_mM,
+      sd_mm: r.sd_mM,
+      cv: r.cv,
+      u_rep_mm: r.u_rep_mM,
+      u_cal_mm: r.u_cal_mM,
+      u_combined_mm: r.u_combined_mM,
+      ci95_mm: r.ci95_mM,
+      df_eff: r.df_eff,
+      t_star: r.t_star,
+      rel_error: r.rel_error,
+      limited_by: r.limited_by,
+      ci_replicate_only_mm: r.ci_replicate_only_mM,
+      raw: r.raw,
+    };
+  }
+  function resetDbButton() {
+    const b = document.getElementById("pa-db-btn");
+    if (b) {
+      b.disabled = false;
+      b.textContent = "⬆ Save to lab database";
+    }
+  }
+  async function submitToDatabase() {
+    if (!RES) {
+      showStatus("Run an analysis first, then save to the database.", true);
+      return;
+    }
+    if (RES.simulated) {
+      showStatus("Simulated runs are not stored in the lab database — only real assays. Load or enter real readings to submit.", true);
+      return;
+    }
+    const db = getDB();
+    if (!db) {
+      showStatus("The database library didn't load (check your connection and reload the page). Your local “Save assay record” still works.", true);
+      return;
+    }
+    const rec = buildRecord();
+    const row = recordToDbRow(rec);
+    const b = document.getElementById("pa-db-btn");
+    if (b) {
+      b.disabled = true;
+      b.textContent = "Saving…";
+    }
+    try {
+      const { error } = await db.from("phosphate_assays").upsert(row, { onConflict: "assay_hash" });
+      if (error) throw error;
+      showStatus("Saved to the lab database ✓  Re-saving the same assay just updates this one row (no duplicates).", false);
+      if (b) b.textContent = "✓ Saved to lab database";
+      loadProvenanceOptions();
+    } catch (e) {
+      if (b) {
+        b.disabled = false;
+        b.textContent = "⬆ Save to lab database";
+      }
+      showStatus("Couldn't save to the database: " + (e.message || e) + ". Your local “Save assay record” still works as a backup.", true);
+    }
+  }
+  // Grow the lab/location/instrument suggestion lists from names already submitted.
+  async function loadProvenanceOptions() {
+    const db = getDB();
+    if (!db) return;
+    try {
+      const { data, error } = await db.from("provenance_options").select("kind,value");
+      if (error || !data) return;
+      const add = (listId, vals) => {
+        const dl = document.getElementById(listId);
+        if (!dl) return;
+        const have = new Set([...dl.options].map((o) => o.value.toLowerCase()));
+        vals.forEach((v) => {
+          if (v && !have.has(v.toLowerCase())) {
+            const o = document.createElement("option");
+            o.value = v;
+            dl.appendChild(o);
+            have.add(v.toLowerCase());
+          }
+        });
+      };
+      add(
+        "pa-labs",
+        data.filter((d) => d.kind === "lab").map((d) => d.value)
+      );
+      add(
+        "pa-locs",
+        data.filter((d) => d.kind === "location").map((d) => d.value)
+      );
+      add(
+        "pa-insts",
+        data.filter((d) => d.kind === "instrument").map((d) => d.value)
+      );
+    } catch (e) {
+      /* enhancement only — ignore failures */
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════
   //  Row management
   // ══════════════════════════════════════════════════════════
   function stdRowHTML(vol, abs) {
@@ -1875,6 +2009,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
       });
 
       renderResults(RES);
+      resetDbButton();
       document.getElementById("pa-results").style.display = "";
       let note = `Analyzed ${RES.m} replicate(s) against ${RES.cal.n} standards.`;
       if (badStd || badUnk) note += ` (${badStd + badUnk} incomplete row(s) skipped.)`;
@@ -2047,4 +2182,5 @@ description: Determine phospholipid stock concentration and its uncertainty from
   });
   seedDefault();
   updatePlanner();
+  loadProvenanceOptions();
 </script>
