@@ -238,6 +238,13 @@ description: Determine phospholipid stock concentration and its uncertainty from
     margin: 16px 0;
     font-size: 14px;
   }
+  #pa-dl-msg {
+    display: none;
+    padding: 9px 13px;
+    border-radius: 6px;
+    margin: 2px 0 14px;
+    font-size: 13.5px;
+  }
   .pa-err {
     background: rgba(200, 0, 0, 0.12);
     color: #ff7070;
@@ -864,6 +871,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
       <button class="pa-btn pa-secondary" onclick="dlPlot('png')">⬇ PNG (300 DPI)</button>
       <button class="pa-btn pa-secondary" onclick="dlXLSX()">⬇ Results XLSX</button>
     </div>
+    <div id="pa-dl-msg"></div>
     <div id="pa-plot"></div>
   </div>
 </div>
@@ -1741,7 +1749,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
   function saveRecord() {
     const rec = buildRecord();
     if (!rec) {
-      showStatus("Run an analysis first, then save the record.", true);
+      showDlStatus("Run an analysis first, then save the record.", true);
       return;
     }
     const base = safeName() + "_" + rec.saved_at.replace(/[:.]/g, "-");
@@ -1753,7 +1761,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
     const keys = Object.keys(flat);
     const csv = keys.join(",") + "\n" + keys.map((k) => csvCell(flat[k])).join(",") + "\n";
     dlBlob(new Blob([csv], { type: "text/csv" }), base + ".csv");
-    showStatus(
+    showDlStatus(
       `Saved assay record for “${rec.sample_name || "unnamed"}” (JSON + CSV). Keep these — they import straight into the lab database later.`,
       false
     );
@@ -1816,19 +1824,21 @@ description: Determine phospholipid stock concentration and its uncertainty from
       b.disabled = false;
       b.textContent = "⬆ Save to lab database";
     }
+    const m = document.getElementById("pa-dl-msg");
+    if (m) m.style.display = "none";
   }
   async function submitToDatabase() {
     if (!RES) {
-      showStatus("Run an analysis first, then save to the database.", true);
+      showDlStatus("Run an analysis first, then save to the database.", true);
       return;
     }
     if (RES.simulated) {
-      showStatus("Simulated runs are not stored in the lab database — only real assays. Load or enter real readings to submit.", true);
+      showDlStatus("Simulated runs are not stored in the lab database — only real assays. Load or enter real readings to submit.", true);
       return;
     }
     const db = getDB();
     if (!db) {
-      showStatus("The database library didn't load (check your connection and reload the page). Your local “Save assay record” still works.", true);
+      showDlStatus("The database library didn't load (check your connection and reload the page). Your local “Save assay record” still works.", true);
       return;
     }
     const rec = buildRecord();
@@ -1841,7 +1851,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
     try {
       const { error } = await db.from("phosphate_assays").upsert(row, { onConflict: "assay_hash" });
       if (error) throw error;
-      showStatus("Saved to the lab database ✓  Re-saving the same assay just updates this one row (no duplicates).", false);
+      showDlStatus("Saved to the lab database ✓  Re-saving the same assay just updates this one row (no duplicates).", false);
       if (b) b.textContent = "✓ Saved to lab database";
       loadProvenanceOptions();
     } catch (e) {
@@ -1849,7 +1859,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
         b.disabled = false;
         b.textContent = "⬆ Save to lab database";
       }
-      showStatus("Couldn't save to the database: " + (e.message || e) + ". Your local “Save assay record” still works as a backup.", true);
+      showDlStatus("Couldn't save to the database: " + (e.message || e) + ". Your local “Save assay record” still works as a backup.", true);
     }
   }
   // Grow the lab/location/instrument suggestion lists from names already submitted.
@@ -2003,6 +2013,14 @@ description: Determine phospholipid stock concentration and its uncertainty from
   // ══════════════════════════════════════════════════════════
   function showStatus(msg, isErr) {
     const el = document.getElementById("pa-status");
+    el.textContent = msg;
+    el.style.display = "block";
+    el.className = isErr ? "pa-err" : "pa-info";
+  }
+  // Feedback for the download/save buttons, shown right beneath them.
+  function showDlStatus(msg, isErr) {
+    const el = document.getElementById("pa-dl-msg");
+    if (!el) return;
     el.textContent = msg;
     el.style.display = "block";
     el.className = isErr ? "pa-err" : "pa-info";
