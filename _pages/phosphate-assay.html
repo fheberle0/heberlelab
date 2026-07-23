@@ -628,6 +628,10 @@ description: Determine phospholipid stock concentration and its uncertainty from
       <label>Gravimetric ±%</label>
       <input class="pa-num-sm" type="number" id="pa-grav" value="5" step="1" min="0" />
     </div>
+    <div class="pa-field">
+      <label>Operator</label>
+      <input class="pa-num" style="width: 90px" type="text" id="pa-operator" placeholder="initials" />
+    </div>
     <div class="pa-field" style="flex: 1; min-width: 220px">
       <label>Sample name (optional)</label>
       <input class="pa-txt" style="width: 100%" type="text" id="pa-name" placeholder="e.g. POPC stock, 2026-07-22" />
@@ -796,6 +800,9 @@ description: Determine phospholipid stock concentration and its uncertainty from
 
     <div class="pa-h">Plots</div>
     <div class="pa-dbar">
+      <button class="pa-btn pa-secondary" onclick="saveRecord()" title="Download a standardized one-assay record (JSON + CSV)">
+        💾 Save assay record
+      </button>
       <button class="pa-btn pa-secondary" onclick="dlPlot('svg')">⬇ SVG (vector)</button>
       <button class="pa-btn pa-secondary" onclick="dlPlot('png')">⬇ PNG (300 DPI)</button>
       <button class="pa-btn pa-secondary" onclick="dlXLSX()">⬇ Results XLSX</button>
@@ -1564,6 +1571,88 @@ description: Determine phospholipid stock concentration and its uncertainty from
   }
 
   // ══════════════════════════════════════════════════════════
+  //  Assay record  (canonical schema — mirrors the Supabase table)
+  // ══════════════════════════════════════════════════════════
+  const r6 = (v) => (isFinite(v) ? +v.toFixed(6) : null);
+
+  function buildRecord() {
+    if (!RES) return null;
+    const calFrac = RES.uComb > 0 ? RES.uCal ** 2 / RES.uComb ** 2 : 0;
+    const limited = calFrac >= 0.55 ? "calibration" : calFrac <= 0.35 ? "replicate" : "mixed";
+    const rawStd = readRows("pa-std-body").map((r) => ({ included: r.use, vol: r.vol, abs: r.abs }));
+    const rawUnk = readRows("pa-unk-body").map((r) => ({ included: r.use, vol: r.vol, abs: r.abs }));
+    return {
+      schema_version: 1,
+      app: "phosphate-assay-analyzer",
+      saved_at: new Date().toISOString(),
+      operator: document.getElementById("pa-operator").value.trim() || null,
+      sample_name: RES.name || null,
+      simulated: RES.simulated || null,
+      expected_conc_mM: RES.expectedConc,
+      gravimetric_pct: RES.gravPct,
+      phosphates_per_lipid: RES.ppl,
+      standard_conc_mM: RES.stdConc,
+      confidence_level: RES.CL,
+      n_standards: RES.cal.n,
+      curve_slope: r6(RES.cal.b),
+      curve_intercept: r6(RES.cal.a),
+      curve_r2: r6(RES.cal.r2),
+      curve_steyx: r6(RES.cal.s),
+      n_replicates: RES.m,
+      mean_conc_mM: r6(RES.cbar),
+      sd_mM: r6(RES.sd),
+      cv: isFinite(RES.cv) ? r6(RES.cv) : null,
+      u_rep_mM: r6(RES.uRep),
+      u_cal_mM: r6(RES.uCal),
+      u_combined_mM: r6(RES.uComb),
+      ci95_mM: r6(RES.ci),
+      df_eff: r6(RES.dfEff),
+      t_star: r6(RES.tstar),
+      rel_error: r6(RES.ci / RES.cbar),
+      limited_by: limited,
+      ci_replicate_only_mM: isFinite(RES.ciRepOnly) ? r6(RES.ciRepOnly) : null,
+      raw: { standards: rawStd, samples: rawUnk },
+    };
+  }
+
+  function dlBlob(blob, name) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }
+  function csvCell(v) {
+    if (v == null) return "";
+    if (typeof v === "number") return String(v);
+    const s = String(v).replace(/"/g, '""');
+    return /[",\n]/.test(s) ? `"${s}"` : s;
+  }
+
+  function saveRecord() {
+    const rec = buildRecord();
+    if (!rec) {
+      showStatus("Run an analysis first, then save the record.", true);
+      return;
+    }
+    const base = safeName() + "_" + rec.saved_at.replace(/[:.]/g, "-");
+    // Full JSON (includes the raw readings, so it can be re-analyzed later)
+    dlBlob(new Blob([JSON.stringify(rec, null, 2)], { type: "application/json" }), base + ".json");
+    // Flat one-row CSV (scalar fields only) for quick spreadsheet use
+    const flat = { ...rec };
+    delete flat.raw;
+    const keys = Object.keys(flat);
+    const csv = keys.join(",") + "\n" + keys.map((k) => csvCell(flat[k])).join(",") + "\n";
+    dlBlob(new Blob([csv], { type: "text/csv" }), base + ".csv");
+    showStatus(
+      `Saved assay record for “${rec.sample_name || "unnamed"}” (JSON + CSV). Keep these — they import straight into the lab database later.`,
+      false
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════
   //  Row management
   // ══════════════════════════════════════════════════════════
   function stdRowHTML(vol, abs) {
@@ -1686,6 +1775,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
       RES.expectedConc = isFinite(ec) && ec > 0 ? ec : null;
       const gp = parseFloat(document.getElementById("pa-grav").value);
       RES.gravPct = isFinite(gp) && gp > 0 ? gp : 5;
+      RES.simulated = null; // set by simulateReadings() when data is synthetic
 
       // annotate the unknown rows with in-range status
       const bodies = document.querySelectorAll("#pa-unk-body tr");
@@ -1859,6 +1949,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
     const nameEl = document.getElementById("pa-name");
     if (!nameEl.value.trim()) nameEl.value = `Simulated · ${lvl} · ${C} mM`;
     runAnalysis();
+    if (RES) RES.simulated = lvl;
     if (document.getElementById("pa-results").style.display !== "none")
       showStatus(
         `Simulated a ${lvl}-technique assay drawn around a true ${C} mM stock. Click “🎲 Simulate readings” again for a fresh random draw, edit any value by hand, or change the technique to see how curve quality moves the result.`,
