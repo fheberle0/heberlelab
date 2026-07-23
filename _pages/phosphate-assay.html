@@ -673,10 +673,35 @@ description: Determine phospholipid stock concentration and its uncertainty from
     </div>
     <div class="pa-field">
       <label>UV/Vis instrument</label>
-      <input class="pa-txt" style="width: 210px" list="pa-insts" id="pa-inst" value="Mettler Toledo UV5" placeholder="start typing…" />
+      <select class="pa-txt" style="width: 230px" id="pa-inst" onchange="onInstChange()">
+        <option value="Mettler Toledo UV5" selected>Mettler Toledo UV5</option>
+        <option value="Mettler Toledo UV7">Mettler Toledo UV7</option>
+        <option value="Agilent Cary 60">Agilent Cary 60</option>
+        <option value="Agilent Cary 3500">Agilent Cary 3500</option>
+        <option value="Agilent Cary 100/300">Agilent Cary 100/300</option>
+        <option value="Thermo Scientific NanoDrop One / OneC">Thermo Scientific NanoDrop One / OneC</option>
+        <option value="Thermo Scientific Evolution 220">Thermo Scientific Evolution 220</option>
+        <option value="Thermo Scientific GENESYS 150">Thermo Scientific GENESYS 150</option>
+        <option value="Shimadzu UV-1900i">Shimadzu UV-1900i</option>
+        <option value="Shimadzu UV-1800">Shimadzu UV-1800</option>
+        <option value="Shimadzu UV-2600i">Shimadzu UV-2600i</option>
+        <option value="PerkinElmer Lambda 365">PerkinElmer Lambda 365</option>
+        <option value="PerkinElmer Lambda 650">PerkinElmer Lambda 650</option>
+        <option value="Jasco V-730">Jasco V-730</option>
+        <option value="Beckman Coulter DU 800">Beckman Coulter DU 800</option>
+        <option value="Eppendorf BioSpectrometer">Eppendorf BioSpectrometer</option>
+        <option value="Molecular Devices SpectraMax (plate reader)">Molecular Devices SpectraMax (plate reader)</option>
+        <option value="BioTek Synergy (plate reader)">BioTek Synergy (plate reader)</option>
+        <option value="Tecan Infinite (plate reader)">Tecan Infinite (plate reader)</option>
+        <option value="__other__">Other (type it in)…</option>
+      </select>
+      <input class="pa-txt" style="width: 230px; display: none; margin-top: 6px" id="pa-inst-other" placeholder="Instrument name" />
     </div>
   </div>
-  <p class="pa-sub" style="margin-top: 6px">Pick from the suggestions or just type your own — whatever you enter is saved with the record.</p>
+  <p class="pa-sub" style="margin-top: 6px">
+    Instrument defaults to the Mettler Toledo UV5 — pick another from the list, or choose “Other” to type one in. Lab and location accept anything you
+    type.
+  </p>
   <datalist id="pa-labs">
     <option value="Heberle"></option>
     <option value="Doktorova"></option>
@@ -684,27 +709,6 @@ description: Determine phospholipid stock concentration and its uncertainty from
   <datalist id="pa-locs">
     <option value="University of Tennessee, Knoxville"></option>
     <option value="Stockholm University"></option>
-  </datalist>
-  <datalist id="pa-insts">
-    <option value="Mettler Toledo UV5"></option>
-    <option value="Mettler Toledo UV7"></option>
-    <option value="Agilent Cary 60"></option>
-    <option value="Agilent Cary 3500"></option>
-    <option value="Agilent Cary 100/300"></option>
-    <option value="Thermo Scientific NanoDrop One / OneC"></option>
-    <option value="Thermo Scientific Evolution 220"></option>
-    <option value="Thermo Scientific GENESYS 150"></option>
-    <option value="Shimadzu UV-1900i"></option>
-    <option value="Shimadzu UV-1800"></option>
-    <option value="Shimadzu UV-2600i"></option>
-    <option value="PerkinElmer Lambda 365"></option>
-    <option value="PerkinElmer Lambda 650"></option>
-    <option value="Jasco V-730"></option>
-    <option value="Beckman Coulter DU 800"></option>
-    <option value="Eppendorf BioSpectrometer"></option>
-    <option value="Molecular Devices SpectraMax (plate reader)"></option>
-    <option value="BioTek Synergy (plate reader)"></option>
-    <option value="Tecan Infinite (plate reader)"></option>
   </datalist>
 
   <!-- ── Pre-assay planner ───────────────────────────────── -->
@@ -1657,6 +1661,23 @@ description: Determine phospholipid stock concentration and its uncertainty from
     return cyrb53("v1|S|" + pack("pa-std-body").join(",") + "|U|" + pack("pa-unk-body").join(","));
   }
 
+  // Instrument dropdown: reveal the free-text box when "Other" is chosen.
+  function onInstChange() {
+    const other = document.getElementById("pa-inst-other");
+    if (document.getElementById("pa-inst").value === "__other__") {
+      other.style.display = "";
+      other.focus();
+    } else {
+      other.style.display = "none";
+    }
+  }
+  function instrumentValue() {
+    const sel = document.getElementById("pa-inst");
+    if (!sel) return null;
+    if (sel.value === "__other__") return document.getElementById("pa-inst-other").value.trim() || null;
+    return sel.value || null;
+  }
+
   function buildRecord() {
     if (!RES) return null;
     const calFrac = RES.uComb > 0 ? RES.uCal ** 2 / RES.uComb ** 2 : 0;
@@ -1671,7 +1692,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
       operator: document.getElementById("pa-operator").value.trim() || null,
       lab: document.getElementById("pa-lab").value.trim() || null,
       location: document.getElementById("pa-loc").value.trim() || null,
-      instrument: document.getElementById("pa-inst").value.trim() || null,
+      instrument: instrumentValue(),
       sample_name: RES.name || null,
       simulated: RES.simulated || null,
       expected_conc_mM: RES.expectedConc,
@@ -1838,7 +1859,8 @@ description: Determine phospholipid stock concentration and its uncertainty from
     try {
       const { data, error } = await db.from("provenance_options").select("kind,value");
       if (error || !data) return;
-      const add = (listId, vals) => {
+      // datalists (lab, location): append <option> at the end
+      const addList = (listId, vals) => {
         const dl = document.getElementById(listId);
         if (!dl) return;
         const have = new Set([...dl.options].map((o) => o.value.toLowerCase()));
@@ -1851,16 +1873,32 @@ description: Determine phospholipid stock concentration and its uncertainty from
           }
         });
       };
-      add(
+      // instrument <select>: insert new options just before the "Other" entry
+      const addSelect = (selId, vals) => {
+        const sel = document.getElementById(selId);
+        if (!sel) return;
+        const other = sel.querySelector('option[value="__other__"]');
+        const have = new Set([...sel.options].map((o) => o.value.toLowerCase()));
+        vals.forEach((v) => {
+          if (v && !have.has(v.toLowerCase())) {
+            const o = document.createElement("option");
+            o.value = v;
+            o.textContent = v;
+            sel.insertBefore(o, other);
+            have.add(v.toLowerCase());
+          }
+        });
+      };
+      addList(
         "pa-labs",
         data.filter((d) => d.kind === "lab").map((d) => d.value)
       );
-      add(
+      addList(
         "pa-locs",
         data.filter((d) => d.kind === "location").map((d) => d.value)
       );
-      add(
-        "pa-insts",
+      addSelect(
+        "pa-inst",
         data.filter((d) => d.kind === "instrument").map((d) => d.value)
       );
     } catch (e) {
