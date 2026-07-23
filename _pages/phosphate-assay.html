@@ -8,7 +8,6 @@ description: Determine phospholipid stock concentration and its uncertainty from
 
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
   .pa-tool {
@@ -1771,13 +1770,14 @@ description: Determine phospholipid stock concentration and its uncertainty from
   //  Lab database (Supabase) — submit real assays + grow dropdowns
   // ══════════════════════════════════════════════════════════
   const SUPA = {
-    url: "https://cweuydobzmzjkrsbyjys.supabase.co",
+    url: "https://cweuydobzmzjkrsbyjys.supabase.co/rest/v1",
     key: "sb_publishable_X1m8FOKIgd6Bv5IrMaKqCA_1MF51_Wc", // publishable key — safe to embed (RLS-protected)
   };
-  let sbClient = null;
-  function getDB() {
-    if (!sbClient && window.supabase && window.supabase.createClient) sbClient = window.supabase.createClient(SUPA.url, SUPA.key);
-    return sbClient;
+  // Direct PostgREST calls with the apikey header only — the auth style Supabase
+  // documents for anonymous requests with the new publishable keys. (The supabase-js
+  // library mishandled the new key format on upsert and returned 401.)
+  function supaHeaders(extra) {
+    return Object.assign({ apikey: SUPA.key, "Content-Type": "application/json" }, extra || {});
   }
   // Map the human-friendly record (mM casing) to the DB column names (lowercase _mm).
   function recordToDbRow(r) {
@@ -1836,11 +1836,6 @@ description: Determine phospholipid stock concentration and its uncertainty from
       showDlStatus("Simulated runs are not stored in the lab database — only real assays. Load or enter real readings to submit.", true);
       return;
     }
-    const db = getDB();
-    if (!db) {
-      showDlStatus("The database library didn't load (check your connection and reload the page). Your local “Save assay record” still works.", true);
-      return;
-    }
     const rec = buildRecord();
     const row = recordToDbRow(rec);
     const b = document.getElementById("pa-db-btn");
@@ -1849,8 +1844,12 @@ description: Determine phospholipid stock concentration and its uncertainty from
       b.textContent = "Saving…";
     }
     try {
-      const { error } = await db.from("phosphate_assays").upsert(row, { onConflict: "assay_hash" });
-      if (error) throw error;
+      const resp = await fetch(SUPA.url + "/phosphate_assays?on_conflict=assay_hash", {
+        method: "POST",
+        headers: supaHeaders({ Prefer: "resolution=merge-duplicates,return=minimal" }),
+        body: JSON.stringify(row),
+      });
+      if (!resp.ok) throw new Error((resp.status + " " + (await resp.text())).trim());
       showDlStatus("Saved to the lab database ✓  Re-saving the same assay just updates this one row (no duplicates).", false);
       if (b) b.textContent = "✓ Saved to lab database";
       loadProvenanceOptions();
@@ -1864,11 +1863,11 @@ description: Determine phospholipid stock concentration and its uncertainty from
   }
   // Grow the lab/location/instrument suggestion lists from names already submitted.
   async function loadProvenanceOptions() {
-    const db = getDB();
-    if (!db) return;
     try {
-      const { data, error } = await db.from("provenance_options").select("kind,value");
-      if (error || !data) return;
+      const resp = await fetch(SUPA.url + "/provenance_options?select=kind,value", { headers: supaHeaders() });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      if (!Array.isArray(data)) return;
       // datalists (lab, location): append <option> at the end
       const addList = (listId, vals) => {
         const dl = document.getElementById(listId);
