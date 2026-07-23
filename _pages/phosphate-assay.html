@@ -1266,16 +1266,36 @@ description: Determine phospholipid stock concentration and its uncertainty from
 
     const stdIn = RES._stdRows; // {nmol, abs} used in the fit
     const traces = [
-      // confidence band
+      // 95% confidence band for the fitted line (darker fill + outlined edges so it's visible)
       {
         x: xs.concat([...xs].reverse()),
         y: yUp.concat([...yLo].reverse()),
         fill: "toself",
-        fillcolor: "rgba(204,0,170,0.10)",
+        fillcolor: "rgba(204,0,170,0.18)",
         line: { color: "rgba(0,0,0,0)" },
         hoverinfo: "skip",
         showlegend: true,
-        name: `${Math.round(R.CL * 100)}% curve band`,
+        name: `${Math.round(R.CL * 100)}% band for the curve`,
+        xaxis: "x",
+        yaxis: "y",
+      },
+      {
+        x: xs,
+        y: yUp,
+        mode: "lines",
+        line: { color: "rgba(204,0,170,0.6)", width: 1 },
+        hoverinfo: "skip",
+        showlegend: false,
+        xaxis: "x",
+        yaxis: "y",
+      },
+      {
+        x: xs,
+        y: yLo,
+        mode: "lines",
+        line: { color: "rgba(204,0,170,0.6)", width: 1 },
+        hoverinfo: "skip",
+        showlegend: false,
         xaxis: "x",
         yaxis: "y",
       },
@@ -1366,6 +1386,8 @@ description: Determine phospholipid stock concentration and its uncertainty from
     const sweetHalf = Math.sqrt(c.Sxx / c.n);
     const bandLo = Math.max(0, c.xbar - sweetHalf),
       bandHi = c.xbar + sweetHalf;
+    // "Aim here" sweet-spot zone — a placement guide, NOT a confidence interval,
+    // so it is drawn in neutral gray to avoid clashing with the green CI band below.
     const shapes = [
       {
         type: "rect",
@@ -1375,7 +1397,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
         x1: bandHi,
         y0: 0,
         y1: 1,
-        fillcolor: "rgba(0,194,68,0.09)",
+        fillcolor: "rgba(120,132,145,0.15)",
         line: { width: 0 },
         layer: "below",
       },
@@ -1387,7 +1409,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
         x1: c.xbar,
         y0: 0,
         y1: 1,
-        line: { color: "rgba(0,150,58,0.55)", width: 1, dash: "dot" },
+        line: { color: "rgba(100,112,125,0.7)", width: 1, dash: "dot" },
       },
     ];
     const annotations = [
@@ -1398,7 +1420,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
         y: 1.02,
         text: "aim here",
         showarrow: false,
-        font: { size: 10, color: "#00963a" },
+        font: { size: 10, color: "#7a8694" },
         xanchor: "center",
         yanchor: "bottom",
       },
