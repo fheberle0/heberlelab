@@ -885,6 +885,8 @@ description: Determine phospholipid stock concentration and its uncertainty from
 
   <div id="pa-status"></div>
 
+  <div id="pa-outliers"></div>
+
   <!-- ── Results ─────────────────────────────────────────── -->
   <div id="pa-results" style="display: none">
     <div class="pa-h" style="margin-top: 28px">Result</div>
@@ -894,8 +896,6 @@ description: Determine phospholipid stock concentration and its uncertainty from
 
     <div class="pa-h">Coaching — how to tighten this result</div>
     <div class="pa-coach" id="pa-coach"></div>
-
-    <div id="pa-outliers"></div>
 
     <div class="pa-h">Per-replicate concentrations</div>
     <div id="pa-reptable"></div>
@@ -2245,6 +2245,9 @@ description: Determine phospholipid stock concentration and its uncertainty from
       showStatus(note, false);
     } catch (err) {
       document.getElementById("pa-results").style.display = "none";
+      const oe = document.getElementById("pa-outliers");
+      if (oe) oe.style.display = "none";
+      document.querySelectorAll("tr.pa-outlier").forEach((el) => el.classList.remove("pa-outlier"));
       showStatus(err.message, true);
     }
   }
