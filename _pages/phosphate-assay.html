@@ -666,6 +666,10 @@ description: Determine phospholipid stock concentration and its uncertainty from
   </div>
   <div class="pa-settings">
     <div class="pa-field">
+      <label>Assay date</label>
+      <input class="pa-num" style="width: 150px; color-scheme: dark" type="date" id="pa-date" />
+    </div>
+    <div class="pa-field">
       <label>Operator</label>
       <input class="pa-num" style="width: 90px" type="text" id="pa-operator" placeholder="initials" />
     </div>
@@ -1695,6 +1699,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
       schema_version: 1,
       app: "phosphate-assay-analyzer",
       saved_at: new Date().toISOString(),
+      assay_date: document.getElementById("pa-date").value || null,
       assay_hash: assayFingerprint(),
       operator: document.getElementById("pa-operator").value.trim() || null,
       lab: document.getElementById("pa-lab").value.trim() || null,
@@ -1786,6 +1791,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
       app: r.app,
       assay_hash: r.assay_hash,
       saved_at: r.saved_at,
+      assay_date: r.assay_date,
       lab: r.lab,
       location: r.location,
       instrument: r.instrument,
@@ -2246,4 +2252,10 @@ description: Determine phospholipid stock concentration and its uncertainty from
   seedDefault();
   updatePlanner();
   loadProvenanceOptions();
+  // Default the assay date to today (local date)
+  (function () {
+    const d = new Date();
+    const el = document.getElementById("pa-date");
+    if (el) el.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  })();
 </script>
