@@ -1730,11 +1730,40 @@ description: Determine phospholipid stock concentration and its uncertainty from
     }
     return new Blob([bytes], { type: mime });
   }
+  // PNG export: rasterize the plot's SVG via a data: URL image (allowed by the site
+  // CSP's img-src) onto a canvas, then toBlob. Plotly's built-in PNG uses a blob: URL
+  // for this step, which the site CSP (img-src has no blob:) blocks — hence PNG failed
+  // while SVG (no rasterization) worked.
+  function dlPlotPNG() {
+    const W = 660,
+      H = 620,
+      scale = 2; // ~300 DPI at ~2.2 in wide
+    Plotly.toImage("pa-plot", { format: "svg", width: W, height: H, scale: 1 })
+      .then((svgUrl) => {
+        const img = new Image();
+        img.onload = () => {
+          const c = document.createElement("canvas");
+          c.width = W * scale;
+          c.height = H * scale;
+          const ctx = c.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          c.toBlob((blob) => {
+            if (blob) dlBlob(blob, safeName() + ".png");
+            else alert("PNG export failed while encoding the image.");
+          }, "image/png");
+        };
+        img.onerror = () => alert("PNG export failed: the plot image could not be loaded.");
+        img.src = svgUrl; // data:image/svg+xml — allowed by img-src
+      })
+      .catch((e) => alert("PNG export failed: " + (e.message || e)));
+  }
   function dlPlot(fmt) {
-    const cfg = fmt === "svg" ? { format: "svg", width: 660, height: 620, scale: 1 } : { format: "png", width: 1320, height: 1240, scale: 2 };
-    Plotly.toImage("pa-plot", cfg)
-      .then((durl) => dlBlob(dataURLtoBlob(durl), safeName() + "." + fmt))
-      .catch((e) => alert(fmt.toUpperCase() + " export failed: " + (e.message || e)));
+    if (fmt === "png") return dlPlotPNG();
+    Plotly.toImage("pa-plot", { format: "svg", width: 660, height: 620, scale: 1 })
+      .then((durl) => dlBlob(dataURLtoBlob(durl), safeName() + ".svg"))
+      .catch((e) => alert("SVG export failed: " + (e.message || e)));
   }
   function dlXLSX() {
     if (!RES) return;
