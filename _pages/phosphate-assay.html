@@ -1583,16 +1583,13 @@ description: Determine phospholipid stock concentration and its uncertainty from
   }
   function dlPlot(fmt) {
     const cfg = fmt === "svg" ? { format: "svg", width: 660, height: 620, scale: 1 } : { format: "png", width: 1320, height: 1240, scale: 2 };
+    // Download via a Blob (object URL) rather than a data: URL — Chrome blocks
+    // large data: URL downloads, which is why the high-res PNG previously failed.
     Plotly.toImage("pa-plot", cfg)
-      .then((url) => {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = safeName() + "." + fmt;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      })
-      .catch((e) => alert(fmt.toUpperCase() + " export failed: " + e.message));
+      .then((durl) => fetch(durl))
+      .then((r) => r.blob())
+      .then((blob) => dlBlob(blob, safeName() + "." + fmt))
+      .catch((e) => alert(fmt.toUpperCase() + " export failed: " + (e.message || e)));
   }
   function dlXLSX() {
     if (!RES) return;
