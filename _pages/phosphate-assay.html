@@ -641,7 +641,9 @@ description: Determine phospholipid stock concentration and its uncertainty from
     the absorbance readings for your standard curve and your replicate samples below, then click <strong>Analyze</strong>. The tool fits a linear
     standard curve (floating intercept from your blanks), converts each sample's absorbance to phosphate, and reports the stock concentration with a
     95% confidence interval that combines <em>replicate scatter</em> and <em>standard-curve uncertainty</em>. For most phospholipids (PC, PE, PS, PG,
-    PI, PA, SM) there is <code>1</code> phosphate per lipid; cardiolipin has <code>2</code>.
+    PI, PA, SM) there is <code>1</code> phosphate per lipid; cardiolipin has <code>2</code>.<br /><br />
+    The calibration, uncertainty, and outlier-detection methods are documented on the
+    <a href="{{ '/resources/phosphate-assay-methods/' | relative_url }}" target="_blank">methods page</a>.
   </p>
 
   <!-- ── Assay parameters ────────────────────────────────── -->
@@ -918,6 +920,8 @@ description: Determine phospholipid stock concentration and its uncertainty from
 </div>
 
 <script>
+  const METHODS_URL = "{{ '/resources/phosphate-assay-methods/' | relative_url }}";
+
   // ══════════════════════════════════════════════════════════
   //  Statistics helpers
   // ══════════════════════════════════════════════════════════
@@ -1194,7 +1198,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
     el.innerHTML =
       `<div class="pa-out-head">⚠ ${items.length} possible outlier${items.length > 1 ? "s" : ""} flagged (α = 0.05)</div>` +
       `<ul><li>${items.join("</li><li>")}</li></ul>` +
-      `<div class="pa-out-note">Highlighted in amber above. These are <b>flagged for your judgment, not removed</b> — check your notebook for a cause (air bubble, mis-pipette, cracked tube) before discarding real data. To drop them, uncheck the highlighted rows and re-analyze, or use the button below.</div>` +
+      `<div class="pa-out-note">Highlighted in amber above. These are <b>flagged for your judgment, not removed</b> — check your notebook for a cause (air bubble, mis-pipette, cracked tube) before discarding real data. To drop them, uncheck the highlighted rows and re-analyze, or use the button below. <a href="${METHODS_URL}#outliers" target="_blank" style="color:#e0a020;text-decoration:underline">How are outliers detected?</a></div>` +
       `<button class="pa-btn pa-secondary" style="margin-top:10px" onclick="excludeFlagged()">Exclude flagged &amp; re-analyze</button>`;
   }
   function excludeFlagged() {
