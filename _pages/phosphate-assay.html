@@ -244,6 +244,42 @@ description: Determine phospholipid stock concentration and its uncertainty from
     margin: 2px 0 14px;
     font-size: 13.5px;
   }
+  /* Outlier flagging */
+  #pa-outliers {
+    display: none;
+    border: 1px solid #e0a020;
+    background: rgba(224, 160, 32, 0.1);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  #pa-outliers .pa-out-head {
+    color: #e8cd90;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  #pa-outliers ul {
+    margin: 0 0 10px;
+    padding-left: 20px;
+    font-size: 13.5px;
+    color: #ddd;
+    line-height: 1.6;
+  }
+  #pa-outliers li {
+    margin-bottom: 4px;
+  }
+  #pa-outliers .pa-out-note {
+    font-size: 12.5px;
+    color: #bbb;
+    line-height: 1.55;
+  }
+  table.pa-input tr.pa-outlier td {
+    background: rgba(224, 160, 32, 0.16);
+  }
+  table.pa-tbl tr.pa-outrow td {
+    background: rgba(224, 160, 32, 0.13);
+  }
   .pa-err {
     background: rgba(200, 0, 0, 0.12);
     color: #ff7070;
@@ -859,6 +895,8 @@ description: Determine phospholipid stock concentration and its uncertainty from
     <div class="pa-h">Coaching — how to tighten this result</div>
     <div class="pa-coach" id="pa-coach"></div>
 
+    <div id="pa-outliers"></div>
+
     <div class="pa-h">Per-replicate concentrations</div>
     <div id="pa-reptable"></div>
 
@@ -1076,6 +1114,97 @@ description: Determine phospholipid stock concentration and its uncertainty from
     return isFinite(v) ? v.toFixed(d) : "—";
   }
 
+  // ══════════════════════════════════════════════════════════
+  //  Outlier detection  (α = 0.05; FLAG only, never auto-remove)
+  //   Standards: externally-studentized residual test (Bonferroni t)
+  //   Samples:   iterated Grubbs' test on the replicate concentrations
+  // ══════════════════════════════════════════════════════════
+  function flagStandardOutliers(cal, stdRows, alpha) {
+    const n = cal.n;
+    if (n < 5) return []; // too few points to test residuals reliably
+    const s2 = cal.s * cal.s;
+    const tcrit = tInv(1 - alpha / (2 * n), n - 3); // Bonferroni, deleted-residual df
+    const out = [];
+    stdRows.forEach((row, i) => {
+      const x = row.nmol,
+        y = row.abs;
+      const e = y - (cal.a + cal.b * x);
+      const h = 1 / n + (x - cal.xbar) ** 2 / cal.Sxx; // leverage
+      const num = (n - 2) * s2 - (e * e) / (1 - h);
+      const sdel = Math.sqrt(Math.max(num, 0) / (n - 3)); // residual SE without point i
+      const t = sdel > 0 ? e / (sdel * Math.sqrt(1 - h)) : 0;
+      if (isFinite(t) && Math.abs(t) > tcrit) out.push({ i, z: Math.abs(t), nmol: x });
+    });
+    return out;
+  }
+  function grubbsCrit(N, alpha) {
+    const t = tInv(1 - alpha / (2 * N), N - 2); // two-sided Grubbs
+    return ((N - 1) / Math.sqrt(N)) * Math.sqrt((t * t) / (N - 2 + t * t));
+  }
+  function flagSampleOutliers(concs, alpha, maxK) {
+    let active = concs.map((_, i) => i);
+    const flagged = [];
+    while (active.length >= 4 && flagged.length < maxK) {
+      const vals = active.map((i) => concs[i]);
+      const m = mean(vals),
+        sd = stdev(vals);
+      if (!(sd > 0)) break;
+      let maxDev = -1,
+        maxJ = -1;
+      active.forEach((i, j) => {
+        const d = Math.abs(concs[i] - m) / sd;
+        if (d > maxDev) {
+          maxDev = d;
+          maxJ = j;
+        }
+      });
+      if (maxDev > grubbsCrit(active.length, alpha)) {
+        flagged.push({ i: active[maxJ], z: maxDev });
+        active.splice(maxJ, 1);
+      } else break;
+    }
+    return flagged;
+  }
+  // DOM rows currently in the fit (included + valid), in fit order — so a flag's
+  // index maps back to the right input row for highlighting / exclusion.
+  function includedDomRows(bodyId, sampleMode) {
+    return [...document.querySelectorAll(`#${bodyId} tr`)].filter((tr) => {
+      const use = tr.querySelector(".pa-use").checked;
+      const v = parseFloat(tr.querySelector(".pa-vol").value);
+      const a = parseFloat(tr.querySelector(".pa-abs").value);
+      return use && isFinite(v) && isFinite(a) && (!sampleMode || v > 0);
+    });
+  }
+  function renderOutliers(R) {
+    const el = document.getElementById("pa-outliers");
+    if (!el) return;
+    const sf = R._stdFlags || [],
+      rf = R._repFlags || [];
+    if (!sf.length && !rf.length) {
+      el.style.display = "none";
+      el.innerHTML = "";
+      return;
+    }
+    const items = [];
+    sf.forEach((f) => items.push(`Standard at <b>${f.nmol.toFixed(0)} nmol</b> — ${f.z.toFixed(1)}σ studentized residual from the curve`));
+    rf.forEach((f) =>
+      items.push(`Replicate <b>#${R.reps[f.i].idx}</b> (${R.reps[f.i].conc.toFixed(2)} mM) — ${f.z.toFixed(1)}σ from the replicate mean (Grubbs)`)
+    );
+    el.style.display = "block";
+    el.innerHTML =
+      `<div class="pa-out-head">⚠ ${items.length} possible outlier${items.length > 1 ? "s" : ""} flagged (α = 0.05)</div>` +
+      `<ul><li>${items.join("</li><li>")}</li></ul>` +
+      `<div class="pa-out-note">Highlighted in amber above. These are <b>flagged for your judgment, not removed</b> — check your notebook for a cause (air bubble, mis-pipette, cracked tube) before discarding real data. To drop them, uncheck the highlighted rows and re-analyze, or use the button below.</div>` +
+      `<button class="pa-btn pa-secondary" style="margin-top:10px" onclick="excludeFlagged()">Exclude flagged &amp; re-analyze</button>`;
+  }
+  function excludeFlagged() {
+    (window._flaggedRows || []).forEach((tr) => {
+      const cb = tr.querySelector(".pa-use");
+      if (cb) cb.checked = false;
+    });
+    runAnalysis();
+  }
+
   function renderResults(R) {
     const clPct = Math.round(R.CL * 100);
 
@@ -1135,9 +1264,11 @@ description: Determine phospholipid stock concentration and its uncertainty from
     // Per-replicate table
     let html =
       '<table class="pa-tbl"><thead><tr><th>#</th><th>Vol (µL)</th><th>Absorbance</th><th>nmol Pi</th><th>Conc (mM)</th><th>In range?</th></tr></thead><tbody>';
-    R.reps.forEach((r) => {
-      html += `<tr${r.inRange ? "" : ' class="excluded"'}>
-        <td>${r.idx}</td><td>${fmt(r.vol, 2)}</td><td>${fmt(r.abs, 4)}</td>
+    R.reps.forEach((r, i) => {
+      const isOut = R._repFlagIdx && R._repFlagIdx.has(i);
+      const rowcls = !r.inRange ? ' class="excluded"' : isOut ? ' class="pa-outrow"' : "";
+      html += `<tr${rowcls}>
+        <td>${r.idx}${isOut ? ' <span class="pa-flag warn" title="Grubbs outlier">⚠</span>' : ""}</td><td>${fmt(r.vol, 2)}</td><td>${fmt(r.abs, 4)}</td>
         <td>${fmt(r.nmol, 2)}</td><td>${fmt(r.conc, 3)}</td>
         <td>${r.inRange ? '<span class="pa-flag ok">yes</span>' : '<span class="pa-flag warn">extrapolated</span>'}</td></tr>`;
     });
@@ -1156,6 +1287,7 @@ description: Determine phospholipid stock concentration and its uncertainty from
 
     renderCoaching(R);
     makePlot(R);
+    renderOutliers(R);
   }
 
   // ══════════════════════════════════════════════════════════
@@ -2058,6 +2190,37 @@ description: Determine phospholipid stock concentration and its uncertainty from
       const gp = parseFloat(document.getElementById("pa-grav").value);
       RES.gravPct = isFinite(gp) && gp > 0 ? gp : 5;
       RES.simulated = null; // set by simulateReadings() when data is synthetic
+
+      // ── Outlier detection (flag only, α = 0.05) ──
+      const OA = 0.05;
+      RES._stdFlags = flagStandardOutliers(RES.cal, RES._stdRows, OA);
+      RES._repFlags =
+        RES.m >= 5
+          ? flagSampleOutliers(
+              RES.reps.map((r) => r.conc),
+              OA,
+              2
+            )
+          : [];
+      RES._repFlagIdx = new Set(RES._repFlags.map((f) => f.i));
+      document.querySelectorAll("tr.pa-outlier").forEach((el) => el.classList.remove("pa-outlier"));
+      window._flaggedRows = [];
+      const stdDom = includedDomRows("pa-std-body", false);
+      const unkDom = includedDomRows("pa-unk-body", true);
+      RES._stdFlags.forEach((f) => {
+        const tr = stdDom[f.i];
+        if (tr) {
+          tr.classList.add("pa-outlier");
+          window._flaggedRows.push(tr);
+        }
+      });
+      RES._repFlags.forEach((f) => {
+        const tr = unkDom[f.i];
+        if (tr) {
+          tr.classList.add("pa-outlier");
+          window._flaggedRows.push(tr);
+        }
+      });
 
       // annotate the unknown rows with in-range status
       const bodies = document.querySelectorAll("#pa-unk-body tr");
