@@ -90,6 +90,9 @@
   <span class="spacer"></span>
   <button id="logFileBtn" title="Live-append a full run log (temperature + events + FRET) to a file on disk">Record run log…</button>
   <button id="dlCsvBtn" title="One-shot export of the FRET results table (T, five channels, ND/TD/FRET_R)">Download FRET data</button>
+  <button id="exportAnaBtn" title="Export an Excel file for the FRET Analyzer — one row per temperature (mean of accepted replicates, outliers excluded)">Export for FRET Analyzer</button>
+  <button id="loadRampBtn" title="Load a previous 'Download FRET data' CSV back into the tool to review or re-export it">Load ramp CSV…</button>
+  <input id="loadRampInput" type="file" accept=".csv,text/csv" style="display:none">
 </header>
 
 <div class="banner">
@@ -490,12 +493,13 @@ function startEquil(sec){
     showEquil(fmtMMSS(s),'status-eq'); s--; };
   upd(); eqTimer=setInterval(upd,1000);
 }
-function startRun(){
+async function startRun(){
   if(!ramp.length) return;
   if((rampStart!==null || acquisitions.length) && !confirm('Start a new run?\n\nThis clears the current temperature traces and the FRET data table and resets the elapsed-time clock. If you need this run\'s data, cancel and use Stop run to save it first.')) return;
   clearInterval(eqTimer);
-  acquisitions.length=0; renderAcqTable(); drawFretPlot();
+  acquisitions.length=0; logRows.length=0; renderAcqTable(); drawFretPlot();
   rampStart=null; actualTrace=[]; setpointTrace=[]; activeIdx=0;
+  if(!logHandle) await startLogging();   // auto-start the run log on Start run
   if(!pollTimer) startPolling();
   gotoStep(0); log('run started — previous data cleared','sys');
 }
@@ -762,18 +766,22 @@ function setRecordingUI(on){
   b.title = on ? 'Recording — click to stop the run log' : 'Live-append a full run log (temperature + events + FRET) to a file on disk';
 }
 function stopLogging(){ logHandle=null; setRecordingUI(false); log('run log stopped — file on disk kept','sys'); }
-$('logFileBtn').onclick=async()=>{
-  if(logHandle){
-    if(confirm('Stop recording the run log?\n\nThe file already saved to disk is kept as-is — new events simply stop being written to it. You can start a new run log afterward.')) stopLogging();
-    return;
-  }
-  if(!window.showSaveFilePicker){ log('live file logging needs Chrome/Edge — use Download FRET data instead','err'); return; }
+async function startLogging(){
+  if(!window.showSaveFilePicker){ log('live logging needs Chrome/Edge — use the Download buttons instead','err'); return false; }
   try{ logHandle=await window.showSaveFilePicker({suggestedName:'LFI3751_run-log_'+stamp()+'.csv',startIn:'downloads',types:[{description:'CSV',accept:{'text/csv':['.csv']}}]});
     const w=await logHandle.createWritable(); await w.write(LOG_HEADER+'\n'); await w.close();
     for(const r of logRows) await appendFile(r);
     setRecordingUI(true);
     log('recording run log (live append) → '+(logHandle.name||'file'),'sys');
-  }catch(e){ if(e.name!=='AbortError') log('log file: '+e.message,'err'); }
+    return true;
+  }catch(e){ if(e.name!=='AbortError') log('log file: '+e.message,'err'); return false; }
+}
+$('logFileBtn').onclick=()=>{
+  if(logHandle){
+    if(confirm('Stop recording the run log?\n\nThe file already saved to disk is kept as-is — new events simply stop being written to it. You can start a new run log afterward.')) stopLogging();
+    return;
+  }
+  startLogging();
 };
 async function saveFretData(){
   if(!acquisitions.length){ log('no FRET data to save','sys'); return false; }
@@ -792,6 +800,64 @@ async function saveFretData(){
   }
 }
 $('dlCsvBtn').onclick=saveFretData;
+
+/* ---- Export for FRET Analyzer: .xlsx, this ramp = one replicate ---- */
+let _sheetjs=null;
+function loadSheetJS(){
+  if(window.XLSX) return Promise.resolve(window.XLSX);
+  if(_sheetjs) return _sheetjs;
+  _sheetjs=new Promise((res,rej)=>{ const s=document.createElement('script');
+    s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+    s.onload=()=>res(window.XLSX); s.onerror=()=>rej(new Error('could not load the spreadsheet library (needs internet the first time)'));
+    document.head.appendChild(s); });
+  return _sheetjs;
+}
+async function exportForAnalyzer(){
+  const agg=aggregates();               // one row per T: mean of accepted replicates, outliers excluded
+  if(!agg.length){ log('no accepted FRET data to export','err'); return; }
+  let XLSX; try{ XLSX=await loadSheetJS(); }catch(e){ log('Export for Analyzer: '+e.message,'err'); return; }
+  // The FRET Analyzer reads 6 columns by position (header ignored): Temperature, FRET1, FRET2, nap, tfpc, did,
+  // and computes ND = FRET1/√(nap·did), TD = FRET2/√(tfpc·did). To reproduce THIS tool's plotted per-temperature
+  // means exactly, put the mean ND/TD into FRET1/FRET2 and set the three direct channels to 1.
+  const header=['Temperature','FRET1 (=mean ND)','FRET2 (=mean TD)','nap (=1)','tfpc (=1)','did (=1)'];
+  const rows=agg.map(p=>[p.T, +p.nd.toFixed(6), +p.td.toFixed(6), 1, 1, 1]);
+  const ws=XLSX.utils.aoa_to_sheet([header,...rows]);
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'ramp1');
+  const name='LFI3751_analyzer_'+stamp()+'.xlsx';
+  XLSX.writeFile(wb,name);              // downloads to the browser's default folder
+  log('exported analyzer file ('+agg.length+' temperatures) → '+name,'sys');
+}
+$('exportAnaBtn').onclick=exportForAnalyzer;
+
+/* ---- Load a previous "Download FRET data" CSV back into the tool ---- */
+function parseCsvLine(line){ const out=[]; let cur='',q=false;
+  for(let i=0;i<line.length;i++){ const c=line[i];
+    if(q){ if(c==='"'){ if(line[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+    else { if(c===','){out.push(cur);cur='';} else if(c==='"'){q=true;} else cur+=c; } }
+  out.push(cur); return out; }
+function loadRampFromText(text){
+  const lines=text.replace(/\r/g,'').split('\n').filter(l=>l.length);
+  if(lines.length<2){ log('file has no data rows','err'); return; }
+  const H=parseCsvLine(lines[0]).map(s=>s.trim()), col=n=>H.indexOf(n);
+  const iT=col('T_C'), iCh=['c1_427_545','c2_427_664','c3_499_551','c4_499_664','c5_646_664'].map(col),
+        iRej=col('rejected'), iIso=col('iso_time'), iTag=col('tag');
+  if(iT<0 || iCh.some(i=>i<0)){ log('not a recognized FRET-data CSV (missing T_C or channel columns)','err'); return; }
+  const loaded=[];
+  for(const line of lines.slice(1)){ const r=parseCsvLine(line);
+    const T=+r[iT], ch=iCh.map(i=>+r[i]);
+    if(!isFinite(T) || ch.some(v=>!isFinite(v))) continue;
+    const rej = iRej>=0 && String(r[iRej]).trim()==='1';
+    loaded.push({T, ch, fret:computeFret(ch), tag:(iTag>=0?(r[iTag]||''):''), iso:(iIso>=0?(r[iIso]||''):''),
+      override: rej?false:null, autoRejected:false, mark:null}); }
+  if(!loaded.length){ log('no valid rows found in file','err'); return; }
+  acquisitions.length=0; loaded.forEach(a=>acquisitions.push(a));
+  renderAcqTable(); drawFretPlot();
+  log('loaded '+loaded.length+' acquisitions from file','sys');
+}
+$('loadRampBtn').onclick=()=>$('loadRampInput').click();
+$('loadRampInput').onchange=e=>{ const f=e.target.files[0]; if(!f) return;
+  if(acquisitions.length && !confirm('Load '+f.name+'?\n\nThis replaces the current FRET data table with the contents of the file.')){ e.target.value=''; return; }
+  const rd=new FileReader(); rd.onload=()=>{ loadRampFromText(String(rd.result)); e.target.value=''; }; rd.readAsText(f); };
 
 /* ============================ wire-up ============================ */
 $('connectBtn').onclick=connect;
