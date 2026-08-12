@@ -31,6 +31,9 @@ Determine the concentration and uncertainty of a phospholipid stock solution fro
 **[Monte Carlo Lattice Simulator →]({{ '/resources/mc-simulator/' | relative_url }})**
 Interactive 2D Monte Carlo simulation of lipid mixing on a triangular lattice with periodic boundary conditions and nearest-neighbor pairwise interactions. A binary A/B mixture evolves via Kawasaki exchange dynamics with the Metropolis acceptance criterion.
 
+**[LFI-3751 Temperature-Ramp + FRET Controller →]({{ '/resources/lfi3751/' | relative_url }})**
+Browser tool for running temperature-dependent FRET experiments on our Fluorolog spectrofluorometer. It programs a step-and-hold temperature ramp on the Wavelength Electronics LFI-3751 Peltier controller over the Web Serial API, then records manual FRET readings at each temperature with live plotting, automatic outlier flagging, and CSV export. Direct hardware control requires Chrome or Edge over HTTPS, but a built-in emulation mode lets anyone explore the full interface with no instrument connected.
+
 ---
 
 ## Data and code

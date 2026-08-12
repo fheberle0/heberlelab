@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LFI-3751 step-and-hold + FRET</title>
+<style>
+  :root{--bg:#0f1216;--panel:#181d24;--line:#2a323d;--ink:#e6ecf2;--mut:#8a97a6;
+        --acc:#4a9eff;--ok:#37c871;--warn:#ffb020;--bad:#ff5c5c;--mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  header{position:sticky;top:0;z-index:20;background:var(--bg);padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .hstat{font-size:12px;color:var(--mut);font-family:var(--mono);white-space:nowrap}
+  .hstat b{color:var(--ink);font-weight:650}
+  .hstat.big{font-size:15px}
+  .hstat.big b{color:var(--warn)}
+  .hsep{width:1px;height:20px;background:var(--line)}
+  .statgroup{display:flex;gap:14px;align-items:baseline;flex-wrap:nowrap}
+  h1{font-size:16px;margin:0 8px 0 0;font-weight:650}
+  .pill{font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mut)}
+  .pill.on{color:var(--ok);border-color:var(--ok)}
+  .pill.off{color:var(--bad);border-color:var(--bad)}
+  .pill.emu{color:#04121f;background:var(--warn);border-color:var(--warn)}
+  .spacer{flex:1}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px;max-width:1280px}
+  @media(max-width:900px){main{grid-template-columns:1fr}}
+  .wide{grid-column:1/-1}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .panel h2{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
+  label{font-size:12px;color:var(--mut)}
+  input,select,textarea,button{font:inherit;background:#0d1117;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:7px 9px}
+  input[type=number]{width:76px}
+  button{cursor:pointer;background:#20272f}
+  button:hover{border-color:var(--acc)}
+  button.primary{background:var(--acc);border-color:var(--acc);color:#04121f;font-weight:650}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .banner{background:#2a1e00;border:1px solid var(--warn);color:#ffe0a3;border-radius:8px;padding:10px 12px;font-size:13px;margin:0 14px 0}
+  .big{font-family:var(--mono);font-size:28px;font-weight:600}
+  .kv{display:flex;gap:20px;align-items:baseline;flex-wrap:wrap}
+  .kv div small{display:block;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  #console{font-family:var(--mono);font-size:12px;background:#0a0d11;border:1px solid var(--line);border-radius:7px;
+           height:150px;overflow:auto;padding:8px;white-space:pre-wrap;word-break:break-all}
+  .tx{color:var(--acc)} .rx{color:var(--ok)} .sys{color:var(--mut)} .err{color:var(--bad)}
+  .muted{color:var(--mut);font-size:12px}
+  code{font-family:var(--mono);background:#0d1117;border:1px solid var(--line);border-radius:4px;padding:0 4px}
+  .status-ready{color:var(--ok)} .status-eq{color:var(--warn)}
+  canvas.plot{width:100%;height:230px;display:block;background:#0a0d11;border:1px solid var(--line);border-radius:7px;margin-top:8px}
+  table{border-collapse:collapse;width:100%;font-size:12px}
+  th,td{border:1px solid var(--line);padding:2px 4px;text-align:center}
+  th{color:var(--mut);font-weight:500;font-size:11px}
+  td.num{font-family:var(--mono)}
+  table input{width:100%;min-width:44px;padding:3px 4px;border:1px solid transparent;background:transparent;text-align:center}
+  table input:focus{border-color:var(--acc);background:#0d1117}
+  table input.warn{color:var(--warn);font-weight:600}
+  tr.active td{background:#12202e}
+  tr.rej td{opacity:.5;text-decoration:line-through}
+  .tbox{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:7px}
+  .acts button{padding:1px 6px;font-size:12px;line-height:1.3}
+  .ov-auto{color:var(--mut)} .ov-keep{color:var(--ok);border-color:var(--ok)} .ov-rej{color:var(--bad);border-color:var(--bad)}
+  ul.links{margin:0;padding-left:18px} ul.links li{margin:5px 0}
+  a{color:var(--acc)}
+  .chgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .chgrid label{display:block;font-size:11px;color:var(--mut);margin-bottom:2px;text-align:center}
+  .chgrid input{width:100%;text-align:center}
+  details.info{margin:8px 0;border:1px solid var(--line);border-radius:7px;padding:6px 10px;background:#0d1117}
+  details.info summary{cursor:pointer;color:var(--acc);font-size:12px}
+  .formula{font-family:var(--mono);font-size:12px;line-height:1.9}
+  .measnote{background:#2a1e00;border:1px solid var(--warn);color:#ffe0a3;border-radius:7px;padding:8px 10px;font-size:13px;margin:6px 0}
+  button.armed{border-color:var(--warn);color:var(--warn)}
+</style>
+</head>
+<body>
+<header>
+  <h1>LFI-3751 · step-and-hold + FRET</h1>
+  <span id="connPill" class="pill off">disconnected</span>
+  <span id="cfgPill" class="pill on">protocol: LFI-3751</span>
+  <span id="emuBadge" class="pill emu" style="display:none">● EMULATION — no hardware</span>
+  <span class="hsep"></span>
+  <div class="statgroup">
+    <span class="hstat">SP <b id="hSP">—</b></span>
+    <span class="hstat big">Act <b id="hAct">—</b></span>
+    <span class="hstat big">Equil <b id="hEq">—</b></span>
+    <span class="hstat">step <b id="hStep">—</b></span>
+  </div>
+  <span class="spacer"></span>
+  <button id="logFileBtn">Log to file…</button>
+  <button id="dlCsvBtn">Download data CSV</button>
+</header>
+
+<div class="banner">
+  <b>Before any 60&nbsp;°C setpoint:</b> widen the high temperature limit (panel&nbsp;3) — default is 35&nbsp;°C and the unit clamps above it. Do <b>not</b> touch thermistor calibration or Autotune. Verify comms with <b>Read actual&nbsp;T</b> before enabling output. No instrument handy? Tick <b>Emulation</b> in panel&nbsp;1.
+</div>
+
+<main>
+  <!-- 1 CONNECTION -->
+  <section class="panel">
+    <h2>1 · Connection</h2>
+    <div class="row">
+      <label>baud</label>
+      <select id="baud"><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option selected>19200</option><option>38400</option><option>57600</option><option>115200</option></select>
+      <label>data</label><select id="data"><option>7</option><option selected>8</option></select>
+      <label>parity</label><select id="parity"><option selected>none</option><option>even</option><option>odd</option></select>
+      <label>stop</label><select id="stop"><option selected>1</option><option>2</option></select>
+      <label>addr</label><input id="addr" type="number" value="1" min="1" max="99" style="width:54px">
+    </div>
+    <div class="row"><label><input type="checkbox" id="emu"> Emulation mode — simulated LFI-3751, no hardware</label></div>
+    <p class="muted" style="margin:0 0 6px">No instrument connected? Turn on Emulation to try the whole interface against a simulated controller — nothing needs to be plugged in.</p>
+    <div class="row">
+      <button id="connectBtn" class="primary">Connect…</button>
+      <button id="disconnectBtn" disabled>Disconnect</button>
+      <span class="muted">FT232RL shows as a <code>usbserial-…</code> port. Settings are fixed at <b>19200 · 8 · N · 1</b>; set <b>addr</b> to the unit's RS-232 address (front panel, default 1).</span>
+    </div>
+  </section>
+
+  <!-- 2 LIVE STATE -->
+  <section class="panel">
+    <h2>2 · Instrument state</h2>
+    <div class="kv">
+      <div><small>setpoint</small><span id="spVal" class="big">—</span></div>
+      <div><small>actual T</small><span id="actVal" class="big">—</span></div>
+      <div><small>equilibration</small><span id="eqVal" class="big">—</span></div>
+    </div>
+    <div class="row">
+      <button id="readBtn" disabled>Read actual T</button>
+      <label>poll every</label><input id="pollSec" type="number" value="5" min="1" step="1"> s
+      <button id="pollBtn" disabled>Start polling</button>
+    </div>
+    <div class="muted">Polling reads ACT&nbsp;T and feeds the live actual-T trace on the ramp plot. The unit refreshes ~every 600&nbsp;ms — don't poll faster than ~1&nbsp;Hz.</div>
+  </section>
+
+  <!-- 3 LIMITS & OUTPUT -->
+  <section class="panel">
+    <h2>3 · Limits &amp; output</h2>
+    <div class="row">
+      <label>high limit</label><input id="limHi" type="number" value="65" step="0.5"> °C
+      <label>low limit</label><input id="limLo" type="number" value="5" step="0.5"> °C
+      <button id="setLimits" disabled>Set limits</button>
+    </div>
+    <div class="row">
+      <label>allow setpoints</label><input id="clampLo" type="number" value="5" step="0.5"> to <input id="clampHi" type="number" value="65" step="0.5"> °C
+      <span class="muted">(software guard — setpoints outside are refused)</span>
+    </div>
+    <div class="row">
+      <button id="outOn" disabled>Enable output</button>
+      <button id="outOff" disabled>Disable output</button>
+    </div>
+    <div class="muted">Widen the high limit (≥ your top setpoint) <b>before</b> a 60&nbsp;°C run. Enabling output drives current to the Peltier — set limits and verify a Read first.</div>
+  </section>
+
+  <!-- 4 STEP AND HOLD -->
+  <section class="panel wide">
+    <h2>4 · Step-and-hold ramp</h2>
+    <div class="row">
+      <label>start</label><input id="bStart" type="number" value="60" step="1"> °C
+      <label>end</label><input id="bEnd" type="number" value="10" step="1"> °C
+      <label>step</label><input id="bStep" type="number" value="1" step="0.5"> °C
+      <label>initial equil</label><input id="bInit" type="number" value="15" step="1"> min
+      <label>per-step equil</label><input id="bStep2" type="number" value="2" step="0.5"> min
+      <button id="buildBtn">Build table</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:14px;align-items:start">
+      <div>
+        <div class="tbox">
+          <table>
+            <thead><tr><th>#</th><th>T (°C)</th><th>equil (M:SS)</th><th></th></tr></thead>
+            <tbody id="rampBody"></tbody>
+          </table>
+        </div>
+        <div class="row"><button id="rampAdd">+ add row</button><span class="muted" id="rampTotal"></span></div>
+      </div>
+      <div>
+        <div class="row" style="margin:0 0 4px">
+          <label><input type="radio" name="rampMode" value="planned" checked> Planned ramp</label>
+          <label><input type="radio" name="rampMode" value="actual"> Actual ramp</label>
+          <label><input type="radio" name="rampMode" value="recent"> Recent (zoom)</label>
+        </div>
+        <canvas id="rampPlot" class="plot"></canvas>
+        <div class="muted" id="rampCap">Planned setpoint staircase vs. cumulative equilibration time.</div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <span class="big" id="stepNow" style="font-size:15px">step —/— · —</span>
+    </div>
+    <div class="row">
+      <button id="startBtn" class="primary" disabled>▶ Start run</button>
+      <button id="prevBtn" disabled>◀ Prev temp</button>
+      <button id="nextBtn" disabled>Next temp ▶</button>
+      <button id="resetBtn" disabled>Reset run</button>
+      <span class="muted">Start run → wait for READY → collect spectrum + enter readings (panel 5) → Next. Actual T &amp; equil show live in the sticky header.</span>
+    </div>
+  </section>
+
+  <!-- 5 FRET -->
+  <section class="panel wide">
+    <h2>5 · FRET readings &amp; live plot</h2>
+    <div class="row">
+      <button id="measStartBtn">▶ Start measurement</button>
+      <label>temperature</label><input id="acqT" type="number" step="0.1" style="width:70px"> °C
+      <label>tag</label><input id="acqTag" type="text" placeholder="optional note" style="width:150px">
+    </div>
+    <div id="measNote" class="measnote" style="display:none"></div>
+    <div class="chgrid" style="margin:6px 0">
+      <div><label>Nap direct<br>427/545</label><input id="ch0" type="number" step="any"></div>
+      <div><label>Nap→DiD<br>427/664</label><input id="ch1" type="number" step="any"></div>
+      <div><label>TFPC direct<br>499/551</label><input id="ch2" type="number" step="any"></div>
+      <div><label>TFPC→DiD<br>499/664</label><input id="ch3" type="number" step="any"></div>
+      <div><label>DiD direct<br>646/664</label><input id="ch4" type="number" step="any"></div>
+    </div>
+    <div class="row">
+      <button id="logAcqBtn" class="primary">Log acquisition</button>
+      <span class="muted">Flow: <b>Start measurement</b> (marks the time &amp; reminds you to trigger FluorEssence) → run the scan → type the five values → <b>Log</b>. Tab across fields, Enter logs. Skipping Start measurement just timestamps at Log. Log again at the same T to re-measure.</span>
+    </div>
+    <details class="info">
+      <summary>FRET equations &amp; channel definitions</summary>
+      <p class="muted" style="margin:6px 0 2px">Five single-point readings I(ex/em), in entry order:</p>
+      <div class="formula">
+        I₁ = Nap direct (427/545) — donor, ND pair<br>
+        I₂ = Nap→DiD (427/664) — sensitized acceptor, ND pair<br>
+        I₃ = TFPC direct (499/551) — donor, TD pair<br>
+        I₄ = TFPC→DiD (499/664) — sensitized acceptor, TD pair<br>
+        I₅ = DiD direct (646/664) — acceptor (shared)
+      </div>
+      <p class="muted" style="margin:8px 0 2px">Normalized sensitized acceptor emission (Chaisson Eq. 1) — sensitized acceptor ÷ geometric mean of the donor-direct and acceptor-direct channels:</p>
+      <div class="formula">
+        FRET<sub>ND</sub> = I₂ / √(I₁ · I₅)<br>
+        FRET<sub>TD</sub> = I₄ / √(I₃ · I₅)<br>
+        FRET<sub>R</sub> = FRET<sub>ND</sub> / FRET<sub>TD</sub>
+      </div>
+      <p class="muted" style="margin:8px 0 0">Relative/dimensionless. Readings used as entered — no background or crosstalk subtraction (do that upstream if your protocol requires it).</p>
+    </details>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:14px;align-items:start;margin-top:8px">
+      <div class="tbox">
+        <table>
+          <thead><tr><th>T</th><th>427/545</th><th>427/664</th><th>499/551</th><th>499/664</th><th>646/664</th><th>ND</th><th>TD</th><th>FRET_R</th><th>tag</th><th></th></tr></thead>
+          <tbody id="acqBody"></tbody>
+        </table>
+      </div>
+      <div>
+        <div class="row" style="margin:0 0 4px">
+          <label><input type="radio" name="fretMode" value="r" checked> Ratio</label>
+          <label><input type="radio" name="fretMode" value="ndtd"> ND &amp; TD</label>
+          <span class="spacer"></span>
+          <label>auto-flag &gt; <input id="relFloor" type="number" value="5" min="0" step="1" style="width:50px"> % from median</label>
+        </div>
+        <canvas id="fretPlot" class="plot"></canvas>
+        <div class="muted">Points = individual acquisitions — <b>filled = accepted, open = rejected</b>; ND ● / TD ■. The line connects the reported per-T value (mean of accepted replicates; outliers auto-flagged when a T has ≥3 rows, and any point manually rejectable — excluded from the value but kept in the record).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 DIAGNOSTICS -->
+  <section class="panel">
+    <h2>6 · Diagnostics <span class="muted">(read-only)</span></h2>
+    <div class="row">
+      <select id="diagSel"></select>
+      <button id="diagSend" disabled>Send</button>
+      <span class="muted">Builds and sends the frame for you; reply appears below. No hand-typing, no state changes.</span>
+    </div>
+    <div id="console"></div>
+    <div class="row"><button id="clearLog">Clear log</button></div>
+  </section>
+
+  <!-- 7 DOCS -->
+  <section class="panel">
+    <h2>7 · Documentation &amp; links</h2>
+    <ul class="links">
+      <li><a href="lfi3751man.pdf" target="_blank" rel="noopener">LFI-3751 User Guide (PDF)</a> — full manual incl. the RS-232 command reference</li>
+      <li><a href="https://rmnmc.chimie.unistra.fr/extra_files/doc_FL/fluorolog_3_manual.pdf" target="_blank" rel="noopener">Fluorolog-3 manual (PDF)</a> — spectrofluorometer operation &amp; FluorEssence reference</li>
+      <li><a href="https://www.teamwavelength.com/product/lfi3751-5a-digital-temperature-control-instrument/" target="_blank" rel="noopener">Wavelength Electronics — LFI-3751 (5 A Digital)</a> — manufacturer product page: manual, LabVIEW drivers, Benchlink</li>
+      <li><a href="https://developer.mozilla.org/docs/Web/API/Web_Serial_API" target="_blank" rel="noopener">Web Serial API (MDN)</a> — browser support &amp; troubleshooting</li>
+    </ul>
+    <p class="muted">Point the manual link at wherever you host the PDF on heberlelab.com. Add lab-specific links (SOPs, the FRET protocol) here as needed.</p>
+  </section>
+</main>
+
+<script>
+/* ============================ LFI-3751 protocol (verified vs. manual) ===== */
+const LFI = {
+  address: 1, configured: true,
+  fmtData(x){ const s=x<0?'-':'+'; let v=Math.round(Math.abs(x)*1000); if(v>999999)v=999999;
+    return s+String(Math.floor(v/1000)).padStart(3,'0')+'.'+String(v%1000).padStart(3,'0'); },
+  fcs(b){ let x=0; for(let i=0;i<b.length;i++) x^=b.charCodeAt(i); return x.toString(16).toUpperCase().padStart(2,'0'); },
+  packet(type,code,d){ const body='!1'+String(this.address).padStart(2,'0')+type+code+this.fmtData(d); return new TextEncoder().encode(body+this.fcs(body)); },
+  encodeSetpoint(t){ return this.packet('2','03',t); },
+  encodeReadActual(){ return this.packet('1','01',0); },
+  encodeTLimHigh(t){ return this.packet('2','31',t); },
+  encodeTLimLow(t){ return this.packet('2','32',t); },
+  encodeOutput(on){ return this.packet('2','51',on?0.001:0); },
+  encodeRead(code){ return this.packet('1',code,0); },
+  parse(p){ if(p.length<19||p[0]!=='@') return null;
+    return {addr:p.slice(2,4),type:p.slice(4,5),code:p.slice(5,7),end:p.slice(7,9),data:p.slice(9,17),value:parseFloat(p.slice(9,17))}; },
+  endMeaning(c){ return ({'00':'OK','01':'command type not supported','20':'code/type mismatch','21':'password required',
+    '22':'command not implemented','23':'FCS mismatch','26':'query calc error (sensor open/short/range)','27':'sensor locked (output ON)'})[c]||('end code '+c); }
+};
+const DIAG=[
+  {label:'Read actual temperature (°C)',code:'01'},
+  {label:'Read setpoint (°C)',code:'03'},
+  {label:'Read TE current (A)',code:'05'},
+  {label:'Read TE voltage (V)',code:'06'},
+  {label:'Read auxiliary sensor T (°C)',code:'09'},
+  {label:'Read alarm status',code:'35'},
+  {label:'Read output status',code:'51'},
+  {label:'Read firmware version',code:'56'},
+  {label:'Read model number',code:'57'},
+];
+
+/* ============================ state & helpers ============================ */
+const $=id=>document.getElementById(id);
+const CO={ink:'#e6ecf2',mut:'#8a97a6',line:'#2a323d',grid:'#20272f',acc:'#4a9eff',ok:'#37c871',warn:'#ffb020',bad:'#ff5c5c'};
+let port=null,reader=null,writer=null,keepReading=false,pollTimer=null,eqTimer=null,rxText='';
+let emulating=false,emuActual=25,emuSetpoint=null,emuTimer=null;
+let ramp=[],activeIdx=0,rampStart=null,actualTrace=[],lastActual=null,setpointVal=null,setpointTrace=[];
+let acquisitions=[]; let pendingMeas=null; let loggedThisStep=false;
+let logHandle=null,logRows=[];
+const LOG_HEADER='iso_time,elapsed_min,event,step_idx,setpoint_C,actual_T_C,T_C,c1_427_545,c2_427_664,c3_499_551,c4_499_664,c5_646_664,FRET_ND,FRET_TD,FRET_R,rejected,tag';
+
+const log=(m,c='sys')=>{const el=$('console');const t=new Date().toLocaleTimeString();
+  el.insertAdjacentHTML('beforeend',`<span class="${c}">[${t}] ${m}</span>\n`);el.scrollTop=el.scrollHeight;};
+function showSetpoint(t){ setpointVal=+t; const s=(+t).toFixed(1)+' °C'; $('spVal').textContent=s; $('hSP').textContent=s; }
+function showActual(t){ lastActual=t; const s=t.toFixed(2)+' °C'; $('actVal').textContent=s; $('hAct').textContent=s; }
+function showEquil(txt,cls){ $('eqVal').textContent=txt; $('eqVal').className='big '+(cls||''); $('hEq').textContent=txt; }
+const fmtMMSS=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const parseMMSS=v=>{const p=String(v).trim().split(':');return p.length===2?(+p[0])*60+(+p[1]):(+v);};
+const fmtTick=v=>Math.abs(v)>=100?v.toFixed(0):(Number.isInteger(v)?v.toFixed(0):v.toFixed(1));
+const median=a=>{if(!a.length)return NaN;const s=[...a].sort((x,y)=>x-y);const m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+function computeFret(ch){ const [a,b,c,d,e]=ch.map(Number);
+  const nd=b/Math.sqrt(a*e), td=d/Math.sqrt(c*e);
+  if(![nd,td].every(isFinite)) return null;
+  return {nd,td,r:nd/td}; }
+
+/* ============================ serial ============================ */
+function setConnected(on){
+  $('connPill').textContent=on?'connected':'disconnected';
+  $('connPill').className='pill '+(on?'on':'off');
+  $('connectBtn').disabled=on; $('disconnectBtn').disabled=!on;
+  ['readBtn','pollBtn','setLimits','outOn','outOff','startBtn','nextBtn','prevBtn','resetBtn','diagSend'].forEach(b=>$(b).disabled=!on);
+}
+if(!('serial' in navigator)) log('Web Serial not available (use Chrome/Edge over https/localhost for hardware). Emulation still works.','err');
+
+async function connect(){
+  if($('emu').checked){ startEmu(); return; }
+  try{
+    port=await navigator.serial.requestPort();
+    await port.open({baudRate:+$('baud').value,dataBits:+$('data').value,parity:$('parity').value,stopBits:+$('stop').value,flowControl:'none'});
+    writer=port.writable.getWriter(); LFI.address=+$('addr').value||1;
+    setConnected(true);
+    log(`opened @ ${$('baud').value} ${$('data').value}${$('parity').value[0].toUpperCase()}${$('stop').value} · addr ${String(LFI.address).padStart(2,'0')}`,'sys');
+    keepReading=true; readLoop();
+  }catch(e){ log('connect failed: '+e.message,'err'); }
+}
+async function disconnect(){
+  if(emulating){ stopEmu(); return; }
+  keepReading=false; stopPolling();
+  try{ if(reader){await reader.cancel(); reader.releaseLock(); reader=null;} }catch(e){}
+  try{ if(writer){writer.releaseLock(); writer=null;} }catch(e){}
+  try{ if(port){await port.close(); port=null;} }catch(e){}
+  setConnected(false); log('disconnected','sys');
+}
+async function readLoop(){
+  try{
+    reader=port.readable.getReader(); const dec=new TextDecoder();
+    while(keepReading){
+      const {value,done}=await reader.read(); if(done) break;
+      if(value&&value.length){
+        rxText+=dec.decode(value,{stream:true}); let nl;
+        while((nl=rxText.indexOf('\n'))>=0){
+          const raw=rxText.slice(0,nl); rxText=rxText.slice(nl+1);
+          const at=raw.indexOf('@'); if(at>=0) handleResponse(raw.slice(at).replace(/\r/g,''));
+        }
+        if(rxText.length>400) rxText=rxText.slice(-400);
+      }
+    }
+  }catch(e){ if(keepReading) log('read error: '+e.message,'err'); }
+  finally{ try{reader&&reader.releaseLock();}catch(e){} }
+}
+function handleResponse(pkt){
+  const r=LFI.parse(pkt);
+  if(!r){ log(`RX ${pkt}`,'rx'); return; }
+  const ok=r.end==='00';
+  log(`RX ${pkt} · code ${r.code} · ${ok?'OK':('END '+r.end+' — '+LFI.endMeaning(r.end))} · ${r.data.trim()}`, ok?'rx':'err');
+  if(ok && r.code==='01' && isFinite(r.value)) sampleActual(r.value);
+  if(ok && r.code==='03' && isFinite(r.value)) showSetpoint(r.value);
+}
+async function sendBytes(bytes,note){
+  if(!writer){ log('not connected','err'); return; }
+  await writer.write(bytes);
+  log(`TX ${new TextDecoder().decode(bytes)}${note?'   '+note:''}`,'tx');
+}
+
+/* ============================ emulator ============================ */
+function startEmu(){
+  emulating=true; emuActual=25; emuSetpoint=null;
+  setConnected(true);
+  $('connPill').textContent='emulated'; $('connPill').className='pill emu'; $('emuBadge').style.display='';
+  log('EMULATION — simulated LFI-3751, no hardware. The whole interface works without an instrument.','sys');
+  emuTimer=setInterval(emuTick,500);
+}
+function stopEmu(){
+  emulating=false; if(emuTimer){clearInterval(emuTimer);emuTimer=null;} $('emuBadge').style.display='none';
+  stopPolling(); setConnected(false); $('actVal').textContent='—'; log('emulation stopped','sys');
+}
+function emuTick(){
+  if(emuSetpoint!==null){ const dt=0.5,tau=8; emuActual+=(emuSetpoint-emuActual)*(1-Math.exp(-dt/tau)); }
+  showActual(emuActual);
+}
+
+/* ============================ setpoint / read / limits / output ========== */
+function clampOk(t){ const lo=+$('clampLo').value,hi=+$('clampHi').value;
+  if(t<lo||t>hi){ log(`REFUSED ${t}°C — outside allowed ${lo}–${hi}°C`,'err'); return false; } return true; }
+async function setSetpoint(t){
+  if(!clampOk(t)) return false;
+  if(emulating){ emuSetpoint=t; log(`[SIM] setpoint → ${t} °C`,'tx'); }
+  else { try{ await sendBytes(LFI.encodeSetpoint(t),`set setpoint ${t}°C`); }catch(e){ log(e.message,'err'); return false; } }
+  showSetpoint(t); return true;
+}
+function sampleActual(t){
+  showActual(t);
+  if(rampStart!==null){
+    const el=(Date.now()-rampStart)/1000;
+    actualTrace.push([el,t]); if(actualTrace.length>6000) actualTrace.shift();
+    logEvent('poll',{actual:t});
+    drawRampPlot();
+  }
+}
+function pollOnce(){ if(emulating) sampleActual(emuActual); else sendBytes(LFI.encodeReadActual(),'poll'); }
+$('readBtn').onclick=()=>{ if(emulating){ log(`[SIM] actual T = ${emuActual.toFixed(2)} °C`,'rx'); sampleActual(emuActual); } else pollOnce(); };
+function startPolling(){ stopPolling(); const ms=Math.max(1,+$('pollSec').value)*1000; pollTimer=setInterval(pollOnce,ms); $('pollBtn').textContent='Stop polling'; log('polling started','sys'); }
+function stopPolling(){ if(pollTimer){clearInterval(pollTimer);pollTimer=null;$('pollBtn').textContent='Start polling';} }
+$('pollBtn').onclick=()=>{ pollTimer?stopPolling():startPolling(); };
+
+$('setLimits').onclick=async()=>{ const hi=+$('limHi').value,lo=+$('limLo').value;
+  if(emulating){ log(`[SIM] limits ${lo}…${hi} °C`,'tx'); return; }
+  try{ await sendBytes(LFI.encodeTLimHigh(hi),`T LIM HIGH ${hi}°C`); await sendBytes(LFI.encodeTLimLow(lo),`T LIM LOW ${lo}°C`); }catch(e){ log(e.message,'err'); } };
+$('outOn').onclick=async()=>{ if(emulating){ log('[SIM] output ENABLED','tx'); return; } try{ await sendBytes(LFI.encodeOutput(true),'output ENABLE'); }catch(e){ log(e.message,'err'); } };
+$('outOff').onclick=async()=>{ if(emulating){ log('[SIM] output disabled','tx'); return; } try{ await sendBytes(LFI.encodeOutput(false),'output disable'); }catch(e){ log(e.message,'err'); } };
+
+/* ============================ ramp table ============================ */
+function buildRamp(){
+  const s=+$('bStart').value,e=+$('bEnd').value,st=Math.abs(+$('bStep').value)||1;
+  const init=(+$('bInit').value)*60, per=(+$('bStep2').value)*60;
+  ramp=[]; const dir=e>=s?1:-1;
+  for(let T=s; dir>0?T<=e+1e-9:T>=e-1e-9; T+=dir*st) ramp.push({T:+T.toFixed(3),equil:ramp.length===0?init:per});
+  activeIdx=0; renderRampTable(); showStep(); drawRampPlot();
+}
+function renderRampTable(){
+  $('rampBody').innerHTML=ramp.map((r,i)=>`<tr class="${i===activeIdx?'active':''}">
+    <td class="num">${i+1}</td>
+    <td><input data-i="${i}" data-k="T" value="${r.T}"></td>
+    <td><input data-i="${i}" data-k="e" value="${fmtMMSS(r.equil)}"></td>
+    <td class="acts"><button data-i="${i}" data-act="ins" title="insert below">＋</button><button data-i="${i}" data-act="del" title="delete">🗑</button></td></tr>`).join('');
+  const tot=ramp.reduce((a,r)=>a+r.equil,0);
+  $('rampTotal').textContent=`${ramp.length} steps · planned ${fmtMMSS(tot)} (${(tot/60).toFixed(0)} min)`;
+}
+$('rampBody').addEventListener('change',e=>{ const el=e.target,i=+el.dataset.i,k=el.dataset.k; if(!ramp[i])return;
+  if(k==='T') ramp[i].T=+el.value; else if(k==='e') ramp[i].equil=parseMMSS(el.value);
+  renderRampTable(); drawRampPlot(); });
+$('rampBody').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; const i=+b.dataset.i;
+  if(b.dataset.act==='ins') ramp.splice(i+1,0,{T:ramp[i].T,equil:ramp[i].equil});
+  else if(b.dataset.act==='del' && ramp.length>1) ramp.splice(i,1);
+  if(activeIdx>=ramp.length) activeIdx=ramp.length-1;
+  renderRampTable(); showStep(); drawRampPlot(); });
+$('rampAdd').onclick=()=>{ const last=ramp[ramp.length-1]||{T:25,equil:120}; ramp.push({T:last.T,equil:last.equil}); renderRampTable(); drawRampPlot(); };
+$('buildBtn').onclick=buildRamp;
+
+function showStep(){ const r=ramp[activeIdx];
+  $('stepNow').textContent=r?`step ${activeIdx+1}/${ramp.length} · ${r.T} °C · equil ${fmtMMSS(r.equil)}`:'step —/— · —';
+  $('hStep').textContent=r?`${activeIdx+1}/${ramp.length}`:'—'; }
+function gotoStep(i){
+  if(i<0||i>=ramp.length) return;
+  const prev=activeIdx;
+  if(rampStart===null) rampStart=Date.now();
+  else if(i!==prev) logEvent('advance',{step:prev,setpoint:ramp[prev]?.T});
+  if(!pollTimer) startPolling();
+  activeIdx=i; loggedThisStep=false; renderRampTable(); showStep();
+  const T=ramp[i].T;
+  setSetpoint(T); logEvent('goto',{step:i,setpoint:T});
+  if(rampStart!==null) setpointTrace.push([(Date.now()-rampStart)/1000, T]);
+  startEquil(ramp[i].equil);
+  $('acqT').value=T; drawRampPlot();
+}
+function startEquil(sec){
+  clearInterval(eqTimer); let s=Math.round(sec);
+  const upd=()=>{ if(s<=0){clearInterval(eqTimer); showEquil('READY','status-ready');
+      log('equilibration complete — collect spectrum','sys'); logEvent('ready',{step:activeIdx,setpoint:ramp[activeIdx]?.T}); return; }
+    showEquil(fmtMMSS(s),'status-eq'); s--; };
+  upd(); eqTimer=setInterval(upd,1000);
+}
+function startRun(){
+  if(!ramp.length) return;
+  if(rampStart!==null && !confirm('A run is already in progress. Restart from the first step?\n\nThis resets the elapsed-time clock and clears the actual-T trace. Your logged data and FRET acquisitions are kept.')) return;
+  clearInterval(eqTimer); rampStart=null; actualTrace=[]; setpointTrace=[]; activeIdx=0;
+  if(!pollTimer) startPolling();
+  gotoStep(0); log('run started','sys');
+}
+$('startBtn').onclick=startRun;
+$('nextBtn').onclick=()=>{
+  if(rampStart!==null && !loggedThisStep && !confirm(`No measurement has been logged at the current step (${ramp[activeIdx]?.T} °C).\n\nAdvance to the next temperature anyway?`)) return;
+  gotoStep(activeIdx+1);
+};
+$('prevBtn').onclick=()=>gotoStep(activeIdx-1);
+$('resetBtn').onclick=()=>{ if(rampStart!==null && !confirm('Reset the current run?\n\nThis resets the elapsed-time clock and clears the actual-T trace and setpoint history. Your logged data and FRET acquisitions are kept.')) return;
+  stopPolling(); rampStart=null; actualTrace=[]; setpointTrace=[]; activeIdx=0; clearInterval(eqTimer); showEquil('—',''); renderRampTable(); showStep(); drawRampPlot(); log('run reset','sys'); };
+
+/* ============================ FRET entry / table / aggregate ============= */
+function effectiveRejected(a){ return a.override===false ? true : a.override===true ? false : !!a.autoRejected; }
+function aggregates(){
+  const g={}; acquisitions.forEach(a=>{ if(a.fret){(g[a.T]=g[a.T]||[]).push(a);} });
+  const rf=(+(($('relFloor')||{}).value)||0)/100;
+  const out=[];
+  for(const T in g){
+    const grp=g[T]; grp.forEach(a=>a.autoRejected=false);
+    const pool=grp.filter(a=>a.override!==false);          // everything not force-rejected
+    if(pool.length>=3){
+      const rs=pool.map(a=>a.fret.r), med=median(rs);
+      const mad=median(rs.map(v=>Math.abs(v-med)))*1.4826;
+      const thr=Math.max(3.5*mad, Math.abs(med)*rf);        // must exceed BOTH stats and floor
+      if(thr>0) pool.forEach(a=>{ if(a.override===null && Math.abs(a.fret.r-med)>thr) a.autoRejected=true; });
+    }
+    const keep=grp.filter(a=>!effectiveRejected(a));
+    if(!keep.length) continue;
+    const mean=k=>keep.reduce((s,a)=>s+a.fret[k],0)/keep.length;
+    out.push({T:+T,nd:mean('nd'),td:mean('td'),r:mean('r'),n:keep.length});
+  }
+  return out.sort((a,b)=>a.T-b.T);
+}
+function renderAcqTable(){
+  aggregates(); // refreshes autoRejected
+  const meds=[0,1,2,3,4].map(ci=>median(acquisitions.map(a=>a.ch[ci]).filter(isFinite)));
+  const out=(v,ci)=>isFinite(meds[ci])&&meds[ci]>0&&(v>5*meds[ci]||v<0.2*meds[ci]||v<0)?'warn':'';
+  $('acqBody').innerHTML=acquisitions.map((a,i)=>{
+    const rej=effectiveRejected(a);
+    return `<tr class="${rej?'rej':''}">
+      <td><input data-i="${i}" data-k="T" value="${a.T}"></td>
+      ${a.ch.map((v,ci)=>`<td><input class="${out(v,ci)}" data-i="${i}" data-k="c${ci}" value="${v??''}"></td>`).join('')}
+      <td class="num">${a.fret?a.fret.nd.toFixed(4):'—'}</td>
+      <td class="num">${a.fret?a.fret.td.toFixed(4):'—'}</td>
+      <td class="num">${a.fret?a.fret.r.toFixed(3):'—'}</td>
+      <td><input data-i="${i}" data-k="tag" value="${a.tag||''}"></td>
+      <td class="acts"><button data-i="${i}" data-act="dup" title="re-measure this T">＋</button><button data-i="${i}" data-act="ov" title="auto → keep → reject" class="ov-${a.override===true?'keep':a.override===false?'rej':'auto'}">${a.override===true?'keep':a.override===false?'rej':'auto'}</button><button data-i="${i}" data-act="del" title="delete">🗑</button></td></tr>`;
+  }).join('');
+}
+function updateDerived(){
+  aggregates();
+  const meds=[0,1,2,3,4].map(ci=>median(acquisitions.map(x=>x.ch[ci]).filter(isFinite)));
+  const rows=$('acqBody').querySelectorAll('tr');
+  acquisitions.forEach((a,i)=>{ const tr=rows[i]; if(!tr) return;
+    tr.className=effectiveRejected(a)?'rej':'';
+    const nums=tr.querySelectorAll('td.num');
+    if(nums.length>=3){ nums[0].textContent=a.fret?a.fret.nd.toFixed(4):'—'; nums[1].textContent=a.fret?a.fret.td.toFixed(4):'—'; nums[2].textContent=a.fret?a.fret.r.toFixed(3):'—'; }
+    tr.querySelectorAll('input[data-k^="c"]').forEach((inp,ci)=>{ const v=a.ch[ci];
+      inp.classList.toggle('warn', isFinite(meds[ci])&&meds[ci]>0&&(v>5*meds[ci]||v<0.2*meds[ci]||v<0)); });
+  });
+  drawFretPlot();
+}
+$('acqBody').addEventListener('input',e=>{ const el=e.target,i=+el.dataset.i,k=el.dataset.k; const a=acquisitions[i]; if(!a||!k)return;
+  if(k==='T') a.T=+el.value; else if(k==='tag') a.tag=el.value;
+  else if(k[0]==='c'){ a.ch[+k.slice(1)]=+el.value; a.fret=computeFret(a.ch); }
+  updateDerived(); });
+$('acqBody').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; const i=+b.dataset.i;
+  if(b.dataset.act==='dup'){ $('acqT').value=acquisitions[i].T; $('ch0').focus(); }
+  else if(b.dataset.act==='ov'){ const a=acquisitions[i]; a.override = a.override===null?true:(a.override===true?false:null); renderAcqTable(); drawFretPlot(); }
+  else if(b.dataset.act==='del'){ acquisitions.splice(i,1); renderAcqTable(); drawFretPlot(); } });
+
+function logAcquisition(){
+  const T=+$('acqT').value;
+  const ch=[0,1,2,3,4].map(ci=>{const v=$('ch'+ci).value; return v===''?NaN:+v;});
+  if(ch.some(v=>!isFinite(v))){ log('enter all five channel values','err'); return; }
+  const fret=computeFret(ch);
+  const pm=pendingMeas;
+  const markEl = pm&&pm.el!=null ? pm.el : (rampStart!==null?(Date.now()-rampStart)/1000:null);
+  const markT  = pm&&pm.T!=null ? pm.T : (lastActual!=null?lastActual:T);
+  const iso    = pm ? pm.iso : new Date().toISOString();
+  const a={T,ch,fret,tag:$('acqTag').value,iso,override:null,autoRejected:false,
+           mark: markEl!=null ? {el:markEl, T:markT} : null};
+  acquisitions.push(a); loggedThisStep=true;
+  logEvent('acquire',{T,ch,fret,tag:a.tag});
+  pendingMeas=null; $('measNote').style.display='none'; $('measStartBtn').classList.remove('armed');
+  [0,1,2,3,4].forEach(ci=>$('ch'+ci).value=''); $('acqTag').value='';
+  renderAcqTable(); drawFretPlot(); drawRampPlot(); $('ch0').focus();
+}
+$('logAcqBtn').onclick=logAcquisition;
+$('measStartBtn').onclick=()=>{
+  pendingMeas={ el: rampStart!==null?(Date.now()-rampStart)/1000:null, T:lastActual, iso:new Date().toISOString() };
+  logEvent('meas_start',{ setpoint:ramp[activeIdx]?.T, actual:lastActual });
+  $('measNote').style.display='';
+  $('measNote').textContent='⏱ Measurement time marked '+new Date().toLocaleTimeString()+' — now press START in FluorEssence. Type the five readings below and click Log when the scan finishes.';
+  $('measStartBtn').classList.add('armed');
+  log('measurement start marked — trigger FluorEssence now','sys');
+  drawRampPlot();
+};
+['ch0','ch1','ch2','ch3','ch4','acqTag'].forEach(id=>$(id).addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();logAcquisition();} }));
+document.querySelectorAll('input[name=fretMode]').forEach(r=>r.onchange=drawFretPlot);
+document.querySelectorAll('input[name=rampMode]').forEach(r=>r.onchange=drawRampPlot);
+$('relFloor').addEventListener('change',()=>{ renderAcqTable(); drawFretPlot(); });
+setInterval(()=>{ if((document.querySelector('input[name=rampMode]:checked')||{}).value==='recent') drawRampPlot(); },1000);
+
+/* ============================ plotting ============================ */
+function prep(cv){ const dpr=window.devicePixelRatio||1,W=cv.clientWidth||600,H=cv.clientHeight||230;
+  cv.width=W*dpr; cv.height=H*dpr; const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); return {ctx,W,H}; }
+function frame(ctx,W,H,xr,yr,xl,yl){
+  const m={l:54,r:14,t:12,b:32},pw=W-m.l-m.r,ph=H-m.t-m.b,[xmin,xmax]=xr,[ymin,ymax]=yr;
+  const sx=x=>m.l+(x-xmin)/((xmax-xmin)||1)*pw, sy=y=>m.t+ph-(y-ymin)/((ymax-ymin)||1)*ph;
+  ctx.font='11px system-ui';
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(let i=0;i<=4;i++){const y=ymin+(ymax-ymin)*i/4,py=sy(y);ctx.strokeStyle=CO.grid;ctx.beginPath();ctx.moveTo(m.l,py);ctx.lineTo(m.l+pw,py);ctx.stroke();ctx.fillStyle=CO.mut;ctx.fillText(fmtTick(y),m.l-6,py);}
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  for(let i=0;i<=5;i++){const x=xmin+(xmax-xmin)*i/5,px=sx(x);ctx.strokeStyle=CO.grid;ctx.beginPath();ctx.moveTo(px,m.t);ctx.lineTo(px,m.t+ph);ctx.stroke();ctx.fillStyle=CO.mut;ctx.fillText(fmtTick(x),px,m.t+ph+6);}
+  ctx.strokeStyle=CO.line; ctx.strokeRect(m.l,m.t,pw,ph);
+  ctx.fillStyle=CO.mut; ctx.fillText(xl,m.l+pw/2,H-13);
+  ctx.save(); ctx.translate(13,m.t+ph/2); ctx.rotate(-Math.PI/2); ctx.fillText(yl,0,0); ctx.restore();
+  return {sx,sy};
+}
+function legend(ctx,W,items){ ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.font='11px system-ui'; let x=W-14,y=20;
+  for(let i=items.length-1;i>=0;i--){ const [t,c]=items[i]; const w=ctx.measureText(t).width; x-=w+18;
+    ctx.fillStyle=c; ctx.fillRect(x,y-3,10,6); ctx.fillStyle=CO.mut; ctx.fillText(t,x+14,y); x-=6; } }
+function dot(ctx,x,y,c,hollow){ ctx.beginPath(); ctx.arc(x,y,3,0,7);
+  if(hollow){ ctx.strokeStyle=c; ctx.lineWidth=1.4; ctx.stroke(); ctx.strokeStyle=c; ctx.beginPath(); ctx.moveTo(x-3,y-3);ctx.lineTo(x+3,y+3);ctx.moveTo(x+3,y-3);ctx.lineTo(x-3,y+3);ctx.stroke(); }
+  else { ctx.fillStyle=c; ctx.fill(); } }
+function sym(ctx,x,y,shape,color,filled,r=3.2){ ctx.beginPath();
+  if(shape==='square') ctx.rect(x-r,y-r,2*r,2*r); else ctx.arc(x,y,r,0,7);
+  if(filled){ ctx.fillStyle=color; ctx.fill(); } else { ctx.strokeStyle=color; ctx.lineWidth=1.6; ctx.stroke(); } }
+function legendSym(ctx,W,items){ ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.font='11px system-ui'; let x=W-14,y=20;
+  for(let i=items.length-1;i>=0;i--){ const [t,c,sh]=items[i]; const w=ctx.measureText(t).width; x-=w+22;
+    if(sh==='line'){ ctx.strokeStyle=c; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+10,y); ctx.stroke(); }
+    else sym(ctx,x+4,y,sh,c,true,4);
+    ctx.fillStyle=CO.mut; ctx.fillText(t,x+14,y); x-=6; } }
+
+function cumTimes(){ const c=[0]; for(const r of ramp) c.push(c[c.length-1]+r.equil); return c; }
+function drawRampPlot(){
+  const cv=$('rampPlot'); if(!cv) return; const {ctx,W,H}=prep(cv);
+  const mode=(document.querySelector('input[name=rampMode]:checked')||{}).value||'planned';
+  if(mode==='planned'){
+    const cum=cumTimes(); const xmax=Math.max(cum[cum.length-1]/60,1);
+    const temps=ramp.map(r=>r.T); let ymin=Math.min(...temps),ymax=Math.max(...temps);
+    if(!isFinite(ymin)){ymin=0;ymax=70;} const pad=(ymax-ymin||10)*0.08; ymin-=pad; ymax+=pad;
+    const f=frame(ctx,W,H,[0,xmax],[ymin,ymax],'planned time (min)','temperature (°C)');
+    ctx.strokeStyle=CO.acc; ctx.lineWidth=1.8; ctx.beginPath();
+    for(let i=0;i<ramp.length;i++){ const x0=cum[i]/60,x1=cum[i+1]/60,y=ramp[i].T;
+      if(i===0)ctx.moveTo(f.sx(x0),f.sy(y)); else ctx.lineTo(f.sx(x0),f.sy(y)); ctx.lineTo(f.sx(x1),f.sy(y)); }
+    ctx.stroke();
+    legendSym(ctx,W,[['planned',CO.acc,'line']]);
+    if($('rampCap')) $('rampCap').textContent='Planned setpoint staircase vs. cumulative equilibration time.';
+  } else if(mode==='actual'){
+    const marks=acquisitions.filter(a=>a.mark);
+    const nowEl = rampStart!==null ? (Date.now()-rampStart)/1000 : (actualTrace.length?actualTrace[actualTrace.length-1][0]:0);
+    const xmax=Math.max(nowEl/60, ...marks.map(a=>a.mark.el/60), 1);
+    const allT=actualTrace.map(p=>p[1]).concat(marks.map(a=>a.mark.T)).concat(setpointTrace.map(s=>s[1]));
+    let ymin,ymax; if(allT.length){ymin=Math.min(...allT);ymax=Math.max(...allT);} else {ymin=10;ymax=60;}
+    const pad=(ymax-ymin||10)*0.08; ymin-=pad; ymax+=pad;
+    const f=frame(ctx,W,H,[0,xmax],[ymin,ymax],'elapsed time (min)','temperature (°C)');
+    if(setpointTrace.length){ ctx.strokeStyle=CO.acc; ctx.lineWidth=1.4; ctx.setLineDash([5,4]); ctx.beginPath();
+      for(let i=0;i<setpointTrace.length;i++){ const x0=setpointTrace[i][0]/60,y=setpointTrace[i][1],x1=(i+1<setpointTrace.length?setpointTrace[i+1][0]:nowEl)/60;
+        if(i===0)ctx.moveTo(f.sx(x0),f.sy(y)); else ctx.lineTo(f.sx(x0),f.sy(y)); ctx.lineTo(f.sx(x1),f.sy(y)); }
+      ctx.stroke(); ctx.setLineDash([]); }
+    if(actualTrace.length){ ctx.strokeStyle=CO.warn; ctx.lineWidth=1.4; ctx.beginPath();
+      actualTrace.forEach((p,i)=>{const X=f.sx(p[0]/60),Y=f.sy(p[1]);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}); ctx.stroke(); }
+    for(const a of marks) sym(ctx,f.sx(a.mark.el/60),f.sy(a.mark.T),'circle',CO.ok,true,4.2);
+    if(pendingMeas && pendingMeas.el!=null && pendingMeas.T!=null) sym(ctx,f.sx(pendingMeas.el/60),f.sy(pendingMeas.T),'circle',CO.ok,false,4.2);
+    legendSym(ctx,W,[['setpoint',CO.acc,'line'],['actual T',CO.warn,'line'],['acquisition',CO.ok,'circle']]);
+    if($('rampCap')) $('rampCap').textContent='Setpoint steps (blue dashed) + measured actual T (orange) vs. elapsed real time; green marks each measurement (open = started, filled = logged).';
+  } else { // recent zoom
+    const WIN=120, HALF=1.0, WMIN=WIN/60;
+    const now = rampStart!==null ? (Date.now()-rampStart)/1000 : (actualTrace.length?actualTrace[actualTrace.length-1][0]:0);
+    const cur = lastActual!=null ? lastActual : (actualTrace.length?actualTrace[actualTrace.length-1][1]:25);
+    const rel = el => (el-now)/60;   // minutes relative to now: 0 = now, negative = past
+    const f=frame(ctx,W,H,[-WMIN,0],[cur-HALF,cur+HALF],'time relative to now (min)','temperature (°C)');
+    if(setpointVal!=null){ ctx.strokeStyle=CO.acc; ctx.lineWidth=1.2; ctx.setLineDash([5,4]); ctx.beginPath();
+      ctx.moveTo(f.sx(-WMIN),f.sy(setpointVal)); ctx.lineTo(f.sx(0),f.sy(setpointVal)); ctx.stroke(); ctx.setLineDash([]); }
+    ctx.strokeStyle=CO.warn; ctx.lineWidth=1.6; ctx.beginPath(); let started=false;
+    actualTrace.forEach(p=>{ const x=rel(p[0]); if(x<-WMIN-0.02) return; const X=f.sx(x),Y=f.sy(p[1]); started?ctx.lineTo(X,Y):(ctx.moveTo(X,Y),started=true); });
+    ctx.stroke();
+    if(actualTrace.length){ const p=actualTrace[actualTrace.length-1]; sym(ctx,f.sx(rel(p[0])),f.sy(p[1]),'circle',CO.warn,true,3.6); }
+    for(const a of acquisitions.filter(a=>a.mark && rel(a.mark.el)>=-WMIN)) sym(ctx,f.sx(rel(a.mark.el)),f.sy(a.mark.T),'circle',CO.ok,true,4.2);
+    if(pendingMeas && pendingMeas.el!=null && pendingMeas.T!=null && rel(pendingMeas.el)>=-WMIN) sym(ctx,f.sx(rel(pendingMeas.el)),f.sy(pendingMeas.T),'circle',CO.ok,false,4.2);
+    legendSym(ctx,W,[['setpoint',CO.acc,'line'],['actual',CO.warn,'line'],['acquisition',CO.ok,'circle']]);
+    if($('rampCap')) $('rampCap').textContent='Zoom on recent behaviour: current reading ±1 °C, last 2 min. x = 0 is now (−1 = one minute ago); dashed = setpoint.';
+  }
+}
+function drawFretPlot(){
+  const cv=$('fretPlot'); if(!cv) return; const {ctx,W,H}=prep(cv);
+  const mode=(document.querySelector('input[name=fretMode]:checked')||{}).value||'r';
+  const pts=acquisitions.filter(a=>a.fret&&isFinite(a.fret.r));
+  if(!pts.length){ frame(ctx,W,H,[10,60],[0,1],'temperature (°C)',mode==='r'?'FRET ratio':'FRET'); return; }
+  const Ts=pts.map(a=>a.T); let xmin=Math.min(...Ts)-2,xmax=Math.max(...Ts)+2;
+  const vals=mode==='r'?pts.map(a=>a.fret.r):pts.flatMap(a=>[a.fret.nd,a.fret.td]);
+  let ymin=Math.min(...vals),ymax=Math.max(...vals); const pad=(ymax-ymin||1)*0.12; ymin-=pad; ymax+=pad;
+  const f=frame(ctx,W,H,[xmin,xmax],[ymin,ymax],'temperature (°C)',mode==='r'?'FRET ratio (ND/TD)':'FRET (ND, TD)');
+  const agg=aggregates();
+  if(mode==='r'){
+    for(const a of pts){ const rej=effectiveRejected(a); sym(ctx,f.sx(a.T),f.sy(a.fret.r),'circle',CO.ok,!rej); }
+    ctx.strokeStyle=CO.ok; ctx.lineWidth=1.6; ctx.beginPath();
+    agg.forEach((p,i)=>{const X=f.sx(p.T),Y=f.sy(p.r);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}); ctx.stroke();
+    agg.forEach(p=>sym(ctx,f.sx(p.T),f.sy(p.r),'circle',CO.ok,true,4.2));
+    legendSym(ctx,W,[['ratio',CO.ok,'circle']]);
+  } else {
+    for(const a of pts){ const rej=effectiveRejected(a);
+      sym(ctx,f.sx(a.T),f.sy(a.fret.nd),'circle',CO.acc,!rej);
+      sym(ctx,f.sx(a.T),f.sy(a.fret.td),'square',CO.warn,!rej); }
+    const aline=(k,c,sh)=>{ ctx.strokeStyle=c; ctx.lineWidth=1.6; ctx.beginPath();
+      agg.forEach((p,i)=>{const X=f.sx(p.T),Y=f.sy(p[k]);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}); ctx.stroke();
+      agg.forEach(p=>sym(ctx,f.sx(p.T),f.sy(p[k]),sh,c,true,4.2)); };
+    aline('nd',CO.acc,'circle'); aline('td',CO.warn,'square');
+    legendSym(ctx,W,[['ND',CO.acc,'circle'],['TD',CO.warn,'square']]);
+  }
+}
+window.addEventListener('resize',()=>{drawRampPlot();drawFretPlot();});
+
+/* ============================ diagnostics ============================ */
+DIAG.forEach(d=>{ const o=document.createElement('option'); o.value=d.code; o.textContent=d.label; $('diagSel').appendChild(o); });
+$('diagSend').onclick=()=>{
+  const code=$('diagSel').value, lab=DIAG.find(d=>d.code===code).label;
+  if(emulating){
+    const sim={ '01':emuActual.toFixed(3),'03':(emuSetpoint??25).toFixed(3),'05':'0.000','06':'0.000','09':'25.000','35':'OK (no faults)','51':'output OFF','56':'FW 1.00','57':'LFI-3751' }[code]||'0.000';
+    log(`[SIM] ${lab} → ${sim}`,'rx'); return;
+  }
+  try{ sendBytes(LFI.encodeRead(code),lab); }catch(e){ log(e.message,'err'); }
+};
+$('clearLog').onclick=()=>$('console').textContent='';
+
+/* ============================ logging ============================ */
+function logEvent(event,o={}){
+  const iso=new Date().toISOString();
+  const el=rampStart!==null?((Date.now()-rampStart)/60000).toFixed(4):'';
+  const ch=o.ch||[], f=o.fret||{};
+  const row=[iso,el,event,(o.step!=null?o.step+1:''),(o.setpoint??''),(o.actual??''),(o.T??''),
+    ch[0]??'',ch[1]??'',ch[2]??'',ch[3]??'',ch[4]??'',
+    (f.nd!=null?f.nd.toFixed(5):''),(f.td!=null?f.td.toFixed(5):''),(f.r!=null?f.r.toFixed(5):''),
+    (o.rejected?1:''),csvq(o.tag||'')].join(',');
+  logRows.push(row); appendFile(row);
+}
+function csvq(s){ s=String(s); return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; }
+async function appendFile(row){ if(!logHandle) return;
+  try{ const file=await logHandle.getFile(); const w=await logHandle.createWritable({keepExistingData:true}); await w.seek(file.size); await w.write(row+'\n'); await w.close(); }catch(e){} }
+$('logFileBtn').onclick=async()=>{
+  if(!window.showSaveFilePicker){ log('live file logging needs Chrome/Edge — use Download CSV instead','err'); return; }
+  try{ logHandle=await window.showSaveFilePicker({suggestedName:'fret_ramp_log.csv',types:[{description:'CSV',accept:{'text/csv':['.csv']}}]});
+    const w=await logHandle.createWritable(); await w.write(LOG_HEADER+'\n'); await w.close();
+    for(const r of logRows) await appendFile(r);
+    log('logging to file (live append)','sys');
+  }catch(e){ log('log file: '+e.message,'err'); }
+};
+$('dlCsvBtn').onclick=()=>{
+  const head='T_C,c1_427_545,c2_427_664,c3_499_551,c4_499_664,c5_646_664,FRET_ND,FRET_TD,FRET_R,rejected,iso_time,tag';
+  const lines=acquisitions.map(a=>[a.T,...a.ch,(a.fret?a.fret.nd.toFixed(5):''),(a.fret?a.fret.td.toFixed(5):''),(a.fret?a.fret.r.toFixed(5):''),
+    (effectiveRejected(a))?1:0,a.iso,csvq(a.tag||'')].join(','));
+  const blob=new Blob([head+'\n'+lines.join('\n')+'\n'],{type:'text/csv'});
+  const url=URL.createObjectURL(blob),el=document.createElement('a'); el.href=url; el.download='fret_data.csv'; el.click(); URL.revokeObjectURL(url);
+};
+
+/* ============================ wire-up ============================ */
+$('connectBtn').onclick=connect;
+$('disconnectBtn').onclick=disconnect;
+$('emu').onchange=()=>{ $('connectBtn').textContent=$('emu').checked?'Start emulator':'Connect…'; };
+$('addr').onchange=()=>{ LFI.address=+$('addr').value||1; };
+window.addEventListener('beforeunload',()=>{ if(port) disconnect(); });
+buildRamp(); renderAcqTable(); drawFretPlot();
+window.addEventListener('load',()=>{ drawRampPlot(); drawFretPlot(); });
+log('Ready. Build/edit the ramp (panel 4), Connect or tick Emulation, then Go to step → wait for READY → enter the five FRET readings (panel 5) → Next. Start a log file for a permanent record.','sys');
+</script>
+</body>
+</html>
