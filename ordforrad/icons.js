@@ -55,3 +55,15 @@ export function Lock(props) {
   return h(Icon, props,
     h('rect', { x: 3, y: 11, width: 18, height: 11, rx: 2 }), h('path', { d: 'M7 11V7a5 5 0 0 1 10 0v4' }));
 }
+export function TrendingUp(props) {
+  return h(Icon, props,
+    h('polyline', { points: '3 17 9 11 13 15 21 6' }), h('polyline', { points: '15 6 21 6 21 12' }));
+}
+export function Award(props) {
+  return h(Icon, props,
+    h('circle', { cx: 12, cy: 8, r: 6 }), h('path', { d: 'M9 13.5 7 22l5-3 5 3-2-8.5' }));
+}
+export function ArrowLeft(props) {
+  return h(Icon, props,
+    h('line', { x1: 19, y1: 12, x2: 5, y2: 12 }), h('polyline', { points: '12 19 5 12 12 5' }));
+}

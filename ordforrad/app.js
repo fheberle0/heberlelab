@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'https://esm.sh/react@18.3.1';
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
-import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock } from './icons.js';
+import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock, TrendingUp, Award, ArrowLeft } from './icons.js';
 import { supabaseClient } from './supabase-client.js';
 const SUPABASE_FUNCTIONS_URL = 'https://ttyfammnucxnypyfabks.supabase.co/functions/v1';
 
@@ -18,13 +18,15 @@ const VOCAB = [{
   "t": "c",
   "es": "Jag dricker kaffe och te.",
   "ee": "I drink coffee and tea.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 26019.68
 }, {
   "id": 88,
   "sv": "vara (vardagl. va)",
   "en": "to be",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 23017.26
 }, {
   "id": 89,
   "sv": "i",
@@ -33,7 +35,8 @@ const VOCAB = [{
   "es": "Hon bor i Stockholm.",
   "ee": "She lives in Stockholm.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 19272.89
 }, {
   "id": 90,
   "sv": "ha",
@@ -43,7 +46,8 @@ const VOCAB = [{
   "es": "Jag har en idé.",
   "ee": "I have an idea.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 15983.31
 }, {
   "id": 91,
   "sv": "dess",
@@ -51,7 +55,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Katten rör dess svans.",
   "ee": "The cat moves its tail.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 15935.58
 }, {
   "id": 92,
   "sv": "det",
@@ -59,7 +64,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Det är kallt idag.",
   "ee": "It is cold today.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 14582.21
 }, {
   "id": 93,
   "sv": "en",
@@ -67,7 +73,8 @@ const VOCAB = [{
   "t": "d",
   "es": "Jag ser en hund.",
   "ee": "I see a dog.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 14511.22
 }, {
   "id": 94,
   "sv": "som",
@@ -75,7 +82,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Hon är personen som hjälper mig.",
   "ee": "She is the person who helps me.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 12734.7
 }, {
   "id": 95,
   "sv": "på",
@@ -84,7 +92,8 @@ const VOCAB = [{
   "es": "Nyckeln ligger på bordet.",
   "ee": "The key lies on the table.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 12591.15
 }, {
   "id": 96,
   "sv": "å",
@@ -92,7 +101,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi köper kaffe å bröd.",
   "ee": "We buy coffee and bread.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 12462.73
 }, {
   "id": 97,
   "sv": "av",
@@ -100,7 +110,8 @@ const VOCAB = [{
   "t": "p",
   "es": "En bok av Strindberg.",
   "ee": "A book by Strindberg.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 11540.13
 }, {
   "id": 98,
   "sv": "för",
@@ -108,7 +119,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Detta är för dig.",
   "ee": "This is for you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 11408.82
 }, {
   "id": 99,
   "sv": "att",
@@ -117,7 +129,8 @@ const VOCAB = [{
   "es": "Jag gillar att läsa.",
   "ee": "I like to read.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 11271.57
 }, {
   "id": 100,
   "sv": "kunna",
@@ -125,7 +138,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(kan, kunde, kunnat)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 11119.08
 }, {
   "id": 101,
   "sv": "skola",
@@ -133,7 +147,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Barnen går till skolan.",
   "ee": "The children go to school.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 10411.19
 }, {
   "id": 102,
   "sv": "jag",
@@ -141,7 +156,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag bor i Stockholm.",
   "ee": "I live in Stockholm.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 9390.67
 }, {
   "id": 103,
   "sv": "inte (formellt: icke, ej)",
@@ -149,7 +165,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag förstår inte.",
   "ee": "I do not understand.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 9073.55
 }, {
   "id": 104,
   "sv": "med",
@@ -157,7 +174,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Hon kommer med mig.",
   "ee": "She comes with me.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 8790.85
 }, {
   "id": 105,
   "sv": "till",
@@ -165,7 +183,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi går till skolan.",
   "ee": "We go to school.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 8662.68
 }, {
   "id": 106,
   "sv": "liten",
@@ -175,7 +194,8 @@ const VOCAB = [{
   "es": "Huset är litet.",
   "ee": "The house is small.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 8654.67
 }, {
   "id": 107,
   "sv": "den",
@@ -183,7 +203,8 @@ const VOCAB = [{
   "t": "d",
   "es": "Den boken är bra.",
   "ee": "That book is good.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 6896.18
 }, {
   "id": 108,
   "sv": "ett",
@@ -191,7 +212,8 @@ const VOCAB = [{
   "t": "d",
   "es": "Jag har ett äpple.",
   "ee": "I have one apple.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 6314.26
 }, {
   "id": 109,
   "sv": "analog",
@@ -199,7 +221,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Klockan är analog.",
   "ee": "The clock is analog.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 5649.0
 }, {
   "id": 110,
   "sv": "unna",
@@ -207,7 +230,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon unnar sig kaffe.",
   "ee": "She treats herself to coffee.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 5559.15
 }, {
   "id": 111,
   "sv": "om",
@@ -215,7 +239,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Om det regnar stannar vi.",
   "ee": "If it rains we stay.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 5278.24
 }, {
   "id": 112,
   "sv": "vi",
@@ -224,7 +249,8 @@ const VOCAB = [{
   "es": "Vi bor här.",
   "ee": "We live here.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 4723.57
 }, {
   "id": 113,
   "sv": "men",
@@ -233,7 +259,8 @@ const VOCAB = [{
   "es": "Jag vill gå men jag arbetar.",
   "ee": "I want to go but I work.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 4545.97
 }, {
   "id": 114,
   "sv": "man",
@@ -241,7 +268,8 @@ const VOCAB = [{
   "t": "p",
   "es": "En man står där.",
   "ee": "A man stands there.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 4446.34
 }, {
   "id": 115,
   "sv": "de (vardagl. dom)",
@@ -249,7 +277,8 @@ const VOCAB = [{
   "t": "d",
   "es": "De arbetar tillsammans.",
   "ee": "They work together.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 4437.26
 }, {
   "id": 116,
   "sv": "få",
@@ -257,7 +286,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag får ett brev.",
   "ee": "I receive a letter.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 4060.39
 }, {
   "id": 117,
   "sv": "så",
@@ -265,7 +295,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är så kallt.",
   "ee": "It is so cold.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 4004.97
 }, {
   "id": 118,
   "sv": "som",
@@ -273,7 +304,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Hon är personen som hjälper mig.",
   "ee": "She is the person who helps me.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3762.28
 }, {
   "id": 119,
   "sv": "sig (vardagl. sej)",
@@ -281,7 +313,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han tvättar sig.",
   "ee": "He washes himself.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3469.03
 }, {
   "id": 120,
   "sv": "han",
@@ -290,7 +323,8 @@ const VOCAB = [{
   "es": "Han arbetar idag.",
   "ee": "He works today.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3380.88
 }, {
   "id": 121,
   "sv": "de (vardagl. dom)",
@@ -298,7 +332,8 @@ const VOCAB = [{
   "t": "p",
   "es": "De arbetar tillsammans.",
   "ee": "They work together.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3345.8
 }, {
   "id": 122,
   "sv": "bli",
@@ -308,7 +343,8 @@ const VOCAB = [{
   "es": "Han vill bli läkare.",
   "ee": "He wants to become a doctor.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3293.35
 }, {
   "id": 123,
   "sv": "komma",
@@ -318,7 +354,8 @@ const VOCAB = [{
   "es": "Han kommer snart.",
   "ee": "He arrives soon.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3224.74
 }, {
   "id": 124,
   "sv": "det",
@@ -327,7 +364,8 @@ const VOCAB = [{
   "es": "Det är kallt idag.",
   "ee": "It is cold today.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3221.41
 }, {
   "id": 125,
   "sv": "sin",
@@ -335,7 +373,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han säljer sin bil.",
   "ee": "He sells his car.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3217.3
 }, {
   "id": 126,
   "sv": "eller",
@@ -344,7 +383,8 @@ const VOCAB = [{
   "es": "Te eller kaffe?",
   "ee": "Tea or coffee?",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3138.92
 }, {
   "id": 127,
   "sv": "från",
@@ -353,7 +393,8 @@ const VOCAB = [{
   "es": "Jag kommer från Sverige.",
   "ee": "I come from Sweden.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3117.46
 }, {
   "id": 128,
   "sv": "mycket",
@@ -361,7 +402,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är mycket arbete.",
   "ee": "It is much work.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3112.13
 }, {
   "id": 129,
   "sv": "vilja",
@@ -369,7 +411,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon har stark vilja.",
   "ee": "She has strong will.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 3004.91
 }, {
   "id": 130,
   "sv": "all",
@@ -377,7 +420,8 @@ const VOCAB = [{
   "t": "p",
   "es": "All mat är slut.",
   "ee": "All food is gone.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2975.47
 }, {
   "id": 131,
   "sv": "göra",
@@ -385,7 +429,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(gör, gjorde, gjort)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2942.04
 }, {
   "id": 132,
   "sv": "om",
@@ -394,7 +439,8 @@ const VOCAB = [{
   "es": "Om det regnar stannar vi.",
   "ee": "If it rains we stay.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2630.45
 }, {
   "id": 133,
   "sv": "annan",
@@ -404,7 +450,8 @@ const VOCAB = [{
   "es": "Jag vill ha en annan bok.",
   "ee": "I want another book.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2624.2
 }, {
   "id": 134,
   "sv": "du",
@@ -412,7 +459,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Du talar svenska.",
   "ee": "You speak Swedish.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2581.46
 }, {
   "id": 135,
   "sv": "någon (vardagl. nån, förk. ngn)",
@@ -420,7 +468,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Någon ringer.",
   "ee": "Someone calls.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2565.69
 }, {
   "id": 136,
   "sv": "finna",
@@ -428,7 +477,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon finner nyckeln.",
   "ee": "She finds the key.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2465.41
 }, {
   "id": 137,
   "sv": "ta (el. taga)",
@@ -436,7 +486,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon tar bussen.",
   "ee": "She takes the bus.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2452.4
 }, {
   "id": 138,
   "sv": "när",
@@ -445,7 +496,8 @@ const VOCAB = [{
   "es": "När börjar filmen?",
   "ee": "When does the movie start?",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2386.89
 }, {
   "id": 139,
   "sv": "se",
@@ -455,7 +507,8 @@ const VOCAB = [{
   "es": "Jag ser huset.",
   "ee": "I see the house.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2253.32
 }, {
   "id": 140,
   "sv": "måste",
@@ -463,7 +516,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag måste gå.",
   "ee": "I must go.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2214.95
 }, {
   "id": 141,
   "sv": "detta",
@@ -471,7 +525,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Detta hus är gammalt.",
   "ee": "This house is old.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2200.74
 }, {
   "id": 142,
   "sv": "stor",
@@ -481,7 +536,8 @@ const VOCAB = [{
   "es": "Det är en stor stad.",
   "ee": "It is a big city.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2046.73
 }, {
   "id": 143,
   "sv": "nu",
@@ -489,7 +545,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag arbetar nu.",
   "ee": "I work now.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2033.06
 }, {
   "id": 144,
   "sv": "gå",
@@ -498,7 +555,8 @@ const VOCAB = [{
   "es": "Vi går hem.",
   "ee": "We go home.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 2001.14
 }, {
   "id": 145,
   "sv": "säga",
@@ -506,7 +564,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(säger, sa/sade, sagt)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1998.46
 }, {
   "id": 146,
   "sv": "den",
@@ -515,7 +574,8 @@ const VOCAB = [{
   "es": "Den boken är bra.",
   "ee": "That book is good.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1981.49
 }, {
   "id": 147,
   "sv": "vad (vardagl. va)",
@@ -523,7 +583,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vad gör du?",
   "ee": "What are you doing?",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1911.2
 }, {
   "id": 148,
   "sv": "år",
@@ -534,7 +595,8 @@ const VOCAB = [{
   "es": "Jag bodde där ett år.",
   "ee": "I lived there for one year.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1886.72
 }, {
   "id": 149,
   "sv": "äga",
@@ -542,7 +604,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(äger, ägde, ägt)",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1867.88
 }, {
   "id": 150,
   "sv": "under",
@@ -551,7 +614,8 @@ const VOCAB = [{
   "es": "Boken ligger under bordet.",
   "ee": "The book lies under the table.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1851.63
 }, {
   "id": 151,
   "sv": "betyda",
@@ -561,7 +625,8 @@ const VOCAB = [{
   "es": "Detta ord betyder mycket.",
   "ee": "This word means a lot.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1811.72
 }, {
   "id": 152,
   "sv": "också (vardagl. oxå)",
@@ -569,7 +634,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag vill också komma.",
   "ee": "I also want to come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1797.39
 }, {
   "id": 153,
   "sv": "där",
@@ -577,7 +643,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han står där.",
   "ee": "He stands there.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1790.68
 }, {
   "id": 154,
   "sv": "då",
@@ -586,7 +653,8 @@ const VOCAB = [{
   "es": "När det regnar stannar vi då.",
   "ee": "When it rains we stay then.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1788.93
 }, {
   "id": 155,
   "sv": "min",
@@ -596,13 +664,15 @@ const VOCAB = [{
   "es": "Det är min bok.",
   "ee": "It is my book.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1757.18
 }, {
   "id": 156,
   "sv": "böra",
   "en": "should",
   "t": "a",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1743.31
 }, {
   "id": 157,
   "sv": "hur",
@@ -610,7 +680,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hur mår du?",
   "ee": "How are you?",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1690.32
 }, {
   "id": 158,
   "sv": "mig (vardagl. mej)",
@@ -618,7 +689,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Hjälp mig.",
   "ee": "Help me.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1622.7
 }, {
   "id": 159,
   "sv": "mot",
@@ -627,7 +699,8 @@ const VOCAB = [{
   "es": "Bilen kör mot staden.",
   "ee": "The car drives toward the city.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1592.42
 }, {
   "id": 160,
   "sv": "bara",
@@ -635,7 +708,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag vill bara sova.",
   "ee": "I only want to sleep.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1582.15
 }, {
   "id": 161,
   "sv": "vilken",
@@ -645,7 +719,8 @@ const VOCAB = [{
   "es": "Vilken bok vill du ha?",
   "ee": "Which book do you want?",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1512.84
 }, {
   "id": 162,
   "sv": "ut",
@@ -653,7 +728,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han går ut.",
   "ee": "He goes out.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1481.5
 }, {
   "id": 163,
   "sv": "ny",
@@ -663,7 +739,8 @@ const VOCAB = [{
   "es": "Jag köpte en ny bil.",
   "ee": "I bought a new car.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1446.08
 }, {
   "id": 164,
   "sv": "vid",
@@ -671,7 +748,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi sitter vid bordet.",
   "ee": "We sit at the table.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1439.02
 }, {
   "id": 165,
   "sv": "än",
@@ -679,7 +757,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Hon är äldre än jag.",
   "ee": "She is older than I am.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1428.89
 }, {
   "id": 166,
   "sv": "bra",
@@ -687,7 +766,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är bra.",
   "ee": "It is good.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1428.27
 }, {
   "id": 167,
   "sv": "ingen",
@@ -696,7 +776,8 @@ const VOCAB = [{
   "es": "Ingen kommer idag.",
   "ee": "No one comes today.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1350.9
 }, {
   "id": 168,
   "sv": "dem (vardagl. dom)",
@@ -704,7 +785,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag ser dem.",
   "ee": "I see them.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1341.39
 }, {
   "id": 169,
   "sv": "efter",
@@ -712,7 +794,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi går hem efter mötet.",
   "ee": "We go home after the meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1323.97
 }, {
   "id": 170,
   "sv": "upp",
@@ -720,7 +803,8 @@ const VOCAB = [{
   "t": "p",
   "es": "H an går upp.",
   "ee": "He goes up.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1322.38
 }, {
   "id": 171,
   "sv": "hon",
@@ -729,7 +813,8 @@ const VOCAB = [{
   "es": "Hon läser en bok.",
   "ee": "She reads a book.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1291.75
 }, {
   "id": 172,
   "sv": "lite",
@@ -738,7 +823,8 @@ const VOCAB = [{
   "es": "Jag vill ha lite kaffe.",
   "ee": "I want a little coffee.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1288.09
 }, {
   "id": 173,
   "sv": "denna",
@@ -746,7 +832,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Denna bok är bra.",
   "ee": "This book is good.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1279.97
 }, {
   "id": 174,
   "sv": "in",
@@ -754,7 +841,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hunden går in.",
   "ee": "The dog goes in.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1274.61
 }, {
   "id": 175,
   "sv": "mycket",
@@ -762,7 +850,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är mycket arbete.",
   "ee": "It is much work.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1271.67
 }, {
   "id": 176,
   "sv": "över",
@@ -770,7 +859,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Fågeln flyger över huset.",
   "ee": "The bird flies over the house.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1267.18
 }, {
   "id": 177,
   "sv": "ge (formellt giva)",
@@ -778,7 +868,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag ger dig boken.",
   "ee": "I give you the book.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1208.51
 }, {
   "id": 178,
   "sv": "vår (vardagl. våran)",
@@ -786,7 +877,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vår bil är blå.",
   "ee": "Our car is blue.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1206.78
 }, {
   "id": 179,
   "sv": "del",
@@ -796,7 +888,8 @@ const VOCAB = [{
   "es": "En del människor arbetar här.",
   "ee": "Some people work here.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1202.45
 }, {
   "id": 180,
   "sv": "här",
@@ -805,7 +898,8 @@ const VOCAB = [{
   "es": "Jag bor här.",
   "ee": "I live here.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1194.91
 }, {
   "id": 181,
   "sv": "även",
@@ -813,7 +907,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon kommer även imorgon.",
   "ee": "She also comes tomorrow.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1191.77
 }, {
   "id": 182,
   "sv": "skriva",
@@ -823,7 +918,8 @@ const VOCAB = [{
   "es": "Jag skriver ett brev.",
   "ee": "I write a letter.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1141.32
 }, {
   "id": 183,
   "sv": "tid",
@@ -834,7 +930,8 @@ const VOCAB = [{
   "es": "Jag har inte tid.",
   "ee": "I don't have time.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1127.59
 }, {
   "id": 184,
   "sv": "ju",
@@ -842,7 +939,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ju sant.",
   "ee": "It is true after all.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1119.58
 }, {
   "id": 185,
   "sv": "sedan (vardagl. sen)",
@@ -850,7 +948,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi ses sedan.",
   "ee": "We see each other later.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1115.12
 }, {
   "id": 186,
   "sv": "te sig",
@@ -858,7 +957,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han te sig lugn.",
   "ee": "He appears calm.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1115.09
 }, {
   "id": 187,
   "sv": "riva",
@@ -866,7 +966,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(river, rev, rivit)",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1088.02
 }, {
   "id": 188,
   "sv": "börja",
@@ -876,7 +977,8 @@ const VOCAB = [{
   "es": "Filmen börjar nu.",
   "ee": "The movie begins now.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1039.45
 }, {
   "id": 189,
   "sv": "hel",
@@ -884,7 +986,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hela huset är tyst.",
   "ee": "The whole house is quiet.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1034.76
 }, {
   "id": 190,
   "sv": "dag",
@@ -895,7 +998,8 @@ const VOCAB = [{
   "es": "Det är en bra dag.",
   "ee": "It is a good day.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1033.61
 }, {
   "id": 191,
   "sv": "själv",
@@ -904,7 +1008,8 @@ const VOCAB = [{
   "es": "Jag gör det själv.",
   "ee": "I do it myself.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1033.19
 }, {
   "id": 192,
   "sv": "människa",
@@ -915,7 +1020,8 @@ const VOCAB = [{
   "es": "Varje människa är viktig.",
   "ee": "Every person is important.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 1030.33
 }, {
   "id": 193,
   "sv": "land",
@@ -926,7 +1032,8 @@ const VOCAB = [{
   "es": "Sverige är ett land.",
   "ee": "Sweden is a country.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 949.12
 }, {
   "id": 194,
   "sv": "svensk",
@@ -934,7 +1041,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han är svensk.",
   "ee": "He is Swedish.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 948.52
 }, {
   "id": 195,
   "sv": "fråga",
@@ -943,7 +1051,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag frågar läraren.",
   "ee": "I ask the teacher.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 938.78
 }, {
   "id": 196,
   "sv": "oss",
@@ -952,7 +1061,8 @@ const VOCAB = [{
   "es": "Han hjälper oss.",
   "ee": "He helps us.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 934.32
 }, {
   "id": 197,
   "sv": "tro",
@@ -960,7 +1070,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon har en stark tro.",
   "ee": "She has a strong belief.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 928.39
 }, {
   "id": 198,
   "sv": "el",
@@ -969,7 +1080,8 @@ const VOCAB = [{
   "g": "en",
   "es": "El är dyr idag.",
   "ee": "Electricity is expensive today.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 925.85
 }, {
   "id": 199,
   "sv": "tycka",
@@ -979,7 +1091,8 @@ const VOCAB = [{
   "es": "Jag tycker om kaffe.",
   "ee": "I like coffee.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 924.85
 }, {
   "id": 200,
   "sv": "kommentar",
@@ -988,13 +1101,15 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon skrev en kommentar.",
   "ee": "She wrote a comment.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 924.68
 }, {
   "id": 201,
   "sv": "veta",
   "en": "to know",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 894.31
 }, {
   "id": 202,
   "sv": "idag (el. i dag)",
@@ -1002,7 +1117,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi arbetar idag.",
   "ee": "We work today.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 865.13
 }, {
   "id": 203,
   "sv": "försöka",
@@ -1012,7 +1128,8 @@ const VOCAB = [{
   "es": "Jag försöker förstå.",
   "ee": "I try to understand.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 859.72
 }, {
   "id": 204,
   "sv": "behöva",
@@ -1022,7 +1139,8 @@ const VOCAB = [{
   "es": "Jag behöver hjälp.",
   "ee": "I need help.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 858.16
 }, {
   "id": 205,
   "sv": "samma",
@@ -1031,7 +1149,8 @@ const VOCAB = [{
   "es": "Vi har samma bok.",
   "ee": "We have the same book.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 844.13
 }, {
   "id": 206,
   "sv": "mellan",
@@ -1040,7 +1159,8 @@ const VOCAB = [{
   "es": "Boken ligger mellan stolarna.",
   "ee": "The book lies between the chairs.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 841.51
 }, {
   "id": 207,
   "sv": "känna",
@@ -1048,7 +1168,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag känner honom.",
   "ee": "I know him.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 840.25
 }, {
   "id": 208,
   "sv": "läsa",
@@ -1056,7 +1177,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, -te, -t)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 823.05
 }, {
   "id": 209,
   "sv": "ro",
@@ -1064,7 +1186,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De ror på sjön.",
   "ee": "They row on the lake.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 816.02
 }, {
   "id": 210,
   "sv": "kanske",
@@ -1073,7 +1196,8 @@ const VOCAB = [{
   "es": "Han kommer kanske.",
   "ee": "He may come.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 809.75
 }, {
   "id": 211,
   "sv": "lik",
@@ -1081,7 +1205,8 @@ const VOCAB = [{
   "t": "a",
   "es": "De två husen är lika.",
   "ee": "The two houses are similar.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 808.09
 }, {
   "id": 212,
   "sv": "låta",
@@ -1089,7 +1214,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(låter, lät, låtit)",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 807.17
 }, {
   "id": 213,
   "sv": "olik",
@@ -1099,7 +1225,8 @@ const VOCAB = [{
   "es": "De har olika idéer.",
   "ee": "They have different ideas.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 790.47
 }, {
   "id": 214,
   "sv": "sådan",
@@ -1107,7 +1234,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag vill ha en sådan bok.",
   "ee": "I want such a book.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 788.97
 }, {
   "id": 215,
   "sv": "sätt",
@@ -1116,7 +1244,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det finns ett bättre sätt.",
   "ee": "There is a better way.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 784.91
 }, {
   "id": 216,
   "sv": "hans",
@@ -1125,7 +1254,8 @@ const VOCAB = [{
   "es": "Det är hans bil.",
   "ee": "It is his car.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 774.6
 }, {
   "id": 217,
   "sv": "din",
@@ -1135,7 +1265,8 @@ const VOCAB = [{
   "es": "Var är din bok?",
   "ee": "Where is your book?",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 771.62
 }, {
   "id": 218,
   "sv": "gång",
@@ -1146,7 +1277,8 @@ const VOCAB = [{
   "es": "Det är första gången.",
   "ee": "It is the first time.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 763.39
 }, {
   "id": 219,
   "sv": "stå",
@@ -1154,7 +1286,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Bilen står här.",
   "ee": "The car stands here.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 761.8
 }, {
   "id": 220,
   "sv": "inom",
@@ -1162,7 +1295,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi ses inom en vecka.",
   "ee": "We meet within a week.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 758.15
 }, {
   "id": 221,
   "sv": "visa",
@@ -1170,7 +1304,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han visar vägen.",
   "ee": "He shows the way.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 757.44
 }, {
   "id": 222,
   "sv": "använda",
@@ -1180,7 +1315,8 @@ const VOCAB = [{
   "es": "Jag använder datorn.",
   "ee": "I use the computer.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 749.26
 }, {
   "id": 223,
   "sv": "vända",
@@ -1188,7 +1324,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon vänder bilen.",
   "ee": "She turns the car.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 749.26
 }, {
   "id": 224,
   "sv": "hålla",
@@ -1196,7 +1333,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han håller boken.",
   "ee": "He holds the book.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 739.42
 }, {
   "id": 225,
   "sv": "genom",
@@ -1205,7 +1343,8 @@ const VOCAB = [{
   "es": "Vi går genom parken.",
   "ee": "We walk through the park.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 733.74
 }, {
   "id": 226,
   "sv": "helt",
@@ -1214,7 +1353,8 @@ const VOCAB = [{
   "es": "Jag är helt säker.",
   "ee": "I am completely sure.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 721.67
 }, {
   "id": 227,
   "sv": "fler",
@@ -1222,7 +1362,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi behöver fler stolar.",
   "ee": "We need more chairs.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 717.99
 }, {
   "id": 228,
   "sv": "utan",
@@ -1230,7 +1371,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag går utan jacka.",
   "ee": "I go without a jacket.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 707.53
 }, {
   "id": 229,
   "sv": "väl",
@@ -1239,7 +1381,8 @@ const VOCAB = [{
   "es": "Det går väl bra.",
   "ee": "It will probably go well.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 705.75
 }, {
   "id": 230,
   "sv": "barn",
@@ -1250,7 +1393,8 @@ const VOCAB = [{
   "es": "Barnet sover.",
   "ee": "The child sleeps.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 700.31
 }, {
   "id": 231,
   "sv": "enligt",
@@ -1259,7 +1403,8 @@ const VOCAB = [{
   "es": "Enligt läraren är det rätt.",
   "ee": "According to the teacher it is correct.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 680.22
 }, {
   "id": 232,
   "sv": "tänka",
@@ -1267,7 +1412,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag tänker på dig.",
   "ee": "I think about you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 666.7
 }, {
   "id": 233,
   "sv": "ni",
@@ -1276,7 +1422,8 @@ const VOCAB = [{
   "es": "Ni kommer imorgon.",
   "ee": "You arrive tomorrow.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 665.01
 }, {
   "id": 234,
   "sv": "viktig",
@@ -1286,7 +1433,8 @@ const VOCAB = [{
   "es": "Det är en viktig fråga.",
   "ee": "It is an important question.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 662.11
 }, {
   "id": 235,
   "sv": "ring",
@@ -1295,7 +1443,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon bär en ring.",
   "ee": "She wears a ring.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 658.84
 }, {
   "id": 236,
   "sv": "eftersom",
@@ -1304,7 +1453,8 @@ const VOCAB = [{
   "es": "Jag stannar eftersom jag är trött.",
   "ee": "I stay because I am tired.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 652.0
 }, {
   "id": 237,
   "sv": "liv",
@@ -1315,7 +1465,8 @@ const VOCAB = [{
   "es": "Livet är långt.",
   "ee": "Life is long.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 624.66
 }, {
   "id": 238,
   "sv": "deras",
@@ -1324,7 +1475,8 @@ const VOCAB = [{
   "es": "Deras hus är stort.",
   "ee": "Their house is big.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 623.86
 }, {
   "id": 239,
   "sv": "värld",
@@ -1335,7 +1487,8 @@ const VOCAB = [{
   "es": "Världen förändras.",
   "ee": "The world changes.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 617.89
 }, {
   "id": 240,
   "sv": "viss",
@@ -1343,7 +1496,8 @@ const VOCAB = [{
   "t": "a",
   "es": "En viss oro finns.",
   "ee": "A certain concern exists.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 614.61
 }, {
   "id": 241,
   "sv": "dock",
@@ -1351,7 +1505,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer dock senare.",
   "ee": "He comes however later.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 614.54
 }, {
   "id": 242,
   "sv": "egen",
@@ -1359,7 +1514,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon har en egen bil.",
   "ee": "She has her own car.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 612.48
 }, {
   "id": 243,
   "sv": "folk",
@@ -1369,7 +1525,8 @@ const VOCAB = [{
   "es": "Det är mycket folk här.",
   "ee": "There are many people here.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 606.98
 }, {
   "id": 244,
   "sv": "regering",
@@ -1378,7 +1535,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Regeringen beslutar.",
   "ee": "The government decides.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 603.37
 }, {
   "id": 245,
   "sv": "fram",
@@ -1386,7 +1544,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han går fram.",
   "ee": "He walks forward.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 600.53
 }, {
   "id": 246,
   "sv": "honom",
@@ -1395,7 +1554,8 @@ const VOCAB = [{
   "es": "Jag ser honom.",
   "ee": "I see him.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 597.56
 }, {
   "id": 247,
   "sv": "söka",
@@ -1403,7 +1563,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, -te, -t)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 596.07
 }, {
   "id": 248,
   "sv": "dig (vardagl. dej)",
@@ -1411,7 +1572,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag ser dig.",
   "ee": "I see you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 590.81
 }, {
   "id": 249,
   "sv": "utan",
@@ -1420,7 +1582,8 @@ const VOCAB = [{
   "es": "Jag går utan jacka.",
   "ee": "I go without a jacket.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 586.71
 }, {
   "id": 250,
   "sv": "sak",
@@ -1431,7 +1594,8 @@ const VOCAB = [{
   "es": "Det är en viktig sak.",
   "ee": "It is an important thing.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 581.51
 }, {
   "id": 251,
   "sv": "hög",
@@ -1439,7 +1603,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Huset är högt.",
   "ee": "The house is tall.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 578.03
 }, {
   "id": 252,
   "sv": "länge",
@@ -1447,7 +1612,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi väntar länge.",
   "ee": "We wait a long time.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 568.83
 }, {
   "id": 253,
   "sv": "person",
@@ -1458,7 +1624,8 @@ const VOCAB = [{
   "es": "Han är en snäll person.",
   "ee": "He is a kind person.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 568.43
 }, {
   "id": 254,
   "sv": "ligga",
@@ -1468,7 +1635,8 @@ const VOCAB = [{
   "es": "Staden ligger vid havet.",
   "ee": "The city lies by the sea.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 566.6
 }, {
   "id": 255,
   "sv": "son",
@@ -1479,7 +1647,8 @@ const VOCAB = [{
   "es": "Han har en son.",
   "ee": "He has a son.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 560.93
 }, {
   "id": 256,
   "sv": "både",
@@ -1487,7 +1656,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Både du och jag kommer.",
   "ee": "Both you and I come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 554.95
 }, {
   "id": 257,
   "sv": "just",
@@ -1496,7 +1666,8 @@ const VOCAB = [{
   "es": "Det är just det.",
   "ee": "That is exactly it.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 545.57
 }, {
   "id": 258,
   "sv": "lägga",
@@ -1506,7 +1677,8 @@ const VOCAB = [{
   "es": "Jag lägger boken här.",
   "ee": "I put the book here.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 545.17
 }, {
   "id": 259,
   "sv": "antal",
@@ -1515,7 +1687,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Ett antal människor kom.",
   "ee": "A number of people came.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 542.86
 }, {
   "id": 260,
   "sv": "redan",
@@ -1524,7 +1697,8 @@ const VOCAB = [{
   "es": "Jag har redan ätit.",
   "ee": "I have already eaten.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 533.67
 }, {
   "id": 261,
   "sv": "kvinna",
@@ -1535,7 +1709,8 @@ const VOCAB = [{
   "es": "En kvinna talar.",
   "ee": "A woman speaks.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 521.11
 }, {
   "id": 262,
   "sv": "problem",
@@ -1546,7 +1721,8 @@ const VOCAB = [{
   "es": "Problemet är svårt.",
   "ee": "The problem is difficult.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 520.62
 }, {
   "id": 263,
   "sv": "fall",
@@ -1555,7 +1731,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett svårt fall.",
   "ee": "It is a difficult case.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 520.07
 }, {
   "id": 264,
   "sv": "man",
@@ -1566,7 +1743,8 @@ const VOCAB = [{
   "es": "En man står där.",
   "ee": "A man stands there.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 520.07
 }, {
   "id": 265,
   "sv": "aldrig",
@@ -1575,7 +1753,8 @@ const VOCAB = [{
   "es": "Jag glömmer aldrig.",
   "ee": "I never forget.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 511.81
 }, {
   "id": 266,
   "sv": "ofta",
@@ -1584,7 +1763,8 @@ const VOCAB = [{
   "es": "Vi går ofta dit.",
   "ee": "We often go there.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 501.79
 }, {
   "id": 267,
   "sv": "varje",
@@ -1593,7 +1773,8 @@ const VOCAB = [{
   "es": "Jag arbetar varje dag.",
   "ee": "I work every day.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 501.7
 }, {
   "id": 268,
   "sv": "artikel",
@@ -1604,7 +1785,8 @@ const VOCAB = [{
   "es": "Artikeln publiceras.",
   "ee": "The article is published.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 501.28
 }, {
   "id": 269,
   "sv": "anse",
@@ -1612,7 +1794,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De anser det viktigt.",
   "ee": "They consider it important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 500.58
 }, {
   "id": 270,
   "sv": "öva",
@@ -1622,7 +1805,8 @@ const VOCAB = [{
   "es": "Jag övar svenska.",
   "ee": "I practice Swedish.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 496.12
 }, {
   "id": 271,
   "sv": "lag",
@@ -1631,7 +1815,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Lagen gäller.",
   "ee": "The law applies.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 489.85
 }, {
   "id": 272,
   "sv": "slag",
@@ -1640,7 +1825,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett nytt slag.",
   "ee": "It is a new kind.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 487.59
 }, {
   "id": 273,
   "sv": "tal",
@@ -1651,7 +1837,8 @@ const VOCAB = [{
   "es": "Han höll ett tal.",
   "ee": "He gave a speech.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 485.93
 }, {
   "id": 274,
   "sv": "åt",
@@ -1659,7 +1846,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han gick åt vänster.",
   "ee": "He went to the left.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 484.56
 }, {
   "id": 275,
   "sv": "nog",
@@ -1667,7 +1855,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är nog sant.",
   "ee": "It is probably true.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 482.6
 }, {
   "id": 276,
   "sv": "bok",
@@ -1678,7 +1867,8 @@ const VOCAB = [{
   "es": "Jag läser en bok.",
   "ee": "I read a book.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 478.59
 }, {
   "id": 277,
   "sv": "varför",
@@ -1687,7 +1877,8 @@ const VOCAB = [{
   "es": "Varför går du?",
   "ee": "Why do you go?",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 475.84
 }, {
   "id": 278,
   "sv": "handla",
@@ -1697,7 +1888,8 @@ const VOCAB = [{
   "es": "Jag handlar mat.",
   "ee": "I shop for food.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 475.07
 }, {
   "id": 279,
   "sv": "gammal",
@@ -1707,7 +1899,8 @@ const VOCAB = [{
   "es": "Det är ett gammalt hus.",
   "ee": "It is an old house.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 470.38
 }, {
   "id": 280,
   "sv": "bild",
@@ -1718,7 +1911,8 @@ const VOCAB = [{
   "es": "Bilden är fin.",
   "ee": "The picture is nice.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 468.8
 }, {
   "id": 281,
   "sv": "sida",
@@ -1729,7 +1923,8 @@ const VOCAB = [{
   "es": "Jag läser en sida.",
   "ee": "I read a page.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 466.09
 }, {
   "id": 282,
   "sv": "så",
@@ -1738,7 +1933,8 @@ const VOCAB = [{
   "es": "Det är så kallt.",
   "ee": "It is so cold.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 465.43
 }, {
   "id": 283,
   "sv": "öka",
@@ -1746,7 +1942,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Priserna ökar.",
   "ee": "Prices increase.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 462.83
 }, {
   "id": 284,
   "sv": "därför",
@@ -1755,7 +1952,8 @@ const VOCAB = [{
   "es": "Jag är trött därför går jag.",
   "ee": "I am tired therefore I go.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 461.58
 }, {
   "id": 285,
   "sv": "sen",
@@ -1763,7 +1961,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi ses sen.",
   "ee": "See you later.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 459.09
 }, {
   "id": 286,
   "sv": "god",
@@ -1773,7 +1972,8 @@ const VOCAB = [{
   "es": "Maten är god.",
   "ee": "The food is good.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 453.87
 }, {
   "id": 287,
   "sv": "hos",
@@ -1781,7 +1981,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag bor hos henne.",
   "ee": "I live with her.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 453.15
 }, {
   "id": 288,
   "sv": "alltid",
@@ -1790,7 +1991,8 @@ const VOCAB = [{
   "es": "Hon är alltid glad.",
   "ee": "She is always happy.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 446.85
 }, {
   "id": 289,
   "sv": "skapa",
@@ -1798,7 +2000,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon skapar konst.",
   "ee": "She creates art.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 445.51
 }, {
   "id": 290,
   "sv": "arbete",
@@ -1809,7 +2012,8 @@ const VOCAB = [{
   "es": "Jag har mycket arbete.",
   "ee": "I have a lot of work.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 441.9
 }, {
   "id": 291,
   "sv": "kapa",
@@ -1817,7 +2021,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han kapar trädet.",
   "ee": "He cuts the tree.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 435.8
 }, {
   "id": 292,
   "sv": "samt",
@@ -1825,7 +2030,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Te samt kaffe serveras.",
   "ee": "Tea as well as coffee is served.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 435.23
 }, {
   "id": 293,
   "sv": "blogg",
@@ -1834,7 +2040,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon skriver en blogg.",
   "ee": "She writes a blog.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 430.91
 }, {
   "id": 294,
   "sv": "innan",
@@ -1842,7 +2049,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Vi äter innan filmen.",
   "ee": "We eat before the movie.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 429.65
 }, {
   "id": 295,
   "sv": "som",
@@ -1851,7 +2059,8 @@ const VOCAB = [{
   "es": "Hon är personen som hjälper mig.",
   "ee": "She is the person who helps me.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 429.24
 }, {
   "id": 296,
   "sv": "ur",
@@ -1860,7 +2069,8 @@ const VOCAB = [{
   "es": "Han tog boken ur väskan.",
   "ee": "He took the book out of the bag.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 427.0
 }, {
   "id": 297,
   "sv": "gälla",
@@ -1868,7 +2078,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Regeln gäller här.",
   "ee": "The rule applies here.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 426.9
 }, {
   "id": 298,
   "sv": "verka",
@@ -1878,7 +2089,8 @@ const VOCAB = [{
   "es": "Det verkar svårt.",
   "ee": "It seems difficult.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 423.62
 }, {
   "id": 299,
   "sv": "tala",
@@ -1888,13 +2100,15 @@ const VOCAB = [{
   "es": "Hon talar svenska.",
   "ee": "She speaks Swedish.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 423.1
 }, {
   "id": 300,
   "sv": "bära",
   "en": "to carry / wear",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 422.35
 }, {
   "id": 301,
   "sv": "för",
@@ -1902,7 +2116,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Detta är för dig.",
   "ee": "This is for you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 421.08
 }, {
   "id": 302,
   "sv": "väg",
@@ -1913,7 +2128,8 @@ const VOCAB = [{
   "es": "Vi går på en lång väg.",
   "ee": "We walk on a long road.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 420.51
 }, {
   "id": 303,
   "sv": "samhälle",
@@ -1924,7 +2140,8 @@ const VOCAB = [{
   "es": "Samhället förändras.",
   "ee": "Society changes.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 420.38
 }, {
   "id": 304,
   "sv": "alltså",
@@ -1932,7 +2149,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är sent alltså går vi.",
   "ee": "It is late so we go.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 419.06
 }, {
   "id": 305,
   "sv": "stat",
@@ -1943,7 +2161,8 @@ const VOCAB = [{
   "es": "Staten beslutar.",
   "ee": "The state decides.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 416.16
 }, {
   "id": 306,
   "sv": "stad",
@@ -1954,7 +2173,8 @@ const VOCAB = [{
   "es": "Stockholm är en stor stad.",
   "ee": "Stockholm is a big city.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 413.66
 }, {
   "id": 307,
   "sv": "höra",
@@ -1962,7 +2182,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(hör, hörde, hört)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 412.78
 }, {
   "id": 308,
   "sv": "innebära",
@@ -1970,7 +2191,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det innebär ett problem.",
   "ee": "It means a problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 412.65
 }, {
   "id": 309,
   "sv": "genom att",
@@ -1979,7 +2201,8 @@ const VOCAB = [{
   "es": "Hon lär sig genom att läsa.",
   "ee": "She learns by reading.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 412.39
 }, {
   "id": 310,
   "sv": "företag",
@@ -1990,7 +2213,8 @@ const VOCAB = [{
   "es": "Företaget växer.",
   "ee": "The company grows.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 412.18
 }, {
   "id": 311,
   "sv": "möjlighet",
@@ -2001,7 +2225,8 @@ const VOCAB = [{
   "es": "Det finns en möjlighet.",
   "ee": "There is a possibility.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 411.21
 }, {
   "id": 312,
   "sv": "ord",
@@ -2012,7 +2237,8 @@ const VOCAB = [{
   "es": "Det är ett svårt ord.",
   "ee": "That is a difficult word.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 410.3
 }, {
   "id": 313,
   "sv": "politisk",
@@ -2020,7 +2246,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en politisk fråga.",
   "ee": "It is a political question.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 409.23
 }, {
   "id": 314,
   "sv": "välja",
@@ -2028,7 +2255,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag väljer kaffe.",
   "ee": "I choose coffee.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 403.72
 }, {
   "id": 315,
   "sv": "er",
@@ -2037,7 +2265,8 @@ const VOCAB = [{
   "es": "Jag ser er.",
   "ee": "I see you.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 403.6
 }, {
   "id": 316,
   "sv": "förstå",
@@ -2047,7 +2276,8 @@ const VOCAB = [{
   "es": "Jag förstår dig.",
   "ee": "I understand you.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 403.12
 }, {
   "id": 317,
   "sv": "inlägg",
@@ -2056,7 +2286,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Hon skrev ett inlägg.",
   "ee": "She wrote a post.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 403.03
 }, {
   "id": 318,
   "sv": "ägg",
@@ -2067,7 +2298,8 @@ const VOCAB = [{
   "es": "Jag äter ett ägg.",
   "ee": "I eat an egg.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 403.03
 }, {
   "id": 319,
   "sv": "te",
@@ -2078,7 +2310,8 @@ const VOCAB = [{
   "es": "Hon dricker te.",
   "ee": "She drinks tea.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 401.97
 }, {
   "id": 320,
   "sv": "spela",
@@ -2088,7 +2321,8 @@ const VOCAB = [{
   "es": "De spelar fotboll.",
   "ee": "They play football.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 401.87
 }, {
   "id": 321,
   "sv": "så att",
@@ -2096,7 +2330,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Jag talar långsamt så att du förstår.",
   "ee": "I speak slowly so that you understand.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 400.31
 }, {
   "id": 322,
   "sv": "lika",
@@ -2104,7 +2339,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Husen är lika.",
   "ee": "The houses are alike.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 394.25
 }, {
   "id": 323,
   "sv": "hitta",
@@ -2112,7 +2348,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag hittar boken.",
   "ee": "I find the book.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 390.73
 }, {
   "id": 324,
   "sv": "tag",
@@ -2121,7 +2358,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vänta ett tag.",
   "ee": "Wait a while.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 390.12
 }, {
   "id": 325,
   "sv": "dra",
@@ -2131,13 +2369,15 @@ const VOCAB = [{
   "es": "Han drar dörren.",
   "ee": "He pulls the door.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 389.89
 }, {
   "id": 326,
   "sv": "leda",
   "en": "to lead",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 388.53
 }, {
   "id": 327,
   "sv": "gärna",
@@ -2145,7 +2385,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag kommer gärna.",
   "ee": "I gladly come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 387.27
 }, {
   "id": 328,
   "sv": "ändå",
@@ -2153,7 +2394,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag går ändå.",
   "ee": "I go anyway.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 386.11
 }, {
   "id": 329,
   "sv": "förslag",
@@ -2164,7 +2406,8 @@ const VOCAB = [{
   "es": "Han ger ett förslag.",
   "ee": "He gives a suggestion.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 385.31
 }, {
   "id": 330,
   "sv": "lyckas",
@@ -2172,7 +2415,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon lyckas bra.",
   "ee": "She succeeds well.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 384.14
 }, {
   "id": 331,
   "sv": "dessutom",
@@ -2181,7 +2425,8 @@ const VOCAB = [{
   "es": "Han arbetar och studerar dessutom.",
   "ee": "He works and also studies.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 381.45
 }, {
   "id": 332,
   "sv": "område",
@@ -2190,7 +2435,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett stort område.",
   "ee": "It is a large area.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 380.95
 }, {
   "id": 333,
   "sv": "lag",
@@ -2199,7 +2445,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Lagen gäller.",
   "ee": "The law applies.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 380.83
 }, {
   "id": 334,
   "sv": "svår",
@@ -2209,13 +2456,15 @@ const VOCAB = [{
   "es": "Uppgiften är svår.",
   "ee": "The task is difficult.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 379.67
 }, {
   "id": 335,
   "sv": "lära",
   "en": "to learn",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 376.66
 }, {
   "id": 336,
   "sv": "sätta",
@@ -2225,7 +2474,8 @@ const VOCAB = [{
   "es": "Hon sätter boken här.",
   "ee": "She puts the book here.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 375.3
 }, {
   "id": 337,
   "sv": "plats",
@@ -2236,7 +2486,8 @@ const VOCAB = [{
   "es": "Vi hittar en plats.",
   "ee": "We find a place.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 374.33
 }, {
   "id": 338,
   "sv": "lång",
@@ -2246,7 +2497,8 @@ const VOCAB = [{
   "es": "Resan är lång.",
   "ee": "The trip is long.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 372.0
 }, {
   "id": 339,
   "sv": "lämna",
@@ -2256,7 +2508,8 @@ const VOCAB = [{
   "es": "Han lämnar huset.",
   "ee": "He leaves the house.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 369.7
 }, {
   "id": 340,
   "sv": "bygga",
@@ -2266,7 +2519,8 @@ const VOCAB = [{
   "es": "De bygger ett hus.",
   "ee": "They build a house.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 368.34
 }, {
   "id": 341,
   "sv": "politik",
@@ -2277,7 +2531,8 @@ const VOCAB = [{
   "es": "Hon studerar politik.",
   "ee": "She studies politics.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 367.14
 }, {
   "id": 342,
   "sv": "tidigare",
@@ -2286,7 +2541,8 @@ const VOCAB = [{
   "es": "Han kom tidigare.",
   "ee": "He came earlier.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 366.98
 }, {
   "id": 343,
   "sv": "kalla",
@@ -2294,7 +2550,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi kallar honom Erik.",
   "ee": "We call him Erik.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 365.74
 }, {
   "id": 344,
   "sv": "peng",
@@ -2303,7 +2560,8 @@ const VOCAB = [{
   "g": "en",
   "es": "J ag har lite pengar.",
   "ee": "I have some money.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 365.1
 }, {
   "id": 345,
   "sv": "väldigt",
@@ -2311,13 +2569,15 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är väldigt kallt.",
   "ee": "It is very cold.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 363.6
 }, {
   "id": 346,
   "sv": "leva",
   "en": "to live",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 363.55
 }, {
   "id": 347,
   "sv": "ställa",
@@ -2327,7 +2587,8 @@ const VOCAB = [{
   "es": "Hon ställer en fråga.",
   "ee": "She asks a question.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 361.06
 }, {
   "id": 348,
   "sv": "följa",
@@ -2337,7 +2598,8 @@ const VOCAB = [{
   "es": "Jag följer honom.",
   "ee": "I follow him.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 359.7
 }, {
   "id": 349,
   "sv": "vecka",
@@ -2348,7 +2610,8 @@ const VOCAB = [{
   "es": "Vi ses nästa vecka.",
   "ee": "We meet next week.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 357.71
 }, {
   "id": 350,
   "sv": "ja",
@@ -2357,7 +2620,8 @@ const VOCAB = [{
   "es": "Ja",
   "ee": "jag kommer.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 353.15
 }, {
   "id": 351,
   "sv": "ske",
@@ -2365,7 +2629,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det sker snart.",
   "ee": "It happens soon.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 351.8
 }, {
   "id": 352,
   "sv": "parti",
@@ -2374,7 +2639,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Ett parti vinner valet.",
   "ee": "A party wins the election.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 348.11
 }, {
   "id": 353,
   "sv": "kräva",
@@ -2382,7 +2648,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jobbet kräver tid.",
   "ee": "The job requires time.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 347.5
 }, {
   "id": 354,
   "sv": "utveckling",
@@ -2393,7 +2660,8 @@ const VOCAB = [{
   "es": "Utvecklingen går snabbt.",
   "ee": "The development goes quickly.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 341.81
 }, {
   "id": 355,
   "sv": "faktiskt",
@@ -2402,7 +2670,8 @@ const VOCAB = [{
   "es": "Det är faktiskt sant.",
   "ee": "It is actually true.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 341.44
 }, {
   "id": 356,
   "sv": "ena",
@@ -2410,7 +2679,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De enar gruppen.",
   "ee": "They unite the group.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 340.46
 }, {
   "id": 357,
   "sv": "svara",
@@ -2420,7 +2690,8 @@ const VOCAB = [{
   "es": "Hon svarar snabbt.",
   "ee": "She answers quickly.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 339.8
 }, {
   "id": 358,
   "sv": "ner",
@@ -2429,7 +2700,8 @@ const VOCAB = [{
   "es": "Hunden går ner.",
   "ee": "The dog goes down.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 339.66
 }, {
   "id": 359,
   "sv": "fortsätta",
@@ -2439,7 +2711,8 @@ const VOCAB = [{
   "es": "Vi fortsätter arbetet.",
   "ee": "We continue the work.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 337.29
 }, {
   "id": 360,
   "sv": "skola",
@@ -2450,7 +2723,8 @@ const VOCAB = [{
   "es": "Barnen går till skolan.",
   "ee": "The children go to school.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 334.72
 }, {
   "id": 361,
   "sv": "bruka",
@@ -2460,7 +2734,8 @@ const VOCAB = [{
   "es": "Jag brukar gå hit.",
   "ee": "I usually go here.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 334.18
 }, {
   "id": 362,
   "sv": "mål",
@@ -2469,7 +2744,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han gör ett mål.",
   "ee": "He scores a goal.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 331.84
 }, {
   "id": 363,
   "sv": "par",
@@ -2480,7 +2756,8 @@ const VOCAB = [{
   "es": "Ett par skor ligger där.",
   "ee": "A pair of shoes lies there.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 331.61
 }, {
   "id": 364,
   "sv": "sent",
@@ -2488,7 +2765,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är sent.",
   "ee": "It is late.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 330.39
 }, {
   "id": 365,
   "sv": "ekonomisk",
@@ -2496,7 +2774,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett ekonomiskt problem.",
   "ee": "It is an economic problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 327.88
 }, {
   "id": 367,
   "sv": "dålig",
@@ -2506,7 +2785,8 @@ const VOCAB = [{
   "es": "Det är dåligt väder.",
   "ee": "It is bad weather.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 323.94
 }, {
   "id": 368,
   "sv": "namn",
@@ -2517,7 +2797,8 @@ const VOCAB = [{
   "es": "Jag skriver mitt namn.",
   "ee": "I write my name.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 323.21
 }, {
   "id": 369,
   "sv": "igen",
@@ -2525,7 +2806,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi ses igen.",
   "ee": "We meet again.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 321.76
 }, {
   "id": 370,
   "sv": "verkligen",
@@ -2534,7 +2816,8 @@ const VOCAB = [{
   "es": "Det är verkligen bra.",
   "ee": "It is really good.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 321.76
 }, {
   "id": 371,
   "sv": "mena",
@@ -2542,7 +2825,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag menar det.",
   "ee": "I mean it.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 320.45
 }, {
   "id": 372,
   "sv": "fortfarande",
@@ -2551,7 +2835,8 @@ const VOCAB = [{
   "es": "Han arbetar fortfarande.",
   "ee": "He still works.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 319.39
 }, {
   "id": 373,
   "sv": "grupp",
@@ -2562,7 +2847,8 @@ const VOCAB = [{
   "es": "En grupp kommer.",
   "ee": "A group arrives.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 315.91
 }, {
   "id": 374,
   "sv": "beslut",
@@ -2571,7 +2857,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Regeringen fattar ett beslut.",
   "ee": "The government makes a decision.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 315.74
 }, {
   "id": 375,
   "sv": "även om",
@@ -2579,7 +2866,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Jag går även om det regnar.",
   "ee": "I go even if it rains.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 314.71
 }, {
   "id": 376,
   "sv": "enda",
@@ -2587,7 +2875,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är den enda vägen.",
   "ee": "It is the only road.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 314.53
 }, {
   "id": 377,
   "sv": "bort",
@@ -2595,7 +2884,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han går bort.",
   "ee": "He goes away.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 313.64
 }, {
   "id": 378,
   "sv": "slå",
@@ -2605,7 +2895,8 @@ const VOCAB = [{
   "es": "Han slår bollen.",
   "ee": "He hits the ball.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 312.71
 }, {
   "id": 379,
   "sv": "möjlig",
@@ -2615,7 +2906,8 @@ const VOCAB = [{
   "es": "Det är möjligt.",
   "ee": "It is possible.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 310.72
 }, {
   "id": 380,
   "sv": "många",
@@ -2624,7 +2916,8 @@ const VOCAB = [{
   "es": "Många människor kommer.",
   "ee": "Many people come.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 310.01
 }, {
   "id": 381,
   "sv": "hända",
@@ -2634,7 +2927,8 @@ const VOCAB = [{
   "es": "Det händer ibland.",
   "ee": "It happens sometimes.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 307.66
 }, {
   "id": 382,
   "sv": "ämna",
@@ -2642,7 +2936,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag ämnar resa.",
   "ee": "I intend to travel.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 307.66
 }, {
   "id": 383,
   "sv": "endast",
@@ -2650,7 +2945,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Endast två personer kom.",
   "ee": "Only two people came.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 302.17
 }, {
   "id": 384,
   "sv": "miljon",
@@ -2659,7 +2955,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Staden har en miljon invånare.",
   "ee": "The city has one million inhabitants.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 301.59
 }, {
   "id": 385,
   "sv": "vidare",
@@ -2667,7 +2964,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi går vidare.",
   "ee": "We go further.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 297.7
 }, {
   "id": 386,
   "sv": "ganska",
@@ -2675,7 +2973,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ganska bra.",
   "ee": "It is quite good.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 295.35
 }, {
   "id": 387,
   "sv": "svar",
@@ -2686,7 +2985,8 @@ const VOCAB = [{
   "es": "Hon ger ett svar.",
   "ee": "She gives an answer.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 291.65
 }, {
   "id": 388,
   "sv": "varenda",
@@ -2694,7 +2994,8 @@ const VOCAB = [{
   "t": "d",
   "es": "Varenda dag arbetar han.",
   "ee": "Every single day he works.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 291.39
 }, {
   "id": 389,
   "sv": "istället (el. i stället)",
@@ -2702,7 +3003,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi går hem istället.",
   "ee": "We go home instead.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 291.38
 }, {
   "id": 390,
   "sv": "först",
@@ -2710,7 +3012,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi äter först.",
   "ee": "We eat first.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 290.35
 }, {
   "id": 391,
   "sv": "arbeta",
@@ -2720,7 +3023,8 @@ const VOCAB = [{
   "es": "Jag arbetar här.",
   "ee": "I work here.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 289.93
 }, {
   "id": 392,
   "sv": "heller",
@@ -2728,7 +3032,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag vill inte heller.",
   "ee": "I don't want to either.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 288.81
 }, {
   "id": 393,
   "sv": "riktigt",
@@ -2736,7 +3041,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är riktigt bra.",
   "ee": "It is really good.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 288.62
 }, {
   "id": 394,
   "sv": "hand",
@@ -2747,7 +3053,8 @@ const VOCAB = [{
   "es": "Hon håller min hand.",
   "ee": "She holds my hand.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 288.6
 }, {
   "id": 395,
   "sv": "uppgift",
@@ -2756,7 +3063,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Uppgiften är svår.",
   "ee": "The assignment is difficult.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 287.98
 }, {
   "id": 396,
   "sv": "fungera (vardagl. funka)",
@@ -2764,7 +3072,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Maskinen fungerar.",
   "ee": "The machine works.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 287.4
 }, {
   "id": 397,
   "sv": "beta",
@@ -2772,7 +3081,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Korna betar.",
   "ee": "The cows graze.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 286.58
 }, {
   "id": 398,
   "sv": "köpa",
@@ -2780,7 +3090,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, -te, -t)",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 284.11
 }, {
   "id": 399,
   "sv": "nästan",
@@ -2789,7 +3100,8 @@ const VOCAB = [{
   "es": "Jag är nästan klar.",
   "ee": "I am almost finished.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 284.0
 }, {
   "id": 400,
   "sv": "bra",
@@ -2797,7 +3109,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är bra.",
   "ee": "It is good.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 283.65
 }, {
   "id": 401,
   "sv": "bland",
@@ -2806,7 +3119,8 @@ const VOCAB = [{
   "es": "Boken ligger bland pappren.",
   "ee": "The book lies among the papers.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 282.47
 }, {
   "id": 402,
   "sv": "december",
@@ -2815,7 +3129,8 @@ const VOCAB = [{
   "es": "Vi ses i december.",
   "ee": "We meet in December.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 280.83
 }, {
   "id": 403,
   "sv": "sitta",
@@ -2825,7 +3140,8 @@ const VOCAB = [{
   "es": "Han sitter vid bordet.",
   "ee": "He sits at the table.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 280.32
 }, {
   "id": 404,
   "sv": "precis",
@@ -2834,7 +3150,8 @@ const VOCAB = [{
   "es": "Det är precis rätt.",
   "ee": "It is exactly right.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 277.18
 }, {
   "id": 405,
   "sv": "hennes",
@@ -2843,7 +3160,8 @@ const VOCAB = [{
   "es": "Det är hennes bok.",
   "ee": "It is her book.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 275.94
 }, {
   "id": 406,
   "sv": "åta sig",
@@ -2851,7 +3169,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon åtar sig arbetet.",
   "ee": "She undertakes the work.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 275.39
 }, {
   "id": 407,
   "sv": "bland annat (förk. bl.a.)",
@@ -2859,7 +3178,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi talar om Sverige bland annat.",
   "ee": "We talk about Sweden among other things.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 275.2
 }, {
   "id": 408,
   "sv": "krig",
@@ -2868,7 +3188,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Kriget tog slut.",
   "ee": "The war ended.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 275.09
 }, {
   "id": 409,
   "sv": "till exempel (förk. t.ex., t ex)",
@@ -2876,7 +3197,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi läser svenska till exempel.",
   "ee": "We study Swedish for example.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 274.97
 }, {
   "id": 410,
   "sv": "tillsammans",
@@ -2885,7 +3207,8 @@ const VOCAB = [{
   "es": "Vi arbetar tillsammans.",
   "ee": "We work together.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 274.88
 }, {
   "id": 411,
   "sv": "henne",
@@ -2894,7 +3217,8 @@ const VOCAB = [{
   "es": "Jag ser henne.",
   "ee": "I see her.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 272.82
 }, {
   "id": 412,
   "sv": "intressant",
@@ -2904,7 +3228,8 @@ const VOCAB = [{
   "es": "Filmen är intressant.",
   "ee": "The movie is interesting.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 272.16
 }, {
   "id": 413,
   "sv": "val",
@@ -2913,7 +3238,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Valet är viktigt.",
   "ee": "The election is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 269.93
 }, {
   "id": 414,
   "sv": "kyrka",
@@ -2924,7 +3250,8 @@ const VOCAB = [{
   "es": "Kyrkan är gammal.",
   "ee": "The church is old.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 268.45
 }, {
   "id": 415,
   "sv": "egentligen",
@@ -2932,7 +3259,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Egentligen vill jag gå hem.",
   "ee": "Actually I want to go home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 267.44
 }, {
   "id": 416,
   "sv": "inför",
@@ -2940,7 +3268,8 @@ const VOCAB = [{
   "t": "p",
   "es": "De talar inför publiken.",
   "ee": "They speak before the audience.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 267.33
 }, {
   "id": 417,
   "sv": "historia",
@@ -2951,7 +3280,8 @@ const VOCAB = [{
   "es": "Han berättar en historia.",
   "ee": "He tells a story.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 267.25
 }, {
   "id": 418,
   "sv": "jobb",
@@ -2962,7 +3292,8 @@ const VOCAB = [{
   "es": "Hon har ett nytt jobb.",
   "ee": "She has a new job.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 266.97
 }, {
   "id": 419,
   "sv": "berätta",
@@ -2972,7 +3303,8 @@ const VOCAB = [{
   "es": "Hon berättar en historia.",
   "ee": "She tells a story.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 266.34
 }, {
   "id": 420,
   "sv": "vanlig",
@@ -2982,7 +3314,8 @@ const VOCAB = [{
   "es": "Det är en vanlig dag.",
   "ee": "It is a normal day.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 265.84
 }, {
   "id": 421,
   "sv": "rätta",
@@ -2990,7 +3323,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Läraren rättar provet.",
   "ee": "The teacher corrects the test.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 265.36
 }, {
   "id": 422,
   "sv": "januari",
@@ -2999,7 +3333,8 @@ const VOCAB = [{
   "es": "Snön faller i januari.",
   "ee": "Snow falls in January.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 264.41
 }, {
   "id": 423,
   "sv": "information",
@@ -3010,7 +3345,8 @@ const VOCAB = [{
   "es": "Vi får information.",
   "ee": "We receive information.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 264.14
 }, {
   "id": 424,
   "sv": "flest",
@@ -3018,7 +3354,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Flest personer kommer.",
   "ee": "Most people come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 262.77
 }, {
   "id": 425,
   "sv": "ung",
@@ -3026,7 +3363,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon är ung.",
   "ee": "She is young.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 260.53
 }, {
   "id": 426,
   "sv": "en",
@@ -3035,7 +3373,8 @@ const VOCAB = [{
   "es": "Jag ser en hund.",
   "ee": "I see a dog.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 260.31
 }, {
   "id": 427,
   "sv": "tillbaka (vardagl. tillbaks)",
@@ -3043,7 +3382,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han kommer tillbaka.",
   "ee": "He comes back.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 259.58
 }, {
   "id": 428,
   "sv": "film",
@@ -3054,7 +3394,8 @@ const VOCAB = [{
   "es": "Vi ser en film.",
   "ee": "We watch a film.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 258.67
 }, {
   "id": 429,
   "sv": "ibland (el. i bland)",
@@ -3062,7 +3403,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag går dit ibland.",
   "ee": "I go there sometimes.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 258.58
 }, {
   "id": 430,
   "sv": "medan (vardagl. medans)",
@@ -3070,7 +3412,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Hon läser medan jag skriver.",
   "ee": "She reads while I write.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 257.43
 }, {
   "id": 431,
   "sv": "slut",
@@ -3079,7 +3422,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Filmen har ett slut.",
   "ee": "The film has an end.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 256.6
 }, {
   "id": 432,
   "sv": "massa",
@@ -3090,7 +3434,8 @@ const VOCAB = [{
   "es": "Det finns en massa böcker.",
   "ee": "There are a lot of books.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 255.87
 }, {
   "id": 433,
   "sv": "tanke",
@@ -3099,7 +3444,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Tanken utvecklas.",
   "ee": "The thought develops.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 251.61
 }, {
   "id": 434,
   "sv": "akt",
@@ -3108,7 +3454,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Pjäsen har tre akter.",
   "ee": "The play has three acts.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 251.45
 }, {
   "id": 435,
   "sv": "procent",
@@ -3119,7 +3466,8 @@ const VOCAB = [{
   "es": "Priset ökar en procent.",
   "ee": "The price increases one percent.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 251.21
 }, {
   "id": 436,
   "sv": "månad",
@@ -3130,7 +3478,8 @@ const VOCAB = [{
   "es": "Vi väntar en månad.",
   "ee": "We wait a month.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 251.14
 }, {
   "id": 437,
   "sv": "sista",
@@ -3138,7 +3487,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är sista dagen.",
   "ee": "It is the last day.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 250.04
 }, {
   "id": 438,
   "sv": "ätt",
@@ -3147,7 +3497,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han tillhör en gammal ätt.",
   "ee": "He belongs to an old lineage.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 249.91
 }, {
   "id": 439,
   "sv": "sluta",
@@ -3157,7 +3508,8 @@ const VOCAB = [{
   "es": "Jag slutar arbeta.",
   "ee": "I stop working.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 249.47
 }, {
   "id": 440,
   "sv": "verksamhet",
@@ -3166,7 +3518,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Företaget har stor verksamhet.",
   "ee": "The company has large operations.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 249.2
 }, {
   "id": 441,
   "sv": "rätt",
@@ -3175,7 +3528,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag beställer en rätt.",
   "ee": "I order a dish.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 249.15
 }, {
   "id": 442,
   "sv": "samtidigt",
@@ -3183,7 +3537,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han arbetar samtidigt.",
   "ee": "He works at the same time.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 247.54
 }, {
   "id": 443,
   "sv": "emot",
@@ -3192,7 +3547,8 @@ const VOCAB = [{
   "es": "Han går emot vinden.",
   "ee": "He walks against the wind.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 247.28
 }, {
   "id": 444,
   "sv": "stöd",
@@ -3203,7 +3559,8 @@ const VOCAB = [{
   "es": "Stödet fortsätter.",
   "ee": "The support continues.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 244.26
 }, {
   "id": 445,
   "sv": "familj",
@@ -3214,7 +3571,8 @@ const VOCAB = [{
   "es": "Min familj bor här.",
   "ee": "My family lives here.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 244.19
 }, {
   "id": 446,
   "sv": "vem",
@@ -3222,7 +3580,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vem kommer?",
   "ee": "Who comes?",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 243.27
 }, {
   "id": 447,
   "sv": "åka",
@@ -3230,7 +3589,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, -te, -t)",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 243.14
 }, {
   "id": 448,
   "sv": "betala",
@@ -3240,7 +3600,8 @@ const VOCAB = [{
   "es": "Jag betalar maten.",
   "ee": "I pay for the food.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 242.04
 }, {
   "id": 449,
   "sv": "kommun",
@@ -3249,7 +3610,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kommunen bygger en skola.",
   "ee": "The municipality builds a school.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 242.01
 }, {
   "id": 450,
   "sv": "resultat",
@@ -3260,7 +3622,8 @@ const VOCAB = [{
   "es": "Resultatet publiceras.",
   "ee": "The result is published.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 241.96
 }, {
   "id": 451,
   "sv": "utveckla",
@@ -3268,13 +3631,15 @@ const VOCAB = [{
   "t": "v",
   "es": "Företaget utvecklar teknik.",
   "ee": "The company develops technology.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 241.91
 }, {
   "id": 452,
   "sv": "föra",
   "en": "to lead / carry",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 240.44
 }, {
   "id": 453,
   "sv": "hjälpa",
@@ -3284,7 +3649,8 @@ const VOCAB = [{
   "es": "Jag hjälper dig.",
   "ee": "I help you.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 238.92
 }, {
   "id": 454,
   "sv": "nästa",
@@ -3293,7 +3659,8 @@ const VOCAB = [{
   "es": "Nästa vecka reser vi.",
   "ee": "Next week we travel.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 237.94
 }, {
   "id": 455,
   "sv": "nära",
@@ -3301,7 +3668,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Huset ligger nära skolan.",
   "ee": "The house lies near the school.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 237.62
 }, {
   "id": 456,
   "sv": "nej",
@@ -3309,7 +3677,8 @@ const VOCAB = [{
   "t": "i",
   "es": "Nej",
   "ee": "jag vill inte.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 237.61
 }, {
   "id": 457,
   "sv": "text",
@@ -3320,7 +3689,8 @@ const VOCAB = [{
   "es": "Jag läser en text.",
   "ee": "I read a text.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 234.6
 }, {
   "id": 458,
   "sv": "exempel",
@@ -3331,7 +3701,8 @@ const VOCAB = [{
   "es": "Det är ett bra exempel.",
   "ee": "It is a good example.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 232.43
 }, {
   "id": 459,
   "sv": "särskilt",
@@ -3339,7 +3710,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är särskilt viktigt.",
   "ee": "It is especially important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 232.35
 }, {
   "id": 460,
   "sv": "debatt",
@@ -3348,7 +3720,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Debatten fortsätter.",
   "ee": "The debate continues.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 232.07
 }, {
   "id": 461,
   "sv": "när det gäller",
@@ -3356,7 +3729,8 @@ const VOCAB = [{
   "t": "p",
   "es": "När det gäller arbete är han noggrann.",
   "ee": "When it comes to work he is careful.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 230.03
 }, {
   "id": 462,
   "sv": "på grund av (förk. p.g.a, pga., p g a)",
@@ -3364,7 +3738,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi stannar hemma på grund av regn.",
   "ee": "We stay home because of rain.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 229.03
 }, {
   "id": 463,
   "sv": "situation",
@@ -3375,7 +3750,8 @@ const VOCAB = [{
   "es": "Det är en svår situation.",
   "ee": "It is a difficult situation.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 229.02
 }, {
   "id": 464,
   "sv": "europeisk",
@@ -3383,7 +3759,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en europeisk stad.",
   "ee": "It is a European city.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 228.56
 }, {
   "id": 465,
   "sv": "form",
@@ -3394,7 +3771,8 @@ const VOCAB = [{
   "es": "Det är en ny form.",
   "ee": "It is a new form.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 228.11
 }, {
   "id": 466,
   "sv": "orm",
@@ -3403,7 +3781,8 @@ const VOCAB = [{
   "g": "en",
   "es": "En orm ligger på vägen.",
   "ee": "A snake lies on the road.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 228.11
 }, {
   "id": 467,
   "sv": "råd",
@@ -3414,7 +3793,8 @@ const VOCAB = [{
   "es": "Han ger ett råd.",
   "ee": "He gives advice.",
   "ch": 19,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 228.07
 }, {
   "id": 468,
   "sv": "november",
@@ -3423,7 +3803,8 @@ const VOCAB = [{
   "es": "Det regnar i november.",
   "ee": "It rains in November.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 228.05
 }, {
   "id": 469,
   "sv": "makt",
@@ -3432,7 +3813,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Regeringen har makt.",
   "ee": "The government has power.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 228.02
 }, {
   "id": 470,
   "sv": "social",
@@ -3442,7 +3824,8 @@ const VOCAB = [{
   "es": "Det är en social fråga.",
   "ee": "It is a social issue.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 226.91
 }, {
   "id": 471,
   "sv": "vinna",
@@ -3452,7 +3835,8 @@ const VOCAB = [{
   "es": "Laget vinner.",
   "ee": "The team wins.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 226.63
 }, {
   "id": 472,
   "sv": "kvar",
@@ -3460,7 +3844,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han är kvar här.",
   "ee": "He remains here.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 226.35
 }, {
   "id": 473,
   "sv": "system",
@@ -3471,7 +3856,8 @@ const VOCAB = [{
   "es": "Systemet fungerar.",
   "ee": "The system works.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 225.72
 }, {
   "id": 474,
   "sv": "vänta",
@@ -3481,7 +3867,8 @@ const VOCAB = [{
   "es": "Vi väntar här.",
   "ee": "We wait here.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 225.55
 }, {
   "id": 475,
   "sv": "tidig",
@@ -3491,7 +3878,8 @@ const VOCAB = [{
   "es": "Det är en tidig morgon.",
   "ee": "It is an early morning.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 225.46
 }, {
   "id": 476,
   "sv": "åtgärd",
@@ -3500,7 +3888,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Regeringen tar en åtgärd.",
   "ee": "The government takes a measure.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 223.86
 }, {
   "id": 477,
   "sv": "krav",
@@ -3509,7 +3898,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Jobbet har många krav.",
   "ee": "The job has many requirements.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 223.66
 }, {
   "id": 478,
   "sv": "skillnad",
@@ -3518,7 +3908,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en skillnad.",
   "ee": "There is a difference.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 223.65
 }, {
   "id": 479,
   "sv": "riksdag",
@@ -3527,7 +3918,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Riksdagen beslutar.",
   "ee": "The parliament decides.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 223.14
 }, {
   "id": 480,
   "sv": "internationell",
@@ -3535,7 +3927,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en internationell fråga.",
   "ee": "It is an international question.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 222.66
 }, {
   "id": 481,
   "sv": "nationell",
@@ -3543,7 +3936,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en nationell lag.",
   "ee": "It is a national law.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 222.66
 }, {
   "id": 482,
   "sv": "jobba",
@@ -3553,7 +3947,8 @@ const VOCAB = [{
   "es": "Jag jobbar idag.",
   "ee": "I work today.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 221.99
 }, {
   "id": 483,
   "sv": "klara",
@@ -3563,7 +3958,8 @@ const VOCAB = [{
   "es": "Hon klarar provet.",
   "ee": "She passes the test.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 218.16
 }, {
   "id": 484,
   "sv": "typ",
@@ -3574,7 +3970,8 @@ const VOCAB = [{
   "es": "Det är en ny typ.",
   "ee": "It is a new type.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 217.75
 }, {
   "id": 485,
   "sv": "kring",
@@ -3582,7 +3979,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi sitter kring bordet.",
   "ee": "We sit around the table.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 217.05
 }, {
   "id": 486,
   "sv": "båda (vardgl. bägge)",
@@ -3590,7 +3988,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Båda kommer.",
   "ee": "Both come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 217.0
 }, {
   "id": 487,
   "sv": "cirka (förk. ca)",
@@ -3598,7 +3997,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Cirka tio personer kommer.",
   "ee": "About ten people come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 216.97
 }, {
   "id": 488,
   "sv": "tur",
@@ -3609,7 +4009,8 @@ const VOCAB = [{
   "es": "Vi tar en tur.",
   "ee": "We take a trip.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 216.52
 }, {
   "id": 489,
   "sv": "polis",
@@ -3620,7 +4021,8 @@ const VOCAB = [{
   "es": "Polisen hjälper oss.",
   "ee": "The police officer helps us.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 216.42
 }, {
   "id": 490,
   "sv": "medium",
@@ -3631,7 +4033,8 @@ const VOCAB = [{
   "es": "TV är ett medium.",
   "ee": "TV is a medium.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 215.79
 }, {
   "id": 491,
   "sv": "låg",
@@ -3641,7 +4044,8 @@ const VOCAB = [{
   "es": "Priset är lågt.",
   "ee": "The price is low.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 214.24
 }, {
   "id": 492,
   "sv": "varandra (vardagl. varann)",
@@ -3649,7 +4053,8 @@ const VOCAB = [{
   "t": "p",
   "es": "De hjälper varandra.",
   "ee": "They help each other.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 214.16
 }, {
   "id": 493,
   "sv": "mun",
@@ -3660,7 +4065,8 @@ const VOCAB = [{
   "es": "Barnet öppnar munnen.",
   "ee": "The child opens the mouth.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 213.93
 }, {
   "id": 494,
   "sv": "ansvar",
@@ -3669,7 +4075,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han har ett stort ansvar.",
   "ee": "He has a big responsibility.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 213.48
 }, {
   "id": 495,
   "sv": "roll",
@@ -3680,7 +4087,8 @@ const VOCAB = [{
   "es": "Hon spelar en roll.",
   "ee": "She plays a role.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 213.39
 }, {
   "id": 496,
   "sv": "regel",
@@ -3689,7 +4097,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en viktig regel.",
   "ee": "It is an important rule.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 211.92
 }, {
   "id": 497,
   "sv": "oktober",
@@ -3698,7 +4107,8 @@ const VOCAB = [{
   "es": "Vi ses i oktober.",
   "ee": "We meet in October.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 211.56
 }, {
   "id": 498,
   "sv": "prata",
@@ -3708,7 +4118,8 @@ const VOCAB = [{
   "es": "Vi pratar svenska.",
   "ee": "We speak Swedish.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 211.06
 }, {
   "id": 499,
   "sv": "organisation",
@@ -3719,7 +4130,8 @@ const VOCAB = [{
   "es": "Organisationen växer.",
   "ee": "The organization grows.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 210.61
 }, {
   "id": 500,
   "sv": "medlem",
@@ -3728,7 +4140,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon är medlem i klubben.",
   "ee": "She is a member of the club.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 210.54
 }, {
   "id": 501,
   "sv": "fråga",
@@ -3738,7 +4151,8 @@ const VOCAB = [{
   "es": "Jag frågar läraren.",
   "ee": "I ask the teacher.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 210.47
 }, {
   "id": 502,
   "sv": "anmäla",
@@ -3746,7 +4160,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon anmäler sig till kursen.",
   "ee": "She registers for the course.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 209.8
 }, {
   "id": 503,
   "sv": "nå",
@@ -3754,7 +4169,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi når målet.",
   "ee": "We reach the goal.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 209.69
 }, {
   "id": 504,
   "sv": "bo",
@@ -3764,7 +4180,8 @@ const VOCAB = [{
   "es": "Jag bor i Stockholm.",
   "ee": "I live in Stockholm.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 209.48
 }, {
   "id": 505,
   "sv": "krona",
@@ -3775,7 +4192,8 @@ const VOCAB = [{
   "es": "Boken kostar hundra kronor.",
   "ee": "The book costs one hundred kronor.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 207.79
 }, {
   "id": 506,
   "sv": "stämma",
@@ -3783,7 +4201,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det stämmer.",
   "ee": "That is correct.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 207.42
 }, {
   "id": 507,
   "sv": "rättighet",
@@ -3792,7 +4211,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Rättigheten skyddas.",
   "ee": "The right is protected.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 207.42
 }, {
   "id": 508,
   "sv": "sedan (vardagl. sen)",
@@ -3800,7 +4220,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi ses sedan.",
   "ee": "We see each other later.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 207.3
 }, {
   "id": 509,
   "sv": "bakom",
@@ -3808,7 +4229,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Bilen står bakom huset.",
   "ee": "The car stands behind the house.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 206.72
 }, {
   "id": 510,
   "sv": "efter att",
@@ -3816,7 +4238,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Vi går hem efter att filmen slutar.",
   "ee": "We go home after the movie ends.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 206.69
 }, {
   "id": 511,
   "sv": "därmed",
@@ -3824,7 +4247,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han accepterar därmed beslutet.",
   "ee": "He thereby accepts the decision.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 206.58
 }, {
   "id": 512,
   "sv": "med",
@@ -3833,7 +4257,8 @@ const VOCAB = [{
   "es": "Hon kommer med mig.",
   "ee": "She comes with me.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 206.58
 }, {
   "id": 513,
   "sv": "hus",
@@ -3844,7 +4269,8 @@ const VOCAB = [{
   "es": "De bor i ett hus.",
   "ee": "They live in a house.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 206.57
 }, {
   "id": 514,
   "sv": "vän",
@@ -3855,7 +4281,8 @@ const VOCAB = [{
   "es": "Min vän ringer.",
   "ee": "My friend calls.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 205.79
 }, {
   "id": 515,
   "sv": "dela",
@@ -3865,7 +4292,8 @@ const VOCAB = [{
   "es": "Vi delar maten.",
   "ee": "We share the food.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 205.43
 }, {
   "id": 516,
   "sv": "februari",
@@ -3874,7 +4302,8 @@ const VOCAB = [{
   "es": "Snön faller i februari.",
   "ee": "Snow falls in February.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 205.04
 }, {
   "id": 517,
   "sv": "kort",
@@ -3882,7 +4311,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Mötet är kort.",
   "ee": "The meeting is short.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 204.59
 }, {
   "id": 518,
   "sv": "grund",
@@ -3891,7 +4321,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en grund för beslutet.",
   "ee": "There is a basis for the decision.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 204.34
 }, {
   "id": 519,
   "sv": "runt",
@@ -3899,7 +4330,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi går runt sjön.",
   "ee": "We walk around the lake.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 203.5
 }, {
   "id": 520,
   "sv": "framtid",
@@ -3910,7 +4342,8 @@ const VOCAB = [{
   "es": "Hon tänker på framtiden.",
   "ee": "She thinks about the future.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 203.16
 }, {
   "id": 521,
   "sv": "köra",
@@ -3918,7 +4351,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(kör, körde, kört)",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 203.16
 }, {
   "id": 522,
   "sv": "etikett",
@@ -3929,7 +4363,8 @@ const VOCAB = [{
   "es": "Flaskan har en etikett.",
   "ee": "The bottle has a label.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 202.31
 }, {
   "id": 523,
   "sv": "fri",
@@ -3937,7 +4372,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon är fri idag.",
   "ee": "She is free today.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 201.84
 }, {
   "id": 524,
   "sv": "behov",
@@ -3948,7 +4384,8 @@ const VOCAB = [{
   "es": "Det finns ett behov.",
   "ee": "There is a need.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 201.71
 }, {
   "id": 525,
   "sv": "timme (el. timma)",
@@ -3957,7 +4394,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Mötet tar en timme.",
   "ee": "The meeting takes one hour.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 201.49
 }, {
   "id": 526,
   "sv": "september",
@@ -3966,7 +4404,8 @@ const VOCAB = [{
   "es": "Skolan börjar i september.",
   "ee": "School begins in September.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 201.31
 }, {
   "id": 527,
   "sv": "hoppas",
@@ -3975,7 +4414,8 @@ const VOCAB = [{
   "es": "Jag hoppas på sol.",
   "ee": "I hope for sun.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 200.99
 }, {
   "id": 528,
   "sv": "ensam",
@@ -3985,7 +4425,8 @@ const VOCAB = [{
   "es": "Han sitter ensam.",
   "ee": "He sits alone.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 200.63
 }, {
   "id": 529,
   "sv": "snart",
@@ -3994,7 +4435,8 @@ const VOCAB = [{
   "es": "Vi ses snart.",
   "ee": "See you soon.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 199.9
 }, {
   "id": 530,
   "sv": "rätt",
@@ -4002,7 +4444,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag beställer en rätt.",
   "ee": "I order a dish.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 198.64
 }, {
   "id": 531,
   "sv": "förklara",
@@ -4012,7 +4455,8 @@ const VOCAB = [{
   "es": "Läraren förklarar.",
   "ee": "The teacher explains.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 198.04
 }, {
   "id": 532,
   "sv": "ledning",
@@ -4021,7 +4465,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ledningen beslutar.",
   "ee": "The leadership decides.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 197.93
 }, {
   "id": 533,
   "sv": "intresse",
@@ -4030,7 +4475,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Jag har ett nytt intresse.",
   "ee": "I have a new interest.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 197.41
 }, {
   "id": 534,
   "sv": "tvinga",
@@ -4038,7 +4484,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Reglerna tvingar oss.",
   "ee": "The rules force us.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 196.99
 }, {
   "id": 535,
   "sv": "påverka",
@@ -4046,7 +4493,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Nyheter påverkar människor.",
   "ee": "News influence people.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 196.4
 }, {
   "id": 536,
   "sv": "anledning",
@@ -4055,7 +4503,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en anledning.",
   "ee": "There is a reason.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 195.88
 }, {
   "id": 537,
   "sv": "titta",
@@ -4065,7 +4514,8 @@ const VOCAB = [{
   "es": "Jag tittar på TV.",
   "ee": "I watch TV.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 195.79
 }, {
   "id": 538,
   "sv": "minska",
@@ -4073,7 +4523,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Priserna minskar.",
   "ee": "Prices decrease.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 195.42
 }, {
   "id": 539,
   "sv": "i alla fall (el. iallafall; förk. iaf)",
@@ -4081,7 +4532,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi kommer i alla fall.",
   "ee": "We come anyway.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 195.28
 }, {
   "id": 540,
   "sv": "däremot",
@@ -4089,7 +4541,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han vill däremot stanna.",
   "ee": "However he wants to stay.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 194.9
 }, {
   "id": 541,
   "sv": "direkt",
@@ -4097,7 +4550,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi går direkt hem.",
   "ee": "We go directly home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 194.63
 }, {
   "id": 542,
   "sv": "ekonomi",
@@ -4108,7 +4562,8 @@ const VOCAB = [{
   "es": "Ekonomin växer.",
   "ee": "The economy grows.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 194.28
 }, {
   "id": 543,
   "sv": "bestämma",
@@ -4116,7 +4571,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi bestämmer idag.",
   "ee": "We decide today.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 192.88
 }, {
   "id": 544,
   "sv": "skicka",
@@ -4124,7 +4580,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag skickar ett brev.",
   "ee": "I send a letter.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 192.84
 }, {
   "id": 545,
   "sv": "trots",
@@ -4132,7 +4589,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi går trots regnet.",
   "ee": "We go despite the rain.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 192.43
 }, {
   "id": 546,
   "sv": "åsikt",
@@ -4141,7 +4599,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon har en stark åsikt.",
   "ee": "She has a strong opinion.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 192.3
 }, {
   "id": 547,
   "sv": "diskussion",
@@ -4152,7 +4611,8 @@ const VOCAB = [{
   "es": "Diskussionen fortsätter.",
   "ee": "The discussion continues.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 192.14
 }, {
   "id": 548,
   "sv": "rad",
@@ -4163,7 +4623,8 @@ const VOCAB = [{
   "es": "Det finns en rad hus.",
   "ee": "There is a row of houses.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 192.14
 }, {
   "id": 549,
   "sv": "faktum",
@@ -4172,7 +4633,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett faktum.",
   "ee": "It is a fact.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 192.11
 }, {
   "id": 550,
   "sv": "tidning",
@@ -4183,7 +4645,8 @@ const VOCAB = [{
   "es": "Jag läser en tidning.",
   "ee": "I read a newspaper.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 191.91
 }, {
   "id": 551,
   "sv": "mening",
@@ -4194,7 +4657,8 @@ const VOCAB = [{
   "es": "Jag skriver en mening.",
   "ee": "I write a sentence.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 191.16
 }, {
   "id": 552,
   "sv": "utanför",
@@ -4202,7 +4666,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han väntar utanför huset.",
   "ee": "He waits outside the house.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 190.63
 }, {
   "id": 553,
   "sv": "rätt",
@@ -4210,7 +4675,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag beställer en rätt.",
   "ee": "I order a dish.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 190.49
 }, {
   "id": 554,
   "sv": "gemensam",
@@ -4220,7 +4686,8 @@ const VOCAB = [{
   "es": "De har ett gemensamt mål.",
   "ee": "They have a common goal.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 189.45
 }, {
   "id": 555,
   "sv": "klar",
@@ -4228,7 +4695,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag är klar.",
   "ee": "I am ready.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 187.9
 }, {
   "id": 556,
   "sv": "juni",
@@ -4237,7 +4705,8 @@ const VOCAB = [{
   "es": "Vi reser i juni.",
   "ee": "We travel in June.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 186.95
 }, {
   "id": 557,
   "sv": "is",
@@ -4246,7 +4715,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Isen smälter.",
   "ee": "The ice melts.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 186.84
 }, {
   "id": 558,
   "sv": "bil",
@@ -4257,7 +4727,8 @@ const VOCAB = [{
   "es": "Bilen är ny.",
   "ee": "The car is new.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 186.44
 }, {
   "id": 559,
   "sv": "myndighet",
@@ -4266,14 +4737,16 @@ const VOCAB = [{
   "g": "en",
   "es": "Myndigheten beslutar.",
   "ee": "The authority decides.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 186.22
 }, {
   "id": 560,
   "sv": "nummer (förk. nr)",
   "en": "number",
   "t": "n",
   "g": "ett",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 186.0
 }, {
   "id": 561,
   "sv": "allmän",
@@ -4281,7 +4754,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en allmän regel.",
   "ee": "It is a general rule.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 185.28
 }, {
   "id": 562,
   "sv": "musik",
@@ -4292,7 +4766,8 @@ const VOCAB = [{
   "es": "Jag lyssnar på musik.",
   "ee": "I listen to music.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 185.07
 }, {
   "id": 563,
   "sv": "ändra",
@@ -4302,7 +4777,8 @@ const VOCAB = [{
   "es": "Vi ändrar planen.",
   "ee": "We change the plan.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 184.81
 }, {
   "id": 564,
   "sv": "träffa",
@@ -4312,7 +4788,8 @@ const VOCAB = [{
   "es": "Jag träffar honom.",
   "ee": "I meet him.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 184.74
 }, {
   "id": 565,
   "sv": "ihop",
@@ -4320,7 +4797,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi arbetar ihop.",
   "ee": "We work together.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 183.73
 }, {
   "id": 566,
   "sv": "diskutera",
@@ -4330,7 +4808,8 @@ const VOCAB = [{
   "es": "De diskuterar frågan.",
   "ee": "They discuss the question.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 183.54
 }, {
   "id": 567,
   "sv": "driva",
@@ -4338,7 +4817,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han driver ett företag.",
   "ee": "He runs a company.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 183.3
 }, {
   "id": 568,
   "sv": "sälja",
@@ -4346,7 +4826,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De säljer bilar.",
   "ee": "They sell cars.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 182.71
 }, {
   "id": 569,
   "sv": "sakna",
@@ -4354,7 +4835,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag saknar dig.",
   "ee": "I miss you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 182.57
 }, {
   "id": 570,
   "sv": "program",
@@ -4365,7 +4847,8 @@ const VOCAB = [{
   "es": "Programmet startar.",
   "ee": "The program starts.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 182.39
 }, {
   "id": 571,
   "sv": "ifrån",
@@ -4373,7 +4856,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag kommer ifrån Sverige.",
   "ee": "I come from Sweden.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 181.44
 }, {
   "id": 572,
   "sv": "länka",
@@ -4381,7 +4865,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon länkar artikeln.",
   "ee": "She links the article.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 179.35
 }, {
   "id": 573,
   "sv": "kunskap",
@@ -4390,7 +4875,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kunskap är viktig.",
   "ee": "Knowledge is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 179.19
 }, {
   "id": 574,
   "sv": "snabbt",
@@ -4398,7 +4884,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han springer snabbt.",
   "ee": "He runs quickly.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 178.68
 }, {
   "id": 575,
   "sv": "maj",
@@ -4407,7 +4894,8 @@ const VOCAB = [{
   "es": "Blommor växer i maj.",
   "ee": "Flowers grow in May.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 177.76
 }, {
   "id": 576,
   "sv": "amerikansk",
@@ -4417,7 +4905,8 @@ const VOCAB = [{
   "es": "Han är amerikansk.",
   "ee": "He is American.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 177.66
 }, {
   "id": 577,
   "sv": "tyda",
@@ -4425,7 +4914,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det är svårt att tyda texten.",
   "ee": "It is hard to interpret the text.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 177.46
 }, {
   "id": 578,
   "sv": "särskild",
@@ -4433,7 +4923,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en särskild dag.",
   "ee": "It is a special day.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 177.43
 }, {
   "id": 579,
   "sv": "början",
@@ -4442,7 +4933,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en början.",
   "ee": "It is a beginning.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 176.59
 }, {
   "id": 580,
   "sv": "naturligtvis",
@@ -4451,7 +4943,8 @@ const VOCAB = [{
   "es": "Naturligtvis kommer jag.",
   "ee": "Of course I come.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 176.31
 }, {
   "id": 581,
   "sv": "skäl",
@@ -4460,7 +4953,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det finns ett skäl.",
   "ee": "There is a reason.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 175.99
 }, {
   "id": 582,
   "sv": "fin",
@@ -4470,7 +4964,8 @@ const VOCAB = [{
   "es": "Det är en fin dag.",
   "ee": "It is a nice day.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 174.99
 }, {
   "id": 583,
   "sv": "genomföra",
@@ -4478,7 +4973,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De genomför planen.",
   "ee": "They carry out the plan.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 174.86
 }, {
   "id": 584,
   "sv": "liksom",
@@ -4486,7 +4982,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han arbetar liksom jag.",
   "ee": "He works like me.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 174.75
 }, {
   "id": 585,
   "sv": "via",
@@ -4494,7 +4991,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi reser via Berlin.",
   "ee": "We travel via Berlin.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 174.12
 }, {
   "id": 586,
   "sv": "före",
@@ -4502,7 +5000,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi äter före mötet.",
   "ee": "We eat before the meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 173.85
 }, {
   "id": 587,
   "sv": "dom",
@@ -4511,7 +5010,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Domaren ger en dom.",
   "ee": "The judge gives a verdict.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 173.6
 }, {
   "id": 588,
   "sv": "risk",
@@ -4522,7 +5022,8 @@ const VOCAB = [{
   "es": "Risken bedöms.",
   "ee": "The risk is assessed.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 173.27
 }, {
   "id": 589,
   "sv": "enkel",
@@ -4532,7 +5033,8 @@ const VOCAB = [{
   "es": "Frågan är enkel.",
   "ee": "The question is simple.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 173.1
 }, {
   "id": 590,
   "sv": "alls",
@@ -4540,7 +5042,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag förstår inte alls.",
   "ee": "I do not understand at all.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 173.06
 }, {
   "id": 591,
   "sv": "pris",
@@ -4551,7 +5054,8 @@ const VOCAB = [{
   "es": "Priset är högt.",
   "ee": "The price is high.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 172.92
 }, {
   "id": 592,
   "sv": "räkna",
@@ -4561,7 +5065,8 @@ const VOCAB = [{
   "es": "Jag räknar pengarna.",
   "ee": "I count the money.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 172.91
 }, {
   "id": 593,
   "sv": "beskriva",
@@ -4571,7 +5076,8 @@ const VOCAB = [{
   "es": "Hon beskriver staden.",
   "ee": "She describes the city.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 172.36
 }, {
   "id": 594,
   "sv": "hem",
@@ -4579,13 +5085,15 @@ const VOCAB = [{
   "t": "p",
   "es": "Huset är ett hem.",
   "ee": "The house is a home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 172.22
 }, {
   "id": 595,
   "sv": "möta",
   "en": "to meet",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 172.02
 }, {
   "id": 596,
   "sv": "såsom",
@@ -4593,7 +5101,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Frukt såsom äpplen.",
   "ee": "Fruit such as apples.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 171.86
 }, {
   "id": 597,
   "sv": "idé",
@@ -4604,7 +5113,8 @@ const VOCAB = [{
   "es": "Jag har en idé.",
   "ee": "I have an idea.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 171.57
 }, {
   "id": 598,
   "sv": "gram",
@@ -4615,7 +5125,8 @@ const VOCAB = [{
   "es": "Det väger ett gram.",
   "ee": "It weighs one gram.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 171.53
 }, {
   "id": 599,
   "sv": "förra",
@@ -4623,7 +5134,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag bodde där förra året.",
   "ee": "I lived there last year.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 170.92
 }, {
   "id": 600,
   "sv": "tjänst",
@@ -4634,7 +5146,8 @@ const VOCAB = [{
   "es": "Han gör mig en tjänst.",
   "ee": "He does me a favor.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 170.63
 }, {
   "id": 601,
   "sv": "heta",
@@ -4642,7 +5155,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(heter, hette, hetat)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 170.22
 }, {
   "id": 602,
   "sv": "kultur",
@@ -4653,7 +5167,8 @@ const VOCAB = [{
   "es": "Sverige har en rik kultur.",
   "ee": "Sweden has a rich culture.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 170.1
 }, {
   "id": 603,
   "sv": "äta",
@@ -4661,7 +5176,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(äter, åt, ätit)",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 169.74
 }, {
   "id": 604,
   "sv": "syfte",
@@ -4670,7 +5186,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Projektet har ett tydligt syfte.",
   "ee": "The project has a clear purpose.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 168.82
 }, {
   "id": 605,
   "sv": "princip",
@@ -4679,7 +5196,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en viktig princip.",
   "ee": "It is an important principle.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 167.86
 }, {
   "id": 606,
   "sv": "flytta",
@@ -4689,7 +5207,8 @@ const VOCAB = [{
   "es": "De flyttar till Stockholm.",
   "ee": "They move to Stockholm.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 167.68
 }, {
   "id": 607,
   "sv": "ute",
@@ -4698,7 +5217,8 @@ const VOCAB = [{
   "es": "Barnen leker ute.",
   "ee": "The children play outside.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 167.61
 }, {
   "id": 608,
   "sv": "utgöra",
@@ -4706,7 +5226,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det utgör ett problem.",
   "ee": "It constitutes a problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 167.61
 }, {
   "id": 609,
   "sv": "politiker",
@@ -4717,7 +5238,8 @@ const VOCAB = [{
   "es": "Politikern talar.",
   "ee": "The politician speaks.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 167.43
 }, {
   "id": 610,
   "sv": "lätt",
@@ -4725,7 +5247,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Uppgiften är lätt.",
   "ee": "The task is easy.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 167.41
 }, {
   "id": 611,
   "sv": "förälder",
@@ -4736,7 +5259,8 @@ const VOCAB = [{
   "es": "En förälder väntar.",
   "ee": "A parent waits.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 167.0
 }, {
   "id": 612,
   "sv": "marknad",
@@ -4745,7 +5269,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Marknaden är stor.",
   "ee": "The market is large.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 166.13
 }, {
   "id": 613,
   "sv": "nämligen",
@@ -4753,7 +5278,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer nämligen idag.",
   "ee": "He comes today namely.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.98
 }, {
   "id": 614,
   "sv": "tydlig",
@@ -4761,7 +5287,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Regeln är tydlig.",
   "ee": "The rule is clear.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.93
 }, {
   "id": 615,
   "sv": "utbildning",
@@ -4772,13 +5299,15 @@ const VOCAB = [{
   "es": "Hon studerar utbildning.",
   "ee": "She studies education.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.87
 }, {
   "id": 616,
   "sv": "röra",
   "en": "to move / touch",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.68
 }, {
   "id": 617,
   "sv": "nivå",
@@ -4789,7 +5318,8 @@ const VOCAB = [{
   "es": "Priset ligger på en hög nivå.",
   "ee": "The price is at a high level.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.64
 }, {
   "id": 618,
   "sv": "april",
@@ -4798,7 +5328,8 @@ const VOCAB = [{
   "es": "Blommor växer i april.",
   "ee": "Flowers grow in April.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.36
 }, {
   "id": 619,
   "sv": "mängd",
@@ -4807,7 +5338,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en stor mängd böcker.",
   "ee": "There is a large amount of books.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.27
 }, {
   "id": 620,
   "sv": "betydelse",
@@ -4816,7 +5348,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ordet har en ny betydelse.",
   "ee": "The word has a new meaning.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 165.2
 }, {
   "id": 621,
   "sv": "kristen",
@@ -4826,7 +5359,8 @@ const VOCAB = [{
   "es": "Han är kristen.",
   "ee": "He is Christian.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 164.51
 }, {
   "id": 622,
   "sv": "dö",
@@ -4834,7 +5368,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-r, dog, -tt)",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 164.3
 }, {
   "id": 623,
   "sv": "mars",
@@ -4843,7 +5378,8 @@ const VOCAB = [{
   "es": "Snön smälter i mars.",
   "ee": "The snow melts in March.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 164.22
 }, {
   "id": 624,
   "sv": "allt",
@@ -4851,7 +5387,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Allt är klart.",
   "ee": "Everything is ready.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 163.95
 }, {
   "id": 625,
   "sv": "kväll",
@@ -4862,7 +5399,8 @@ const VOCAB = [{
   "es": "Vi ses ikväll.",
   "ee": "See you tonight.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 163.87
 }, {
   "id": 626,
   "sv": "bildning",
@@ -4871,7 +5409,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Bildning är viktigt.",
   "ee": "Education is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 163.82
 }, {
   "id": 627,
   "sv": "länk",
@@ -4882,7 +5421,8 @@ const VOCAB = [{
   "es": "Hon skickar en länk.",
   "ee": "She sends a link.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 163.54
 }, {
   "id": 628,
   "sv": "växa",
@@ -4890,7 +5430,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, -te, -t)",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 162.65
 }, {
   "id": 629,
   "sv": "per",
@@ -4898,7 +5439,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Priset är tio kronor per kilo.",
   "ee": "The price is ten kronor per kilo.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 162.15
 }, {
   "id": 630,
   "sv": "offentlig",
@@ -4906,7 +5448,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett offentligt möte.",
   "ee": "It is a public meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 161.83
 }, {
   "id": 631,
   "sv": "såväl",
@@ -4914,7 +5457,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Han arbetar såväl hemma som på kontoret.",
   "ee": "He works both at home and at the office.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 161.72
 }, {
   "id": 632,
   "sv": "våga",
@@ -4922,7 +5466,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon vågar tala.",
   "ee": "She dares to speak.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 161.66
 }, {
   "id": 633,
   "sv": "vatten",
@@ -4933,7 +5478,8 @@ const VOCAB = [{
   "es": "Jag dricker vatten.",
   "ee": "I drink water.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 161.3
 }, {
   "id": 634,
   "sv": "håll",
@@ -4942,7 +5488,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han går åt mitt håll.",
   "ee": "He walks in my direction.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 161.22
 }, {
   "id": 635,
   "sv": "mänsklig",
@@ -4950,7 +5497,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en mänsklig rättighet.",
   "ee": "It is a human right.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 160.58
 }, {
   "id": 636,
   "sv": "demokrati",
@@ -4959,7 +5507,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Sverige är en demokrati.",
   "ee": "Sweden is a democracy.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 160.56
 }, {
   "id": 637,
   "sv": "fatta",
@@ -4967,7 +5516,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Regeringen fattar beslut.",
   "ee": "The government makes decisions.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 160.43
 }, {
   "id": 638,
   "sv": "jord",
@@ -4976,7 +5526,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jorden är våt.",
   "ee": "The soil is wet.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 159.88
 }, {
   "id": 639,
   "sv": "känsla",
@@ -4985,7 +5536,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag har en stark känsla.",
   "ee": "I have a strong feeling.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 159.45
 }, {
   "id": 640,
   "sv": "förändring",
@@ -4996,7 +5548,8 @@ const VOCAB = [{
   "es": "Förändringen märks.",
   "ee": "The change is noticeable.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 159.43
 }, {
   "id": 641,
   "sv": "nämna",
@@ -5004,7 +5557,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han nämner problemet.",
   "ee": "He mentions the problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 159.17
 }, {
   "id": 642,
   "sv": "tyvärr",
@@ -5013,7 +5567,8 @@ const VOCAB = [{
   "es": "Tyvärr kan jag inte komma.",
   "ee": "Unfortunately I cannot come.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 159.15
 }, {
   "id": 643,
   "sv": "enskild",
@@ -5021,7 +5576,8 @@ const VOCAB = [{
   "t": "a",
   "es": "En enskild person talar.",
   "ee": "An individual person speaks.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 159.02
 }, {
   "id": 644,
   "sv": "rätt",
@@ -5031,7 +5587,8 @@ const VOCAB = [{
   "es": "Jag beställer en rätt.",
   "ee": "I order a dish.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 158.98
 }, {
   "id": 645,
   "sv": "be (el. bedja)",
@@ -5039,7 +5596,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon ber om hjälp.",
   "ee": "She asks for help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 158.82
 }, {
   "id": 646,
   "sv": "punkt",
@@ -5050,7 +5608,8 @@ const VOCAB = [{
   "es": "Vi diskuterar en punkt.",
   "ee": "We discuss a point.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 158.58
 }, {
   "id": 647,
   "sv": "ändring",
@@ -5059,7 +5618,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ändringen godkänns.",
   "ee": "The amendment is approved.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 158.58
 }, {
   "id": 648,
   "sv": "mission",
@@ -5068,7 +5628,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Organisationen har en mission.",
   "ee": "The organization has a mission.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 158.08
 }, {
   "id": 649,
   "sv": "igår (el. i går)",
@@ -5076,7 +5637,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag arbetade igår.",
   "ee": "I worked yesterday.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 157.53
 }, {
   "id": 650,
   "sv": "kommission",
@@ -5085,7 +5647,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kommissionen möts.",
   "ee": "The commission meets.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 157.33
 }, {
   "id": 651,
   "sv": "ort",
@@ -5094,7 +5657,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han bor i en liten ort.",
   "ee": "He lives in a small locality.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 156.85
 }, {
   "id": 652,
   "sv": "anta",
@@ -5102,7 +5666,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag antar det.",
   "ee": "I assume that.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 156.58
 }, {
   "id": 653,
   "sv": "trots att",
@@ -5110,7 +5675,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Jag går trots att det regnar.",
   "ee": "I go although it rains.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 156.41
 }, {
   "id": 654,
   "sv": "spel",
@@ -5121,7 +5687,8 @@ const VOCAB = [{
   "es": "Barnen spelar ett spel.",
   "ee": "The children play a game.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 156.33
 }, {
   "id": 655,
   "sv": "språk",
@@ -5132,7 +5699,8 @@ const VOCAB = [{
   "es": "Svenska är ett språk.",
   "ee": "Swedish is a language.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 156.31
 }, {
   "id": 656,
   "sv": "föreslå",
@@ -5142,7 +5710,8 @@ const VOCAB = [{
   "es": "Hon föreslår en idé.",
   "ee": "She suggests an idea.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 156.27
 }, {
   "id": 657,
   "sv": "igenom",
@@ -5150,7 +5719,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi går igenom parken.",
   "ee": "We walk through the park.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 154.93
 }, {
   "id": 658,
   "sv": "undra",
@@ -5160,7 +5730,8 @@ const VOCAB = [{
   "es": "Jag undrar varför.",
   "ee": "I wonder why.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 154.38
 }, {
   "id": 659,
   "sv": "eget",
@@ -5168,7 +5739,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Huset är hans eget.",
   "ee": "The house is his own.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 154.19
 }, {
   "id": 660,
   "sv": "möte",
@@ -5177,7 +5749,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi har ett möte.",
   "ee": "We have a meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 153.97
 }, {
   "id": 661,
   "sv": "mat",
@@ -5188,7 +5761,8 @@ const VOCAB = [{
   "es": "Jag lagar mat.",
   "ee": "I cook food.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 153.94
 }, {
   "id": 662,
   "sv": "gräns",
@@ -5197,7 +5771,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Landet har en gräns.",
   "ee": "The country has a border.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 153.55
 }, {
   "id": 663,
   "sv": "lyssna",
@@ -5207,7 +5782,8 @@ const VOCAB = [{
   "es": "Jag lyssnar på musik.",
   "ee": "I listen to music.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 152.94
 }, {
   "id": 664,
   "sv": "delta",
@@ -5215,7 +5791,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon deltar i mötet.",
   "ee": "She participates in the meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 152.8
 }, {
   "id": 665,
   "sv": "samarbete",
@@ -5224,7 +5801,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "De startar ett samarbete.",
   "ee": "They start a cooperation.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 152.7
 }, {
   "id": 666,
   "sv": "annars",
@@ -5233,7 +5811,8 @@ const VOCAB = [{
   "es": "Vi går nu annars blir det sent.",
   "ee": "We go now otherwise it becomes late.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 152.6
 }, {
   "id": 667,
   "sv": "falla",
@@ -5241,7 +5820,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Löven faller.",
   "ee": "The leaves fall.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 152.58
 }, {
   "id": 668,
   "sv": "nära",
@@ -5250,7 +5830,8 @@ const VOCAB = [{
   "es": "Huset ligger nära skolan.",
   "ee": "The house lies near the school.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 152.36
 }, {
   "id": 669,
   "sv": "rum",
@@ -5261,7 +5842,8 @@ const VOCAB = [{
   "es": "Vi sitter i ett rum.",
   "ee": "We sit in a room.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 152.07
 }, {
   "id": 670,
   "sv": "ungefär",
@@ -5270,7 +5852,8 @@ const VOCAB = [{
   "es": "Det är ungefär tio personer.",
   "ee": "It is about ten people.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 151.93
 }, {
   "id": 671,
   "sv": "starta",
@@ -5280,7 +5863,8 @@ const VOCAB = [{
   "es": "De startar projektet.",
   "ee": "They start the project.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 151.68
 }, {
   "id": 672,
   "sv": "inse",
@@ -5288,7 +5872,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag inser problemet.",
   "ee": "I realize the problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 151.51
 }, {
   "id": 673,
   "sv": "internet",
@@ -5297,7 +5882,8 @@ const VOCAB = [{
   "es": "Jag läser nyheter på internet.",
   "ee": "I read news on the internet.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 151.38
 }, {
   "id": 674,
   "sv": "hov",
@@ -5306,7 +5892,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Kungen har ett hov.",
   "ee": "The king has a court.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 150.99
 }, {
   "id": 675,
   "sv": "öppen",
@@ -5316,7 +5903,8 @@ const VOCAB = [{
   "es": "Dörren är öppen.",
   "ee": "The door is open.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 150.86
 }, {
   "id": 676,
   "sv": "bidra",
@@ -5324,7 +5912,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon bidrar till projektet.",
   "ee": "She contributes to the project.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 150.84
 }, {
   "id": 677,
   "sv": "död",
@@ -5333,7 +5922,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Döden kom plötsligt.",
   "ee": "Death came suddenly.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 150.59
 }, {
   "id": 678,
   "sv": "luta",
@@ -5341,7 +5931,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han lutar sig mot väggen.",
   "ee": "He leans against the wall.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 150.2
 }, {
   "id": 679,
   "sv": "öga",
@@ -5352,7 +5943,8 @@ const VOCAB = [{
   "es": "Hon öppnar ögat.",
   "ee": "She opens the eye.",
   "ch": 19,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 150.07
 }, {
   "id": 680,
   "sv": "säkert",
@@ -5360,7 +5952,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är säkert sant.",
   "ee": "It is certainly true.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 149.46
 }, {
   "id": 681,
   "sv": "ämne",
@@ -5371,7 +5964,8 @@ const VOCAB = [{
   "es": "Vi studerar ett ämne.",
   "ee": "We study a subject.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 149.25
 }, {
   "id": 682,
   "sv": "få",
@@ -5380,7 +5974,8 @@ const VOCAB = [{
   "es": "Jag får ett brev.",
   "ee": "I receive a letter.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 148.91
 }, {
   "id": 683,
   "sv": "augusti",
@@ -5389,7 +5984,8 @@ const VOCAB = [{
   "es": "Skolan börjar i augusti.",
   "ee": "School begins in August.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 148.76
 }, {
   "id": 684,
   "sv": "socialdemokrat (vardagl. sosse)",
@@ -5398,7 +5994,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han är socialdemokrat.",
   "ee": "He is a social democrat.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 148.49
 }, {
   "id": 685,
   "sv": "projekt",
@@ -5409,7 +6006,8 @@ const VOCAB = [{
   "es": "De startar ett projekt.",
   "ee": "They start a project.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 148.31
 }, {
   "id": 686,
   "sv": "övrig",
@@ -5419,7 +6017,8 @@ const VOCAB = [{
   "es": "Övriga frågor diskuteras.",
   "ee": "Other questions are discussed.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 148.21
 }, {
   "id": 687,
   "sv": "dels",
@@ -5427,7 +6026,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Han arbetar dels hemma.",
   "ee": "He works partly at home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 148.09
 }, {
   "id": 688,
   "sv": "framför allt (el. framförallt)",
@@ -5435,7 +6035,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är framför allt viktigt.",
   "ee": "It is above all important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 147.43
 }, {
   "id": 689,
   "sv": "positiv",
@@ -5445,7 +6046,8 @@ const VOCAB = [{
   "es": "Hon är positiv.",
   "ee": "She is positive.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 147.36
 }, {
   "id": 690,
   "sv": "rolig",
@@ -5455,7 +6057,8 @@ const VOCAB = [{
   "es": "Filmen är rolig.",
   "ee": "The movie is fun.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 147.33
 }, {
   "id": 691,
   "sv": "port",
@@ -5466,7 +6069,8 @@ const VOCAB = [{
   "es": "Porten är stängd.",
   "ee": "The gate is closed.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 146.95
 }, {
   "id": 692,
   "sv": "bero",
@@ -5474,7 +6078,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det beror på vädret.",
   "ee": "It depends on the weather.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 146.68
 }, {
   "id": 693,
   "sv": "kropp",
@@ -5483,7 +6088,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kroppen behöver vila.",
   "ee": "The body needs rest.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 145.82
 }, {
   "id": 694,
   "sv": "minnas",
@@ -5491,7 +6097,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag minns honom.",
   "ee": "I remember him.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 145.43
 }, {
   "id": 695,
   "sv": "handling",
@@ -5500,7 +6107,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Handlingen börjar.",
   "ee": "The action begins.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 145.37
 }, {
   "id": 696,
   "sv": "rösta",
@@ -5508,7 +6116,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi röstar idag.",
   "ee": "We vote today.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 145.06
 }, {
   "id": 697,
   "sv": "riktig",
@@ -5518,7 +6127,8 @@ const VOCAB = [{
   "es": "Det är en riktig historia.",
   "ee": "It is a real story.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 144.98
 }, {
   "id": 698,
   "sv": "rapport",
@@ -5529,7 +6139,8 @@ const VOCAB = [{
   "es": "Hon skriver en rapport.",
   "ee": "She writes a report.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 144.86
 }, {
   "id": 699,
   "sv": "lösning",
@@ -5538,7 +6149,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi hittar en lösning.",
   "ee": "We find a solution.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 144.58
 }, {
   "id": 700,
   "sv": "personlig",
@@ -5546,7 +6158,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en personlig fråga.",
   "ee": "It is a personal question.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 143.81
 }, {
   "id": 701,
   "sv": "kommentera",
@@ -5554,7 +6167,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon kommenterar artikeln.",
   "ee": "She comments on the article.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 142.95
 }, {
   "id": 702,
   "sv": "som att",
@@ -5562,7 +6176,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Han talar som att han vet.",
   "ee": "He speaks as if he knows.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 142.78
 }, {
   "id": 703,
   "sv": "gilla",
@@ -5570,7 +6185,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag gillar kaffe.",
   "ee": "I like coffee.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 142.42
 }, {
   "id": 704,
   "sv": "bryta",
@@ -5578,7 +6194,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han bryter pinnen.",
   "ee": "He breaks the stick.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 142.11
 }, {
   "id": 705,
   "sv": "hjälp",
@@ -5587,7 +6204,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag behöver hjälp.",
   "ee": "I need help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 142.06
 }, {
   "id": 706,
   "sv": "juli",
@@ -5596,7 +6214,8 @@ const VOCAB = [{
   "es": "Vi reser i juli.",
   "ee": "We travel in July.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 142.01
 }, {
   "id": 707,
   "sv": "innehålla",
@@ -5604,7 +6223,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Boken innehåller många bilder.",
   "ee": "The book contains many pictures.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 141.45
 }, {
   "id": 708,
   "sv": "liknande",
@@ -5612,7 +6232,8 @@ const VOCAB = [{
   "t": "a",
   "es": "De har liknande idéer.",
   "ee": "They have similar ideas.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 140.93
 }, {
   "id": 709,
   "sv": "tillfälle",
@@ -5621,7 +6242,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett bra tillfälle.",
   "ee": "It is a good opportunity.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 140.9
 }, {
   "id": 710,
   "sv": "inte ens",
@@ -5629,7 +6251,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kom inte ens.",
   "ee": "He did not even come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 140.79
 }, {
   "id": 711,
   "sv": "känd",
@@ -5637,7 +6260,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon är känd.",
   "ee": "She is well known.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 140.65
 }, {
   "id": 712,
   "sv": "forskning",
@@ -5646,7 +6270,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Forskning är viktig.",
   "ee": "Research is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 140.49
 }, {
   "id": 713,
   "sv": "kraft",
@@ -5655,7 +6280,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en stark kraft.",
   "ee": "There is a strong force.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 140.46
 }, {
   "id": 714,
   "sv": "helt enkelt",
@@ -5664,7 +6290,8 @@ const VOCAB = [{
   "es": "Det är helt enkelt sant.",
   "ee": "It is simply true.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 140.11
 }, {
   "id": 715,
   "sv": "brott",
@@ -5673,7 +6300,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Brottet är allvarligt.",
   "ee": "The crime is serious.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 139.94
 }, {
   "id": 716,
   "sv": "exempelvis",
@@ -5682,7 +6310,8 @@ const VOCAB = [{
   "es": "Exempelvis kan vi resa.",
   "ee": "For example we can travel.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 139.94
 }, {
   "id": 717,
   "sv": "röst",
@@ -5691,7 +6320,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Rösten hörs.",
   "ee": "The voice is heard.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 139.89
 }, {
   "id": 718,
   "sv": "bjuda",
@@ -5701,7 +6331,8 @@ const VOCAB = [{
   "es": "Hon bjuder oss.",
   "ee": "She invites us.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 139.86
 }, {
   "id": 719,
   "sv": "till och med (förk. t.o.m., t o m)",
@@ -5709,7 +6340,8 @@ const VOCAB = [{
   "t": "a",
   "es": "H an kom till och med tidigt.",
   "ee": "He even came early.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 139.7
 }, {
   "id": 720,
   "sv": "hävda",
@@ -5717,7 +6349,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han hävdar att det är sant.",
   "ee": "He claims that it is true.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 139.57
 }, {
   "id": 721,
   "sv": "hamna",
@@ -5725,7 +6358,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han hamnar i Stockholm.",
   "ee": "He ends up in Stockholm.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 139.4
 }, {
   "id": 722,
   "sv": "effekt",
@@ -5734,7 +6368,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Medicinen har effekt.",
   "ee": "The medicine has an effect.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 138.78
 }, {
   "id": 723,
   "sv": "enhet",
@@ -5743,7 +6378,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en viktig enhet.",
   "ee": "It is an important unit.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 138.39
 }, {
   "id": 724,
   "sv": "det vill säga (förk. d.v.s., dvs.)",
@@ -5751,7 +6387,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han är läkare det vill säga doktor.",
   "ee": "He is a physician that is to say a doctor.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 138.07
 }, {
   "id": 725,
   "sv": "kontakt",
@@ -5760,7 +6397,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kontakten fortsätter.",
   "ee": "The contact continues.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 137.86
 }, {
   "id": 726,
   "sv": "takt",
@@ -5769,7 +6407,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Musiken går i snabb takt.",
   "ee": "The music goes at a fast pace.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 137.86
 }, {
   "id": 727,
   "sv": "värde",
@@ -5778,7 +6417,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett viktigt värde.",
   "ee": "It is an important value.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 137.82
 }, {
   "id": 728,
   "sv": "förutsättning",
@@ -5787,7 +6427,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en viktig förutsättning.",
   "ee": "It is an important condition.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 137.72
 }, {
   "id": 729,
   "sv": "sats",
@@ -5796,7 +6437,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag skriver en sats.",
   "ee": "I write a sentence.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 137.65
 }, {
   "id": 730,
   "sv": "medlemsstat",
@@ -5805,7 +6447,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Sverige är en medlemsstat.",
   "ee": "Sweden is a member state.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 137.58
 }, {
   "id": 731,
   "sv": "hinna",
@@ -5815,7 +6458,8 @@ const VOCAB = [{
   "es": "Jag hinner inte.",
   "ee": "I do not have time.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 137.35
 }, {
   "id": 732,
   "sv": "sanning",
@@ -5824,7 +6468,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en sanning.",
   "ee": "It is a truth.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 136.75
 }, {
   "id": 733,
   "sv": "religion",
@@ -5835,7 +6480,8 @@ const VOCAB = [{
   "es": "Religion är viktig.",
   "ee": "Religion is important.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 136.55
 }, {
   "id": 734,
   "sv": "källa",
@@ -5846,7 +6492,8 @@ const VOCAB = [{
   "es": "Artikeln har en källa.",
   "ee": "The article has a source.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 136.13
 }, {
   "id": 735,
   "sv": "må",
@@ -5856,7 +6503,8 @@ const VOCAB = [{
   "es": "Jag mår bra.",
   "ee": "I feel well.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 135.98
 }, {
   "id": 736,
   "sv": "kostnad",
@@ -5865,7 +6513,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en hög kostnad.",
   "ee": "It is a high cost.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 135.72
 }, {
   "id": 737,
   "sv": "medborgare",
@@ -5874,7 +6523,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Varje medborgare röstar.",
   "ee": "Every citizen votes.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 135.65
 }, {
   "id": 738,
   "sv": "förhållande",
@@ -5883,7 +6533,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "De har ett långt förhållande.",
   "ee": "They have a long relationship.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 135.64
 }, {
   "id": 739,
   "sv": "far (el. fader, vardagl. farsa)",
@@ -5892,7 +6543,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Min far arbetar.",
   "ee": "My father works.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 135.06
 }, {
   "id": 740,
   "sv": "miljard",
@@ -5901,7 +6553,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Företaget tjänar en miljard kronor.",
   "ee": "The company earns one billion kronor.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 134.96
 }, {
   "id": 741,
   "sv": "ungdom",
@@ -5910,7 +6563,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ungdom är viktig.",
   "ee": "Youth is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 134.37
 }, {
   "id": 742,
   "sv": "släppa",
@@ -5918,7 +6572,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han släpper bollen.",
   "ee": "He releases the ball.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 134.32
 }, {
   "id": 743,
   "sv": "enbart",
@@ -5926,7 +6581,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är enbart sant.",
   "ee": "It is only true.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 134.15
 }, {
   "id": 744,
   "sv": "drag",
@@ -5935,7 +6591,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett viktigt drag.",
   "ee": "It is an important trait.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 134.15
 }, {
   "id": 745,
   "sv": "verklighet",
@@ -5944,7 +6601,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det blir verklighet.",
   "ee": "It becomes reality.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 133.94
 }, {
   "id": 746,
   "sv": "författare",
@@ -5955,7 +6613,8 @@ const VOCAB = [{
   "es": "Hon är en känd författare.",
   "ee": "She is a known author.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 133.87
 }, {
   "id": 747,
   "sv": "tillgång",
@@ -5964,7 +6623,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vatten är en tillgång.",
   "ee": "Water is an asset.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 133.5
 }, {
   "id": 748,
   "sv": "nödvändig",
@@ -5972,7 +6632,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är nödvändigt.",
   "ee": "It is necessary.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 133.42
 }, {
   "id": 749,
   "sv": "full",
@@ -5982,7 +6643,8 @@ const VOCAB = [{
   "es": "Glaset är fullt.",
   "ee": "The glass is full.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 133.12
 }, {
   "id": 750,
   "sv": "frihet",
@@ -5993,7 +6655,8 @@ const VOCAB = [{
   "es": "Frihet är viktigt.",
   "ee": "Freedom is important.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 132.47
 }, {
   "id": 751,
   "sv": "passa",
@@ -6003,7 +6666,8 @@ const VOCAB = [{
   "es": "Tröjan passar bra.",
   "ee": "The sweater fits well.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 132.39
 }, {
   "id": 752,
   "sv": "lokal",
@@ -6011,7 +6675,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en lokal fråga.",
   "ee": "It is a local question.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 132.16
 }, {
   "id": 753,
   "sv": "ytterligare",
@@ -6019,7 +6684,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi behöver ytterligare hjälp.",
   "ee": "We need additional help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 131.58
 }, {
   "id": 754,
   "sv": "öppna",
@@ -6029,7 +6695,8 @@ const VOCAB = [{
   "es": "Han öppnar dörren.",
   "ee": "He opens the door.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 131.53
 }, {
   "id": 755,
   "sv": "införa",
@@ -6037,7 +6704,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Regeringen inför en lag.",
   "ee": "The government introduces a law.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 130.26
 }, {
   "id": 756,
   "sv": "ledare",
@@ -6046,7 +6714,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han är en bra ledare.",
   "ee": "He is a good leader.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.98
 }, {
   "id": 757,
   "sv": "mamma",
@@ -6057,7 +6726,8 @@ const VOCAB = [{
   "es": "Min mamma ringer.",
   "ee": "My mother calls.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.87
 }, {
   "id": 758,
   "sv": "sammanhang",
@@ -6066,7 +6736,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Ordet står i ett sammanhang.",
   "ee": "The word stands in a context.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.67
 }, {
   "id": 759,
   "sv": "svensk",
@@ -6077,7 +6748,8 @@ const VOCAB = [{
   "es": "Han är svensk.",
   "ee": "He is Swedish.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.62
 }, {
   "id": 760,
   "sv": "hemma",
@@ -6085,7 +6757,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag är hemma.",
   "ee": "I am at home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.59
 }, {
   "id": 761,
   "sv": "produkt",
@@ -6094,7 +6767,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Företaget säljer en produkt.",
   "ee": "The company sells a product.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.58
 }, {
   "id": 762,
   "sv": "därefter",
@@ -6102,7 +6776,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi äter därefter.",
   "ee": "We eat after that.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.33
 }, {
   "id": 763,
   "sv": "efter",
@@ -6111,7 +6786,8 @@ const VOCAB = [{
   "es": "Vi går hem efter mötet.",
   "ee": "We go home after the meeting.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.33
 }, {
   "id": 764,
   "sv": "match",
@@ -6122,7 +6798,8 @@ const VOCAB = [{
   "es": "Laget spelar en match.",
   "ee": "The team plays a match.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.11
 }, {
   "id": 765,
   "sv": "tro",
@@ -6133,7 +6810,8 @@ const VOCAB = [{
   "es": "Hon har en stark tro.",
   "ee": "She has a strong belief.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 129.11
 }, {
   "id": 766,
   "sv": "alldeles",
@@ -6141,7 +6819,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är alldeles sant.",
   "ee": "It is completely true.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 128.37
 }, {
   "id": 767,
   "sv": "lätt",
@@ -6151,7 +6830,8 @@ const VOCAB = [{
   "es": "Uppgiften är lätt.",
   "ee": "The task is easy.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 128.34
 }, {
   "id": 768,
   "sv": "sann",
@@ -6159,7 +6839,8 @@ const VOCAB = [{
   "t": "a",
   "c": "(sant, sanna)",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 128.33
 }, {
   "id": 769,
   "sv": "uppfattning",
@@ -6168,7 +6849,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Uppfattningen förändras.",
   "ee": "The perception changes.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 128.3
 }, {
   "id": 770,
   "sv": "demokrat",
@@ -6177,7 +6859,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han är demokrat.",
   "ee": "He is a democrat.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 128.13
 }, {
   "id": 771,
   "sv": "bolag",
@@ -6188,7 +6871,8 @@ const VOCAB = [{
   "es": "Bolaget växer.",
   "ee": "The company grows.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 128.01
 }, {
   "id": 772,
   "sv": "erfarenhet",
@@ -6197,7 +6881,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag har erfarenhet.",
   "ee": "I have experience.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.97
 }, {
   "id": 773,
   "sv": "kritik",
@@ -6206,7 +6891,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Artikeln får kritik.",
   "ee": "The article receives criticism.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.81
 }, {
   "id": 774,
   "sv": "grad",
@@ -6217,7 +6903,8 @@ const VOCAB = [{
   "es": "Temperaturen är tio grader.",
   "ee": "The temperature is ten degrees.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.76
 }, {
   "id": 775,
   "sv": "jude",
@@ -6228,7 +6915,8 @@ const VOCAB = [{
   "es": "Han är jude.",
   "ee": "He is Jewish.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.57
 }, {
   "id": 776,
   "sv": "vacker",
@@ -6238,7 +6926,8 @@ const VOCAB = [{
   "es": "Staden är vacker.",
   "ee": "The city is beautiful.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.57
 }, {
   "id": 777,
   "sv": "erbjuda",
@@ -6246,7 +6935,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Företaget erbjuder hjälp.",
   "ee": "The company offers help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.44
 }, {
   "id": 778,
   "sv": "kamp",
@@ -6255,7 +6945,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kampen fortsätter.",
   "ee": "The struggle continues.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.43
 }, {
   "id": 779,
   "sv": "period",
@@ -6264,7 +6955,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en svår period.",
   "ee": "It is a difficult period.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.37
 }, {
   "id": 780,
   "sv": "modern",
@@ -6274,7 +6966,8 @@ const VOCAB = [{
   "es": "Huset är modernt.",
   "ee": "The house is modern.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.04
 }, {
   "id": 781,
   "sv": "spelare",
@@ -6283,7 +6976,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Spelaren springer.",
   "ee": "The player runs.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.02
 }, {
   "id": 782,
   "sv": "elev",
@@ -6294,7 +6988,8 @@ const VOCAB = [{
   "es": "Eleven läser.",
   "ee": "The student reads.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 127.01
 }, {
   "id": 783,
   "sv": "utredning",
@@ -6303,7 +6998,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Polisen gör en utredning.",
   "ee": "The police make an investigation.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.93
 }, {
   "id": 784,
   "sv": "ingå",
@@ -6311,7 +7007,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han ingår i gruppen.",
   "ee": "He is included in the group.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.92
 }, {
   "id": 785,
   "sv": "kung",
@@ -6322,7 +7019,8 @@ const VOCAB = [{
   "es": "Kungen talar.",
   "ee": "The king speaks.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.7
 }, {
   "id": 786,
   "sv": "bestå",
@@ -6330,7 +7028,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Teamet består av fem personer.",
   "ee": "The team consists of five people.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.46
 }, {
   "id": 787,
   "sv": "katt",
@@ -6341,7 +7040,8 @@ const VOCAB = [{
   "es": "Katten sover.",
   "ee": "The cat sleeps.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.45
 }, {
   "id": 788,
   "sv": "konstatera",
@@ -6349,7 +7049,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De konstaterar resultatet.",
   "ee": "They establish the result.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.41
 }, {
   "id": 789,
   "sv": "dit",
@@ -6358,7 +7059,8 @@ const VOCAB = [{
   "es": "Vi går dit.",
   "ee": "We go there.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.29
 }, {
   "id": 790,
   "sv": "klart",
@@ -6366,7 +7068,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är klart.",
   "ee": "It is clear.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.22
 }, {
   "id": 791,
   "sv": "nuvarande",
@@ -6374,7 +7077,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Den nuvarande planen gäller.",
   "ee": "The current plan applies.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.21
 }, {
   "id": 792,
   "sv": "styra",
@@ -6382,7 +7086,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon styr landet.",
   "ee": "She governs the country.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.2
 }, {
   "id": 793,
   "sv": "förlora",
@@ -6392,7 +7097,8 @@ const VOCAB = [{
   "es": "Laget förlorar.",
   "ee": "The team loses.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.19
 }, {
   "id": 794,
   "sv": "vit",
@@ -6402,7 +7108,8 @@ const VOCAB = [{
   "es": "Huset är vitt.",
   "ee": "The house is white.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 126.15
 }, {
   "id": 795,
   "sv": "klocka",
@@ -6413,7 +7120,8 @@ const VOCAB = [{
   "es": "Klockan är ny.",
   "ee": "The clock is new.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 125.96
 }, {
   "id": 796,
   "sv": "påstå",
@@ -6421,7 +7129,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han påstår det.",
   "ee": "He claims that.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 125.75
 }, {
   "id": 797,
   "sv": "skatt",
@@ -6430,7 +7139,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Regeringen höjer skatten.",
   "ee": "The government raises the tax.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 125.65
 }, {
   "id": 798,
   "sv": "besluta",
@@ -6438,7 +7148,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Regeringen beslutar.",
   "ee": "The government decides.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 125.13
 }, {
   "id": 799,
   "sv": "befolkning",
@@ -6449,7 +7160,8 @@ const VOCAB = [{
   "es": "Landet har en stor befolkning.",
   "ee": "The country has a large population.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 125.01
 }, {
   "id": 800,
   "sv": "avse",
@@ -6457,7 +7169,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Regeln avser alla.",
   "ee": "The rule concerns everyone.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 124.91
 }, {
   "id": 801,
   "sv": "ro",
@@ -6466,7 +7179,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De ror på sjön.",
   "ee": "They row on the lake.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 124.53
 }, {
   "id": 802,
   "sv": "privat",
@@ -6474,7 +7188,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett privat möte.",
   "ee": "It is a private meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 124.48
 }, {
   "id": 803,
   "sv": "steg",
@@ -6483,7 +7198,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi tar ett steg fram.",
   "ee": "We take a step forward.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 124.22
 }, {
   "id": 804,
   "sv": "art",
@@ -6492,7 +7208,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en ny art.",
   "ee": "There is a new species.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 123.8
 }, {
   "id": 805,
   "sv": "stödja",
@@ -6500,7 +7217,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De stödjer projektet.",
   "ee": "They support the project.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 123.76
 }, {
   "id": 806,
   "sv": "ond",
@@ -6508,7 +7226,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det var en ond handling.",
   "ee": "It was an evil act.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 123.18
 }, {
   "id": 807,
   "sv": "plan",
@@ -6517,14 +7236,16 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi gör en plan.",
   "ee": "We make a plan.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 122.73
 }, {
   "id": 808,
   "sv": "resa",
   "en": "trip",
   "t": "n",
   "g": "en",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 122.43
 }, {
   "id": 809,
   "sv": "utom",
@@ -6533,7 +7254,8 @@ const VOCAB = [{
   "es": "Alla kom utom honom.",
   "ee": "Everyone came except him.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 122.27
 }, {
   "id": 810,
   "sv": "hund",
@@ -6544,7 +7266,8 @@ const VOCAB = [{
   "es": "Hunden sover.",
   "ee": "The dog sleeps.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 122.24
 }, {
   "id": 811,
   "sv": "syn",
@@ -6553,7 +7276,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en vacker syn.",
   "ee": "It is a beautiful sight.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 122.2
 }, {
   "id": 812,
   "sv": "glömma",
@@ -6563,7 +7287,8 @@ const VOCAB = [{
   "es": "Jag glömmer nyckeln.",
   "ee": "I forget the key.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 122.09
 }, {
   "id": 813,
   "sv": "avtal",
@@ -6572,7 +7297,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "De skriver ett avtal.",
   "ee": "They sign an agreement.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.92
 }, {
   "id": 814,
   "sv": "lek",
@@ -6581,7 +7307,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Barnen leker en lek.",
   "ee": "The children play a game.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.7
 }, {
   "id": 815,
   "sv": "kul",
@@ -6591,7 +7318,8 @@ const VOCAB = [{
   "es": "Det är kul.",
   "ee": "It is fun.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.6
 }, {
   "id": 816,
   "sv": "natt",
@@ -6602,7 +7330,8 @@ const VOCAB = [{
   "es": "Vi stannar en natt.",
   "ee": "We stay one night.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.51
 }, {
   "id": 817,
   "sv": "förändra",
@@ -6610,7 +7339,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De förändrar planen.",
   "ee": "They change the plan.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.43
 }, {
   "id": 818,
   "sv": "ange",
@@ -6618,7 +7348,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han anger sitt namn.",
   "ee": "He states his name.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.39
 }, {
   "id": 819,
   "sv": "någonting",
@@ -6626,7 +7357,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag hör någonting.",
   "ee": "I hear something.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.12
 }, {
   "id": 820,
   "sv": "förstås",
@@ -6635,7 +7367,8 @@ const VOCAB = [{
   "es": "Det är förstås sant.",
   "ee": "It is of course true.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 121.03
 }, {
   "id": 821,
   "sv": "individ",
@@ -6644,7 +7377,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Varje individ är unik.",
   "ee": "Each individual is unique.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 120.93
 }, {
   "id": 822,
   "sv": "älska",
@@ -6654,7 +7388,8 @@ const VOCAB = [{
   "es": "Jag älskar musik.",
   "ee": "I love music.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 120.93
 }, {
   "id": 823,
   "sv": "motion",
@@ -6663,7 +7398,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Motionspasset börjar.",
   "ee": "The exercise session begins.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 120.87
 }, {
   "id": 824,
   "sv": "glad",
@@ -6673,7 +7409,8 @@ const VOCAB = [{
   "es": "Hon är glad.",
   "ee": "She is happy.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 120.57
 }, {
   "id": 825,
   "sv": "ned",
@@ -6681,7 +7418,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Hunden går ned.",
   "ee": "The dog goes down.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 120.5
 }, {
   "id": 826,
   "sv": "dator",
@@ -6692,7 +7430,8 @@ const VOCAB = [{
   "es": "Datorn startar.",
   "ee": "The computer starts.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 120.28
 }, {
   "id": 827,
   "sv": "miljö",
@@ -6701,7 +7440,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Miljön är viktig.",
   "ee": "The environment is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 120.16
 }, {
   "id": 828,
   "sv": "ek",
@@ -6710,7 +7450,8 @@ const VOCAB = [{
   "g": "en",
   "es": "En ek växer här.",
   "ee": "An oak grows here.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 119.87
 }, {
   "id": 829,
   "sv": "åtminstone",
@@ -6718,7 +7459,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han försöker åtminstone.",
   "ee": "He tries at least.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 119.86
 }, {
   "id": 830,
   "sv": "presentera",
@@ -6728,7 +7470,8 @@ const VOCAB = [{
   "es": "Hon presenterar planen.",
   "ee": "She presents the plan.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 119.78
 }, {
   "id": 831,
   "sv": "stanna",
@@ -6738,7 +7481,8 @@ const VOCAB = [{
   "es": "Vi stannar här.",
   "ee": "We stay here.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 119.33
 }, {
   "id": 832,
   "sv": "byta",
@@ -6746,7 +7490,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(byter, bytte, bytt)",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 119.29
 }, {
   "id": 833,
   "sv": "alternativ",
@@ -6755,7 +7500,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det finns ett alternativ.",
   "ee": "There is an alternative.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.94
 }, {
   "id": 834,
   "sv": "minut",
@@ -6766,7 +7512,8 @@ const VOCAB = [{
   "es": "Vänta en minut.",
   "ee": "Wait a minute.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.87
 }, {
   "id": 835,
   "sv": "ingenting",
@@ -6775,7 +7522,8 @@ const VOCAB = [{
   "es": "Jag ser ingenting.",
   "ee": "I see nothing.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.79
 }, {
   "id": 836,
   "sv": "uppleva",
@@ -6783,7 +7531,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi upplever något nytt.",
   "ee": "We experience something new.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.65
 }, {
   "id": 837,
   "sv": "samla",
@@ -6793,7 +7542,8 @@ const VOCAB = [{
   "es": "Han samlar frimärken.",
   "ee": "He collects stamps.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.53
 }, {
   "id": 838,
   "sv": "svart",
@@ -6803,7 +7553,8 @@ const VOCAB = [{
   "es": "Bilen är svart.",
   "ee": "The car is black.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.26
 }, {
   "id": 839,
   "sv": "bakgrund",
@@ -6812,7 +7563,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han har en lång bakgrund.",
   "ee": "He has a long background.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.12
 }, {
   "id": 840,
   "sv": "skott",
@@ -6821,7 +7573,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "De hör ett skott.",
   "ee": "They hear a shot.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.07
 }, {
   "id": 841,
   "sv": "ö",
@@ -6832,7 +7585,8 @@ const VOCAB = [{
   "es": "Vi bor på en ö.",
   "ee": "We live on an island.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.02
 }, {
   "id": 842,
   "sv": "kärlek",
@@ -6841,7 +7595,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kärlek är viktigt.",
   "ee": "Love is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 118.0
 }, {
   "id": 843,
   "sv": "metod",
@@ -6852,7 +7607,8 @@ const VOCAB = [{
   "es": "De använder en metod.",
   "ee": "They use a method.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 117.61
 }, {
   "id": 844,
   "sv": "äldre",
@@ -6861,7 +7617,8 @@ const VOCAB = [{
   "es": "Han är äldre än jag.",
   "ee": "He is older than me.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 117.18
 }, {
   "id": 845,
   "sv": "säker",
@@ -6871,7 +7628,8 @@ const VOCAB = [{
   "es": "Jag är säker.",
   "ee": "I am sure.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 117.08
 }, {
   "id": 846,
   "sv": "borgare",
@@ -6880,7 +7638,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han är en borgare.",
   "ee": "He is a citizen.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 117.01
 }, {
   "id": 847,
   "sv": "gud",
@@ -6889,7 +7648,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De tror på en gud.",
   "ee": "They believe in a god.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 116.98
 }, {
   "id": 848,
   "sv": "insats",
@@ -6898,7 +7658,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det krävs en stor insats.",
   "ee": "It requires a big effort.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 116.63
 }, {
   "id": 849,
   "sv": "tysk",
@@ -6906,7 +7667,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han är tysk.",
   "ee": "He is German.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 116.47
 }, {
   "id": 850,
   "sv": "kontroll",
@@ -6915,13 +7677,15 @@ const VOCAB = [{
   "g": "en",
   "es": "Polisen gör en kontroll.",
   "ee": "The police make a check.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 116.35
 }, {
   "id": 851,
   "sv": "lösa",
   "en": "to solve",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 116.34
 }, {
   "id": 852,
   "sv": "kolla",
@@ -6929,7 +7693,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag kollar mejlet.",
   "ee": "I check the email.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 116.13
 }, {
   "id": 853,
   "sv": "fylla",
@@ -6939,7 +7704,8 @@ const VOCAB = [{
   "es": "Hon fyller glaset.",
   "ee": "She fills the glass.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 116.0
 }, {
   "id": 854,
   "sv": "bestämmelse",
@@ -6948,7 +7714,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en ny bestämmelse.",
   "ee": "There is a new regulation.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 115.66
 }, {
   "id": 855,
   "sv": "ris",
@@ -6959,7 +7726,8 @@ const VOCAB = [{
   "es": "Jag äter ris.",
   "ee": "I eat rice.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 115.66
 }, {
   "id": 856,
   "sv": "drabba",
@@ -6969,7 +7737,8 @@ const VOCAB = [{
   "es": "Olyckan drabbar många.",
   "ee": "The accident affects many.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 115.55
 }, {
   "id": 857,
   "sv": "nät",
@@ -6980,7 +7749,8 @@ const VOCAB = [{
   "es": "De bygger ett nät.",
   "ee": "They build a network.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 115.48
 }, {
   "id": 858,
   "sv": "teknik",
@@ -6989,7 +7759,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ny teknik utvecklas.",
   "ee": "New technology develops.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 115.08
 }, {
   "id": 859,
   "sv": "resurs",
@@ -6998,7 +7769,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vatten är en resurs.",
   "ee": "Water is a resource.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 115.04
 }, {
   "id": 860,
   "sv": "försök",
@@ -7007,7 +7779,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han gör ett försök.",
   "ee": "He makes an attempt.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 114.85
 }, {
   "id": 861,
   "sv": "fara",
@@ -7015,7 +7788,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Faran är över.",
   "ee": "The danger is over.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 114.82
 }, {
   "id": 862,
   "sv": "tjäna",
@@ -7025,7 +7799,8 @@ const VOCAB = [{
   "es": "Hon tjänar pengar.",
   "ee": "She earns money.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 114.8
 }, {
   "id": 863,
   "sv": "argument",
@@ -7034,7 +7809,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han ger ett argument.",
   "ee": "He gives an argument.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 114.69
 }, {
   "id": 864,
   "sv": "behandla",
@@ -7042,7 +7818,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De behandlar frågan.",
   "ee": "They treat the issue.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 114.58
 }, {
   "id": 865,
   "sv": "ren",
@@ -7050,7 +7827,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vattnet är rent.",
   "ee": "The water is clean.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 114.14
 }, {
   "id": 866,
   "sv": "fru",
@@ -7061,7 +7839,8 @@ const VOCAB = [{
   "es": "Hans fru arbetar.",
   "ee": "His wife works.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 114.0
 }, {
   "id": 867,
   "sv": "sjuk",
@@ -7071,7 +7850,8 @@ const VOCAB = [{
   "es": "Jag är sjuk.",
   "ee": "I am sick.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 113.46
 }, {
   "id": 868,
   "sv": "istället för (el. i stället för)",
@@ -7079,7 +7859,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi går hem istället för att stanna.",
   "ee": "We go home instead of staying.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 113.32
 }, {
   "id": 869,
   "sv": "våld",
@@ -7088,7 +7869,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Våld är farligt.",
   "ee": "Violence is dangerous.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 113.28
 }, {
   "id": 870,
   "sv": "utföra",
@@ -7096,7 +7878,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De utför arbetet.",
   "ee": "They perform the work.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 113.17
 }, {
   "id": 871,
   "sv": "ställning",
@@ -7105,7 +7888,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon tar en ställning.",
   "ee": "She takes a position.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 113.06
 }, {
   "id": 872,
   "sv": "främst",
@@ -7113,7 +7897,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han arbetar främst hemma.",
   "ee": "He works mainly at home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.96
 }, {
   "id": 873,
   "sv": "räcka",
@@ -7121,7 +7906,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det räcker.",
   "ee": "It is enough.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.94
 }, {
   "id": 874,
   "sv": "bättre",
@@ -7129,7 +7915,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är bättre nu.",
   "ee": "It is better now.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.92
 }, {
   "id": 875,
   "sv": "fundera",
@@ -7139,7 +7926,8 @@ const VOCAB = [{
   "es": "Jag funderar.",
   "ee": "I think.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.8
 }, {
   "id": 876,
   "sv": "visst",
@@ -7147,7 +7935,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Visst är det sant.",
   "ee": "Certainly it is true.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.62
 }, {
   "id": 877,
   "sv": "sommar",
@@ -7158,7 +7947,8 @@ const VOCAB = [{
   "es": "Vi reser i sommar.",
   "ee": "We travel in summer.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.48
 }, {
   "id": 878,
   "sv": "rörelse",
@@ -7167,7 +7957,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Rörelsen växer.",
   "ee": "The movement grows.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.44
 }, {
   "id": 879,
   "sv": "kund",
@@ -7178,7 +7969,8 @@ const VOCAB = [{
   "es": "Kunden väntar.",
   "ee": "The customer waits.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.31
 }, {
   "id": 880,
   "sv": "villkor",
@@ -7187,7 +7979,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett viktigt villkor.",
   "ee": "It is an important condition.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.19
 }, {
   "id": 881,
   "sv": "tillbaka (vardagl. tillbaks)",
@@ -7195,7 +7988,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer tillbaka.",
   "ee": "He comes back.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.16
 }, {
   "id": 882,
   "sv": "högt",
@@ -7203,7 +7997,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Priset är högt.",
   "ee": "The price is high.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 112.04
 }, {
   "id": 883,
   "sv": "president",
@@ -7212,7 +8007,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Presidenten talar.",
   "ee": "The president speaks.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 111.99
 }, {
   "id": 884,
   "sv": "emellertid",
@@ -7220,7 +8016,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer emellertid senare.",
   "ee": "However he comes later.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 111.59
 }, {
   "id": 885,
   "sv": "händelse",
@@ -7229,7 +8026,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det var en viktig händelse.",
   "ee": "It was an important event.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 111.44
 }, {
   "id": 886,
   "sv": "uppstå",
@@ -7237,7 +8035,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Ett problem uppstår.",
   "ee": "A problem arises.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 111.37
 }, {
   "id": 887,
   "sv": "acceptera",
@@ -7245,7 +8044,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag accepterar beslutet.",
   "ee": "I accept the decision.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 111.33
 }, {
   "id": 888,
   "sv": "huvud",
@@ -7256,7 +8056,8 @@ const VOCAB = [{
   "es": "Han skakar på huvudet.",
   "ee": "He shakes his head.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 111.17
 }, {
   "id": 889,
   "sv": "sök",
@@ -7266,7 +8067,8 @@ const VOCAB = [{
   "es": "Han gör ett sök.",
   "ee": "He performs a search.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.86
 }, {
   "id": 890,
   "sv": "snabb",
@@ -7276,7 +8078,8 @@ const VOCAB = [{
   "es": "Hunden är snabb.",
   "ee": "The dog is fast.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.8
 }, {
   "id": 891,
   "sv": "så kallad (förk. s.k., s k)",
@@ -7284,7 +8087,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en så kallad expert.",
   "ee": "He is a so-called expert.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.51
 }, {
   "id": 892,
   "sv": "framför",
@@ -7292,14 +8096,16 @@ const VOCAB = [{
   "t": "p",
   "es": "Bilen står framför huset.",
   "ee": "The car stands in front of the house.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.51
 }, {
   "id": 893,
   "sv": "ande",
   "en": "spirit",
   "t": "n",
   "g": "en",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.42
 }, {
   "id": 894,
   "sv": "bilda",
@@ -7307,7 +8113,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De bildar en grupp.",
   "ee": "They form a group.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.42
 }, {
   "id": 895,
   "sv": "orsak",
@@ -7316,7 +8123,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en orsak.",
   "ee": "There is a cause.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.42
 }, {
   "id": 896,
   "sv": "försvinna",
@@ -7324,7 +8132,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Nyckeln försvinner.",
   "ee": "The key disappears.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.33
 }, {
   "id": 897,
   "sv": "fel",
@@ -7333,7 +8142,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett fel.",
   "ee": "It is an error.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.16
 }, {
   "id": 898,
   "sv": "innehåll",
@@ -7342,7 +8152,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Boken har ett rikt innehåll.",
   "ee": "The book has rich content.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.12
 }, {
   "id": 899,
   "sv": "natur",
@@ -7353,7 +8164,8 @@ const VOCAB = [{
   "es": "Naturen är vacker.",
   "ee": "Nature is beautiful.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 110.01
 }, {
   "id": 900,
   "sv": "begrepp",
@@ -7362,7 +8174,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett svårt begrepp.",
   "ee": "It is a difficult concept.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 109.99
 }, {
   "id": 901,
   "sv": "för att",
@@ -7371,7 +8184,8 @@ const VOCAB = [{
   "es": "Jag studerar för att lära.",
   "ee": "I study in order to learn.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 109.47
 }, {
   "id": 902,
   "sv": "konflikt",
@@ -7380,7 +8194,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Konflikten löses.",
   "ee": "The conflict is resolved.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 109.19
 }, {
   "id": 903,
   "sv": "tack",
@@ -7388,7 +8203,8 @@ const VOCAB = [{
   "t": "i",
   "es": "Tack för hjälpen.",
   "ee": "Thanks for the help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 108.87
 }, {
   "id": 904,
   "sv": "djur",
@@ -7397,7 +8213,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Jag ser ett djur.",
   "ee": "I see an animal.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 108.73
 }, {
   "id": 905,
   "sv": "chans",
@@ -7408,7 +8225,8 @@ const VOCAB = [{
   "es": "Jag får en chans.",
   "ee": "I get a chance.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 108.16
 }, {
   "id": 906,
   "sv": "samtidigt som",
@@ -7416,7 +8234,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Han arbetar samtidigt som hon studerar.",
   "ee": "He works while she studies.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 108.12
 }, {
   "id": 907,
   "sv": "demokratisk",
@@ -7424,7 +8243,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett demokratiskt land.",
   "ee": "It is a democratic country.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 107.94
 }, {
   "id": 908,
   "sv": "fel",
@@ -7432,7 +8252,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett fel.",
   "ee": "It is an error.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 107.8
 }, {
   "id": 909,
   "sv": "läge",
@@ -7443,7 +8264,8 @@ const VOCAB = [{
   "es": "Läget är svårt.",
   "ee": "The situation is difficult.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 107.77
 }, {
   "id": 910,
   "sv": "sprida",
@@ -7451,7 +8273,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De sprider nyheten.",
   "ee": "They spread the news.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 107.63
 }, {
   "id": 911,
   "sv": "växt",
@@ -7462,7 +8285,8 @@ const VOCAB = [{
   "es": "Växten växer.",
   "ee": "The plant grows.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 107.37
 }, {
   "id": 912,
   "sv": "förutom",
@@ -7470,7 +8294,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Alla kom förutom honom.",
   "ee": "Everyone came besides him.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 106.41
 }, {
   "id": 913,
   "sv": "i samband med",
@@ -7478,7 +8303,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Mötet sker i samband med konferensen.",
   "ee": "The meeting occurs in connection with the conference.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 106.3
 }, {
   "id": 914,
   "sv": "styck",
@@ -7486,7 +8312,8 @@ const VOCAB = [{
   "t": "n",
   "es": "Han köper ett styck bröd.",
   "ee": "He buys a piece of bread.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 106.25
 }, {
   "id": 915,
   "sv": "utskott",
@@ -7495,7 +8322,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Utskottet möts.",
   "ee": "The committee meets.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 106.04
 }, {
   "id": 916,
   "sv": "muslim",
@@ -7506,7 +8334,8 @@ const VOCAB = [{
   "es": "Han är muslim.",
   "ee": "He is Muslim.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.98
 }, {
   "id": 917,
   "sv": "ordning",
@@ -7515,7 +8344,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en ordning.",
   "ee": "There is an order.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.89
 }, {
   "id": 918,
   "sv": "uppdrag",
@@ -7524,7 +8354,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han får ett uppdrag.",
   "ee": "He gets an assignment.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.87
 }, {
   "id": 919,
   "sv": "mark",
@@ -7533,7 +8364,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De går på marken.",
   "ee": "They walk on the ground.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.63
 }, {
   "id": 920,
   "sv": "säkerhet",
@@ -7542,7 +8374,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Säkerhet är viktigt.",
   "ee": "Security is important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.63
 }, {
   "id": 921,
   "sv": "linje",
@@ -7553,7 +8386,8 @@ const VOCAB = [{
   "es": "Vi följer en linje.",
   "ee": "We follow a line.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.51
 }, {
   "id": 922,
   "sv": "bank",
@@ -7564,7 +8398,8 @@ const VOCAB = [{
   "es": "Hon arbetar på en bank.",
   "ee": "She works at a bank.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.47
 }, {
   "id": 923,
   "sv": "önska",
@@ -7572,7 +8407,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag önskar lycka.",
   "ee": "I wish good luck.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.47
 }, {
   "id": 924,
   "sv": "givetvis",
@@ -7580,7 +8416,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag kommer givetvis.",
   "ee": "Of course I come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.17
 }, {
   "id": 925,
   "sv": "studie",
@@ -7589,7 +8426,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Studien publiceras.",
   "ee": "The study is published.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 105.12
 }, {
   "id": 926,
   "sv": "fredag",
@@ -7600,7 +8438,8 @@ const VOCAB = [{
   "es": "Vi ses på fredag.",
   "ee": "We meet on Friday.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.7
 }, {
   "id": 927,
   "sv": "lärare",
@@ -7611,7 +8450,8 @@ const VOCAB = [{
   "es": "Läraren förklarar.",
   "ee": "The teacher explains.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.69
 }, {
   "id": 928,
   "sv": "statlig",
@@ -7619,7 +8459,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en statlig myndighet.",
   "ee": "It is a state authority.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.45
 }, {
   "id": 929,
   "sv": "söndag",
@@ -7630,7 +8471,8 @@ const VOCAB = [{
   "es": "Vi ses på söndag.",
   "ee": "We meet on Sunday.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.44
 }, {
   "id": 930,
   "sv": "fel",
@@ -7640,7 +8482,8 @@ const VOCAB = [{
   "es": "Det är ett fel.",
   "ee": "It is an error.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.42
 }, {
   "id": 931,
   "sv": "speciellt",
@@ -7648,7 +8491,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är speciellt viktigt.",
   "ee": "It is especially important.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.35
 }, {
   "id": 932,
   "sv": "röd",
@@ -7658,7 +8502,8 @@ const VOCAB = [{
   "es": "Bilen är röd.",
   "ee": "The car is red.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.34
 }, {
   "id": 933,
   "sv": "television (el. teve, tv)",
@@ -7667,7 +8512,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag ser på television.",
   "ee": "I watch television.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.3
 }, {
   "id": 934,
   "sv": "hot",
@@ -7676,7 +8522,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det finns ett hot.",
   "ee": "There is a threat.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.27
 }, {
   "id": 935,
   "sv": "verk",
@@ -7685,7 +8532,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han skriver ett verk.",
   "ee": "He writes a work.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 104.0
 }, {
   "id": 936,
   "sv": "publicera",
@@ -7695,7 +8543,8 @@ const VOCAB = [{
   "es": "Hon publicerar artikeln.",
   "ee": "She publishes the article.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 103.98
 }, {
   "id": 937,
   "sv": "stund",
@@ -7706,7 +8555,8 @@ const VOCAB = [{
   "es": "Vänta en stund.",
   "ee": "Wait a moment.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 103.98
 }, {
   "id": 938,
   "sv": "tillhöra",
@@ -7714,7 +8564,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han tillhör gruppen.",
   "ee": "He belongs to the group.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 103.16
 }, {
   "id": 939,
   "sv": "omfatta",
@@ -7722,7 +8573,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Projektet omfattar många ämnen.",
   "ee": "The project includes many subjects.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 103.14
 }, {
   "id": 940,
   "sv": "material",
@@ -7731,7 +8583,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Materialet är starkt.",
   "ee": "The material is strong.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.94
 }, {
   "id": 941,
   "sv": "pelare",
@@ -7740,7 +8593,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Byggnaden har en pelare.",
   "ee": "The building has a pillar.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.91
 }, {
   "id": 942,
   "sv": "hjärta",
@@ -7751,7 +8605,8 @@ const VOCAB = [{
   "es": "Hjärtat slår.",
   "ee": "The heart beats.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.88
 }, {
   "id": 943,
   "sv": "knappast",
@@ -7759,7 +8614,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer knappast.",
   "ee": "He hardly comes.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.76
 }, {
   "id": 944,
   "sv": "befinna",
@@ -7767,7 +8623,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han befinner sig här.",
   "ee": "He is located here.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.66
 }, {
   "id": 945,
   "sv": "part",
@@ -7776,7 +8633,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De två parterna möts.",
   "ee": "The two parties meet.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.65
 }, {
   "id": 946,
   "sv": "trevlig",
@@ -7786,7 +8644,8 @@ const VOCAB = [{
   "es": "H an är trevlig.",
   "ee": "He is nice.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.64
 }, {
   "id": 947,
   "sv": "höst",
@@ -7795,7 +8654,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hösten är kall.",
   "ee": "Autumn is cold.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.61
 }, {
   "id": 948,
   "sv": "skilja",
@@ -7805,7 +8665,8 @@ const VOCAB = [{
   "es": "De skiljer sig.",
   "ee": "They separate.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.57
 }, {
   "id": 949,
   "sv": "ens",
@@ -7813,7 +8674,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Inte ens jag vet.",
   "ee": "Not even I know.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.09
 }, {
   "id": 950,
   "sv": "förmåga",
@@ -7822,7 +8684,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon har en stor förmåga.",
   "ee": "She has a great ability.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 102.02
 }, {
   "id": 951,
   "sv": "döda",
@@ -7832,7 +8695,8 @@ const VOCAB = [{
   "es": "Hunden dödar inte.",
   "ee": "The dog does not kill.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 101.92
 }, {
   "id": 952,
   "sv": "stånd",
@@ -7841,7 +8705,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han tar ett stånd.",
   "ee": "He takes a stand.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 101.76
 }, {
   "id": 953,
   "sv": "peka",
@@ -7851,7 +8716,8 @@ const VOCAB = [{
   "es": "Han pekar på huset.",
   "ee": "He points at the house.",
   "ch": 19,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 101.73
 }, {
   "id": 954,
   "sv": "bedömning",
@@ -7862,7 +8728,8 @@ const VOCAB = [{
   "es": "Vi gör en bedömning.",
   "ee": "We make an assessment.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 101.49
 }, {
   "id": 955,
   "sv": "ringa",
@@ -7870,7 +8737,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag ringer dig.",
   "ee": "I call you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 101.34
 }, {
   "id": 956,
   "sv": "betrakta",
@@ -7878,7 +8746,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han betraktar bilden.",
   "ee": "He regards the picture.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 101.05
 }, {
   "id": 957,
   "sv": "by",
@@ -7887,7 +8756,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De bor i en by.",
   "ee": "They live in a village.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 100.93
 }, {
   "id": 958,
   "sv": "utifrån",
@@ -7895,7 +8765,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han ser det utifrån.",
   "ee": "He sees it from outside.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 100.69
 }, {
   "id": 959,
   "sv": "brist",
@@ -7904,7 +8775,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en brist.",
   "ee": "There is a lack.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 100.59
 }, {
   "id": 960,
   "sv": "hänga",
@@ -7914,7 +8786,8 @@ const VOCAB = [{
   "es": "Jackan hänger där.",
   "ee": "The jacket hangs there.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 100.43
 }, {
   "id": 961,
   "sv": "tillräckligt",
@@ -7922,7 +8795,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är tillräckligt.",
   "ee": "It is enough.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 100.4
 }, {
   "id": 962,
   "sv": "måndag",
@@ -7931,7 +8805,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi ses på måndag.",
   "ee": "We meet on Monday.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 100.12
 }, {
   "id": 963,
   "sv": "aktuell",
@@ -7939,7 +8814,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en aktuell fråga.",
   "ee": "It is a current issue.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 99.75
 }, {
   "id": 964,
   "sv": "någonsin (vardagl. nånsin)",
@@ -7947,7 +8823,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Har du någonsin varit där?",
   "ee": "Have you ever been there?",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 99.71
 }, {
   "id": 965,
   "sv": "tillåta",
@@ -7955,7 +8832,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De tillåter det.",
   "ee": "They allow it.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 99.66
 }, {
   "id": 966,
   "sv": "universitet",
@@ -7966,7 +8844,8 @@ const VOCAB = [{
   "es": "Hon studerar vid universitetet.",
   "ee": "She studies at the university.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 99.16
 }, {
   "id": 967,
   "sv": "konsekvens",
@@ -7975,7 +8854,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Konsekvensen diskuteras.",
   "ee": "The consequence is discussed.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 99.15
 }, {
   "id": 968,
   "sv": "ställe",
@@ -7986,7 +8866,8 @@ const VOCAB = [{
   "es": "Det är ett bra ställe.",
   "ee": "It is a good place.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.93
 }, {
   "id": 969,
   "sv": "hård",
@@ -7996,7 +8877,8 @@ const VOCAB = [{
   "es": "Stenen är hård.",
   "ee": "The stone is hard.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.66
 }, {
   "id": 970,
   "sv": "majoritet",
@@ -8007,7 +8889,8 @@ const VOCAB = [{
   "es": "Majoriteten röstar ja.",
   "ee": "The majority votes yes.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.59
 }, {
   "id": 971,
   "sv": "domstol",
@@ -8016,7 +8899,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Domstolen beslutar.",
   "ee": "The court decides.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.49
 }, {
   "id": 972,
   "sv": "ordförande",
@@ -8025,7 +8909,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ordföranden talar.",
   "ee": "The chairperson speaks.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.46
 }, {
   "id": 973,
   "sv": "lördag",
@@ -8036,7 +8921,8 @@ const VOCAB = [{
   "es": "Vi ses på lördag.",
   "ee": "We meet on Saturday.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.43
 }, {
   "id": 974,
   "sv": "låt",
@@ -8045,7 +8931,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag lyssnar på en låt.",
   "ee": "I listen to a song.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.35
 }, {
   "id": 975,
   "sv": "herr",
@@ -8053,7 +8940,8 @@ const VOCAB = [{
   "t": "n",
   "es": "Herr Andersson talar.",
   "ee": "Mr Andersson speaks.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.28
 }, {
   "id": 976,
   "sv": "sekvens",
@@ -8062,7 +8950,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Filmen har en sekvens.",
   "ee": "The film has a sequence.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.23
 }, {
   "id": 977,
   "sv": "förekomma",
@@ -8070,7 +8959,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Problemet förekommer ofta.",
   "ee": "The problem occurs often.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.18
 }, {
   "id": 978,
   "sv": "stoppa",
@@ -8080,7 +8970,8 @@ const VOCAB = [{
   "es": "Polisen stoppar bilen.",
   "ee": "The police stop the car.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 98.15
 }, {
   "id": 979,
   "sv": "nyhet",
@@ -8091,7 +8982,8 @@ const VOCAB = [{
   "es": "Jag läser en nyhet.",
   "ee": "I read a news story.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.8
 }, {
   "id": 980,
   "sv": "journalist",
@@ -8102,7 +8994,8 @@ const VOCAB = [{
   "es": "Journalisten skriver.",
   "ee": "The journalist writes.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.73
 }, {
   "id": 981,
   "sv": "kris",
@@ -8111,7 +9004,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en kris.",
   "ee": "It is a crisis.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.59
 }, {
   "id": 982,
   "sv": "rycka",
@@ -8119,7 +9013,8 @@ const VOCAB = [{
   "t": "v",
   "es": "H an rycker i dörren.",
   "ee": "He pulls the door.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.44
 }, {
   "id": 983,
   "sv": "trycka",
@@ -8129,7 +9024,8 @@ const VOCAB = [{
   "es": "Han trycker på knappen.",
   "ee": "He presses the button.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.44
 }, {
   "id": 984,
   "sv": "betydligt",
@@ -8137,7 +9033,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är betydligt bättre.",
   "ee": "It is considerably better.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.4
 }, {
   "id": 985,
   "sv": "kosta",
@@ -8147,7 +9044,8 @@ const VOCAB = [{
   "es": "Boken kostar mycket.",
   "ee": "The book costs much.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.1
 }, {
   "id": 986,
   "sv": "band",
@@ -8156,7 +9054,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "De spelar i ett band.",
   "ee": "They play in a band.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.09
 }, {
   "id": 987,
   "sv": "numera (el. numer)",
@@ -8164,7 +9063,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Numera arbetar jag hemma.",
   "ee": "Nowadays I work at home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.08
 }, {
   "id": 988,
   "sv": "tillstånd",
@@ -8173,13 +9073,15 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han får ett tillstånd.",
   "ee": "He receives a permit.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.07
 }, {
   "id": 989,
   "sv": "värd",
   "en": "host",
   "t": "a",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 97.06
 }, {
   "id": 990,
   "sv": "igen",
@@ -8188,7 +9090,8 @@ const VOCAB = [{
   "es": "Vi ses igen.",
   "ee": "We meet again.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 96.98
 }, {
   "id": 991,
   "sv": "imorgon (el. i morgon)",
@@ -8196,7 +9099,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi ses imorgon.",
   "ee": "We meet tomorrow.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 96.53
 }, {
   "id": 992,
   "sv": "klass",
@@ -8207,7 +9111,8 @@ const VOCAB = [{
   "es": "Hon går i en klass.",
   "ee": "She attends a class.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 96.49
 }, {
   "id": 993,
   "sv": "uttrycka",
@@ -8215,7 +9120,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han uttrycker sin åsikt.",
   "ee": "He expresses his opinion.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 96.1
 }, {
   "id": 994,
   "sv": "slutsats",
@@ -8224,7 +9130,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi drar en slutsats.",
   "ee": "We draw a conclusion.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.99
 }, {
   "id": 995,
   "sv": "global",
@@ -8232,7 +9139,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett globalt problem.",
   "ee": "It is a global problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.78
 }, {
   "id": 996,
   "sv": "mitt",
@@ -8240,7 +9148,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är mitt hus.",
   "ee": "It is my house.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.61
 }, {
   "id": 997,
   "sv": "stol",
@@ -8249,7 +9158,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han sitter på stolen.",
   "ee": "He sits on the chair.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.52
 }, {
   "id": 998,
   "sv": "ytterligare",
@@ -8257,7 +9167,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi behöver ytterligare hjälp.",
   "ee": "We need additional help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.35
 }, {
   "id": 999,
   "sv": "effektiv",
@@ -8265,7 +9176,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Metoden är effektiv.",
   "ee": "The method is efficient.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.24
 }, {
   "id": 1000,
   "sv": "resa",
@@ -8273,7 +9185,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, -te, -t)",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.16
 }, {
   "id": 1001,
   "sv": "förbättra",
@@ -8281,7 +9194,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De förbättrar systemet.",
   "ee": "They improve the system.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.1
 }, {
   "id": 1002,
   "sv": "rädda",
@@ -8291,7 +9205,8 @@ const VOCAB = [{
   "es": "Brandmännen räddar huset.",
   "ee": "The firefighters save the house.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 95.09
 }, {
   "id": 1003,
   "sv": "list",
@@ -8300,7 +9215,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han använder en list.",
   "ee": "He uses a trick.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.89
 }, {
   "id": 1004,
   "sv": "relation",
@@ -8311,7 +9227,8 @@ const VOCAB = [{
   "es": "De har en nära relation.",
   "ee": "They have a close relationship.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.81
 }, {
   "id": 1005,
   "sv": "agera",
@@ -8321,7 +9238,8 @@ const VOCAB = [{
   "es": "Regeringen agerar snabbt.",
   "ee": "The government acts quickly.",
   "ch": 19,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.6
 }, {
   "id": 1006,
   "sv": "central",
@@ -8329,7 +9247,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en central fråga.",
   "ee": "It is a central issue.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.56
 }, {
   "id": 1007,
   "sv": "flera",
@@ -8338,7 +9257,8 @@ const VOCAB = [{
   "es": "Flera personer kommer.",
   "ee": "Several people arrive.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.49
 }, {
   "id": 1008,
   "sv": "undersökning",
@@ -8349,7 +9269,8 @@ const VOCAB = [{
   "es": "De gör en undersökning.",
   "ee": "They conduct an investigation.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.27
 }, {
   "id": 1009,
   "sv": "uppnå",
@@ -8357,7 +9278,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon uppnår målet.",
   "ee": "She achieves the goal.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.18
 }, {
   "id": 1010,
   "sv": "krona (förk. kr.)",
@@ -8366,7 +9288,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Boken kostar hundra kronor.",
   "ee": "The book costs one hundred kronor.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.15
 }, {
   "id": 1011,
   "sv": "perspektiv",
@@ -8375,7 +9298,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi ser saken från ett nytt perspektiv.",
   "ee": "We see the issue from a new perspective.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 94.04
 }, {
   "id": 1012,
   "sv": "plötsligt",
@@ -8383,7 +9307,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Plötsligt börjar det regna.",
   "ee": "Suddenly it starts to rain.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.95
 }, {
   "id": 1013,
   "sv": "naturlig",
@@ -8393,7 +9318,8 @@ const VOCAB = [{
   "es": "Det är en naturlig process.",
   "ee": "It is a natural process.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.87
 }, {
   "id": 1014,
   "sv": "ålder",
@@ -8402,7 +9328,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han når hög ålder.",
   "ee": "He reaches an old age.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.87
 }, {
   "id": 1015,
   "sv": "process",
@@ -8413,7 +9340,8 @@ const VOCAB = [{
   "es": "Projektet är en lång process.",
   "ee": "The project is a long process.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.76
 }, {
   "id": 1016,
   "sv": "uttryck",
@@ -8422,7 +9350,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Uttrycket används ofta.",
   "ee": "The expression is used often.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.7
 }, {
   "id": 1017,
   "sv": "lista",
@@ -8431,7 +9360,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag gör en lista.",
   "ee": "I make a list.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.66
 }, {
   "id": 1018,
   "sv": "allra",
@@ -8439,7 +9369,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är allra bäst.",
   "ee": "It is the very best.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.57
 }, {
   "id": 1019,
   "sv": "sökning",
@@ -8448,7 +9379,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han gör en sökning.",
   "ee": "He performs a search.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.56
 }, {
   "id": 1020,
   "sv": "ökning",
@@ -8459,7 +9391,8 @@ const VOCAB = [{
   "es": "Priset visar en ökning.",
   "ee": "The price shows an increase.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.56
 }, {
   "id": 1021,
   "sv": "därför att",
@@ -8467,7 +9400,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Jag stannar därför att jag är trött.",
   "ee": "I stay because I am tired.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.55
 }, {
   "id": 1022,
   "sv": "rysk",
@@ -8477,7 +9411,8 @@ const VOCAB = [{
   "es": "Han är rysk.",
   "ee": "He is Russian.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.55
 }, {
   "id": 1023,
   "sv": "jämföra (förk. jfr)",
@@ -8485,7 +9420,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi jämför resultaten.",
   "ee": "We compare the results.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.52
 }, {
   "id": 1024,
   "sv": "tills",
@@ -8493,7 +9429,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Vi väntar tills imorgon.",
   "ee": "We wait until tomorrow.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.48
 }, {
   "id": 1025,
   "sv": "intresserad",
@@ -8503,7 +9440,8 @@ const VOCAB = [{
   "es": "Jag är intresserad.",
   "ee": "I am interested.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 93.21
 }, {
   "id": 1026,
   "sv": "totalt",
@@ -8511,7 +9449,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är totalt tio personer.",
   "ee": "There are ten people in total.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.97
 }, {
   "id": 1027,
   "sv": "hantera",
@@ -8519,7 +9458,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De hanterar problemet.",
   "ee": "They handle the problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.87
 }, {
   "id": 1028,
   "sv": "förvänta",
@@ -8527,7 +9467,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag förväntar mig hjälp.",
   "ee": "I expect help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.79
 }, {
   "id": 1029,
   "sv": "medel",
@@ -8536,19 +9477,22 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett viktigt medel.",
   "ee": "It is an important means.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.73
 }, {
   "id": 1030,
   "sv": "vika",
   "en": "to fold",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.39
 }, {
   "id": 1031,
   "sv": "döma",
   "en": "to judge",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.38
 }, {
   "id": 1032,
   "sv": "besöka",
@@ -8558,7 +9502,8 @@ const VOCAB = [{
   "es": "Vi besöker museet.",
   "ee": "We visit the museum.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.36
 }, {
   "id": 1033,
   "sv": "hem",
@@ -8567,7 +9512,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Huset är ett hem.",
   "ee": "The house is a home.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.26
 }, {
   "id": 1034,
   "sv": "var",
@@ -8575,7 +9521,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Var bor du?",
   "ee": "Where do you live?",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.16
 }, {
   "id": 1035,
   "sv": "täcka",
@@ -8583,7 +9530,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Snön täcker marken.",
   "ee": "Snow covers the ground.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.1
 }, {
   "id": 1036,
   "sv": "borgerlig",
@@ -8591,7 +9539,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en borgerlig regering.",
   "ee": "It is a bourgeois government.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.09
 }, {
   "id": 1037,
   "sv": "inleda",
@@ -8599,7 +9548,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De inleder mötet.",
   "ee": "They begin the meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.09
 }, {
   "id": 1038,
   "sv": "helg",
@@ -8610,7 +9560,8 @@ const VOCAB = [{
   "es": "Vi ses i helgen.",
   "ee": "We meet this weekend.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.06
 }, {
   "id": 1039,
   "sv": "undvika",
@@ -8618,7 +9569,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi undviker problemet.",
   "ee": "We avoid the problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 92.02
 }, {
   "id": 1040,
   "sv": "ryck",
@@ -8627,7 +9579,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han gör ett ryck.",
   "ee": "He makes a jerk.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.76
 }, {
   "id": 1041,
   "sv": "tryck",
@@ -8636,7 +9589,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Maskinen ger ett tryck.",
   "ee": "The machine creates pressure.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.76
 }, {
   "id": 1042,
   "sv": "tydligen",
@@ -8644,7 +9598,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer tydligen.",
   "ee": "Apparently he comes.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.69
 }, {
   "id": 1043,
   "sv": "aktiv",
@@ -8654,7 +9609,8 @@ const VOCAB = [{
   "es": "Hon är aktiv.",
   "ee": "She is active.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.62
 }, {
   "id": 1044,
   "sv": "höja",
@@ -8662,7 +9618,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, -de, -t)",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.58
 }, {
   "id": 1045,
   "sv": "pappa",
@@ -8673,7 +9630,8 @@ const VOCAB = [{
   "es": "Min pappa arbetar.",
   "ee": "My dad works.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.48
 }, {
   "id": 1046,
   "sv": "varken…eller",
@@ -8681,7 +9639,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Han vill varken äta eller dricka.",
   "ee": "He wants neither to eat nor drink.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.32
 }, {
   "id": 1047,
   "sv": "religiös",
@@ -8689,7 +9648,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han är religiös.",
   "ee": "He is religious.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.15
 }, {
   "id": 1048,
   "sv": "råka",
@@ -8697,7 +9657,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag råkar se honom.",
   "ee": "I happen to see him.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 91.0
 }, {
   "id": 1049,
   "sv": "verklig",
@@ -8705,7 +9666,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en verklig historia.",
   "ee": "It is a real story.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.87
 }, {
   "id": 1050,
   "sv": "rent",
@@ -8713,7 +9675,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vattnet är rent.",
   "ee": "The water is clean.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.85
 }, {
   "id": 1051,
   "sv": "fantastisk",
@@ -8723,7 +9686,8 @@ const VOCAB = [{
   "es": "Filmen är fantastisk.",
   "ee": "The film is fantastic.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.78
 }, {
   "id": 1052,
   "sv": "grundläggande",
@@ -8731,7 +9695,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är grundläggande kunskap.",
   "ee": "It is fundamental knowledge.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.73
 }, {
   "id": 1053,
   "sv": "upptäcka",
@@ -8739,7 +9704,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De upptäcker något nytt.",
   "ee": "They discover something new.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.72
 }, {
   "id": 1054,
   "sv": "erkänna",
@@ -8747,7 +9713,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han erkänner felet.",
   "ee": "He admits the mistake.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.67
 }, {
   "id": 1055,
   "sv": "helig",
@@ -8755,7 +9722,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en helig plats.",
   "ee": "It is a holy place.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.59
 }, {
   "id": 1056,
   "sv": "lön",
@@ -8764,7 +9732,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon får en hög lön.",
   "ee": "She receives a high salary.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.42
 }, {
   "id": 1057,
   "sv": "historisk",
@@ -8774,7 +9743,8 @@ const VOCAB = [{
   "es": "Det är ett historiskt beslut.",
   "ee": "It is a historical decision.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.34
 }, {
   "id": 1058,
   "sv": "rest",
@@ -8783,7 +9753,8 @@ const VOCAB = [{
   "g": "en",
   "es": "En rest finns kvar.",
   "ee": "A remnant remains.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.27
 }, {
   "id": 1059,
   "sv": "halv",
@@ -8793,7 +9764,8 @@ const VOCAB = [{
   "es": "Han äter en halv pizza.",
   "ee": "He eats half a pizza.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.13
 }, {
   "id": 1060,
   "sv": "andel",
@@ -8804,7 +9776,8 @@ const VOCAB = [{
   "es": "Hon äger en andel.",
   "ee": "She owns a share.",
   "ch": 18,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.06
 }, {
   "id": 1061,
   "sv": "besök",
@@ -8813,7 +9786,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi gör ett besök.",
   "ee": "We make a visit.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.06
 }, {
   "id": 1062,
   "sv": "teknisk",
@@ -8823,7 +9797,8 @@ const VOCAB = [{
   "es": "Det är en teknisk lösning.",
   "ee": "It is a technical solution.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 90.04
 }, {
   "id": 1063,
   "sv": "kasta",
@@ -8833,7 +9808,8 @@ const VOCAB = [{
   "es": "Han kastar bollen.",
   "ee": "He throws the ball.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.78
 }, {
   "id": 1064,
   "sv": "hemsida",
@@ -8842,7 +9818,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon öppnar en hemsida.",
   "ee": "She opens a website.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.75
 }, {
   "id": 1065,
   "sv": "bedöma",
@@ -8850,7 +9827,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De bedömer resultatet.",
   "ee": "They assess the result.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.72
 }, {
   "id": 1066,
   "sv": "torsdag",
@@ -8861,7 +9839,8 @@ const VOCAB = [{
   "es": "Vi ses på torsdag.",
   "ee": "We meet on Thursday.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.68
 }, {
   "id": 1067,
   "sv": "tillväxt",
@@ -8870,7 +9849,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Företaget visar tillväxt.",
   "ee": "The company shows growth.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.64
 }, {
   "id": 1068,
   "sv": "läsare",
@@ -8881,7 +9861,8 @@ const VOCAB = [{
   "es": "Läsaren förstår.",
   "ee": "The reader understands.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.59
 }, {
   "id": 1069,
   "sv": "forskare",
@@ -8892,7 +9873,8 @@ const VOCAB = [{
   "es": "Forskaren arbetar.",
   "ee": "The researcher works.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.52
 }, {
   "id": 1070,
   "sv": "bidrag",
@@ -8901,7 +9883,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han ger ett bidrag.",
   "ee": "He gives a contribution.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.28
 }, {
   "id": 1071,
   "sv": "onsdag",
@@ -8912,7 +9895,8 @@ const VOCAB = [{
   "es": "Vi ses på onsdag.",
   "ee": "We meet on Wednesday.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.16
 }, {
   "id": 1072,
   "sv": "vilja",
@@ -8923,7 +9907,8 @@ const VOCAB = [{
   "es": "Hon har stark vilja.",
   "ee": "She has strong will.",
   "ch": 4,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.16
 }, {
   "id": 1073,
   "sv": "sol",
@@ -8934,7 +9919,8 @@ const VOCAB = [{
   "es": "Solen skiner.",
   "ee": "The sun shines.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.1
 }, {
   "id": 1074,
   "sv": "inte minst",
@@ -8942,7 +9928,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Problemet är viktigt inte minst här.",
   "ee": "The problem is important not least here.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 89.08
 }, {
   "id": 1075,
   "sv": "analys",
@@ -8951,7 +9938,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Analysen visar resultat.",
   "ee": "The analysis shows results.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.93
 }, {
   "id": 1076,
   "sv": "ovan",
@@ -8959,7 +9947,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Texten står ovan.",
   "ee": "The text stands above.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.85
 }, {
   "id": 1077,
   "sv": "lagstiftning",
@@ -8968,7 +9957,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ny lagstiftning införs.",
   "ee": "New legislation is introduced.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.83
 }, {
   "id": 1078,
   "sv": "militär",
@@ -8976,7 +9966,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en militär bas.",
   "ee": "It is a military base.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.82
 }, {
   "id": 1079,
   "sv": "toppa",
@@ -8984,7 +9975,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon toppar listan.",
   "ee": "She tops the list.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.72
 }, {
   "id": 1080,
   "sv": "sort",
@@ -8993,7 +9985,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en sort.",
   "ee": "There is a kind.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.57
 }, {
   "id": 1081,
   "sv": "fördel",
@@ -9004,7 +9997,8 @@ const VOCAB = [{
   "es": "Det är en stor fördel.",
   "ee": "It is a big advantage.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.33
 }, {
   "id": 1082,
   "sv": "skydda",
@@ -9014,7 +10008,8 @@ const VOCAB = [{
   "es": "De skyddar naturen.",
   "ee": "They protect nature.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.3
 }, {
   "id": 1083,
   "sv": "nyttja",
@@ -9022,7 +10017,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi nyttjar resurser.",
   "ee": "We use resources.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.29
 }, {
   "id": 1084,
   "sv": "utnyttja",
@@ -9030,7 +10026,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De utnyttjar möjligheten.",
   "ee": "They exploit the opportunity.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.29
 }, {
   "id": 1085,
   "sv": "teori",
@@ -9039,7 +10036,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Teorin diskuteras.",
   "ee": "The theory is discussed.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.16
 }, {
   "id": 1086,
   "sv": "fransk",
@@ -9049,7 +10047,8 @@ const VOCAB = [{
   "es": "Hon är fransk.",
   "ee": "She is French.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 88.02
 }, {
   "id": 1087,
   "sv": "pågå",
@@ -9059,7 +10058,8 @@ const VOCAB = [{
   "es": "Mötet pågår.",
   "ee": "The meeting continues.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.99
 }, {
   "id": 1088,
   "sv": "samling",
@@ -9068,7 +10068,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon har en samling.",
   "ee": "She has a collection.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.94
 }, {
   "id": 1089,
   "sv": "flertal",
@@ -9077,7 +10078,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Ett flertal personer kommer.",
   "ee": "Several people arrive.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.89
 }, {
   "id": 1090,
   "sv": "snarare",
@@ -9085,7 +10087,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är snarare ett problem.",
   "ee": "It is rather a problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.88
 }, {
   "id": 1091,
   "sv": "försvara",
@@ -9093,7 +10096,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han försvarar laget.",
   "ee": "He defends the team.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.72
 }, {
   "id": 1092,
   "sv": "modell",
@@ -9104,7 +10108,8 @@ const VOCAB = [{
   "es": "De bygger en modell.",
   "ee": "They build a model.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.56
 }, {
   "id": 1093,
   "sv": "skön",
@@ -9114,7 +10119,8 @@ const VOCAB = [{
   "es": "Det är en skön dag.",
   "ee": "It is a pleasant day.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.52
 }, {
   "id": 1094,
   "sv": "vapen",
@@ -9123,7 +10129,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Polisen hittar ett vapen.",
   "ee": "The police find a weapon.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.52
 }, {
   "id": 1095,
   "sv": "således",
@@ -9131,7 +10138,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han vann således loppet.",
   "ee": "Thus he won the race.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.49
 }, {
   "id": 1096,
   "sv": "förening",
@@ -9142,7 +10150,8 @@ const VOCAB = [{
   "es": "De startar en förening.",
   "ee": "They start an association.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.48
 }, {
   "id": 1097,
   "sv": "lyfta",
@@ -9150,7 +10159,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han lyfter lådan.",
   "ee": "He lifts the box.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.39
 }, {
   "id": 1098,
   "sv": "eftermiddag (förk. em.)",
@@ -9159,7 +10169,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi ses på eftermiddagen.",
   "ee": "We meet in the afternoon.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.36
 }, {
   "id": 1099,
   "sv": "soldat",
@@ -9168,7 +10179,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Soldaten marscherar.",
   "ee": "The soldier marches.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.29
 }, {
   "id": 1100,
   "sv": "märka",
@@ -9178,7 +10190,8 @@ const VOCAB = [{
   "es": "Jag märker förändringen.",
   "ee": "I notice the change.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.24
 }, {
   "id": 1101,
   "sv": "gemenskap",
@@ -9187,13 +10200,15 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi känner gemenskap.",
   "ee": "We feel community.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.17
 }, {
   "id": 1102,
   "sv": "ösa",
   "en": "to pour / scoop",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.12
 }, {
   "id": 1103,
   "sv": "fast",
@@ -9201,7 +10216,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Jag går fast det regnar.",
   "ee": "I go although it rains.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 87.09
 }, {
   "id": 1104,
   "sv": "styrka",
@@ -9210,7 +10226,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon har stor styrka.",
   "ee": "She has great strength.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.87
 }, {
   "id": 1105,
   "sv": "ersätta",
@@ -9218,7 +10235,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De ersätter chefen.",
   "ee": "They replace the boss.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.51
 }, {
   "id": 1106,
   "sv": "kille",
@@ -9229,7 +10247,8 @@ const VOCAB = [{
   "es": "Killen springer.",
   "ee": "The guy runs.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.47
 }, {
   "id": 1107,
   "sv": "vård",
@@ -9240,7 +10259,8 @@ const VOCAB = [{
   "es": "Han får vård.",
   "ee": "He receives care.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.44
 }, {
   "id": 1108,
   "sv": "fullt",
@@ -9248,7 +10268,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Rummet är fullt.",
   "ee": "The room is full.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.4
 }, {
   "id": 1109,
   "sv": "ägna",
@@ -9256,7 +10277,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon ägnar tid åt studier.",
   "ee": "She devotes time to studies.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.39
 }, {
   "id": 1110,
   "sv": "oavsett",
@@ -9264,7 +10286,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Oavsett väder går vi.",
   "ee": "Regardless of the weather we go.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.16
 }, {
   "id": 1111,
   "sv": "poäng",
@@ -9273,7 +10296,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han gör en poäng.",
   "ee": "He scores a point.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.13
 }, {
   "id": 1112,
   "sv": "satsa",
@@ -9281,7 +10305,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De satsar pengar.",
   "ee": "They invest money.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.11
 }, {
   "id": 1113,
   "sv": "moderat",
@@ -9290,7 +10315,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han är moderat.",
   "ee": "He is a moderate.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 86.02
 }, {
   "id": 1114,
   "sv": "rida",
@@ -9298,7 +10324,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, red, ridit)",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.96
 }, {
   "id": 1115,
   "sv": "jo",
@@ -9307,7 +10334,8 @@ const VOCAB = [{
   "es": "Jo",
   "ee": "det är sant.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.95
 }, {
   "id": 1116,
   "sv": "tisdag",
@@ -9318,7 +10346,8 @@ const VOCAB = [{
   "es": "Vi ses på tisdag.",
   "ee": "We meet on Tuesday.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.94
 }, {
   "id": 1117,
   "sv": "död",
@@ -9326,7 +10355,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Döden kom plötsligt.",
   "ee": "Death came suddenly.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.9
 }, {
   "id": 1118,
   "sv": "allmänt",
@@ -9334,7 +10364,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är allmänt känt.",
   "ee": "It is generally known.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.48
 }, {
   "id": 1119,
   "sv": "avsluta",
@@ -9342,7 +10373,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De avslutar mötet.",
   "ee": "They finish the meeting.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.39
 }, {
   "id": 1120,
   "sv": "sova",
@@ -9350,7 +10382,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(sover, sov, sovit)",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.26
 }, {
   "id": 1121,
   "sv": "inne",
@@ -9358,7 +10391,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han är inne.",
   "ee": "He is inside.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.1
 }, {
   "id": 1122,
   "sv": "flicka",
@@ -9369,7 +10403,8 @@ const VOCAB = [{
   "es": "Flickan läser.",
   "ee": "The girl reads.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 85.02
 }, {
   "id": 1123,
   "sv": "sedan (vardagl. sen)",
@@ -9377,7 +10412,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Vi ses sedan.",
   "ee": "We see each other later.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.79
 }, {
   "id": 1124,
   "sv": "total",
@@ -9387,7 +10423,8 @@ const VOCAB = [{
   "es": "Det är en total förändring.",
   "ee": "It is a total change.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.78
 }, {
   "id": 1125,
   "sv": "allvarlig",
@@ -9395,7 +10432,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett allvarligt problem.",
   "ee": "It is a serious problem.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.74
 }, {
   "id": 1126,
   "sv": "fram",
@@ -9403,7 +10441,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han går fram.",
   "ee": "He walks forward.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.73
 }, {
   "id": 1127,
   "sv": "ljus",
@@ -9412,7 +10451,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Ljuset tänds.",
   "ee": "The light turns on.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.31
 }, {
   "id": 1128,
   "sv": "sjukdom",
@@ -9421,7 +10461,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Sjukdomen behandlas.",
   "ee": "The illness is treated.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.27
 }, {
   "id": 1129,
   "sv": "unge",
@@ -9430,7 +10471,8 @@ const VOCAB = [{
   "g": "en",
   "es": "En unge leker.",
   "ee": "A child plays.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.16
 }, {
   "id": 1130,
   "sv": "i form av",
@@ -9438,7 +10480,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Det kommer i form av stöd.",
   "ee": "It comes in the form of support.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 84.01
 }, {
   "id": 1131,
   "sv": "vikt",
@@ -9447,7 +10490,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han lyfter en vikt.",
   "ee": "He lifts a weight.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.95
 }, {
   "id": 1132,
   "sv": "rik",
@@ -9457,7 +10501,8 @@ const VOCAB = [{
   "es": "Han är rik.",
   "ee": "He is rich.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.8
 }, {
   "id": 1133,
   "sv": "region",
@@ -9468,7 +10513,8 @@ const VOCAB = [{
   "es": "Regionen utvecklas.",
   "ee": "The region develops.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.76
 }, {
   "id": 1134,
   "sv": "samtal",
@@ -9477,7 +10523,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi har ett samtal.",
   "ee": "We have a conversation.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.69
 }, {
   "id": 1135,
   "sv": "negativ",
@@ -9487,7 +10534,8 @@ const VOCAB = [{
   "es": "Resultatet är negativt.",
   "ee": "The result is negative.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.54
 }, {
   "id": 1136,
   "sv": "mycket",
@@ -9496,7 +10544,8 @@ const VOCAB = [{
   "es": "Det är mycket arbete.",
   "ee": "It is much work.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.53
 }, {
   "id": 1137,
   "sv": "i år",
@@ -9504,7 +10553,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi reser i år.",
   "ee": "We travel this year.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.52
 }, {
   "id": 1138,
   "sv": "igång",
@@ -9512,7 +10562,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Projektet är igång.",
   "ee": "The project has started.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.49
 }, {
   "id": 1139,
   "sv": "vändning",
@@ -9521,7 +10572,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Historien får en vändning.",
   "ee": "The story takes a turn.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.42
 }, {
   "id": 1140,
   "sv": "antingen…eller",
@@ -9529,13 +10581,15 @@ const VOCAB = [{
   "t": "c",
   "es": "Antingen går vi eller stannar.",
   "ee": "Either we go or stay.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.19
 }, {
   "id": 1141,
   "sv": "föda",
   "en": "to give birth",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.1
 }, {
   "id": 1142,
   "sv": "åter",
@@ -9543,7 +10597,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer åter.",
   "ee": "He comes again.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.06
 }, {
   "id": 1143,
   "sv": "arbetare",
@@ -9552,7 +10607,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Arbetaren bygger.",
   "ee": "The worker builds.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.02
 }, {
   "id": 1144,
   "sv": "skjuta",
@@ -9562,7 +10618,8 @@ const VOCAB = [{
   "es": "Han skjuter bollen.",
   "ee": "He shoots the ball.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 83.01
 }, {
   "id": 1145,
   "sv": "tradition",
@@ -9571,7 +10628,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Traditionen fortsätter.",
   "ee": "The tradition continues.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.91
 }, {
   "id": 1146,
   "sv": "hämta",
@@ -9581,7 +10639,8 @@ const VOCAB = [{
   "es": "Jag hämtar boken.",
   "ee": "I fetch the book.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.84
 }, {
   "id": 1147,
   "sv": "församling",
@@ -9590,7 +10649,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Församlingen samlas.",
   "ee": "The congregation gathers.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.73
 }, {
   "id": 1148,
   "sv": "hav",
@@ -9601,7 +10661,8 @@ const VOCAB = [{
   "es": "Havet är kallt.",
   "ee": "The sea is cold.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.66
 }, {
   "id": 1149,
   "sv": "energi",
@@ -9612,7 +10673,8 @@ const VOCAB = [{
   "es": "Hon har mycket energi.",
   "ee": "She has much energy.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.37
 }, {
   "id": 1150,
   "sv": "bred",
@@ -9622,7 +10684,8 @@ const VOCAB = [{
   "es": "Vägen är bred.",
   "ee": "The road is wide.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.28
 }, {
   "id": 1151,
   "sv": "vad gäller",
@@ -9630,7 +10693,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vad gäller arbete är han noggrann.",
   "ee": "Regarding work he is careful.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.23
 }, {
   "id": 1152,
   "sv": "fast",
@@ -9638,7 +10702,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Jag går fast det regnar.",
   "ee": "I go although it rains.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.22
 }, {
   "id": 1153,
   "sv": "påpeka",
@@ -9646,7 +10711,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han påpekar felet.",
   "ee": "He points out the mistake.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.21
 }, {
   "id": 1154,
   "sv": "bättra",
@@ -9654,7 +10720,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Vi bättrar resultatet.",
   "ee": "We improve the result.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.19
 }, {
   "id": 1155,
   "sv": "skaffa",
@@ -9662,7 +10729,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han skaffar en bil.",
   "ee": "He gets a car.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.09
 }, {
   "id": 1156,
   "sv": "utgå",
@@ -9670,7 +10738,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Mötet utgår från planen.",
   "ee": "The meeting proceeds from the plan.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 82.08
 }, {
   "id": 1157,
   "sv": "samtlig",
@@ -9678,7 +10747,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Samtliga elever kommer.",
   "ee": "All students come.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.95
 }, {
   "id": 1158,
   "sv": "stärka",
@@ -9686,7 +10756,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De stärker laget.",
   "ee": "They strengthen the team.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.95
 }, {
   "id": 1159,
   "sv": "läkare",
@@ -9697,7 +10768,8 @@ const VOCAB = [{
   "es": "Läkaren hjälper.",
   "ee": "The doctor helps.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.81
 }, {
   "id": 1160,
   "sv": "fattig",
@@ -9707,7 +10779,8 @@ const VOCAB = [{
   "es": "Han är fattig.",
   "ee": "He is poor.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.56
 }, {
   "id": 1161,
   "sv": "grepp",
@@ -9716,7 +10789,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han tar ett grepp.",
   "ee": "He takes a grip.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.5
 }, {
   "id": 1162,
   "sv": "hej",
@@ -9725,7 +10799,8 @@ const VOCAB = [{
   "es": "Hej",
   "ee": "hur mår du?",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.45
 }, {
   "id": 1163,
   "sv": "utsätta",
@@ -9733,7 +10808,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han utsätter sig för risk.",
   "ee": "He exposes himself to risk.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.45
 }, {
   "id": 1164,
   "sv": "spännande",
@@ -9743,7 +10819,8 @@ const VOCAB = [{
   "es": "Filmen är spännande.",
   "ee": "The film is exciting.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.2
 }, {
   "id": 1165,
   "sv": "fort",
@@ -9751,7 +10828,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han springer fort.",
   "ee": "He runs fast.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.07
 }, {
   "id": 1166,
   "sv": "sikt",
@@ -9760,7 +10838,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han har god sikt.",
   "ee": "He has good visibility.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.06
 }, {
   "id": 1167,
   "sv": "revolution",
@@ -9769,7 +10848,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Revolutionen börjar.",
   "ee": "The revolution begins.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 81.03
 }, {
   "id": 1168,
   "sv": "brev",
@@ -9780,7 +10860,8 @@ const VOCAB = [{
   "es": "Jag skriver ett brev.",
   "ee": "I write a letter.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.95
 }, {
   "id": 1169,
   "sv": "personal",
@@ -9789,7 +10870,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Personalen arbetar.",
   "ee": "The staff works.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.84
 }, {
   "id": 1170,
   "sv": "skada",
@@ -9798,7 +10880,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han får en skada.",
   "ee": "He gets an injury.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.74
 }, {
   "id": 1171,
   "sv": "illa",
@@ -9806,7 +10889,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han mår illa.",
   "ee": "He feels sick.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.73
 }, {
   "id": 1172,
   "sv": "kämpa",
@@ -9816,7 +10900,8 @@ const VOCAB = [{
   "es": "De kämpar hårt.",
   "ee": "They fight hard.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.69
 }, {
   "id": 1173,
   "sv": "alltför",
@@ -9824,7 +10909,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är alltför dyrt.",
   "ee": "It is far too expensive.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.65
 }, {
   "id": 1174,
   "sv": "tecken",
@@ -9833,7 +10919,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Tecknet visas.",
   "ee": "The sign appears.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.61
 }, {
   "id": 1175,
   "sv": "siffra",
@@ -9844,7 +10931,8 @@ const VOCAB = [{
   "es": "Hon skriver en siffra.",
   "ee": "She writes a number.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.59
 }, {
   "id": 1176,
   "sv": "tydligt",
@@ -9852,7 +10940,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han talar tydligt.",
   "ee": "He speaks clearly.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.52
 }, {
   "id": 1177,
   "sv": "än (el. ännu)",
@@ -9860,7 +10949,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon är äldre än jag.",
   "ee": "She is older than I am.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.5
 }, {
   "id": 1178,
   "sv": "hårt",
@@ -9868,7 +10958,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han arbetar hårt.",
   "ee": "He works hard.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.46
 }, {
   "id": 1179,
   "sv": "absolut",
@@ -9876,7 +10967,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Ja absolut.",
   "ee": "Yes absolutely.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.27
 }, {
   "id": 1180,
   "sv": "eka",
@@ -9884,7 +10976,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Rösten ekar.",
   "ee": "The voice echoes.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.26
 }, {
   "id": 1181,
   "sv": "engelsk",
@@ -9894,7 +10987,8 @@ const VOCAB = [{
   "es": "Han talar engelsk dialekt.",
   "ee": "He speaks an English dialect.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 80.2
 }, {
   "id": 1182,
   "sv": "praktik",
@@ -9905,7 +10999,8 @@ const VOCAB = [{
   "es": "Hon gör praktik.",
   "ee": "She does an internship.",
   "ch": 16,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.79
 }, {
   "id": 1183,
   "sv": "förmodligen",
@@ -9913,7 +11008,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kommer förmodligen.",
   "ee": "He probably comes.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.75
 }, {
   "id": 1184,
   "sv": "hoppa",
@@ -9923,7 +11019,8 @@ const VOCAB = [{
   "es": "Barnet hoppar.",
   "ee": "The child jumps.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.72
 }, {
   "id": 1185,
   "sv": "morgon",
@@ -9934,7 +11031,8 @@ const VOCAB = [{
   "es": "Vi ses imorgon morgon.",
   "ee": "We meet tomorrow morning.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.54
 }, {
   "id": 1186,
   "sv": "tjej",
@@ -9945,7 +11043,8 @@ const VOCAB = [{
   "es": "Tjejen skrattar.",
   "ee": "The girl laughs.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.44
 }, {
   "id": 1187,
   "sv": "konstig",
@@ -9953,7 +11052,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är konstigt.",
   "ee": "It is strange.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.43
 }, {
   "id": 1188,
   "sv": "union",
@@ -9962,7 +11062,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De bildar en union.",
   "ee": "They form a union.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.39
 }, {
   "id": 1189,
   "sv": "kommande",
@@ -9970,7 +11071,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Kommande vecka reser vi.",
   "ee": "Next week we travel.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.27
 }, {
   "id": 1190,
   "sv": "avgöra",
@@ -9978,7 +11080,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Domaren avgör matchen.",
   "ee": "The referee decides the match.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.23
 }, {
   "id": 1191,
   "sv": "chef",
@@ -9989,7 +11092,8 @@ const VOCAB = [{
   "es": "Chefen beslutar.",
   "ee": "The boss decides.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.17
 }, {
   "id": 1192,
   "sv": "vis",
@@ -9998,7 +11102,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "På detta vis fungerar det.",
   "ee": "In this way it works.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 79.11
 }, {
   "id": 1193,
   "sv": "strid",
@@ -10007,7 +11112,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Striden börjar.",
   "ee": "The battle begins.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.98
 }, {
   "id": 1194,
   "sv": "sända",
@@ -10015,7 +11121,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De sänder nyheter.",
   "ee": "They broadcast news.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.93
 }, {
   "id": 1195,
   "sv": "missa",
@@ -10025,7 +11132,8 @@ const VOCAB = [{
   "es": "Jag missar bussen.",
   "ee": "I miss the bus.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.88
 }, {
   "id": 1196,
   "sv": "bedriva",
@@ -10033,7 +11141,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Företaget bedriver handel.",
   "ee": "The company conducts trade.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.64
 }, {
   "id": 1197,
   "sv": "etcetera (el. et cetera, förk. etc.)",
@@ -10041,7 +11150,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Listan fortsätter etcetera.",
   "ee": "The list continues etcetera.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.45
 }, {
   "id": 1198,
   "sv": "anföra",
@@ -10049,7 +11159,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han anför ett argument.",
   "ee": "He presents an argument.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.34
 }, {
   "id": 1199,
   "sv": "varm",
@@ -10057,7 +11168,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Soppan är varm.",
   "ee": "The soup is warm.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.22
 }, {
   "id": 1200,
   "sv": "hit",
@@ -10066,7 +11178,8 @@ const VOCAB = [{
   "es": "Kom hit.",
   "ee": "Come here.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.19
 }, {
   "id": 1201,
   "sv": "berättelse",
@@ -10075,7 +11188,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon berättar en berättelse.",
   "ee": "She tells a story.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 78.05
 }, {
   "id": 1202,
   "sv": "produktion",
@@ -10084,7 +11198,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Företaget ökar produktionen.",
   "ee": "The company increases production.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.86
 }, {
   "id": 1203,
   "sv": "kapitel (förk. kap.)",
@@ -10093,7 +11208,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Jag läser ett kapitel.",
   "ee": "I read a chapter.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.76
 }, {
   "id": 1204,
   "sv": "hindra",
@@ -10101,7 +11217,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De hindrar olyckan.",
   "ee": "They prevent the accident.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.58
 }, {
   "id": 1205,
   "sv": "konst",
@@ -10110,7 +11227,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon studerar konst.",
   "ee": "She studies art.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.53
 }, {
   "id": 1206,
   "sv": "speciell",
@@ -10120,7 +11238,8 @@ const VOCAB = [{
   "es": "Det är en speciell dag.",
   "ee": "It is a special day.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.45
 }, {
   "id": 1207,
   "sv": "allvar",
@@ -10129,7 +11248,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han talar med allvar.",
   "ee": "He speaks with seriousness.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.42
 }, {
   "id": 1208,
   "sv": "grön",
@@ -10139,7 +11259,8 @@ const VOCAB = [{
   "es": "Gräset är grönt.",
   "ee": "The grass is green.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.31
 }, {
   "id": 1209,
   "sv": "vår",
@@ -10150,7 +11271,8 @@ const VOCAB = [{
   "es": "Vår bil är blå.",
   "ee": "Our car is blue.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.26
 }, {
   "id": 1210,
   "sv": "meddela",
@@ -10160,7 +11282,8 @@ const VOCAB = [{
   "es": "Hon meddelar nyheten.",
   "ee": "She informs the news.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.16
 }, {
   "id": 1211,
   "sv": "omöjlig",
@@ -10168,7 +11291,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är omöjligt.",
   "ee": "It is impossible.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.05
 }, {
   "id": 1212,
   "sv": "tillämpa",
@@ -10176,7 +11300,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De tillämpar lagen.",
   "ee": "They apply the law.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 77.02
 }, {
   "id": 1213,
   "sv": "skydd",
@@ -10185,7 +11310,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "De ger skydd.",
   "ee": "They provide protection.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.99
 }, {
   "id": 1214,
   "sv": "hittills",
@@ -10193,7 +11319,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hittills går det bra.",
   "ee": "So far it goes well.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.96
 }, {
   "id": 1215,
   "sv": "sällan",
@@ -10202,7 +11329,8 @@ const VOCAB = [{
   "es": "Jag reser sällan.",
   "ee": "I travel seldom.",
   "ch": 5,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.95
 }, {
   "id": 1216,
   "sv": "position",
@@ -10213,7 +11341,8 @@ const VOCAB = [{
   "es": "Han tar en position.",
   "ee": "He takes a position.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.89
 }, {
   "id": 1217,
   "sv": "behandling",
@@ -10222,7 +11351,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Behandlingen fortsätter.",
   "ee": "The treatment continues.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.64
 }, {
   "id": 1218,
   "sv": "omfattande",
@@ -10230,7 +11360,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en omfattande studie.",
   "ee": "It is an extensive study.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.54
 }, {
   "id": 1219,
   "sv": "skog",
@@ -10241,7 +11372,8 @@ const VOCAB = [{
   "es": "Vi går i skogen.",
   "ee": "We walk in the forest.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.52
 }, {
   "id": 1220,
   "sv": "kritisera",
@@ -10249,7 +11381,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han kritiserar beslutet.",
   "ee": "He criticizes the decision.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.46
 }, {
   "id": 1221,
   "sv": "förklaring",
@@ -10260,7 +11393,8 @@ const VOCAB = [{
   "es": "Jag ger en förklaring.",
   "ee": "I give an explanation.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.39
 }, {
   "id": 1222,
   "sv": "springa",
@@ -10270,7 +11404,8 @@ const VOCAB = [{
   "es": "Hunden springer.",
   "ee": "The dog runs.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.39
 }, {
   "id": 1223,
   "sv": "oerhört",
@@ -10278,7 +11413,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är oerhört svårt.",
   "ee": "It is extremely difficult.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.26
 }, {
   "id": 1224,
   "sv": "uppfatta",
@@ -10286,7 +11422,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag uppfattar budskapet.",
   "ee": "I perceive the message.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.24
 }, {
   "id": 1225,
   "sv": "foto",
@@ -10297,7 +11434,8 @@ const VOCAB = [{
   "es": "Jag tar ett foto.",
   "ee": "I take a photo.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.14
 }, {
   "id": 1226,
   "sv": "islam",
@@ -10306,7 +11444,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han studerar islam.",
   "ee": "He studies Islam.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.13
 }, {
   "id": 1227,
   "sv": "stänga",
@@ -10316,7 +11455,8 @@ const VOCAB = [{
   "es": "Hon stänger dörren.",
   "ee": "She closes the door.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.1
 }, {
   "id": 1228,
   "sv": "aning",
@@ -10325,7 +11465,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag har en aning.",
   "ee": "I have an idea.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.09
 }, {
   "id": 1229,
   "sv": "försvar",
@@ -10334,7 +11475,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han bygger ett försvar.",
   "ee": "He builds a defense.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.08
 }, {
   "id": 1230,
   "sv": "meter",
@@ -10343,7 +11485,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Staven är en meter.",
   "ee": "The stick is one meter.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 76.04
 }, {
   "id": 1231,
   "sv": "evolution",
@@ -10352,7 +11495,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Evolutionen fortsätter.",
   "ee": "Evolution continues.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.98
 }, {
   "id": 1232,
   "sv": "funktion",
@@ -10361,7 +11505,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Maskinen har en funktion.",
   "ee": "The machine has a function.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.88
 }, {
   "id": 1233,
   "sv": "dotter",
@@ -10372,7 +11517,8 @@ const VOCAB = [{
   "es": "Min dotter studerar.",
   "ee": "My daughter studies.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.82
 }, {
   "id": 1234,
   "sv": "värdering",
@@ -10381,13 +11527,15 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon gör en värdering.",
   "ee": "She makes an evaluation.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.62
 }, {
   "id": 1235,
   "sv": "råda",
   "en": "to advise",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.56
 }, {
   "id": 1236,
   "sv": "ersättning",
@@ -10396,7 +11544,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han får ersättning.",
   "ee": "He receives compensation.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.51
 }, {
   "id": 1237,
   "sv": "slippa",
@@ -10404,7 +11553,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag slipper jobbet.",
   "ee": "I avoid the work.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.51
 }, {
   "id": 1238,
   "sv": "självklart",
@@ -10413,7 +11563,8 @@ const VOCAB = [{
   "es": "Självklart kommer jag.",
   "ee": "Of course I come.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.31
 }, {
   "id": 1239,
   "sv": "lämplig",
@@ -10421,7 +11572,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en lämplig plats.",
   "ee": "It is a suitable place.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.27
 }, {
   "id": 1240,
   "sv": "ting",
@@ -10430,7 +11582,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det är ett märkligt ting.",
   "ee": "It is a strange thing.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.13
 }, {
   "id": 1241,
   "sv": "minne",
@@ -10439,7 +11592,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Jag har ett minne.",
   "ee": "I have a memory.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.11
 }, {
   "id": 1242,
   "sv": "strategi",
@@ -10448,7 +11602,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De utvecklar en strategi.",
   "ee": "They develop a strategy.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.1
 }, {
   "id": 1243,
   "sv": "dyka",
@@ -10456,7 +11611,8 @@ const VOCAB = [{
   "t": "v",
   "c": "(-er, dök, dykit)",
   "ch": 19,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.09
 }, {
   "id": 1244,
   "sv": "orka",
@@ -10466,7 +11622,8 @@ const VOCAB = [{
   "es": "Jag orkar inte.",
   "ee": "I do not have the energy.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 75.09
 }, {
   "id": 1245,
   "sv": "kontrollera",
@@ -10476,7 +11633,8 @@ const VOCAB = [{
   "es": "De kontrollerar systemet.",
   "ee": "They check the system.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.97
 }, {
   "id": 1246,
   "sv": "planera",
@@ -10486,7 +11644,8 @@ const VOCAB = [{
   "es": "Vi planerar resan.",
   "ee": "We plan the trip.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.86
 }, {
   "id": 1247,
   "sv": "färg",
@@ -10497,7 +11656,8 @@ const VOCAB = [{
   "es": "Bilen har en fin färg.",
   "ee": "The car has a nice color.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.81
 }, {
   "id": 1248,
   "sv": "lova",
@@ -10505,7 +11665,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han lovar hjälp.",
   "ee": "He promises help.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.62
 }, {
   "id": 1249,
   "sv": "citera",
@@ -10513,7 +11674,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon citerar boken.",
   "ee": "She quotes the book.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.41
 }, {
   "id": 1250,
   "sv": "finansiell",
@@ -10521,7 +11683,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en finansiell fråga.",
   "ee": "It is a financial issue.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.34
 }, {
   "id": 1251,
   "sv": "ständigt",
@@ -10529,7 +11692,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han arbetar ständigt.",
   "ee": "He works constantly.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.22
 }, {
   "id": 1252,
   "sv": "spår",
@@ -10540,7 +11704,8 @@ const VOCAB = [{
   "es": "Vi följer ett spår.",
   "ee": "We follow a track.",
   "ch": 9,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.17
 }, {
   "id": 1253,
   "sv": "kall",
@@ -10548,7 +11713,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vattnet är kallt.",
   "ee": "The water is cold.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.14
 }, {
   "id": 1254,
   "sv": "vuxen",
@@ -10558,7 +11724,8 @@ const VOCAB = [{
   "es": "Han är vuxen.",
   "ee": "He is an adult.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.07
 }, {
   "id": 1255,
   "sv": "allians",
@@ -10567,7 +11734,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De bildar en allians.",
   "ee": "They form an alliance.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 74.06
 }, {
   "id": 1256,
   "sv": "faktor",
@@ -10578,7 +11746,8 @@ const VOCAB = [{
   "es": "Det är en viktig faktor.",
   "ee": "It is an important factor.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.95
 }, {
   "id": 1257,
   "sv": "kvalitet (el. kvalité)",
@@ -10587,7 +11756,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Produkten har hög kvalitet.",
   "ee": "The product has high quality.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.93
 }, {
   "id": 1258,
   "sv": "upp",
@@ -10596,7 +11766,8 @@ const VOCAB = [{
   "es": "H an går upp.",
   "ee": "He goes up.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.89
 }, {
   "id": 1259,
   "sv": "utländsk",
@@ -10604,7 +11775,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon arbetar i ett utländskt företag.",
   "ee": "She works in a foreign company.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.89
 }, {
   "id": 1260,
   "sv": "svag",
@@ -10612,7 +11784,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han känner sig svag.",
   "ee": "He feels weak.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.87
 }, {
   "id": 1261,
   "sv": "sköta",
@@ -10620,7 +11793,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon sköter företaget.",
   "ee": "She manages the company.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.72
 }, {
   "id": 1262,
   "sv": "vägra",
@@ -10628,7 +11802,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han vägrar svara.",
   "ee": "He refuses to answer.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.64
 }, {
   "id": 1263,
   "sv": "rike",
@@ -10637,7 +11812,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Riket växer.",
   "ee": "The kingdom grows.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.5
 }, {
   "id": 1264,
   "sv": "framgå",
@@ -10645,7 +11821,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det framgår av rapporten.",
   "ee": "It appears from the report.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.41
 }, {
   "id": 1265,
   "sv": "judisk",
@@ -10653,7 +11830,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han studerar judisk historia.",
   "ee": "He studies Jewish history.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.26
 }, {
   "id": 1266,
   "sv": "studera",
@@ -10663,7 +11841,8 @@ const VOCAB = [{
   "es": "Jag studerar svenska.",
   "ee": "I study Swedish.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.17
 }, {
   "id": 1267,
   "sv": "farlig",
@@ -10673,7 +11852,8 @@ const VOCAB = [{
   "es": "Det är farligt.",
   "ee": "It is dangerous.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.07
 }, {
   "id": 1268,
   "sv": "framgång",
@@ -10682,7 +11862,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Projektet är en framgång.",
   "ee": "The project is a success.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.07
 }, {
   "id": 1269,
   "sv": "tolka",
@@ -10690,7 +11871,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon tolkar texten.",
   "ee": "She interprets the text.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.02
 }, {
   "id": 1270,
   "sv": "billig",
@@ -10700,7 +11882,8 @@ const VOCAB = [{
   "es": "Boken är billig.",
   "ee": "The book is cheap.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 73.02
 }, {
   "id": 1271,
   "sv": "iväg",
@@ -10708,7 +11891,8 @@ const VOCAB = [{
   "t": "p",
   "es": "H an springer iväg.",
   "ee": "He runs away.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.74
 }, {
   "id": 1272,
   "sv": "student",
@@ -10717,7 +11901,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Studenten studerar.",
   "ee": "The student studies.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.69
 }, {
   "id": 1273,
   "sv": "och så vidare (förk. o.s.v., osv.)",
@@ -10725,7 +11910,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Listan fortsätter och så vidare.",
   "ee": "The list continues etcetera.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.62
 }, {
   "id": 1274,
   "sv": "visserligen",
@@ -10733,7 +11919,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är visserligen sant.",
   "ee": "Admittedly it is true.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.58
 }, {
   "id": 1275,
   "sv": "vara",
@@ -10742,7 +11929,8 @@ const VOCAB = [{
   "g": "en",
   "c": "(är, var, varit)",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.57
 }, {
   "id": 1276,
   "sv": "undantag",
@@ -10751,7 +11939,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Det finns ett undantag.",
   "ee": "There is an exception.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.4
 }, {
   "id": 1277,
   "sv": "tillgänglig",
@@ -10759,7 +11948,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Informationen är tillgänglig.",
   "ee": "The information is available.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.31
 }, {
   "id": 1278,
   "sv": "enorm",
@@ -10769,7 +11959,8 @@ const VOCAB = [{
   "es": "Det är ett enormt problem.",
   "ee": "It is an enormous problem.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.24
 }, {
   "id": 1279,
   "sv": "behålla",
@@ -10777,7 +11968,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han behåller boken.",
   "ee": "He keeps the book.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.2
 }, {
   "id": 1280,
   "sv": "dricka",
@@ -10787,7 +11979,8 @@ const VOCAB = [{
   "es": "Jag dricker vatten.",
   "ee": "I drink water.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.16
 }, {
   "id": 1281,
   "sv": "aktion",
@@ -10796,7 +11989,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De startar en aktion.",
   "ee": "They start an action.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.14
 }, {
   "id": 1282,
   "sv": "bry sig",
@@ -10804,7 +11998,8 @@ const VOCAB = [{
   "t": "v",
   "es": "H an bryr sig.",
   "ee": "He cares.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.13
 }, {
   "id": 1283,
   "sv": "relativt",
@@ -10812,7 +12007,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är relativt lätt.",
   "ee": "It is relatively easy.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.06
 }, {
   "id": 1284,
   "sv": "tung",
@@ -10820,7 +12016,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Väskan är tung.",
   "ee": "The bag is heavy.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 72.04
 }, {
   "id": 1285,
   "sv": "arbetsgivare",
@@ -10829,7 +12026,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Arbetsgivaren anställer.",
   "ee": "The employer hires.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.89
 }, {
   "id": 1286,
   "sv": "med hjälp av",
@@ -10837,7 +12035,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han löser det med hjälp av en vän.",
   "ee": "He solves it with the help of a friend.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.84
 }, {
   "id": 1287,
   "sv": "tvärtom (el. tvärt om)",
@@ -10845,7 +12044,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är tvärtom.",
   "ee": "It is the opposite.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.67
 }, {
   "id": 1288,
   "sv": "notera",
@@ -10853,7 +12053,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han noterar resultatet.",
   "ee": "He notes the result.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.48
 }, {
   "id": 1289,
   "sv": "nation",
@@ -10862,7 +12063,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Nationen växer.",
   "ee": "The nation grows.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.44
 }, {
   "id": 1290,
   "sv": "sänka",
@@ -10870,7 +12072,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De sänker priset.",
   "ee": "They lower the price.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.42
 }, {
   "id": 1291,
   "sv": "ärende",
@@ -10879,7 +12082,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han har ett ärende.",
   "ee": "He has a matter.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.39
 }, {
   "id": 1292,
   "sv": "givare",
@@ -10888,7 +12092,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Givaren hjälper.",
   "ee": "The donor helps.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.09
 }, {
   "id": 1293,
   "sv": "kull",
@@ -10897,7 +12102,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hunden har en kull.",
   "ee": "The dog has a litter.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.03
 }, {
   "id": 1294,
   "sv": "nyligen",
@@ -10905,7 +12111,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han kom nyligen.",
   "ee": "He came recently.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.03
 }, {
   "id": 1295,
   "sv": "rättelse",
@@ -10914,7 +12121,8 @@ const VOCAB = [{
   "g": "en",
   "es": "De gör en rättelse.",
   "ee": "They make a correction.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 71.0
 }, {
   "id": 1296,
   "sv": "delvis",
@@ -10922,7 +12130,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Projektet lyckas delvis.",
   "ee": "The project partly succeeds.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.94
 }, {
   "id": 1297,
   "sv": "medföra",
@@ -10930,7 +12139,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Det medför risk.",
   "ee": "It entails risk.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.92
 }, {
   "id": 1298,
   "sv": "ifrågasätta",
@@ -10938,7 +12148,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon ifrågasätter beslutet.",
   "ee": "She questions the decision.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.79
 }, {
   "id": 1299,
   "sv": "för övrigt",
@@ -10946,7 +12157,8 @@ const VOCAB = [{
   "t": "a",
   "es": "För övrigt mår jag bra.",
   "ee": "By the way I feel well.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.76
 }, {
   "id": 1300,
   "sv": "län",
@@ -10957,7 +12169,8 @@ const VOCAB = [{
   "es": "Han bor i ett län.",
   "ee": "He lives in a county.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.61
 }, {
   "id": 1301,
   "sv": "gata",
@@ -10968,7 +12181,8 @@ const VOCAB = [{
   "es": "Bilen står på gatan.",
   "ee": "The car stands on the street.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.48
 }, {
   "id": 1302,
   "sv": "medveten",
@@ -10976,7 +12190,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hon är medveten.",
   "ee": "She is aware.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.44
 }, {
   "id": 1303,
   "sv": "serie",
@@ -10987,7 +12202,8 @@ const VOCAB = [{
   "es": "Jag ser en serie.",
   "ee": "I watch a series.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.44
 }, {
   "id": 1304,
   "sv": "rimlig",
@@ -10995,7 +12211,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är ett rimligt pris.",
   "ee": "It is a reasonable price.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.42
 }, {
   "id": 1305,
   "sv": "ty",
@@ -11003,7 +12220,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Han stannar ty han är trött.",
   "ee": "He stays because he is tired.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.38
 }, {
   "id": 1306,
   "sv": "invandrare",
@@ -11012,7 +12230,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Invandraren arbetar.",
   "ee": "The immigrant works.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.38
 }, {
   "id": 1307,
   "sv": "dörr",
@@ -11023,7 +12242,8 @@ const VOCAB = [{
   "es": "Dörren är stängd.",
   "ee": "The door is closed.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 70.02
 }, {
   "id": 1308,
   "sv": "direktiv",
@@ -11032,7 +12252,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Regeringen ger ett direktiv.",
   "ee": "The government gives a directive.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.99
 }, {
   "id": 1309,
   "sv": "stiga",
@@ -11042,13 +12263,15 @@ const VOCAB = [{
   "es": "Temperaturen stiger.",
   "ee": "The temperature rises.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.91
 }, {
   "id": 1310,
   "sv": "tiga",
   "en": "to remain silent",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.91
 }, {
   "id": 1311,
   "sv": "fot",
@@ -11059,7 +12282,8 @@ const VOCAB = [{
   "es": "Han skadar sin fot.",
   "ee": "He injures his foot.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.9
 }, {
   "id": 1312,
   "sv": "begränsad",
@@ -11067,7 +12291,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Resurserna är begränsade.",
   "ee": "The resources are limited.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.9
 }, {
   "id": 1313,
   "sv": "vag",
@@ -11075,7 +12300,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Planen är vag.",
   "ee": "The plan is vague.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.88
 }, {
   "id": 1314,
   "sv": "äntligen",
@@ -11084,7 +12310,8 @@ const VOCAB = [{
   "es": "Vi är äntligen hemma.",
   "ee": "We are finally home.",
   "ch": 17,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.88
 }, {
   "id": 1315,
   "sv": "vänster",
@@ -11092,7 +12319,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han svänger vänster.",
   "ee": "He turns left.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.77
 }, {
   "id": 1316,
   "sv": "ner (el. ned)",
@@ -11100,7 +12328,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Hunden går ner.",
   "ee": "The dog goes down.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.65
 }, {
   "id": 1317,
   "sv": "väcka",
@@ -11108,7 +12337,8 @@ const VOCAB = [{
   "t": "v",
   "es": "H on väcker barnet.",
   "ee": "She wakes the child.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.65
 }, {
   "id": 1318,
   "sv": "leta",
@@ -11118,7 +12348,8 @@ const VOCAB = [{
   "es": "Jag letar efter boken.",
   "ee": "I search for the book.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.52
 }, {
   "id": 1319,
   "sv": "häst",
@@ -11127,7 +12358,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hästen springer.",
   "ee": "The horse runs.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.47
 }, {
   "id": 1320,
   "sv": "kategori",
@@ -11138,7 +12370,8 @@ const VOCAB = [{
   "es": "Produkten hör till en kategori.",
   "ee": "The product belongs to a category.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.47
 }, {
   "id": 1321,
   "sv": "brittisk",
@@ -11146,7 +12379,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han är brittisk.",
   "ee": "He is British.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.43
 }, {
   "id": 1322,
   "sv": "följd",
@@ -11155,7 +12389,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det får en följd.",
   "ee": "It has a consequence.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.24
 }, {
   "id": 1323,
   "sv": "ed",
@@ -11164,7 +12399,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han svär en ed.",
   "ee": "He swears an oath.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.22
 }, {
   "id": 1324,
   "sv": "fred",
@@ -11173,7 +12409,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Landet vill ha fred.",
   "ee": "The country wants peace.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.22
 }, {
   "id": 1325,
   "sv": "traditionell",
@@ -11183,7 +12420,8 @@ const VOCAB = [{
   "es": "Det är en traditionell rätt.",
   "ee": "It is a traditional dish.",
   "ch": 12,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.22
 }, {
   "id": 1326,
   "sv": "användning",
@@ -11192,7 +12430,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en användning.",
   "ee": "There is a use.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.21
 }, {
   "id": 1327,
   "sv": "riskera",
@@ -11202,7 +12441,8 @@ const VOCAB = [{
   "es": "Han riskerar livet.",
   "ee": "He risks his life.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.16
 }, {
   "id": 1328,
   "sv": "tappa",
@@ -11210,7 +12450,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon tappar glaset.",
   "ee": "She drops the glass.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.16
 }, {
   "id": 1329,
   "sv": "inkomst",
@@ -11219,7 +12460,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Han har hög inkomst.",
   "ee": "He has a high income.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.04
 }, {
   "id": 1330,
   "sv": "nöjd",
@@ -11229,7 +12471,8 @@ const VOCAB = [{
   "es": "Jag är nöjd.",
   "ee": "I am satisfied.",
   "ch": 15,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.02
 }, {
   "id": 1331,
   "sv": "kläder",
@@ -11239,7 +12482,8 @@ const VOCAB = [{
   "es": "Jag köper kläder.",
   "ee": "I buy clothes.",
   "ch": 6,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 69.0
 }, {
   "id": 1332,
   "sv": "spara",
@@ -11249,7 +12493,8 @@ const VOCAB = [{
   "es": "Vi sparar pengar.",
   "ee": "We save money.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.81
 }, {
   "id": 1333,
   "sv": "styrelse",
@@ -11258,7 +12503,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Styrelsen möts.",
   "ee": "The board meets.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.79
 }, {
   "id": 1334,
   "sv": "intervju",
@@ -11269,7 +12515,8 @@ const VOCAB = [{
   "es": "Hon gör en intervju.",
   "ee": "She conducts an interview.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.72
 }, {
   "id": 1335,
   "sv": "starkt",
@@ -11277,7 +12524,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är starkt kaffe.",
   "ee": "It is strong coffee.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.69
 }, {
   "id": 1336,
   "sv": "slutligen",
@@ -11285,7 +12533,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Slutligen tackar jag.",
   "ee": "Finally I thank you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.46
 }, {
   "id": 1337,
   "sv": "bit",
@@ -11295,7 +12544,8 @@ const VOCAB = [{
   "es": "Han äter en bit.",
   "ee": "He eats a piece.",
   "ch": 14,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.3
 }, {
   "id": 1338,
   "sv": "muslimsk",
@@ -11303,7 +12553,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en muslimsk tradition.",
   "ee": "It is a Muslim tradition.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.24
 }, {
   "id": 1339,
   "sv": "vetenskaplig",
@@ -11311,7 +12562,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en vetenskaplig studie.",
   "ee": "It is a scientific study.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 68.23
 }, {
   "id": 1340,
   "sv": "överens",
@@ -11319,7 +12571,8 @@ const VOCAB = [{
   "t": "a",
   "es": "De är överens.",
   "ee": "They agree.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.86
 }, {
   "id": 1341,
   "sv": "framtida",
@@ -11327,7 +12580,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en framtida plan.",
   "ee": "It is a future plan.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.84
 }, {
   "id": 1342,
   "sv": "bevis",
@@ -11336,7 +12590,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Beviset presenteras.",
   "ee": "The evidence is presented.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.69
 }, {
   "id": 1343,
   "sv": "fast",
@@ -11344,7 +12599,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag går fast det regnar.",
   "ee": "I go although it rains.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.58
 }, {
   "id": 1344,
   "sv": "sexuell",
@@ -11352,7 +12608,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en sexuell fråga.",
   "ee": "It is a sexual question.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.49
 }, {
   "id": 1345,
   "sv": "exakt",
@@ -11360,7 +12617,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Resultatet är exakt.",
   "ee": "The result is exact.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.27
 }, {
   "id": 1346,
   "sv": "arbetsmarknad",
@@ -11371,7 +12629,8 @@ const VOCAB = [{
   "es": "Arbetsmarknaden förändras.",
   "ee": "The labor market changes.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.26
 }, {
   "id": 1347,
   "sv": "underbar",
@@ -11381,7 +12640,8 @@ const VOCAB = [{
   "es": "Det är en underbar dag.",
   "ee": "It is a wonderful day.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.23
 }, {
   "id": 1348,
   "sv": "post",
@@ -11392,7 +12652,8 @@ const VOCAB = [{
   "es": "Han får en post.",
   "ee": "He gets a position.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 67.02
 }, {
   "id": 1349,
   "sv": "extra",
@@ -11400,14 +12661,16 @@ const VOCAB = [{
   "t": "a",
   "es": "Han arbetar extra.",
   "ee": "He works extra.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.9
 }, {
   "id": 1350,
   "sv": "offer",
   "en": "victim",
   "t": "n",
   "g": "ett",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.85
 }, {
   "id": 1351,
   "sv": "sektor",
@@ -11416,7 +12679,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Sektorn växer.",
   "ee": "The sector grows.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.75
 }, {
   "id": 1352,
   "sv": "vinst",
@@ -11427,7 +12691,8 @@ const VOCAB = [{
   "es": "Företaget gör en vinst.",
   "ee": "The company makes a profit.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.65
 }, {
   "id": 1353,
   "sv": "England",
@@ -11436,7 +12701,8 @@ const VOCAB = [{
   "es": "Han reser till England.",
   "ee": "He travels to England.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.6
 }, {
   "id": 1354,
   "sv": "inflytande",
@@ -11445,7 +12711,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Hon har inflytande.",
   "ee": "She has influence.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.6
 }, {
   "id": 1355,
   "sv": "budskap",
@@ -11454,7 +12721,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Han skickar ett budskap.",
   "ee": "He sends a message.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.59
 }, {
   "id": 1356,
   "sv": "klicka",
@@ -11464,7 +12732,8 @@ const VOCAB = [{
   "es": "Jag klickar på länken.",
   "ee": "I click the link.",
   "ch": 11,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.58
 }, {
   "id": 1357,
   "sv": "tips",
@@ -11475,7 +12744,8 @@ const VOCAB = [{
   "es": "Han ger ett tips.",
   "ee": "He gives a tip.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.37
 }, {
   "id": 1358,
   "sv": "världskrig",
@@ -11484,7 +12754,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Världen minns ett världskrig.",
   "ee": "The world remembers a world war.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.36
 }, {
   "id": 1359,
   "sv": "med tanke på",
@@ -11492,7 +12763,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Med tanke på vädret stannar vi.",
   "ee": "Considering the weather we stay.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.31
 }, {
   "id": 1360,
   "sv": "självklar",
@@ -11500,7 +12772,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en självklar sak.",
   "ee": "It is a self-evident thing.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.24
 }, {
   "id": 1361,
   "sv": "båt",
@@ -11511,7 +12784,8 @@ const VOCAB = [{
   "es": "Båten ligger i hamnen.",
   "ee": "The boat lies in the harbor.",
   "ch": 8,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.17
 }, {
   "id": 1362,
   "sv": "borta",
@@ -11520,7 +12794,8 @@ const VOCAB = [{
   "es": "Han är borta.",
   "ee": "He is away.",
   "ch": 13,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.14
 }, {
   "id": 1363,
   "sv": "regional",
@@ -11528,7 +12803,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en regional fråga.",
   "ee": "It is a regional issue.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.06
 }, {
   "id": 1364,
   "sv": "framåt",
@@ -11536,7 +12812,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi går framåt.",
   "ee": "We move forward.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.04
 }, {
   "id": 1365,
   "sv": "karaktär",
@@ -11545,7 +12822,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Filmen har en karaktär.",
   "ee": "The film has a character.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.0
 }, {
   "id": 1366,
   "sv": "skiva",
@@ -11554,7 +12832,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag lyssnar på en skiva.",
   "ee": "I listen to a record.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 66.0
 }, {
   "id": 1367,
   "sv": "omkring",
@@ -11562,7 +12841,8 @@ const VOCAB = [{
   "t": "a",
   "es": "De går omkring.",
   "ee": "They walk around.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.97
 }, {
   "id": 1368,
   "sv": "ansikte",
@@ -11573,7 +12853,8 @@ const VOCAB = [{
   "es": "Jag ser ett ansikte.",
   "ee": "I see a face.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.96
 }, {
   "id": 1369,
   "sv": "i början",
@@ -11581,7 +12862,8 @@ const VOCAB = [{
   "t": "p",
   "es": "I början är det svårt.",
   "ee": "In the beginning it is difficult.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.88
 }, {
   "id": 1370,
   "sv": "aktivitet",
@@ -11592,7 +12874,8 @@ const VOCAB = [{
   "es": "Vi planerar en aktivitet.",
   "ee": "We plan an activity.",
   "ch": 3,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.76
 }, {
   "id": 1371,
   "sv": "ost",
@@ -11601,7 +12884,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag äter ost.",
   "ee": "I eat cheese.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.67
 }, {
   "id": 1372,
   "sv": "fängelse",
@@ -11612,7 +12896,8 @@ const VOCAB = [{
   "es": "Han sitter i fängelse.",
   "ee": "He sits in prison.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.6
 }, {
   "id": 1373,
   "sv": "motsvarande",
@@ -11620,13 +12905,15 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är motsvarande resultat.",
   "ee": "It is a corresponding result.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.56
 }, {
   "id": 1374,
   "sv": "synas",
   "en": "to be seen",
   "t": "v",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.54
 }, {
   "id": 1375,
   "sv": "mor (el. moder, vardagl. morsa)",
@@ -11635,7 +12922,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Min mor arbetar.",
   "ee": "My mother works.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.46
 }, {
   "id": 1376,
   "sv": "an",
@@ -11643,7 +12931,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Han går an.",
   "ee": "It is acceptable.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.44
 }, {
   "id": 1377,
   "sv": "samman",
@@ -11651,7 +12940,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi arbetar samman.",
   "ee": "We work together.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.44
 }, {
   "id": 1378,
   "sv": "ända",
@@ -11659,7 +12949,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi väntar ända tills kväll.",
   "ee": "We wait until evening.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.38
 }, {
   "id": 1379,
   "sv": "ledamot",
@@ -11668,7 +12959,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ledamoten talar.",
   "ee": "The member speaks.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.34
 }, {
   "id": 1380,
   "sv": "i enlighet med",
@@ -11676,7 +12968,8 @@ const VOCAB = [{
   "t": "p",
   "es": "I enlighet med lagen gäller detta.",
   "ee": "In accordance with the law this applies.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.2
 }, {
   "id": 1381,
   "sv": "civil",
@@ -11684,7 +12977,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det är en civil konflikt.",
   "ee": "It is a civil conflict.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.17
 }, {
   "id": 1382,
   "sv": "uppenbar",
@@ -11692,7 +12986,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Felet är uppenbart.",
   "ee": "The mistake is obvious.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.12
 }, {
   "id": 1383,
   "sv": "skull",
@@ -11700,7 +12995,8 @@ const VOCAB = [{
   "t": "n",
   "es": "Han gör det för din skull.",
   "ee": "He does it for your sake.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.07
 }, {
   "id": 1384,
   "sv": "arbetslöshet",
@@ -11711,7 +13007,8 @@ const VOCAB = [{
   "es": "Arbetslösheten minskar.",
   "ee": "Unemployment decreases.",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 65.0
 }, {
   "id": 1385,
   "sv": "fysisk",
@@ -11719,7 +13016,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det kräver fysisk styrka.",
   "ee": "It requires physical strength.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.96
 }, {
   "id": 1386,
   "sv": "generation",
@@ -11728,7 +13026,8 @@ const VOCAB = [{
   "g": "en",
   "es": "En ny generation växer.",
   "ee": "A new generation grows.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.92
 }, {
   "id": 1387,
   "sv": "återigen",
@@ -11736,7 +13035,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han försöker återigen.",
   "ee": "He tries again.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.84
 }, {
   "id": 1388,
   "sv": "djup",
@@ -11744,7 +13044,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Sjön är djup.",
   "ee": "The lake is deep.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.61
 }, {
   "id": 1389,
   "sv": "initiativ",
@@ -11753,7 +13054,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Hon tar ett initiativ.",
   "ee": "She takes an initiative.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.56
 }, {
   "id": 1390,
   "sv": "fastställa",
@@ -11761,7 +13063,8 @@ const VOCAB = [{
   "t": "v",
   "es": "De fastställer resultatet.",
   "ee": "They determine the result.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.47
 }, {
   "id": 1391,
   "sv": "parlament",
@@ -11772,7 +13075,8 @@ const VOCAB = [{
   "es": "Parlamentet röstar.",
   "ee": "The parliament votes.",
   "ch": 10,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.38
 }, {
   "id": 1392,
   "sv": "säsong",
@@ -11781,7 +13085,8 @@ const VOCAB = [{
   "g": "en",
   "es": "En ny säsong börjar.",
   "ee": "A new season begins.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.38
 }, {
   "id": 1393,
   "sv": "levande",
@@ -11789,7 +13094,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Fisken är levande.",
   "ee": "The fish is alive.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.27
 }, {
   "id": 1394,
   "sv": "tacka",
@@ -11797,7 +13103,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Jag tackar dig.",
   "ee": "I thank you.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.24
 }, {
   "id": 1395,
   "sv": "hota",
@@ -11805,7 +13112,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han hotar dem.",
   "ee": "He threatens them.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.07
 }, {
   "id": 1396,
   "sv": "tusentals",
@@ -11813,7 +13121,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Tusentals människor samlas.",
   "ee": "Thousands of people gather.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.02
 }, {
   "id": 1397,
   "sv": "eventuell",
@@ -11821,7 +13130,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Det finns en eventuell risk.",
   "ee": "There is a potential risk.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 64.0
 }, {
   "id": 1398,
   "sv": "pojke",
@@ -11832,7 +13142,8 @@ const VOCAB = [{
   "es": "Pojken leker.",
   "ee": "The boy plays.",
   "ch": 1,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 63.91
 }, {
   "id": 1399,
   "sv": "version",
@@ -11841,7 +13152,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det finns en ny version.",
   "ee": "There is a new version.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 63.9
 }, {
   "id": 1400,
   "sv": "existera",
@@ -11849,7 +13161,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Problemet existerar fortfarande.",
   "ee": "The problem still exists.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 63.72
 }, {
   "id": 1401,
   "sv": "trött",
@@ -11858,7 +13171,8 @@ const VOCAB = [{
   "es": "Jag är trött.",
   "ee": "I am tired.",
   "ch": 2,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 63.63
 }, {
   "id": 1402,
   "sv": "himmel",
@@ -11867,7 +13181,8 @@ const VOCAB = [{
   "g": "en",
   "c": "(himlen)",
   "ch": 20,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 63.39
 }, {
   "id": 1403,
   "sv": "reaktion",
@@ -11876,7 +13191,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hon visar en stark reaktion.",
   "ee": "She shows a strong reaction.",
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 63.39
 }, {
   "id": 1404,
   "sv": "dyr",
@@ -11886,7 +13202,8 @@ const VOCAB = [{
   "es": "Bilen är dyr.",
   "ee": "The car is expensive.",
   "ch": 7,
-  "lv": "A1"
+  "lv": "A1",
+  "wpm": 63.35
 }, {
   "id": 1,
   "sv": "andra",
@@ -12650,7 +13967,8 @@ const VOCAB = [{
   "es": "Kursen börjar idag.",
   "ee": "The course begins today.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 63.24
 }, {
   "id": 1413,
   "sv": "upplevelse",
@@ -12661,7 +13979,8 @@ const VOCAB = [{
   "es": "Upplevelsen minns.",
   "ee": "The experience is remembered.",
   "ch": 19,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 62.97
 }, {
   "id": 1414,
   "sv": "riktning",
@@ -12670,7 +13989,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Riktningen ändras.",
   "ee": "The direction changes.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 62.93
 }, {
   "id": 1415,
   "sv": "vetenskap",
@@ -12679,7 +13999,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vetenskapen avancerar.",
   "ee": "Science advances.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 62.83
 }, {
   "id": 1417,
   "sv": "handel",
@@ -12688,7 +14009,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Handeln ökar.",
   "ee": "Trade increases.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 62.81
 }, {
   "id": 1430,
   "sv": "direkt",
@@ -12697,7 +14019,8 @@ const VOCAB = [{
   "es": "Vi går direkt hem.",
   "ee": "We go directly home.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 62.17
 }, {
   "id": 1436,
   "sv": "rubrik",
@@ -12708,7 +14031,8 @@ const VOCAB = [{
   "es": "Rubriken syns.",
   "ee": "The title is visible.",
   "ch": 18,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 61.88
 }, {
   "id": 1447,
   "sv": "luft",
@@ -12719,7 +14043,8 @@ const VOCAB = [{
   "es": "Luften är ren.",
   "ee": "The air is clean.",
   "ch": 10,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 61.33
 }, {
   "id": 1448,
   "sv": "industri",
@@ -12730,7 +14055,8 @@ const VOCAB = [{
   "es": "Industrin växer.",
   "ee": "Industry grows.",
   "ch": 10,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 61.23
 }, {
   "id": 1449,
   "sv": "tåg",
@@ -12739,7 +14065,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Tåget går.",
   "ee": "The train departs.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 61.07
 }, {
   "id": 1450,
   "sv": "skada",
@@ -12747,7 +14074,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Han får en skada.",
   "ee": "He gets an injury.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 61.02
 }, {
   "id": 1454,
   "sv": "förhandling",
@@ -12756,7 +14084,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Förhandlingen börjar.",
   "ee": "The negotiation begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 60.69
 }, {
   "id": 1469,
   "sv": "kommunikation",
@@ -12765,7 +14094,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kommunikationen fungerar.",
   "ee": "Communication works.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 59.79
 }, {
   "id": 1472,
   "sv": "patient",
@@ -12776,7 +14106,8 @@ const VOCAB = [{
   "es": "Patienten väntar.",
   "ee": "The patient waits.",
   "ch": 19,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 59.58
 }, {
   "id": 1475,
   "sv": "hälsa",
@@ -12785,7 +14116,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hälsan förbättras.",
   "ee": "Health improves.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 59.45
 }, {
   "id": 1477,
   "sv": "centrum",
@@ -12794,7 +14126,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Centrum är livligt.",
   "ee": "The center is lively.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 59.43
 }, {
   "id": 1482,
   "sv": "bord",
@@ -12803,7 +14136,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Boken ligger på bordet.",
   "ee": "The book lies on the table.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 59.07
 }, {
   "id": 1490,
   "sv": "publik",
@@ -12814,7 +14148,8 @@ const VOCAB = [{
   "es": "Publiken applåderar.",
   "ee": "The audience applauds.",
   "ch": 20,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 58.71
 }, {
   "id": 1502,
   "sv": "utmaning",
@@ -12823,7 +14158,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Utmaningen accepteras.",
   "ee": "The challenge is accepted.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 58.16
 }, {
   "id": 1503,
   "sv": "hopp",
@@ -12832,7 +14168,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Hoppet finns.",
   "ee": "Hope exists.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 58.14
 }, {
   "id": 1505,
   "sv": "dröm",
@@ -12843,7 +14180,8 @@ const VOCAB = [{
   "es": "Drömmen fortsätter.",
   "ee": "The dream continues.",
   "ch": 11,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 58.07
 }, {
   "id": 1532,
   "sv": "investering",
@@ -12852,7 +14190,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Investeringen ger resultat.",
   "ee": "The investment yields results.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 57.01
 }, {
   "id": 1534,
   "sv": "försäljning",
@@ -12861,7 +14200,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Försäljningen ökar.",
   "ee": "Sales increase.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 56.93
 }, {
   "id": 1546,
   "sv": "omkring",
@@ -12869,7 +14209,8 @@ const VOCAB = [{
   "t": "p",
   "es": "De går omkring.",
   "ee": "They walk around.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 56.37
 }, {
   "id": 1554,
   "sv": "minister",
@@ -12878,7 +14219,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ministern talar.",
   "ee": "The minister speaks.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 55.85
 }, {
   "id": 1560,
   "sv": "nätverk",
@@ -12887,7 +14229,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Nätverket växer.",
   "ee": "The network grows.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 55.73
 }, {
   "id": 1561,
   "sv": "scen",
@@ -12896,7 +14239,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Scenen är ljus.",
   "ee": "The stage is bright.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 55.67
 }, {
   "id": 1585,
   "sv": "klimat",
@@ -12907,7 +14251,8 @@ const VOCAB = [{
   "es": "Klimatet förändras.",
   "ee": "The climate changes.",
   "ch": 12,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 54.24
 }, {
   "id": 1586,
   "sv": "var",
@@ -12916,7 +14261,8 @@ const VOCAB = [{
   "es": "Var bor du?",
   "ee": "Where do you live?",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 54.15
 }, {
   "id": 1609,
   "sv": "dokument",
@@ -12927,7 +14273,8 @@ const VOCAB = [{
   "es": "Dokumentet skrivs.",
   "ee": "The document is written.",
   "ch": 11,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 53.17
 }, {
   "id": 1613,
   "sv": "middag",
@@ -12938,7 +14285,8 @@ const VOCAB = [{
   "es": "De lagar middag.",
   "ee": "They cook dinner.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 53.1
 }, {
   "id": 1618,
   "sv": "fast",
@@ -12946,7 +14294,8 @@ const VOCAB = [{
   "t": "s",
   "es": "Jag går fast det regnar.",
   "ee": "I go although it rains.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 53.01
 }, {
   "id": 1623,
   "sv": "professor",
@@ -12955,7 +14304,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Professorn föreläser.",
   "ee": "The professor lectures.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 52.61
 }, {
   "id": 1632,
   "sv": "buss",
@@ -12966,7 +14316,8 @@ const VOCAB = [{
   "es": "Bussen kommer.",
   "ee": "The bus arrives.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 52.35
 }, {
   "id": 1637,
   "sv": "plan",
@@ -12975,7 +14326,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi gör en plan.",
   "ee": "We make a plan.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 52.0
 }, {
   "id": 1638,
   "sv": "stil",
@@ -12984,7 +14336,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Stilen är enkel.",
   "ee": "The style is simple.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 51.78
 }, {
   "id": 1643,
   "sv": "berg",
@@ -12995,7 +14348,8 @@ const VOCAB = [{
   "es": "Berget är högt.",
   "ee": "The mountain is high.",
   "ch": 10,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 51.57
 }, {
   "id": 1649,
   "sv": "träning",
@@ -13004,7 +14358,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Träningen börjar.",
   "ee": "The training begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 51.25
 }, {
   "id": 1663,
   "sv": "sjukhus",
@@ -13013,7 +14368,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Sjukhuset öppnar.",
   "ee": "The hospital opens.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 50.51
 }, {
   "id": 1675,
   "sv": "dialog",
@@ -13024,7 +14380,8 @@ const VOCAB = [{
   "es": "Dialogen fortsätter.",
   "ee": "The dialogue continues.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 50.17
 }, {
   "id": 1677,
   "sv": "vägg",
@@ -13035,7 +14392,8 @@ const VOCAB = [{
   "es": "Väggen är vit.",
   "ee": "The wall is white.",
   "ch": 17,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 50.14
 }, {
   "id": 1690,
   "sv": "kollega",
@@ -13046,7 +14404,8 @@ const VOCAB = [{
   "es": "Kollegan hjälper.",
   "ee": "The colleague helps.",
   "ch": 5,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 49.68
 }, {
   "id": 1696,
   "sv": "meddelande",
@@ -13057,7 +14416,8 @@ const VOCAB = [{
   "es": "Meddelandet skickas.",
   "ee": "The message is sent.",
   "ch": 11,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 49.48
 }, {
   "id": 1705,
   "sv": "telefon",
@@ -13068,7 +14428,8 @@ const VOCAB = [{
   "es": "Telefonen ringer.",
   "ee": "The phone rings.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 48.95
 }, {
   "id": 1707,
   "sv": "slut",
@@ -13076,7 +14437,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Filmen har ett slut.",
   "ee": "The film has an end.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 48.93
 }, {
   "id": 1724,
   "sv": "väder",
@@ -13085,7 +14447,8 @@ const VOCAB = [{
   "g": "ett",
   "c": "(vädret, väder, vädren)",
   "ch": 8,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 48.25
 }, {
   "id": 1730,
   "sv": "trafik",
@@ -13096,7 +14459,8 @@ const VOCAB = [{
   "es": "Trafiken ökar.",
   "ee": "Traffic increases.",
   "ch": 9,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 48.01
 }, {
   "id": 1734,
   "sv": "bröd",
@@ -13107,7 +14471,8 @@ const VOCAB = [{
   "es": "Jag köper bröd.",
   "ee": "I buy bread.",
   "ch": 4,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 47.92
 }, {
   "id": 1737,
   "sv": "butik",
@@ -13116,7 +14481,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Butiken öppnar.",
   "ee": "The store opens.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 47.83
 }, {
   "id": 1744,
   "sv": "vänster",
@@ -13124,7 +14490,8 @@ const VOCAB = [{
   "t": "n",
   "es": "Han svänger vänster.",
   "ee": "He turns left.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 47.58
 }, {
   "id": 1757,
   "sv": "opposition",
@@ -13133,7 +14500,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Oppositionen kritiserar.",
   "ee": "The opposition criticizes.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 47.11
 }, {
   "id": 1760,
   "sv": "visa",
@@ -13144,7 +14512,8 @@ const VOCAB = [{
   "es": "Han visar vägen.",
   "ee": "He shows the way.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 46.94
 }, {
   "id": 1764,
   "sv": "tack",
@@ -13154,7 +14523,8 @@ const VOCAB = [{
   "es": "Tack för hjälpen.",
   "ee": "Thanks for the help.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 46.74
 }, {
   "id": 1773,
   "sv": "vad",
@@ -13163,7 +14533,8 @@ const VOCAB = [{
   "es": "Vad gör du?",
   "ee": "What are you doing?",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 46.51
 }, {
   "id": 1787,
   "sv": "kommitté",
@@ -13172,7 +14543,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kommittén möts.",
   "ee": "The committee meets.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 46.0
 }, {
   "id": 1797,
   "sv": "kvar",
@@ -13181,7 +14553,8 @@ const VOCAB = [{
   "es": "Han är kvar här.",
   "ee": "He remains here.",
   "ch": 14,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 45.69
 }, {
   "id": 1799,
   "sv": "tak",
@@ -13190,7 +14563,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Taket är högt.",
   "ee": "The ceiling is high.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 45.67
 }, {
   "id": 1802,
   "sv": "överenskommelse",
@@ -13199,7 +14573,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Överenskommelsen nås.",
   "ee": "The agreement is reached.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 45.61
 }, {
   "id": 1803,
   "sv": "kampanj",
@@ -13208,7 +14583,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kampanjen börjar.",
   "ee": "The campaign begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 45.59
 }, {
   "id": 1806,
   "sv": "budget",
@@ -13217,7 +14593,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Budgeten är klar.",
   "ee": "The budget is ready.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 45.56
 }, {
   "id": 1812,
   "sv": "verktyg",
@@ -13226,7 +14603,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Verktyget ligger här.",
   "ee": "The tool lies here.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 45.4
 }, {
   "id": 1814,
   "sv": "betyg",
@@ -13237,7 +14615,8 @@ const VOCAB = [{
   "es": "Betyget är högt.",
   "ee": "The rating is high.",
   "ch": 16,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 45.28
 }, {
   "id": 1821,
   "sv": "vinter",
@@ -13248,7 +14627,8 @@ const VOCAB = [{
   "es": "Vintern är kall.",
   "ee": "Winter is cold.",
   "ch": 5,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 44.95
 }, {
   "id": 1823,
   "sv": "skyldighet",
@@ -13257,7 +14637,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Skyldigheten uppfylls.",
   "ee": "The duty is fulfilled.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 44.81
 }, {
   "id": 1831,
   "sv": "för",
@@ -13265,7 +14646,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Detta är för dig.",
   "ee": "This is for you.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 44.36
 }, {
   "id": 1835,
   "sv": "yta",
@@ -13274,7 +14656,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ytan är slät.",
   "ee": "The surface is smooth.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 44.18
 }, {
   "id": 1845,
   "sv": "konferens",
@@ -13285,7 +14668,8 @@ const VOCAB = [{
   "es": "Konferensen öppnar.",
   "ee": "The conference opens.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 43.68
 }, {
   "id": 1847,
   "sv": "runt",
@@ -13293,7 +14677,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi går runt sjön.",
   "ee": "We walk around the lake.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 43.65
 }, {
   "id": 1850,
   "sv": "kanal",
@@ -13304,7 +14689,8 @@ const VOCAB = [{
   "es": "Kanalen sänder.",
   "ee": "The channel broadcasts.",
   "ch": 9,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 43.59
 }, {
   "id": 1863,
   "sv": "vind",
@@ -13315,7 +14701,8 @@ const VOCAB = [{
   "es": "Vinden blåser.",
   "ee": "The wind blows.",
   "ch": 15,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 43.29
 }, {
   "id": 1865,
   "sv": "mitt",
@@ -13325,7 +14712,8 @@ const VOCAB = [{
   "es": "Det är mitt hus.",
   "ee": "It is my house.",
   "ch": 6,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 43.27
 }, {
   "id": 1881,
   "sv": "kort",
@@ -13334,7 +14722,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Mötet är kort.",
   "ee": "The meeting is short.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 43.02
 }, {
   "id": 1885,
   "sv": "fönster",
@@ -13345,7 +14734,8 @@ const VOCAB = [{
   "es": "Fönstret är stängt.",
   "ee": "The window is closed.",
   "ch": 17,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 42.75
 }, {
   "id": 1888,
   "sv": "ljud",
@@ -13356,7 +14746,8 @@ const VOCAB = [{
   "es": "Ljudet ökar.",
   "ee": "The sound increases.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 42.67
 }, {
   "id": 1892,
   "sv": "fara",
@@ -13365,7 +14756,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Faran är över.",
   "ee": "The danger is over.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 42.39
 }, {
   "id": 1898,
   "sv": "riktlinje",
@@ -13374,7 +14766,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Riktlinjen gäller.",
   "ee": "The guideline applies.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 42.17
 }, {
   "id": 1908,
   "sv": "dess",
@@ -13382,7 +14775,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Katten rör dess svans.",
   "ee": "The cat moves its tail.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 41.98
 }, {
   "id": 1919,
   "sv": "snö",
@@ -13391,7 +14785,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Snön ligger kvar.",
   "ee": "The snow remains.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 41.31
 }, {
   "id": 1932,
   "sv": "oavsett",
@@ -13399,7 +14794,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Oavsett väder går vi.",
   "ee": "Regardless of the weather we go.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 40.87
 }, {
   "id": 1940,
   "sv": "sjö",
@@ -13410,7 +14806,8 @@ const VOCAB = [{
   "es": "Sjön fryser.",
   "ee": "The lake freezes.",
   "ch": 10,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 40.7
 }, {
   "id": 1944,
   "sv": "kaffe",
@@ -13421,7 +14818,8 @@ const VOCAB = [{
   "es": "Jag dricker kaffe.",
   "ee": "I drink coffee.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 40.67
 }, {
   "id": 1974,
   "sv": "extra",
@@ -13430,7 +14828,8 @@ const VOCAB = [{
   "es": "Han arbetar extra.",
   "ee": "He works extra.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 39.67
 }, {
   "id": 1976,
   "sv": "lokal",
@@ -13439,7 +14838,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en lokal fråga.",
   "ee": "It is a local question.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 39.58
 }, {
   "id": 1983,
   "sv": "restaurang",
@@ -13450,7 +14850,8 @@ const VOCAB = [{
   "es": "Vi äter på restaurang.",
   "ee": "We eat at a restaurant.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 39.29
 }, {
   "id": 1987,
   "sv": "kamera",
@@ -13459,7 +14860,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kameran startar.",
   "ee": "The camera starts.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 39.24
 }, {
   "id": 1991,
   "sv": "ända (el. ände)",
@@ -13468,7 +14870,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi väntar ända tills kväll.",
   "ee": "We wait until evening.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 39.0
 }, {
   "id": 1993,
   "sv": "strand",
@@ -13479,7 +14882,8 @@ const VOCAB = [{
   "es": "Stranden är lång.",
   "ee": "The beach is long.",
   "ch": 15,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.97
 }, {
   "id": 1994,
   "sv": "pension",
@@ -13488,7 +14892,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Pensionen betalas.",
   "ee": "The pension is paid.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.96
 }, {
   "id": 1995,
   "sv": "hem",
@@ -13497,7 +14902,8 @@ const VOCAB = [{
   "es": "Huset är ett hem.",
   "ee": "The house is a home.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.95
 }, {
   "id": 2000,
   "sv": "medicin",
@@ -13508,7 +14914,8 @@ const VOCAB = [{
   "es": "Medicinen fungerar.",
   "ee": "The medicine works.",
   "ch": 6,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.84
 }, {
   "id": 2001,
   "sv": "sport",
@@ -13518,7 +14925,8 @@ const VOCAB = [{
   "es": "Sporten engagerar.",
   "ee": "Sport engages.",
   "ch": 7,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.76
 }, {
   "id": 2006,
   "sv": "ifrån",
@@ -13526,7 +14934,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Jag kommer ifrån Sverige.",
   "ee": "I come from Sweden.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.64
 }, {
   "id": 2013,
   "sv": "köp",
@@ -13537,7 +14946,8 @@ const VOCAB = [{
   "es": "Köpet var dyrt.",
   "ee": "The purchase was expensive.",
   "ch": 7,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.33
 }, {
   "id": 2026,
   "sv": "fest",
@@ -13548,7 +14958,8 @@ const VOCAB = [{
   "es": "Festen startar.",
   "ee": "The party starts.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 38.12
 }, {
   "id": 2044,
   "sv": "trend",
@@ -13559,7 +14970,8 @@ const VOCAB = [{
   "es": "Trenden fortsätter.",
   "ee": "The trend continues.",
   "ch": 12,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 37.69
 }, {
   "id": 2054,
   "sv": "demonstration",
@@ -13568,7 +14980,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Demonstrationen börjar.",
   "ee": "The demonstration begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 37.37
 }, {
   "id": 2057,
   "sv": "kandidat",
@@ -13577,7 +14990,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kandidaten talar.",
   "ee": "The candidate speaks.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 37.23
 }, {
   "id": 2064,
   "sv": "genomförande",
@@ -13586,7 +15000,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Genomförandet börjar.",
   "ee": "The implementation begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 37.04
 }, {
   "id": 2067,
   "sv": "föreställning",
@@ -13595,7 +15010,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Föreställningen börjar.",
   "ee": "The performance begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.97
 }, {
   "id": 2068,
   "sv": "än",
@@ -13604,7 +15020,8 @@ const VOCAB = [{
   "es": "Hon är äldre än jag.",
   "ee": "She is older than I am.",
   "ch": 12,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.96
 }, {
   "id": 2074,
   "sv": "gäst",
@@ -13613,7 +15030,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Gästen anländer.",
   "ee": "The guest arrives.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.85
 }, {
   "id": 2079,
   "sv": "kort",
@@ -13623,7 +15041,8 @@ const VOCAB = [{
   "es": "Mötet är kort.",
   "ee": "The meeting is short.",
   "ch": 4,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.7
 }, {
   "id": 2081,
   "sv": "lära",
@@ -13632,7 +15051,8 @@ const VOCAB = [{
   "g": "en",
   "c": "(lär, lärde, lärt)",
   "ch": 11,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.63
 }, {
   "id": 2096,
   "sv": "över",
@@ -13641,7 +15061,8 @@ const VOCAB = [{
   "es": "Fågeln flyger över huset.",
   "ee": "The bird flies over the house.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.31
 }, {
   "id": 2101,
   "sv": "fil",
@@ -13652,7 +15073,8 @@ const VOCAB = [{
   "es": "Filen sparas.",
   "ee": "The file is saved.",
   "ch": 4,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.17
 }, {
   "id": 2103,
   "sv": "hemma",
@@ -13661,7 +15083,8 @@ const VOCAB = [{
   "es": "Jag är hemma.",
   "ee": "I am at home.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 36.09
 }, {
   "id": 2116,
   "sv": "räkning",
@@ -13670,7 +15093,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Räkningen kommer.",
   "ee": "The bill arrives.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 35.61
 }, {
   "id": 2124,
   "sv": "bibliotek",
@@ -13681,7 +15105,8 @@ const VOCAB = [{
   "es": "Biblioteket är tyst.",
   "ee": "The library is quiet.",
   "ch": 5,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 35.39
 }, {
   "id": 2140,
   "sv": "balans",
@@ -13692,7 +15117,8 @@ const VOCAB = [{
   "es": "Balansen hålls.",
   "ee": "Balance is maintained.",
   "ch": 20,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 35.09
 }, {
   "id": 2145,
   "sv": "lunch",
@@ -13703,7 +15129,8 @@ const VOCAB = [{
   "es": "Vi äter lunch.",
   "ee": "We eat lunch.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.98
 }, {
   "id": 2147,
   "sv": "militär",
@@ -13712,7 +15139,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Det är en militär bas.",
   "ee": "It is a military base.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.9
 }, {
   "id": 2150,
   "sv": "alternativ",
@@ -13722,7 +15150,8 @@ const VOCAB = [{
   "es": "Det finns ett alternativ.",
   "ee": "There is an alternative.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.82
 }, {
   "id": 2152,
   "sv": "hälsa",
@@ -13732,7 +15161,8 @@ const VOCAB = [{
   "es": "Hälsan förbättras.",
   "ee": "Health improves.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.8
 }, {
   "id": 2157,
   "sv": "protest",
@@ -13741,7 +15171,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Protesten sprids.",
   "ee": "The protest spreads.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.62
 }, {
   "id": 2158,
   "sv": "test",
@@ -13750,7 +15181,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vi skriver ett test.",
   "ee": "We write a test.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.62
 }, {
   "id": 2171,
   "sv": "flod",
@@ -13761,7 +15193,8 @@ const VOCAB = [{
   "es": "Floden rinner.",
   "ee": "The river flows.",
   "ch": 10,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.29
 }, {
   "id": 2173,
   "sv": "mörker",
@@ -13772,7 +15205,8 @@ const VOCAB = [{
   "es": "Mörkret faller.",
   "ee": "Darkness falls.",
   "ch": 15,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.28
 }, {
   "id": 2174,
   "sv": "begränsning",
@@ -13781,7 +15215,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Begränsningen märks.",
   "ee": "The limitation appears.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.27
 }, {
   "id": 2177,
   "sv": "minoritet",
@@ -13790,7 +15225,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Minoriteten protesterar.",
   "ee": "The minority protests.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 34.2
 }, {
   "id": 2198,
   "sv": "mönster",
@@ -13799,7 +15235,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Mönstret upprepas.",
   "ee": "The pattern repeats.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 33.72
 }, {
   "id": 2246,
   "sv": "standard",
@@ -13808,7 +15245,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Standarden gäller.",
   "ee": "The standard applies.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 32.74
 }, {
   "id": 2247,
   "sv": "olycka",
@@ -13819,7 +15257,8 @@ const VOCAB = [{
   "es": "Olyckan rapporteras.",
   "ee": "The accident is reported.",
   "ch": 20,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 32.73
 }, {
   "id": 2249,
   "sv": "maskin",
@@ -13828,7 +15267,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Maskinen startar.",
   "ee": "The machine starts.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 32.7
 }, {
   "id": 2250,
   "sv": "transport",
@@ -13839,7 +15279,8 @@ const VOCAB = [{
   "es": "Transporten fungerar.",
   "ee": "Transport works.",
   "ch": 9,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 32.7
 }, {
   "id": 2256,
   "sv": "golv",
@@ -13850,7 +15291,8 @@ const VOCAB = [{
   "es": "Golvet är rent.",
   "ee": "The floor is clean.",
   "ch": 17,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 32.64
 }, {
   "id": 2261,
   "sv": "semester",
@@ -13861,7 +15303,8 @@ const VOCAB = [{
   "es": "Semestern börjar.",
   "ee": "The vacation begins.",
   "ch": 5,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 32.51
 }, {
   "id": 2264,
   "sv": "tysk",
@@ -13872,7 +15315,8 @@ const VOCAB = [{
   "es": "Han är tysk.",
   "ee": "He is German.",
   "ch": 5,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 32.38
 }, {
   "id": 2276,
   "sv": "beräkning",
@@ -13881,7 +15325,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Beräkningen görs.",
   "ee": "The calculation is made.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.99
 }, {
   "id": 2285,
   "sv": "domare",
@@ -13890,7 +15335,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Domaren dömer.",
   "ee": "The judge rules.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.82
 }, {
   "id": 2287,
   "sv": "signal",
@@ -13899,7 +15345,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Signalen ges.",
   "ee": "The signal is given.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.8
 }, {
   "id": 2292,
   "sv": "rättegång",
@@ -13908,7 +15355,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Rättegången börjar.",
   "ee": "The trial begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.75
 }, {
   "id": 2298,
   "sv": "försäkring",
@@ -13917,7 +15365,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Försäkringen gäller.",
   "ee": "The insurance applies.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.67
 }, {
   "id": 2311,
   "sv": "utrustning",
@@ -13926,7 +15375,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Utrustningen används.",
   "ee": "The equipment is used.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.48
 }, {
   "id": 2315,
   "sv": "kök",
@@ -13937,7 +15387,8 @@ const VOCAB = [{
   "es": "Köket är nytt.",
   "ee": "The kitchen is new.",
   "ch": 11,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.43
 }, {
   "id": 2317,
   "sv": "visst",
@@ -13945,7 +15396,8 @@ const VOCAB = [{
   "t": "i",
   "es": "Visst är det sant.",
   "ee": "Certainly it is true.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.4
 }, {
   "id": 2328,
   "sv": "symbol",
@@ -13954,7 +15406,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Symbolen betyder något.",
   "ee": "The symbol means something.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 31.17
 }, {
   "id": 2344,
   "sv": "förbättring",
@@ -13963,7 +15416,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Förbättringen syns.",
   "ee": "The improvement is visible.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 30.87
 }, {
   "id": 2362,
   "sv": "omröstning",
@@ -13972,7 +15426,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Omröstningen avslutas.",
   "ee": "The vote concludes.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 30.56
 }, {
   "id": 2367,
   "sv": "stopp",
@@ -13983,7 +15438,8 @@ const VOCAB = [{
   "es": "Stoppet är kort.",
   "ee": "The stop is short.",
   "ch": 18,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 30.49
 }, {
   "id": 2374,
   "sv": "bort",
@@ -13992,7 +15448,8 @@ const VOCAB = [{
   "es": "Han går bort.",
   "ee": "He goes away.",
   "ch": 13,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 30.4
 }, {
   "id": 2385,
   "sv": "utvärdering",
@@ -14001,7 +15458,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Utvärderingen görs.",
   "ee": "The evaluation is done.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 30.3
 }, {
   "id": 2388,
   "sv": "seminarium",
@@ -14012,7 +15470,8 @@ const VOCAB = [{
   "es": "Seminariet startar.",
   "ee": "The seminar starts.",
   "ch": 16,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 30.27
 }, {
   "id": 2401,
   "sv": "adress",
@@ -14021,7 +15480,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Adressen ändras.",
   "ee": "The address changes.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 29.89
 }, {
   "id": 2406,
   "sv": "kontrakt",
@@ -14030,7 +15490,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Kontraktet skrivs.",
   "ee": "The contract is signed.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 29.78
 }, {
   "id": 2410,
   "sv": "röstning",
@@ -14039,7 +15500,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Röstningen sker.",
   "ee": "The voting takes place.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 29.75
 }, {
   "id": 2425,
   "sv": "smak",
@@ -14050,7 +15512,8 @@ const VOCAB = [{
   "es": "Smaken är god.",
   "ee": "The taste is good.",
   "ch": 12,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 29.35
 }, {
   "id": 2426,
   "sv": "order",
@@ -14059,7 +15522,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ordern skickas.",
   "ee": "The order is sent.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 29.34
 }, {
   "id": 2430,
   "sv": "absolut",
@@ -14068,7 +15532,8 @@ const VOCAB = [{
   "es": "Ja absolut.",
   "ee": "Yes absolutely.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 29.29
 }, {
   "id": 2463,
   "sv": "recension",
@@ -14077,7 +15542,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Recensionen publiceras.",
   "ee": "The review is published.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 28.65
 }, {
   "id": 2464,
   "sv": "till",
@@ -14086,7 +15552,8 @@ const VOCAB = [{
   "es": "Vi går till skolan.",
   "ee": "We go to school.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 28.65
 }, {
   "id": 2469,
   "sv": "förbindelse",
@@ -14095,7 +15562,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Förbindelsen etableras.",
   "ee": "The connection is established.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 28.54
 }, {
   "id": 2474,
   "sv": "cykel",
@@ -14104,7 +15572,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Cykeln är snabb.",
   "ee": "The bicycle is fast.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 28.46
 }, {
   "id": 2475,
   "sv": "design",
@@ -14115,7 +15584,8 @@ const VOCAB = [{
   "es": "Designen är modern.",
   "ee": "The design is modern.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 28.45
 }, {
   "id": 2499,
   "sv": "planering",
@@ -14124,7 +15594,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Planeringen börjar.",
   "ee": "Planning begins.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 28.05
 }, {
   "id": 2516,
   "sv": "frukost",
@@ -14135,7 +15606,8 @@ const VOCAB = [{
   "es": "Jag äter frukost.",
   "ee": "I eat breakfast.",
   "ch": 3,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 27.59
 }, {
   "id": 2519,
   "sv": "prognos",
@@ -14146,7 +15618,8 @@ const VOCAB = [{
   "es": "Prognosen publiceras.",
   "ee": "The forecast is published.",
   "ch": 9,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 27.55
 }, {
   "id": 2521,
   "sv": "advokat",
@@ -14157,7 +15630,8 @@ const VOCAB = [{
   "es": "Advokaten försvarar.",
   "ee": "The lawyer defends.",
   "ch": 1,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 27.53
 }, {
   "id": 2525,
   "sv": "regn",
@@ -14168,7 +15642,8 @@ const VOCAB = [{
   "es": "Regnet faller.",
   "ee": "The rain falls.",
   "ch": 8,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 27.44
 }, {
   "id": 2529,
   "sv": "fabrik",
@@ -14179,7 +15654,8 @@ const VOCAB = [{
   "es": "Fabriken producerar.",
   "ee": "The factory produces.",
   "ch": 6,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 27.37
 }, {
   "id": 2607,
   "sv": "moderat",
@@ -14187,7 +15663,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Han är moderat.",
   "ee": "He is a moderate.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 26.38
 }, {
   "id": 2608,
   "sv": "data",
@@ -14195,7 +15672,8 @@ const VOCAB = [{
   "t": "n",
   "es": "Data analyseras.",
   "ee": "Data are analyzed.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 26.32
 }, {
   "id": 2617,
   "sv": "regelverk",
@@ -14204,7 +15682,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Regelverket följs.",
   "ee": "The regulations are followed.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 26.23
 }, {
   "id": 2619,
   "sv": "vittne",
@@ -14213,7 +15692,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vittnet talar.",
   "ee": "The witness speaks.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 26.21
 }, {
   "id": 2620,
   "sv": "ljus",
@@ -14223,7 +15703,8 @@ const VOCAB = [{
   "es": "Ljuset tänds.",
   "ee": "The light turns on.",
   "ch": 7,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 26.17
 }, {
   "id": 2659,
   "sv": "konto",
@@ -14234,7 +15715,8 @@ const VOCAB = [{
   "es": "Jag öppnar konto.",
   "ee": "I open an account.",
   "ch": 20,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 25.67
 }, {
   "id": 2660,
   "sv": "ju",
@@ -14242,7 +15724,8 @@ const VOCAB = [{
   "t": "c",
   "es": "Det är ju sant.",
   "ee": "It is true after all.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 25.65
 }, {
   "id": 2666,
   "sv": "paket",
@@ -14253,7 +15736,8 @@ const VOCAB = [{
   "es": "Paketet levereras.",
   "ee": "The package is delivered.",
   "ch": 2,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 25.51
 }, {
   "id": 2678,
   "sv": "bro",
@@ -14264,7 +15748,8 @@ const VOCAB = [{
   "es": "Bron är gammal.",
   "ee": "The bridge is old.",
   "ch": 9,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 25.37
 }, {
   "id": 2688,
   "sv": "tystnad",
@@ -14273,7 +15758,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Tystnaden varar.",
   "ee": "The silence lasts.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 25.3
 }, {
   "id": 2695,
   "sv": "flygplan",
@@ -14282,7 +15768,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Flygplanet lyfter.",
   "ee": "The airplane takes off.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 25.2
 }, {
   "id": 2739,
   "sv": "flyg",
@@ -14293,7 +15780,8 @@ const VOCAB = [{
   "es": "Flyget landar.",
   "ee": "The flight lands.",
   "ch": 9,
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 24.66
 }, {
   "id": 2789,
   "sv": "opinion",
@@ -14302,7 +15790,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Opinionen förändras.",
   "ee": "The opinion changes.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 23.75
 }, {
   "id": 2795,
   "sv": "vidare",
@@ -14310,7 +15799,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi går vidare.",
   "ee": "We go further.",
-  "lv": "A2"
+  "lv": "A2",
+  "wpm": 23.71
 }, {
   "id": 2814,
   "sv": "agenda",
@@ -14319,7 +15809,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Agendan godkänns.",
   "ee": "The agenda is approved.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 23.43
 }, {
   "id": 2838,
   "sv": "resolution",
@@ -14328,7 +15819,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Resolutionen antas.",
   "ee": "The resolution is adopted.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 23.04
 }, {
   "id": 2855,
   "sv": "lektion",
@@ -14339,7 +15831,8 @@ const VOCAB = [{
   "es": "Lektionen är lång.",
   "ee": "The lesson is long.",
   "ch": 15,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 22.89
 }, {
   "id": 2860,
   "sv": "teater",
@@ -14350,7 +15843,8 @@ const VOCAB = [{
   "es": "Teatern öppnar.",
   "ee": "The theater opens.",
   "ch": 5,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 22.82
 }, {
   "id": 2889,
   "sv": "potential",
@@ -14359,7 +15853,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Potentialen är stor.",
   "ee": "The potential is large.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 22.48
 }, {
   "id": 2892,
   "sv": "biljett",
@@ -14370,7 +15865,8 @@ const VOCAB = [{
   "es": "Biljetten kontrolleras.",
   "ee": "The ticket is checked.",
   "ch": 5,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 22.43
 }, {
   "id": 2926,
   "sv": "ton",
@@ -14379,7 +15875,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Tonen är vänlig.",
   "ee": "The tone is friendly.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 22.11
 }, {
   "id": 2929,
   "sv": "station",
@@ -14390,7 +15887,8 @@ const VOCAB = [{
   "es": "Vi möts på stationen.",
   "ee": "We meet at the station.",
   "ch": 9,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 22.08
 }, {
   "id": 2935,
   "sv": "brand",
@@ -14399,7 +15897,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Branden släcks.",
   "ee": "The fire is extinguished.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 21.99
 }, {
   "id": 2941,
   "sv": "motor",
@@ -14408,7 +15907,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Motoren startar.",
   "ee": "The engine starts.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 21.82
 }, {
   "id": 2945,
   "sv": "äventyr",
@@ -14417,7 +15917,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Äventyret börjar.",
   "ee": "The adventure begins.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 21.8
 }, {
   "id": 2950,
   "sv": "paragraf",
@@ -14426,7 +15927,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Paragrafen citeras.",
   "ee": "The paragraph is cited.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 21.73
 }, {
   "id": 2970,
   "sv": "lager",
@@ -14435,7 +15937,8 @@ const VOCAB = [{
   "g": "ett",
   "c": "(lagret, −, lagren)",
   "ch": 15,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 21.45
 }, {
   "id": 2979,
   "sv": "hastighet",
@@ -14444,7 +15947,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hastigheten ökar.",
   "ee": "The speed increases.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 21.38
 }, {
   "id": 3010,
   "sv": "mätning",
@@ -14453,7 +15957,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Mätningen upprepas.",
   "ee": "The measurement is repeated.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 21.02
 }, {
   "id": 3024,
   "sv": "föreläsning",
@@ -14464,7 +15969,8 @@ const VOCAB = [{
   "es": "Föreläsningen börjar.",
   "ee": "The lecture begins.",
   "ch": 9,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 20.77
 }, {
   "id": 3032,
   "sv": "tills",
@@ -14472,7 +15978,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi väntar tills imorgon.",
   "ee": "We wait until tomorrow.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 20.69
 }, {
   "id": 3044,
   "sv": "inne",
@@ -14481,7 +15988,8 @@ const VOCAB = [{
   "es": "Han är inne.",
   "ee": "He is inside.",
   "ch": 11,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 20.48
 }, {
   "id": 3066,
   "sv": "djup",
@@ -14490,7 +15998,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Sjön är djup.",
   "ee": "The lake is deep.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 20.27
 }, {
   "id": 3101,
   "sv": "sömn",
@@ -14499,7 +16008,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Sömnen förbättras.",
   "ee": "Sleep improves.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 19.96
 }, {
   "id": 3112,
   "sv": "experiment",
@@ -14510,7 +16020,8 @@ const VOCAB = [{
   "es": "Experimentet lyckas.",
   "ee": "The experiment succeeds.",
   "ch": 5,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 19.82
 }, {
   "id": 3131,
   "sv": "exakt",
@@ -14520,7 +16031,8 @@ const VOCAB = [{
   "es": "Resultatet är exakt.",
   "ee": "The result is exact.",
   "ch": 10,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 19.65
 }, {
   "id": 3168,
   "sv": "presentation",
@@ -14529,7 +16041,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Presentationen visas.",
   "ee": "The presentation is shown.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 19.28
 }, {
   "id": 3169,
   "sv": "stress",
@@ -14540,7 +16053,8 @@ const VOCAB = [{
   "es": "Stress minskar.",
   "ee": "Stress decreases.",
   "ch": 19,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 19.27
 }, {
   "id": 3178,
   "sv": "valrörelse",
@@ -14549,7 +16063,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Valrörelsen börjar.",
   "ee": "The election campaign begins.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 19.2
 }, {
   "id": 3219,
   "sv": "godkännande",
@@ -14558,7 +16073,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Godkännandet ges.",
   "ee": "Approval is granted.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 18.8
 }, {
   "id": 3224,
   "sv": "stycke",
@@ -14567,7 +16083,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Stycket skrivs.",
   "ee": "The paragraph is written.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 18.73
 }, {
   "id": 3227,
   "sv": "kant",
@@ -14576,7 +16093,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Kanten är skarp.",
   "ee": "The edge is sharp.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 18.68
 }, {
   "id": 3250,
   "sv": "studio",
@@ -14587,7 +16105,8 @@ const VOCAB = [{
   "es": "Studion är redo.",
   "ee": "The studio is ready.",
   "ch": 3,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 18.46
 }, {
   "id": 3258,
   "sv": "reportage",
@@ -14596,7 +16115,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Reportaget visas.",
   "ee": "The report is shown.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 18.34
 }, {
   "id": 3269,
   "sv": "vid",
@@ -14605,7 +16125,8 @@ const VOCAB = [{
   "es": "Vi sitter vid bordet.",
   "ee": "We sit at the table.",
   "ch": 3,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 18.24
 }, {
   "id": 3305,
   "sv": "vis",
@@ -14613,7 +16134,8 @@ const VOCAB = [{
   "t": "a",
   "es": "På detta vis fungerar det.",
   "ee": "In this way it works.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.93
 }, {
   "id": 3310,
   "sv": "bokstav",
@@ -14624,7 +16146,8 @@ const VOCAB = [{
   "es": "Bokstaven skrivs.",
   "ee": "The letter is written.",
   "ch": 4,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.89
 }, {
   "id": 3316,
   "sv": "test",
@@ -14633,7 +16156,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi skriver ett test.",
   "ee": "We write a test.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.8
 }, {
   "id": 3348,
   "sv": "skratt",
@@ -14642,7 +16166,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Skrattet sprider sig.",
   "ee": "The laughter spreads.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.58
 }, {
   "id": 3358,
   "sv": "leverantör",
@@ -14651,7 +16176,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Leverantören levererar.",
   "ee": "The supplier delivers.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.46
 }, {
   "id": 3374,
   "sv": "innan",
@@ -14659,7 +16185,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Vi äter innan filmen.",
   "ee": "We eat before the movie.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.32
 }, {
   "id": 3386,
   "sv": "innovation",
@@ -14668,7 +16195,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Innovationen sprids.",
   "ee": "The innovation spreads.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.23
 }, {
   "id": 3388,
   "sv": "uppföljning",
@@ -14677,7 +16205,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Uppföljningen görs.",
   "ee": "The follow-up is done.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.21
 }, {
   "id": 3392,
   "sv": "innan",
@@ -14685,7 +16214,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Vi äter innan filmen.",
   "ee": "We eat before the movie.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 17.15
 }, {
   "id": 3416,
   "sv": "mobil",
@@ -14693,7 +16223,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Mobilen är ny.",
   "ee": "The phone is new.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.93
 }, {
   "id": 3418,
   "sv": "ett",
@@ -14702,7 +16233,8 @@ const VOCAB = [{
   "es": "Jag har ett äpple.",
   "ee": "I have one apple.",
   "ch": 1,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.92
 }, {
   "id": 3421,
   "sv": "rösträtt",
@@ -14711,7 +16243,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Rösträtten skyddas.",
   "ee": "Voting rights are protected.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.89
 }, {
   "id": 3428,
   "sv": "livsstil",
@@ -14720,7 +16253,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Livsstilen ändras.",
   "ee": "Lifestyle changes.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.85
 }, {
   "id": 3450,
   "sv": "mjölk",
@@ -14731,7 +16265,8 @@ const VOCAB = [{
   "es": "Barnet dricker mjölk.",
   "ee": "The child drinks milk.",
   "ch": 4,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.68
 }, {
   "id": 3451,
   "sv": "policy",
@@ -14740,7 +16275,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Policyn uppdateras.",
   "ee": "The policy is updated.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.68
 }, {
   "id": 3464,
   "sv": "inspelning",
@@ -14749,7 +16285,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Inspelningen börjar.",
   "ee": "The recording begins.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.53
 }, {
   "id": 3492,
   "sv": "delegation",
@@ -14758,7 +16295,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Delegationen reser.",
   "ee": "The delegation travels.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 16.19
 }, {
   "id": 3516,
   "sv": "entreprenör",
@@ -14769,7 +16307,8 @@ const VOCAB = [{
   "es": "Entreprenören startar företag.",
   "ee": "The entrepreneur starts a company.",
   "ch": 18,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 15.98
 }, {
   "id": 3563,
   "sv": "rapportering",
@@ -14778,7 +16317,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Rapporteringen sker.",
   "ee": "The reporting occurs.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 15.6
 }, {
   "id": 3594,
   "sv": "passagerare",
@@ -14787,7 +16327,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Passageraren väntar.",
   "ee": "The passenger waits.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 15.38
 }, {
   "id": 3632,
   "sv": "teknologi",
@@ -14796,7 +16337,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Teknologin utvecklas.",
   "ee": "The technology develops.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 15.17
 }, {
   "id": 3652,
   "sv": "handlingsplan",
@@ -14805,7 +16347,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Handlingsplanen skrivs.",
   "ee": "The action plan is written.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 15.09
 }, {
   "id": 3687,
   "sv": "ton",
@@ -14816,7 +16359,8 @@ const VOCAB = [{
   "es": "Tonen är vänlig.",
   "ee": "The tone is friendly.",
   "ch": 2,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 14.81
 }, {
   "id": 3711,
   "sv": "upptäckt",
@@ -14825,7 +16369,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Upptäckten publiceras.",
   "ee": "The discovery is published.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 14.72
 }, {
   "id": 3745,
   "sv": "marknadsekonomi",
@@ -14834,7 +16379,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Marknadsekonomin förändras.",
   "ee": "The market economy changes.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 14.46
 }, {
   "id": 3782,
   "sv": "lista",
@@ -14844,7 +16390,8 @@ const VOCAB = [{
   "es": "Jag gör en lista.",
   "ee": "I make a list.",
   "ch": 2,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 14.2
 }, {
   "id": 3799,
   "sv": "uppskattning",
@@ -14853,7 +16400,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Uppskattningen revideras.",
   "ee": "The estimate is revised.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 14.07
 }, {
   "id": 3857,
   "sv": "styrka",
@@ -14861,7 +16409,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Hon har stor styrka.",
   "ee": "She has great strength.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 13.77
 }, {
   "id": 3862,
   "sv": "val",
@@ -14870,7 +16419,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Valet är viktigt.",
   "ee": "The election is important.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 13.73
 }, {
   "id": 3891,
   "sv": "mobil",
@@ -14881,7 +16431,8 @@ const VOCAB = [{
   "es": "Mobilen är ny.",
   "ee": "The phone is new.",
   "ch": 1,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 13.55
 }, {
   "id": 3894,
   "sv": "skärm",
@@ -14892,7 +16443,8 @@ const VOCAB = [{
   "es": "Skärmen lyser.",
   "ee": "The screen lights up.",
   "ch": 11,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 13.54
 }, {
   "id": 3913,
   "sv": "avhandling",
@@ -14901,7 +16453,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Avhandlingen skrivs.",
   "ee": "The dissertation is written.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 13.44
 }, {
   "id": 3953,
   "sv": "hypotes",
@@ -14910,7 +16463,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Hypotesen testas.",
   "ee": "The hypothesis is tested.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 13.18
 }, {
   "id": 3955,
   "sv": "stämma",
@@ -14921,7 +16475,8 @@ const VOCAB = [{
   "es": "Det stämmer.",
   "ee": "That is correct.",
   "ch": 16,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 13.18
 }, {
   "id": 4006,
   "sv": "hjul",
@@ -14930,7 +16485,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Hjulet snurrar.",
   "ee": "The wheel spins.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 12.89
 }, {
   "id": 4047,
   "sv": "minut (förk. min.)",
@@ -14939,7 +16495,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Vänta en minut.",
   "ee": "Wait a minute.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 12.69
 }, {
   "id": 4058,
   "sv": "leverans",
@@ -14950,7 +16507,8 @@ const VOCAB = [{
   "es": "Leveransen anländer.",
   "ee": "The delivery arrives.",
   "ch": 18,
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 12.62
 }, {
   "id": 4090,
   "sv": "besättning",
@@ -14959,7 +16517,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Besättningen arbetar.",
   "ee": "The crew works.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 12.46
 }, {
   "id": 4148,
   "sv": "ankomst",
@@ -14968,7 +16527,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ankomsten sker snart.",
   "ee": "The arrival happens soon.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 12.18
 }, {
   "id": 4162,
   "sv": "doft",
@@ -14977,7 +16537,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Doften sprider sig.",
   "ee": "The smell spreads.",
-  "lv": "B1"
+  "lv": "B1",
+  "wpm": 12.12
 }, {
   "id": 4253,
   "sv": "evenemang",
@@ -14986,7 +16547,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Evenemanget börjar.",
   "ee": "The event begins.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 11.69
 }, {
   "id": 4273,
   "sv": "partnerskap",
@@ -14995,7 +16557,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Partnerskapet stärks.",
   "ee": "The partnership strengthens.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 11.58
 }, {
   "id": 4327,
   "sv": "observation",
@@ -15004,7 +16567,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Observationen rapporteras.",
   "ee": "The observation is reported.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 11.31
 }, {
   "id": 4359,
   "sv": "sändning",
@@ -15015,7 +16579,8 @@ const VOCAB = [{
   "es": "Sändningen startar.",
   "ee": "The broadcast starts.",
   "ch": 20,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 11.18
 }, {
   "id": 4362,
   "sv": "rabatt",
@@ -15024,7 +16589,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Jag fick rabatt.",
   "ee": "I got a discount.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 11.17
 }, {
   "id": 4400,
   "sv": "fras",
@@ -15035,7 +16601,8 @@ const VOCAB = [{
   "es": "Frasen upprepas.",
   "ee": "The phrase repeats.",
   "ch": 2,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 10.97
 }, {
   "id": 4414,
   "sv": "ringa",
@@ -15045,7 +16612,8 @@ const VOCAB = [{
   "es": "Jag ringer dig.",
   "ee": "I call you.",
   "ch": 3,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 10.93
 }, {
   "id": 4474,
   "sv": "liksom",
@@ -15053,14 +16621,16 @@ const VOCAB = [{
   "t": "s",
   "es": "Han arbetar liksom jag.",
   "ee": "He works like me.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 10.64
 }, {
   "id": 4525,
   "sv": "föda",
   "en": "to give birth",
   "t": "n",
   "g": "en",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 10.47
 }, {
   "id": 4596,
   "sv": "examen",
@@ -15071,7 +16641,8 @@ const VOCAB = [{
   "es": "Examen erhålls.",
   "ee": "The degree is obtained.",
   "ch": 6,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 10.17
 }, {
   "id": 4608,
   "sv": "beställning",
@@ -15080,7 +16651,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Beställningen kommer.",
   "ee": "The order arrives.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 10.12
 }, {
   "id": 4628,
   "sv": "inbjudan",
@@ -15090,7 +16662,8 @@ const VOCAB = [{
   "es": "Inbjudan skickas.",
   "ee": "The invitation is sent.",
   "ch": 14,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 10.03
 }, {
   "id": 4700,
   "sv": "rätta",
@@ -15098,7 +16671,8 @@ const VOCAB = [{
   "t": "n",
   "es": "Läraren rättar provet.",
   "ee": "The teacher corrects the test.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 9.72
 }, {
   "id": 4777,
   "sv": "meny",
@@ -15109,7 +16683,8 @@ const VOCAB = [{
   "es": "Menyn är lång.",
   "ee": "The menu is long.",
   "ch": 4,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 9.45
 }, {
   "id": 4782,
   "sv": "publikation",
@@ -15118,7 +16693,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Publikationen släpps.",
   "ee": "The publication is released.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 9.44
 }, {
   "id": 4791,
   "sv": "jag",
@@ -15128,7 +16704,8 @@ const VOCAB = [{
   "es": "Jag bor i Stockholm.",
   "ee": "I live in Stockholm.",
   "ch": 1,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 9.39
 }, {
   "id": 4815,
   "sv": "ovan",
@@ -15136,7 +16713,8 @@ const VOCAB = [{
   "t": "p",
   "es": "Texten står ovan.",
   "ee": "The text stands above.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 9.28
 }, {
   "id": 4906,
   "sv": "för",
@@ -15146,7 +16724,8 @@ const VOCAB = [{
   "es": "Detta är för dig.",
   "ee": "This is for you.",
   "ch": 1,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.96
 }, {
   "id": 4922,
   "sv": "räddning",
@@ -15155,7 +16734,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Räddningen lyckas.",
   "ee": "The rescue succeeds.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.92
 }, {
   "id": 4926,
   "sv": "mode",
@@ -15166,7 +16746,8 @@ const VOCAB = [{
   "es": "Modet förändras.",
   "ee": "Fashion changes.",
   "ch": 7,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.89
 }, {
   "id": 4927,
   "sv": "programledare",
@@ -15175,7 +16756,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Programledaren talar.",
   "ee": "The host speaks.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.89
 }, {
   "id": 4947,
   "sv": "lik",
@@ -15184,7 +16766,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "De två husen är lika.",
   "ee": "The two houses are similar.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.81
 }, {
   "id": 4969,
   "sv": "popularitet",
@@ -15193,7 +16776,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Populariteten ökar.",
   "ee": "Popularity increases.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.75
 }, {
   "id": 5024,
   "sv": "applåd",
@@ -15204,7 +16788,8 @@ const VOCAB = [{
   "es": "Applåden hörs.",
   "ee": "The applause is heard.",
   "ch": 8,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.54
 }, {
   "id": 5029,
   "sv": "slut",
@@ -15214,7 +16799,8 @@ const VOCAB = [{
   "es": "Filmen har ett slut.",
   "ee": "The film has an end.",
   "ch": 2,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.53
 }, {
   "id": 5054,
   "sv": "badrum",
@@ -15225,7 +16811,8 @@ const VOCAB = [{
   "es": "Badrummet är litet.",
   "ee": "The bathroom is small.",
   "ch": 17,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.44
 }, {
   "id": 5056,
   "sv": "sovrum",
@@ -15234,7 +16821,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Sovrummet är lugnt.",
   "ee": "The bedroom is quiet.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.44
 }, {
   "id": 5089,
   "sv": "respons",
@@ -15245,7 +16833,8 @@ const VOCAB = [{
   "es": "Responsen är snabb.",
   "ee": "The response is quick.",
   "ch": 2,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.35
 }, {
   "id": 5095,
   "sv": "bara",
@@ -15254,7 +16843,8 @@ const VOCAB = [{
   "es": "Jag vill bara sova.",
   "ee": "I only want to sleep.",
   "ch": 7,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.32
 }, {
   "id": 5116,
   "sv": "bagage",
@@ -15265,7 +16855,8 @@ const VOCAB = [{
   "es": "Bagaget hämtas.",
   "ee": "The luggage is collected.",
   "ch": 7,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.28
 }, {
   "id": 5170,
   "sv": "markering",
@@ -15276,7 +16867,8 @@ const VOCAB = [{
   "es": "Markeringen syns.",
   "ee": "The mark is visible.",
   "ch": 2,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.12
 }, {
   "id": 5202,
   "sv": "inspektion",
@@ -15285,7 +16877,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Inspektionen genomförs.",
   "ee": "The inspection is conducted.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 8.05
 }, {
   "id": 5266,
   "sv": "pilot",
@@ -15296,7 +16889,8 @@ const VOCAB = [{
   "es": "Piloten talar.",
   "ee": "The pilot speaks.",
   "ch": 13,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 7.88
 }, {
   "id": 5284,
   "sv": "gud",
@@ -15304,7 +16898,8 @@ const VOCAB = [{
   "t": "i",
   "es": "De tror på en gud.",
   "ee": "They believe in a god.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 7.82
 }, {
   "id": 5458,
   "sv": "magasin",
@@ -15313,7 +16908,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Magasinet säljs.",
   "ee": "The magazine sells.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 7.39
 }, {
   "id": 5479,
   "sv": "sex",
@@ -15322,7 +16918,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi är sex personer här.",
   "ee": "There are six people here.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 7.35
 }, {
   "id": 5494,
   "sv": "nej",
@@ -15332,7 +16929,8 @@ const VOCAB = [{
   "es": "Nej",
   "ee": "jag vill inte.",
   "ch": 1,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 7.32
 }, {
   "id": 5536,
   "sv": "språkbruk",
@@ -15341,7 +16939,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Språkbruket varierar.",
   "ee": "Language use varies.",
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 7.23
 }, {
   "id": 5578,
   "sv": "central",
@@ -15352,7 +16951,8 @@ const VOCAB = [{
   "es": "Det är en central fråga.",
   "ee": "It is a central issue.",
   "ch": 18,
-  "lv": "B2"
+  "lv": "B2",
+  "wpm": 7.15
 }, {
   "id": 5621,
   "sv": "trots",
@@ -15362,7 +16962,8 @@ const VOCAB = [{
   "es": "Vi går trots regnet.",
   "ee": "We go despite the rain.",
   "ch": 18,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 7.05
 }, {
   "id": 5674,
   "sv": "mus",
@@ -15373,7 +16974,8 @@ const VOCAB = [{
   "es": "Musen rör sig.",
   "ee": "The mouse moves.",
   "ch": 11,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.96
 }, {
   "id": 5755,
   "sv": "hög",
@@ -15384,7 +16986,8 @@ const VOCAB = [{
   "es": "Huset är högt.",
   "ee": "The house is tall.",
   "ch": 17,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.77
 }, {
   "id": 5760,
   "sv": "utifrån",
@@ -15393,13 +16996,15 @@ const VOCAB = [{
   "es": "Han ser det utifrån.",
   "ee": "He sees it from outside.",
   "ch": 13,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.76
 }, {
   "id": 5797,
   "sv": "vika",
   "en": "to fold",
   "t": "a",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.69
 }, {
   "id": 5813,
   "sv": "måste",
@@ -15409,7 +17014,8 @@ const VOCAB = [{
   "es": "Jag måste gå.",
   "ee": "I must go.",
   "ch": 4,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.66
 }, {
   "id": 5880,
   "sv": "parameter",
@@ -15418,7 +17024,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Parametern justeras.",
   "ee": "The parameter is adjusted.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.54
 }, {
   "id": 5946,
   "sv": "session",
@@ -15427,7 +17034,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Sessionen öppnas.",
   "ee": "The session opens.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.46
 }, {
   "id": 5952,
   "sv": "utanför",
@@ -15436,7 +17044,8 @@ const VOCAB = [{
   "es": "Han väntar utanför huset.",
   "ee": "He waits outside the house.",
   "ch": 3,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.45
 }, {
   "id": 5957,
   "sv": "firande",
@@ -15444,7 +17053,8 @@ const VOCAB = [{
   "t": "n",
   "es": "Firandet börjar.",
   "ee": "The celebration begins.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.43
 }, {
   "id": 5990,
   "sv": "handledare",
@@ -15453,7 +17063,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Handledaren ger råd.",
   "ee": "The supervisor gives advice.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.37
 }, {
   "id": 5993,
   "sv": "media",
@@ -15461,14 +17072,16 @@ const VOCAB = [{
   "t": "n",
   "es": "Media rapporterar.",
   "ee": "The media report.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.37
 }, {
   "id": 5997,
   "sv": "röra",
   "en": "to move / touch",
   "t": "n",
   "g": "en",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.37
 }, {
   "id": 6013,
   "sv": "destination",
@@ -15479,7 +17092,8 @@ const VOCAB = [{
   "es": "Destinationen nås.",
   "ee": "The destination is reached.",
   "ch": 8,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.34
 }, {
   "id": 6026,
   "sv": "procedur",
@@ -15488,7 +17102,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Proceduren följs.",
   "ee": "The procedure is followed.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.32
 }, {
   "id": 6046,
   "sv": "nu",
@@ -15498,7 +17113,8 @@ const VOCAB = [{
   "es": "Jag arbetar nu.",
   "ee": "I work now.",
   "ch": 1,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.28
 }, {
   "id": 6099,
   "sv": "ambulans",
@@ -15507,7 +17123,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Ambulansen kommer.",
   "ee": "The ambulance arrives.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.21
 }, {
   "id": 6124,
   "sv": "tangentbord",
@@ -15518,7 +17135,8 @@ const VOCAB = [{
   "es": "Tangentbordet klickar.",
   "ee": "The keyboard clicks.",
   "ch": 11,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 6.18
 }, {
   "id": 6284,
   "sv": "stavning",
@@ -15527,7 +17145,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Stavningen kontrolleras.",
   "ee": "The spelling is checked.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 5.75
 }, {
   "id": 6373,
   "sv": "bokhandel",
@@ -15536,7 +17155,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Bokhandeln öppnar.",
   "ee": "The bookstore opens.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 5.43
 }, {
   "id": 6447,
   "sv": "variabel",
@@ -15545,7 +17165,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Variabeln ändras.",
   "ee": "The variable changes.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 5.18
 }, {
   "id": 6704,
   "sv": "brandman",
@@ -15554,7 +17175,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Brandmannen arbetar.",
   "ee": "The firefighter works.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 4.33
 }, {
   "id": 6709,
   "sv": "broms",
@@ -15563,7 +17185,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Bromsen används.",
   "ee": "The brake is used.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 4.32
 }, {
   "id": 6901,
   "sv": "landning",
@@ -15572,7 +17195,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Landningen sker.",
   "ee": "The landing occurs.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 3.71
 }, {
   "id": 6924,
   "sv": "kafé (el. café)",
@@ -15581,7 +17205,8 @@ const VOCAB = [{
   "g": "ett",
   "es": "Vi möts på ett kafé.",
   "ee": "We meet at a café.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 3.66
 }, {
   "id": 6963,
   "sv": "klausul",
@@ -15590,7 +17215,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Klausulen diskuteras.",
   "ee": "The clause is discussed.",
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 3.56
 }, {
   "id": 7010,
   "sv": "mapp",
@@ -15601,7 +17227,8 @@ const VOCAB = [{
   "es": "Mappen öppnas.",
   "ee": "The folder opens.",
   "ch": 11,
-  "lv": "C1"
+  "lv": "C1",
+  "wpm": 3.44
 }, {
   "id": 7108,
   "sv": "avresa",
@@ -15610,7 +17237,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Avresan närmar sig.",
   "ee": "The departure approaches.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 3.19
 }, {
   "id": 7126,
   "sv": "bokning",
@@ -15619,7 +17247,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Bokningen bekräftas.",
   "ee": "The booking is confirmed.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 3.14
 }, {
   "id": 7166,
   "sv": "underskrift",
@@ -15628,7 +17257,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Underskriften behövs.",
   "ee": "The signature is needed.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 3.06
 }, {
   "id": 7431,
   "sv": "simulering",
@@ -15637,7 +17267,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Simuleringen körs.",
   "ee": "The simulation runs.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 2.52
 }, {
   "id": 7452,
   "sv": "dricks",
@@ -15648,7 +17279,8 @@ const VOCAB = [{
   "es": "Han lämnar dricks.",
   "ee": "He leaves a tip.",
   "ch": 8,
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 2.45
 }, {
   "id": 7456,
   "sv": "algoritm",
@@ -15657,7 +17289,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Algoritmen förbättras.",
   "ee": "The algorithm improves.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 2.42
 }, {
   "id": 7503,
   "sv": "startpunkt",
@@ -15666,7 +17299,8 @@ const VOCAB = [{
   "g": "en",
   "es": "Startpunkten är här.",
   "ee": "The starting point is here.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 2.33
 }, {
   "id": 7858,
   "sv": "servitör",
@@ -15677,7 +17311,8 @@ const VOCAB = [{
   "es": "Servitören hjälper oss.",
   "ee": "The waiter helps us.",
   "ch": 1,
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 1.47
 }, {
   "id": 8195,
   "sv": "variabel",
@@ -15685,7 +17320,8 @@ const VOCAB = [{
   "t": "a",
   "es": "Variabeln ändras.",
   "ee": "The variable changes.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 0.63
 }, {
   "id": 8314,
   "sv": "avresa",
@@ -15693,7 +17329,8 @@ const VOCAB = [{
   "t": "v",
   "es": "Avresan närmar sig.",
   "ee": "The departure approaches.",
-  "lv": "C2"
+  "lv": "C2",
+  "wpm": 0.33
 }, {
   "id": 8426,
   "sv": "Ursäkta.",
@@ -23564,6 +25201,74 @@ const VOCAB = [{
   "ch": 20
 }];
 const VOCAB_BY_ID = new Map(VOCAB.map(v => [v.id, v]));
+const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const MILESTONES = [50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000];
+function computeProgressStats(vocab, srs) {
+  const cefrBuckets = {};
+  CEFR_LEVELS.forEach(l => {
+    cefrBuckets[l] = {
+      total: 0,
+      learned: 0
+    };
+  });
+  const rivstartBucket = {
+    total: 0,
+    learned: 0
+  };
+  let totalWpm = 0,
+    learnedWpm = 0,
+    totalLearned = 0;
+  for (const item of vocab) {
+    const isLearned = !!srs[item.id];
+    if (isLearned) totalLearned++;
+    if (item.lv && cefrBuckets[item.lv]) {
+      cefrBuckets[item.lv].total++;
+      if (isLearned) cefrBuckets[item.lv].learned++;
+    } else {
+      rivstartBucket.total++;
+      if (isLearned) rivstartBucket.learned++;
+    }
+    if (item.wpm) {
+      totalWpm += item.wpm;
+      if (isLearned) learnedWpm += item.wpm;
+    }
+  }
+  const coveragePct = totalWpm > 0 ? learnedWpm / totalWpm * 100 : 0;
+  return {
+    cefrBuckets,
+    rivstartBucket,
+    coveragePct,
+    totalLearned,
+    total: vocab.length
+  };
+}
+function computeGrowthSeries(srs) {
+  const entries = Object.values(srs);
+  const dated = entries.filter(c => c.graduatedAt).map(c => c.graduatedAt.slice(0, 10));
+  const undatedCount = entries.length - dated.length;
+  const counts = {};
+  dated.forEach(d => {
+    counts[d] = (counts[d] || 0) + 1;
+  });
+  const days = Object.keys(counts).sort();
+  let cumulative = 0;
+  const series = [];
+  if (undatedCount > 0) {
+    cumulative += undatedCount;
+    series.push({
+      label: 'tidigare',
+      cumulative
+    });
+  }
+  days.forEach(d => {
+    cumulative += counts[d];
+    series.push({
+      label: d,
+      cumulative
+    });
+  });
+  return series;
+}
 const WORD_TYPE_LABELS = {
   n: 'noun',
   v: 'verb',
@@ -23658,6 +25363,8 @@ function defaultAppState() {
     // id -> { streak }  (in-progress, not yet graduated)
     todayIntroducedIds: [],
     // ids introduced today, for the Övningar/Matchningsspel pool
+    seenMilestones: [],
+    // milestone thresholds already celebrated (never re-shown)
     requiredReps: 3,
     newIntroducedToday: 0,
     bonusNewToday: 0,
@@ -23757,6 +25464,7 @@ function useAppState(userId) {
       if (s.requiredReps === undefined) s.requiredReps = 3;
       if (s.bonusNewToday === undefined) s.bonusNewToday = 0;
       if (s.todayIntroducedIds === undefined) s.todayIntroducedIds = [];
+      if (s.seenMilestones === undefined) s.seenMilestones = [];
       s = rolloverDay(s);
       if (!cancelled) {
         setState(s);
@@ -23891,6 +25599,7 @@ function OrdforradApp({
   const [extrasSession, setExtrasSession] = useState(null);
   const [scopeOpen, setScopeOpen] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [milestoneToast, setMilestoneToast] = useState(null);
   const chapters = useMemo(() => {
     const set = new Set();
     VOCAB.forEach(v => {
@@ -24040,6 +25749,7 @@ function OrdforradApp({
       const prevStreak = prevEntry.streak || 0;
       let nextEverGoodOrEasy = prevEntry.everGoodOrEasy;
       if (g === 2 || g === 3) nextEverGoodOrEasy = true;
+      let crossedMilestone = null;
       update(prev => {
         const next = {
           ...prev,
@@ -24066,8 +25776,18 @@ function OrdforradApp({
             next.learning = restLearning;
             next.srs = {
               ...prev.srs,
-              [card.id]: gradeCard(undefined, g, now)
+              [card.id]: {
+                ...gradeCard(undefined, g, now),
+                graduatedAt: now.toISOString()
+              }
             };
+            const newTotal = Object.keys(next.srs).length;
+            const seen = prev.seenMilestones || [];
+            const hit = MILESTONES.find(m => newTotal >= m && !seen.includes(m));
+            if (hit) {
+              crossedMilestone = hit;
+              next.seenMilestones = [...seen, hit];
+            }
           } else {
             next.learning = {
               ...prev.learning,
@@ -24080,6 +25800,10 @@ function OrdforradApp({
         }
         return next;
       });
+      if (crossedMilestone) {
+        setMilestoneToast(crossedMilestone);
+        setTimeout(() => setMilestoneToast(null), 4000);
+      }
       let nextQueue = session.queue;
       if (!graduated) {
         nextQueue = [...session.queue];
@@ -24122,7 +25846,11 @@ function OrdforradApp({
     className: "ord-root"
   }, /*#__PURE__*/React.createElement(Style, null), saveError && /*#__PURE__*/React.createElement("div", {
     className: "ord-save-error"
-  }, "Kunde inte spara — kontrollera din internetanslutning"), screen === 'home' && /*#__PURE__*/React.createElement(HomeScreen, {
+  }, "Kunde inte spara — kontrollera din internetanslutning"), milestoneToast && /*#__PURE__*/React.createElement("div", {
+    className: "ord-milestone-toast"
+  }, /*#__PURE__*/React.createElement(Award, {
+    size: 20
+  }), " ", milestoneToast, " ord inlärda! 🎉"), screen === 'home' && /*#__PURE__*/React.createElement(HomeScreen, {
     state: state,
     stats: stats,
     chapters: chapters,
@@ -24149,7 +25877,11 @@ function OrdforradApp({
     setConfirmReset: setConfirmReset,
     onReset: resetProgress,
     userEmail: userEmail,
-    onLogout: onLogout
+    onLogout: onLogout,
+    onOpenProgress: () => setScreen('progress')
+  }), screen === 'progress' && /*#__PURE__*/React.createElement(ProgressScreen, {
+    state: state,
+    onExit: () => setScreen('home')
   }), screen === 'flash' && session && currentCard && /*#__PURE__*/React.createElement(FlashScreen, {
     card: currentCard,
     onGrade: handleFlashGrade,
@@ -24200,7 +25932,8 @@ function HomeScreen({
   setConfirmReset,
   onReset,
   userEmail,
-  onLogout
+  onLogout,
+  onOpenProgress
 }) {
   const scopeLabel = state.scope === 'all' ? 'Alla ord — frequency order' : `Rivstart · Kapitel ${state.scope}`;
   let extrasHelperText = null;
@@ -24241,7 +25974,12 @@ function HomeScreen({
     }),
     value: state.streak,
     label: "day streak"
-  })), /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("button", {
+    className: "ord-progress-link",
+    onClick: onOpenProgress
+  }, /*#__PURE__*/React.createElement(TrendingUp, {
+    size: 15
+  }), " Se dina framsteg"), /*#__PURE__*/React.createElement("div", {
     className: "ord-scope"
   }, /*#__PURE__*/React.createElement("button", {
     className: "ord-scope-btn",
@@ -24436,6 +26174,144 @@ function BoardStat({
   }, value), /*#__PURE__*/React.createElement("div", {
     className: "ord-board-label"
   }, label));
+}
+
+/* ---------------- Progress screen (CEFR breakdown, coverage estimate, growth chart, milestones) ---------------- */
+
+const CEFR_LABELS = {
+  A1: 'A1 · Nybörjare',
+  A2: 'A2',
+  B1: 'B1 · Medel',
+  B2: 'B2',
+  C1: 'C1 · Avancerad',
+  C2: 'C2'
+};
+function ProgressScreen({
+  state,
+  onExit
+}) {
+  const progress = useMemo(() => computeProgressStats(VOCAB, state.srs), [state.srs]);
+  const growthSeries = useMemo(() => computeGrowthSeries(state.srs), [state.srs]);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-screen"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-top"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-exit-btn",
+    onClick: onExit
+  }, /*#__PURE__*/React.createElement(ArrowLeft, {
+    size: 18
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "ord-eyebrow",
+    style: {
+      margin: 0
+    }
+  }, "DINA FRAMSTEG")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-pct"
+  }, progress.coveragePct.toFixed(0), "%"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-label"
+  }, "uppskattad ordtäckning"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-note"
+  }, "Baserat på hur vanliga dina inlärda ord är i vardaglig svenska — ", progress.totalLearned, " av ", progress.total, " ord inlärda totalt.")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-section-title"
+  }, "Nivå (CEFR)"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-cefr-list"
+  }, CEFR_LEVELS.map(lv => {
+    const b = progress.cefrBuckets[lv];
+    if (b.total === 0) return null;
+    const pct = b.learned / b.total * 100;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ord-cefr-row",
+      key: lv
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-cefr-row-top"
+    }, /*#__PURE__*/React.createElement("span", null, CEFR_LABELS[lv]), /*#__PURE__*/React.createElement("span", {
+      className: "ord-cefr-count"
+    }, b.learned, " / ", b.total)), /*#__PURE__*/React.createElement("div", {
+      className: "ord-progress-track"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-progress-fill",
+      style: {
+        width: `${pct}%`
+      }
+    })));
+  }), progress.rivstartBucket.total > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "ord-cefr-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-cefr-row-top"
+  }, /*#__PURE__*/React.createElement("span", null, "Rivstart (ej CEFR-taggat)"), /*#__PURE__*/React.createElement("span", {
+    className: "ord-cefr-count"
+  }, progress.rivstartBucket.learned, " / ", progress.rivstartBucket.total)), /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-track"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-fill",
+    style: {
+      width: `${progress.rivstartBucket.learned / progress.rivstartBucket.total * 100}%`
+    }
+  })))), /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-section-title"
+  }, "Tillväxt över tid"), /*#__PURE__*/React.createElement(GrowthChart, {
+    series: growthSeries
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-section-title"
+  }, "Milstolpar"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-milestone-grid"
+  }, MILESTONES.map(m => {
+    const reached = progress.totalLearned >= m;
+    return /*#__PURE__*/React.createElement("div", {
+      key: m,
+      className: "ord-milestone-badge" + (reached ? ' reached' : '')
+    }, /*#__PURE__*/React.createElement(Award, {
+      size: 16
+    }), /*#__PURE__*/React.createElement("span", null, m));
+  })));
+}
+function GrowthChart({
+  series
+}) {
+  if (series.length < 2) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ord-growth-empty"
+    }, series.length === 0 ? 'Inga ord inlärda ännu — kom igång med flashcards!' : 'Fortsätt öva så växer grafen fram.');
+  }
+  const W = 400,
+    H = 140,
+    PAD = 24;
+  const maxVal = series[series.length - 1].cumulative;
+  const points = series.map((d, i) => {
+    const x = PAD + i / (series.length - 1) * (W - PAD * 2);
+    const y = H - PAD - d.cumulative / maxVal * (H - PAD * 2);
+    return [x, y];
+  });
+  const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const areaD = pathD + ` L${points[points.length - 1][0].toFixed(1)},${H - PAD} L${points[0][0].toFixed(1)},${H - PAD} Z`;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-chart"
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: `0 0 ${W} ${H}`,
+    width: "100%",
+    height: H
+  }, /*#__PURE__*/React.createElement("path", {
+    d: areaD,
+    fill: "rgba(162,62,42,0.1)"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: pathD,
+    fill: "none",
+    stroke: "#A23E2A",
+    strokeWidth: "2.5"
+  }), points.map((p, i) => /*#__PURE__*/React.createElement("circle", {
+    key: i,
+    cx: p[0],
+    cy: p[1],
+    r: i === points.length - 1 ? 4 : 2.5,
+    fill: "#A23E2A"
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-labels"
+  }, /*#__PURE__*/React.createElement("span", null, series[0].label === 'tidigare' ? 'tidigare' : series[0].label), /*#__PURE__*/React.createElement("span", {
+    className: "ord-growth-max"
+  }, maxVal, " ord"), /*#__PURE__*/React.createElement("span", null, series[series.length - 1].label)));
 }
 
 /* ---------------- Shared exercise frame (consistent layout for every type) ---------------- */
@@ -25118,6 +26994,33 @@ function Style() {
 
       @media (prefers-reduced-motion: reduce) { .ord-flap, .ord-progress-fill, .ord-review-progress-fill { transition: none !important; } }
       button:focus-visible, .ord-flap:focus-visible, input:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
+
+      .ord-progress-link { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: none; border: none; color: var(--c-slate); font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; cursor: pointer; padding: 6px; margin-bottom: 20px; text-decoration: underline; text-underline-offset: 3px; }
+      .ord-progress-link:hover { color: var(--c-red); }
+
+      .ord-milestone-toast { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 8px; background: var(--c-forest); color: #F3EFE6; padding: 12px 20px; border-radius: 30px; font-family: var(--font-body); font-weight: 600; font-size: 13.5px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); animation: ord-toast-in .3s ease-out; }
+      @keyframes ord-toast-in { from { opacity: 0; transform: translate(-50%, -10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+      .ord-progress-screen { max-width: 460px; margin: 0 auto; }
+      .ord-coverage-card { text-align: center; background: var(--c-ink); color: var(--c-paper); border-radius: 10px; padding: 28px 20px; margin: 18px 0 24px; }
+      .ord-coverage-pct { font-family: var(--font-display); font-size: 52px; font-weight: 700; color: var(--c-mustard); line-height: 1; }
+      .ord-coverage-label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #C9C2AC; margin-top: 6px; }
+      .ord-coverage-note { font-size: 12.5px; color: #B8B3A2; margin-top: 14px; line-height: 1.5; }
+
+      .ord-progress-section-title { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: #9a927c; text-transform: uppercase; margin: 22px 0 10px; }
+
+      .ord-cefr-list { display: flex; flex-direction: column; gap: 14px; }
+      .ord-cefr-row-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+      .ord-cefr-count { font-family: var(--font-mono); color: #8a8570; }
+
+      .ord-growth-chart { background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 8px; padding: 14px 14px 10px; }
+      .ord-growth-empty { background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 8px; padding: 30px 16px; text-align: center; font-size: 13px; color: #8a8570; }
+      .ord-growth-labels { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 10px; color: #9a927c; margin-top: 6px; }
+      .ord-growth-max { color: var(--c-red); font-weight: 600; }
+
+      .ord-milestone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .ord-milestone-badge { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 6px; border-radius: 8px; border: 1.5px solid var(--c-line); background: #FBF9F4; color: #C9C2AC; font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+      .ord-milestone-badge.reached { border-color: var(--c-mustard); background: rgba(201,154,46,0.1); color: #8C6A1F; }
 
       .ord-save-error { max-width: 460px; margin: 0 auto 16px; padding: 10px 14px; background: rgba(162,62,42,0.1); border: 1px solid rgba(162,62,42,0.3); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--c-red); text-align: center; }
 
