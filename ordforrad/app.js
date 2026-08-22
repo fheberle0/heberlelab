@@ -25317,15 +25317,25 @@ function checkTyped(input, correctRaw) {
   const norm = input.trim().toLowerCase();
   return answerVariants(correctRaw).includes(norm);
 }
-function findBlankWord(exampleSv, baseForm) {
+const LINKING_VERBS = new Set(['är', 'var', 'blir', 'blev', 'blivit', 'varit', 'vara']);
+function findBlankWord(exampleSv, baseForm, wordType) {
   if (!exampleSv) return null;
   const cleanedBase = cleanAnswer(baseForm).split(' ')[0].toLowerCase();
   const stem = cleanedBase.slice(0, Math.min(3, cleanedBase.length));
   if (!stem || stem.length < 2) return null;
   const words = exampleSv.match(/[A-Za-zÅÄÖåäöÉé]+/g) || [];
-  for (const w of words) {
-    const lw = w.toLowerCase();
-    if (lw.startsWith(stem) || stem.length >= 3 && stem.startsWith(lw)) return w;
+  for (let i = 0; i < words.length; i++) {
+    const lw = words[i].toLowerCase();
+    if (lw.startsWith(stem) || stem.length >= 3 && stem.startsWith(lw)) {
+      // Skip sentences where the blank is a predicate adjective/noun directly
+      // after a linking verb ("Klockan är ___.") — almost anything fits there,
+      // so it doesn't actually test knowledge of this specific word.
+      const preceding = i > 0 ? words[i - 1].toLowerCase() : null;
+      if ((wordType === 'a' || wordType === 'n') && preceding && LINKING_VERBS.has(preceding)) {
+        return null;
+      }
+      return words[i];
+    }
   }
   return null;
 }
@@ -25347,7 +25357,7 @@ function pickDistractors(pool, correctItem, direction, count) {
 }
 function pickExtraExerciseType(card, lastType) {
   const candidates = ['mcq', 'type'];
-  if (findBlankWord(card.es, card.sv)) candidates.push('blank');
+  if (findBlankWord(card.es, card.sv, card.t)) candidates.push('blank');
   const filtered = candidates.filter(t => t !== lastType);
   const pool = filtered.length ? filtered : candidates;
   return pool[Math.floor(Math.random() * pool.length)];
@@ -26641,7 +26651,7 @@ function BlankExercise({
   const [revealed, setRevealed] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const inputRef = useRef(null);
-  const blankWord = useMemo(() => findBlankWord(card.es, card.sv), [card.id]);
+  const blankWord = useMemo(() => findBlankWord(card.es, card.sv, card.t), [card.id]);
   const sentenceParts = useMemo(() => {
     if (!blankWord) return ['', ''];
     const idx = card.es.indexOf(blankWord);
