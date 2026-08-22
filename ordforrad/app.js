@@ -25234,10 +25234,12 @@ function computeProgressStats(vocab, srs) {
     }
   }
   const coveragePct = totalWpm > 0 ? learnedWpm / totalWpm * 100 : 0;
+  const rawPct = vocab.length > 0 ? totalLearned / vocab.length * 100 : 0;
   return {
     cefrBuckets,
     rivstartBucket,
     coveragePct,
+    rawPct,
     totalLearned,
     total: vocab.length
   };
@@ -26219,12 +26221,24 @@ function ProgressScreen({
   }, "DINA FRAMSTEG")), /*#__PURE__*/React.createElement("div", {
     className: "ord-coverage-card"
   }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-split"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-stat"
+  }, /*#__PURE__*/React.createElement("div", {
     className: "ord-coverage-pct"
   }, progress.coveragePct.toFixed(0), "%"), /*#__PURE__*/React.createElement("div", {
     className: "ord-coverage-label"
-  }, "uppskattad ordtäckning"), /*#__PURE__*/React.createElement("div", {
+  }, "ordfrekvenstäckning")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-divider"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-stat"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-pct ord-coverage-pct-raw"
+  }, progress.rawPct.toFixed(1), "%"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-coverage-label"
+  }, "av hela ordlistan"))), /*#__PURE__*/React.createElement("div", {
     className: "ord-coverage-note"
-  }, "Baserat på hur vanliga dina inlärda ord är i vardaglig svenska — ", progress.totalLearned, " av ", progress.total, " ord inlärda totalt.")), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("strong", null, progress.totalLearned, " av ", progress.total), " ord inlärda totalt. Täckningssiffran visar hur vanliga dina ord är i löpande text — det är ", /*#__PURE__*/React.createElement("em", null, "inte"), " samma sak som att förstå en text. Verklig förståelse kräver oftast 95%+ täckning, så se den som en riktning, inte ett facit.")), /*#__PURE__*/React.createElement("div", {
     className: "ord-progress-section-title"
   }, "Nivå (CEFR)"), /*#__PURE__*/React.createElement("div", {
     className: "ord-cefr-list"
@@ -27012,10 +27026,16 @@ function Style() {
       @keyframes ord-toast-in { from { opacity: 0; transform: translate(-50%, -10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
       .ord-progress-screen { max-width: 460px; margin: 0 auto; }
-      .ord-coverage-card { text-align: center; background: var(--c-ink); color: var(--c-paper); border-radius: 10px; padding: 28px 20px; margin: 18px 0 24px; }
-      .ord-coverage-pct { font-family: var(--font-display); font-size: 52px; font-weight: 700; color: var(--c-mustard); line-height: 1; }
-      .ord-coverage-label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #C9C2AC; margin-top: 6px; }
-      .ord-coverage-note { font-size: 12.5px; color: #B8B3A2; margin-top: 14px; line-height: 1.5; }
+      .ord-coverage-card { background: var(--c-ink); color: var(--c-paper); border-radius: 10px; padding: 26px 20px 22px; margin: 18px 0 24px; }
+      .ord-coverage-split { display: flex; align-items: stretch; }
+      .ord-coverage-stat { flex: 1; text-align: center; }
+      .ord-coverage-divider { width: 1px; background: rgba(255,255,255,0.15); margin: 4px 4px; }
+      .ord-coverage-pct { font-family: var(--font-display); font-size: 44px; font-weight: 700; color: var(--c-mustard); line-height: 1; }
+      .ord-coverage-pct-raw { color: #8FAFC0; }
+      .ord-coverage-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: #C9C2AC; margin-top: 6px; }
+      .ord-coverage-note { font-size: 12px; color: #B8B3A2; margin-top: 18px; line-height: 1.55; text-align: center; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.12); }
+      .ord-coverage-note strong { color: #E4DCC8; }
+      .ord-coverage-note em { font-style: normal; text-decoration: underline; text-decoration-color: rgba(201,154,46,0.5); }
 
       .ord-progress-section-title { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: #9a927c; text-transform: uppercase; margin: 22px 0 10px; }
 
