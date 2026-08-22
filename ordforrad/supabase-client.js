@@ -1,0 +1,1 @@
+import{createClient}from"https://esm.sh/@supabase/supabase-js@2";const SUPABASE_URL="https://ttyfammnucxnypyfabks.supabase.co",SUPABASE_ANON_KEY="sb_publishable_zlXgyU3xxBQYnLrwD9et6w_WctzIBtz";export const supabaseClient=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
