@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'https:
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
 import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock } from './icons.js';
 import { supabaseClient } from './supabase-client.js';
+const SUPABASE_FUNCTIONS_URL = 'https://ttyfammnucxnypyfabks.supabase.co/functions/v1';
 
 /* ============================================================
    ORDFÖRRÅD — Swedish vocabulary trainer
@@ -24331,7 +24332,7 @@ function HomeScreen({
   }, "Ja, radera allt"), /*#__PURE__*/React.createElement("button", {
     className: "ord-reset-no",
     onClick: () => setConfirmReset(false)
-  }, "Avbryt")))), /*#__PURE__*/React.createElement("div", {
+  }, "Avbryt")))), /*#__PURE__*/React.createElement(InviteFriend, null), /*#__PURE__*/React.createElement("div", {
     className: "ord-account-row"
   }, /*#__PURE__*/React.createElement("span", {
     className: "ord-account-email"
@@ -24339,6 +24340,89 @@ function HomeScreen({
     className: "ord-reset-link",
     onClick: onLogout
   }, "Logga ut")));
+}
+function InviteFriend() {
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const [errorMsg, setErrorMsg] = useState('');
+  const sendInvite = async e => {
+    e.preventDefault();
+    if (!email.trim() || status === 'sending') return;
+    setStatus('sending');
+    setErrorMsg('');
+    try {
+      const {
+        data: {
+          session
+        }
+      } = await supabaseClient.auth.getSession();
+      const res = await fetch(`${SUPABASE_FUNCTIONS_URL}/invite-friend`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({
+          friendEmail: email.trim()
+        })
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || 'Något gick fel');
+      setStatus('sent');
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err.message || 'Något gick fel');
+    }
+  };
+  if (!open) {
+    return /*#__PURE__*/React.createElement("button", {
+      className: "ord-invite-link",
+      onClick: () => setOpen(true)
+    }, "Gillar du Ordförråd? Bjud in en vän!");
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-invite-box"
+  }, status === 'sent' ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "ord-type-feedback correct"
+  }, "Inbjudan skickad till ", email, "!"), /*#__PURE__*/React.createElement("button", {
+    className: "ord-reset-link",
+    onClick: () => {
+      setOpen(false);
+      setStatus('idle');
+      setEmail('');
+    }
+  }, "Stäng")) : /*#__PURE__*/React.createElement("form", {
+    className: "ord-login-form",
+    onSubmit: sendInvite,
+    style: {
+      marginTop: 0
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    required: true,
+    value: email,
+    onChange: e => setEmail(e.target.value),
+    placeholder: "väns@epost.se",
+    className: "ord-type-input",
+    autoComplete: "email"
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "ord-start-btn",
+    type: "submit",
+    disabled: status === 'sending',
+    style: {
+      marginBottom: 0
+    }
+  }, status === 'sending' ? 'Skickar...' : 'Skicka inbjudan'), status === 'error' && /*#__PURE__*/React.createElement("div", {
+    className: "ord-type-feedback incorrect"
+  }, errorMsg), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "ord-reset-link",
+    onClick: () => {
+      setOpen(false);
+      setStatus('idle');
+    }
+  }, "Avbryt")));
 }
 function BoardStat({
   icon,
@@ -25040,6 +25124,10 @@ function Style() {
       .ord-save-error { max-width: 460px; margin: 0 auto 16px; padding: 10px 14px; background: rgba(162,62,42,0.1); border: 1px solid rgba(162,62,42,0.3); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--c-red); text-align: center; }
 
       .ord-account-row { max-width: 460px; margin: 14px auto 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; color: #A39C86; }
+
+      .ord-invite-link { display: block; width: 100%; text-align: center; padding: 12px; margin-top: 6px; background: rgba(201,154,46,0.1); border: 1px dashed var(--c-mustard); border-radius: 6px; font-family: var(--font-body); font-size: 13px; font-weight: 600; color: #8C6A1F; cursor: pointer; }
+      .ord-invite-link:hover { background: rgba(201,154,46,0.18); }
+      .ord-invite-box { margin-top: 6px; padding: 16px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 8px; }
       .ord-account-email { opacity: 0.8; }
 
       .ord-login { max-width: 380px; margin: 60px auto 0; }
