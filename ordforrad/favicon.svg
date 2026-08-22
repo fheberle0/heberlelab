@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#A23E2A"/>
+  <text x="32" y="47" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-weight="700"
+        font-size="42" fill="#F3EFE6">O</text>
+  <rect x="0" y="30" width="64" height="4" fill="#A23E2A" opacity="0.001"/>
+  <line x1="0" y1="32" x2="64" y2="32" stroke="#7A2F20" stroke-width="2.5"/>
+</svg>
