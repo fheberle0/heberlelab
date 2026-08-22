@@ -25598,7 +25598,9 @@ function randomRequeuePos(index, len, minGap) {
 function OrdforradApp({
   userId,
   userEmail,
-  onLogout
+  userName,
+  onLogout,
+  onUpdateName
 }) {
   const {
     state,
@@ -25889,7 +25891,9 @@ function OrdforradApp({
     setConfirmReset: setConfirmReset,
     onReset: resetProgress,
     userEmail: userEmail,
+    userName: userName,
     onLogout: onLogout,
+    onUpdateName: onUpdateName,
     onOpenProgress: () => setScreen('progress')
   }), screen === 'progress' && /*#__PURE__*/React.createElement(ProgressScreen, {
     state: state,
@@ -25944,8 +25948,10 @@ function HomeScreen({
   setConfirmReset,
   onReset,
   userEmail,
+  userName,
   onLogout,
-  onOpenProgress
+  onOpenProgress,
+  onUpdateName
 }) {
   const scopeLabel = state.scope === 'all' ? 'Alla ord — frequency order' : `Rivstart · Kapitel ${state.scope}`;
   let extrasHelperText = null;
@@ -25961,6 +25967,8 @@ function HomeScreen({
   }, "Ordförråd"), /*#__PURE__*/React.createElement("div", {
     className: "ord-sub"
   }, "din avgångstavla för svenska ord")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-user-banner"
+  }, userName ? `Hej, ${userName}! 👋` : `Inloggad som ${userEmail}`), /*#__PURE__*/React.createElement("div", {
     className: "ord-board"
   }, /*#__PURE__*/React.createElement(BoardStat, {
     icon: /*#__PURE__*/React.createElement(Clock, {
@@ -26084,10 +26092,58 @@ function HomeScreen({
     className: "ord-account-row"
   }, /*#__PURE__*/React.createElement("span", {
     className: "ord-account-email"
-  }, userEmail), /*#__PURE__*/React.createElement("button", {
+  }, userEmail), /*#__PURE__*/React.createElement(EditName, {
+    currentName: userName,
+    onUpdate: onUpdateName
+  }), /*#__PURE__*/React.createElement("button", {
     className: "ord-reset-link",
     onClick: onLogout
   }, "Logga ut")));
+}
+function EditName({
+  currentName,
+  onUpdate
+}) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState(currentName || '');
+  const [saving, setSaving] = useState(false);
+  const submit = async e => {
+    e.preventDefault();
+    if (!name.trim() || saving) return;
+    setSaving(true);
+    const ok = await onUpdate(name.trim());
+    setSaving(false);
+    if (ok) setOpen(false);
+  };
+  if (!open) {
+    return /*#__PURE__*/React.createElement("button", {
+      className: "ord-reset-link",
+      onClick: () => {
+        setName(currentName || '');
+        setOpen(true);
+      }
+    }, currentName ? 'Ändra namn' : 'Lägg till namn');
+  }
+  return /*#__PURE__*/React.createElement("form", {
+    className: "ord-edit-name-form",
+    onSubmit: submit
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: name,
+    onChange: e => setName(e.target.value),
+    placeholder: "Ditt förnamn",
+    className: "ord-edit-name-input",
+    autoFocus: true
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "ord-reset-link",
+    type: "submit",
+    disabled: saving
+  }, saving ? '...' : 'Spara'), /*#__PURE__*/React.createElement("button", {
+    className: "ord-reset-link",
+    type: "button",
+    onClick: () => setOpen(false),
+    disabled: saving
+  }, "Avbryt"));
 }
 function InviteFriend() {
   const [open, setOpen] = useState(false);
@@ -27054,7 +27110,13 @@ function Style() {
 
       .ord-save-error { max-width: 460px; margin: 0 auto 16px; padding: 10px 14px; background: rgba(162,62,42,0.1); border: 1px solid rgba(162,62,42,0.3); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--c-red); text-align: center; }
 
-      .ord-account-row { max-width: 460px; margin: 14px auto 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; color: #A39C86; }
+      .ord-account-row { max-width: 460px; margin: 14px auto 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 10px; font-family: var(--font-mono); font-size: 11px; color: #A39C86; }
+
+      .ord-user-banner { text-align: center; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--c-ink); margin: -4px 0 18px; }
+
+      .ord-edit-name-form { display: flex; align-items: center; gap: 6px; }
+      .ord-edit-name-input { font-family: var(--font-mono); font-size: 11px; padding: 4px 8px; border: 1px solid var(--c-line); border-radius: 4px; background: #FBF9F4; color: var(--c-ink); width: 110px; }
+      .ord-edit-name-input:focus { outline: none; border-color: var(--c-red); }
 
       .ord-invite-link { display: block; width: 100%; text-align: center; padding: 12px; margin-top: 6px; background: rgba(201,154,46,0.1); border: 1px dashed var(--c-mustard); border-radius: 6px; font-family: var(--font-body); font-size: 13px; font-weight: 600; color: #8C6A1F; cursor: pointer; }
       .ord-invite-link:hover { background: rgba(201,154,46,0.18); }
@@ -27154,11 +27216,98 @@ function AuthGate() {
       className: "ord-type-feedback incorrect"
     }, authError))));
   }
+  const updateDisplayName = async patch => {
+    const {
+      data,
+      error
+    } = await supabaseClient.auth.updateUser({
+      data: patch
+    });
+    if (!error && data && data.user) {
+      setSession(prev => ({
+        ...prev,
+        user: data.user
+      }));
+    }
+    return !error;
+  };
+  const meta = session.user.user_metadata || {};
+  const needsNamePrompt = !meta.display_name && !meta.name_prompt_skipped;
+  if (needsNamePrompt) {
+    return /*#__PURE__*/React.createElement(NameOnboarding, {
+      onComplete: name => updateDisplayName({
+        display_name: name
+      }),
+      onSkip: () => updateDisplayName({
+        name_prompt_skipped: true
+      })
+    });
+  }
   return /*#__PURE__*/React.createElement(OrdforradApp, {
     userId: session.user.id,
     userEmail: session.user.email,
-    onLogout: () => supabaseClient.auth.signOut()
+    userName: meta.display_name || '',
+    onLogout: () => supabaseClient.auth.signOut(),
+    onUpdateName: name => updateDisplayName({
+      display_name: name
+    })
   });
+}
+function NameOnboarding({
+  onComplete,
+  onSkip
+}) {
+  const [name, setName] = useState('');
+  const [saving, setSaving] = useState(false);
+  const submit = async e => {
+    e.preventDefault();
+    if (!name.trim() || saving) return;
+    setSaving(true);
+    await onComplete(name.trim());
+    setSaving(false);
+  };
+  const skip = async () => {
+    if (saving) return;
+    setSaving(true);
+    await onSkip();
+    setSaving(false);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-root"
+  }, /*#__PURE__*/React.createElement(Style, null), /*#__PURE__*/React.createElement("div", {
+    className: "ord-login"
+  }, /*#__PURE__*/React.createElement("header", {
+    className: "ord-header"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-eyebrow"
+  }, "SVENSKA · ORDINLÄRNING"), /*#__PURE__*/React.createElement("h1", {
+    className: "ord-title"
+  }, "Ordförråd"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-sub"
+  }, "vad heter du?")), /*#__PURE__*/React.createElement("form", {
+    className: "ord-login-form",
+    onSubmit: submit
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: name,
+    onChange: e => setName(e.target.value),
+    placeholder: "Ditt förnamn",
+    className: "ord-type-input",
+    autoComplete: "given-name",
+    autoFocus: true
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "ord-start-btn",
+    type: "submit",
+    disabled: saving,
+    style: {
+      marginBottom: 0
+    }
+  }, saving ? 'Sparar...' : 'Fortsätt'), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "ord-reset-link",
+    onClick: skip,
+    disabled: saving
+  }, "Hoppa över"))));
 }
 const rootEl = document.getElementById('root');
 createRoot(rootEl).render(/*#__PURE__*/React.createElement(AuthGate, null));
