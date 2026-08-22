@@ -23863,19 +23863,17 @@ function buildFlashQueue(vocab, state) {
     _kind: 'review',
     _direction: randDirection()
   }));
-  const queue = [];
-  let di = 0,
-    li = 0;
-  while (di < reviewItems.length || li < learningItems.length) {
-    if (di < reviewItems.length) queue.push(reviewItems[di++]);
-    if (li < learningItems.length) queue.push(learningItems[li++]);
-    if (di < reviewItems.length) queue.push(reviewItems[di++]);
-  }
+  const queue = shuffle([...reviewItems, ...learningItems]);
   return {
     queue,
     newLearningEntries,
     newIds: freshPicks.map(i => i.id)
   };
+}
+function randomRequeuePos(index, len, minGap) {
+  const start = Math.min(len, index + minGap);
+  if (start >= len) return len;
+  return start + Math.floor(Math.random() * (len - start + 1));
 }
 function OrdforradApp({
   userId,
@@ -24020,7 +24018,7 @@ function OrdforradApp({
       let nextQueue = session.queue;
       if (g === 0) {
         nextQueue = [...session.queue];
-        const insertAt = Math.min(nextQueue.length, session.index + 4);
+        const insertAt = randomRequeuePos(session.index, nextQueue.length, 3);
         nextQueue.splice(insertAt, 0, {
           ...card,
           _kind: 'review',
@@ -24090,7 +24088,7 @@ function OrdforradApp({
           _kind: 'learning',
           _direction: nextEverGoodOrEasy ? randDirection() : 'sv-en'
         };
-        const insertAt = Math.min(nextQueue.length, session.index + (g === 0 ? 4 : 6));
+        const insertAt = randomRequeuePos(session.index, nextQueue.length, 3);
         nextQueue.splice(insertAt, 0, requeued);
       }
       const nextResults = {
