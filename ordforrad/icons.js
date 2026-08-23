@@ -67,3 +67,20 @@ export function ArrowLeft(props) {
   return h(Icon, props,
     h('line', { x1: 19, y1: 12, x2: 5, y2: 12 }), h('polyline', { points: '12 19 5 12 12 5' }));
 }
+export function Flag(props) {
+  return h(Icon, props,
+    h('path', { d: 'M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z' }), h('line', { x1: 4, y1: 22, x2: 4, y2: 3 }));
+}
+export function BookOpen(props) {
+  return h(Icon, props,
+    h('path', { d: 'M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z' }), h('path', { d: 'M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z' }));
+}
+export function ExternalLink(props) {
+  return h(Icon, props,
+    h('path', { d: 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6' }),
+    h('polyline', { points: '15 3 21 3 21 9' }), h('line', { x1: 10, y1: 14, x2: 21, y2: 3 }));
+}
+export function Search(props) {
+  return h(Icon, props,
+    h('circle', { cx: 11, cy: 11, r: 8 }), h('line', { x1: 21, y1: 21, x2: 16.65, y2: 16.65 }));
+}

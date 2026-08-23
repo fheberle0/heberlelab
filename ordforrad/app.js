@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'https://esm.sh/react@18.3.1';
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
-import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock, TrendingUp, Award, ArrowLeft } from './icons.js';
+import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock, TrendingUp, Award, ArrowLeft, Flag, BookOpen, ExternalLink, Search } from './icons.js';
 import { supabaseClient } from './supabase-client.js';
 const SUPABASE_FUNCTIONS_URL = 'https://ttyfammnucxnypyfabks.supabase.co/functions/v1';
 
@@ -25271,6 +25271,27 @@ function computeGrowthSeries(srs) {
   });
   return series;
 }
+const HARD_LAPSES_THRESHOLD = 2;
+const HARD_EF_THRESHOLD = 1.8;
+const HARD_RESETS_THRESHOLD = 2;
+function computeHardWordIds(state) {
+  const auto = new Set();
+  Object.entries(state.srs).forEach(([id, c]) => {
+    if ((c.lapses || 0) >= HARD_LAPSES_THRESHOLD || (c.ef || 2.5) <= HARD_EF_THRESHOLD) auto.add(Number(id));
+  });
+  Object.entries(state.learning).forEach(([id, c]) => {
+    if ((c.resets || 0) >= HARD_RESETS_THRESHOLD) auto.add(Number(id));
+  });
+  (state.manualHardIds || []).forEach(id => auto.add(id));
+  (state.dismissedHardIds || []).forEach(id => auto.delete(id));
+  return auto;
+}
+function isWordHard(state, id) {
+  const auto = state.srs[id] && ((state.srs[id].lapses || 0) >= HARD_LAPSES_THRESHOLD || (state.srs[id].ef || 2.5) <= HARD_EF_THRESHOLD) || state.learning[id] && (state.learning[id].resets || 0) >= HARD_RESETS_THRESHOLD;
+  const manual = (state.manualHardIds || []).includes(id);
+  const dismissed = (state.dismissedHardIds || []).includes(id);
+  return (auto || manual) && !dismissed;
+}
 const WORD_TYPE_LABELS = {
   n: 'noun',
   v: 'verb',
@@ -25377,6 +25398,10 @@ function defaultAppState() {
     // ids introduced today, for the Övningar/Matchningsspel pool
     seenMilestones: [],
     // milestone thresholds already celebrated (never re-shown)
+    manualHardIds: [],
+    // ids the user explicitly flagged as hard
+    dismissedHardIds: [],
+    // ids the user explicitly un-flagged (suppresses auto-detection)
     requiredReps: 3,
     newIntroducedToday: 0,
     bonusNewToday: 0,
@@ -25477,6 +25502,8 @@ function useAppState(userId) {
       if (s.bonusNewToday === undefined) s.bonusNewToday = 0;
       if (s.todayIntroducedIds === undefined) s.todayIntroducedIds = [];
       if (s.seenMilestones === undefined) s.seenMilestones = [];
+      if (s.manualHardIds === undefined) s.manualHardIds = [];
+      if (s.dismissedHardIds === undefined) s.dismissedHardIds = [];
       s = rolloverDay(s);
       if (!cancelled) {
         setState(s);
@@ -25633,13 +25660,29 @@ function OrdforradApp({
   const canStartFlash = stats && (stats.due > 0 || stats.learning > 0 || remainingNew > 0 && stats.untouched > 0);
   const capReached = stats && remainingNew === 0 && stats.due === 0 && stats.learning === 0 && stats.untouched > 0;
   const flashDoneForNow = stats && stats.due === 0 && stats.learning === 0 && remainingNew === 0;
+  const hardWordIds = useMemo(() => state ? computeHardWordIds(state) : new Set(), [state && state.srs, state && state.learning, state && state.manualHardIds, state && state.dismissedHardIds]);
+  const hardWordItems = useMemo(() => {
+    return Array.from(hardWordIds).map(id => VOCAB_BY_ID.get(id)).filter(Boolean);
+  }, [hardWordIds]);
   const extrasPool = useMemo(() => {
     if (!state) return [];
-    return state.todayIntroducedIds.map(id => VOCAB_BY_ID.get(id)).filter(Boolean);
-  }, [state && state.todayIntroducedIds]);
+    // Today's new words, plus hard words duplicated (over-represented) so they show up more often.
+    const todayItems = state.todayIntroducedIds.map(id => VOCAB_BY_ID.get(id)).filter(Boolean);
+    return [...todayItems, ...hardWordItems, ...hardWordItems];
+  }, [state && state.todayIntroducedIds, hardWordItems]);
   const extrasUnlocked = flashDoneForNow;
+  const matchPool = useMemo(() => {
+    const seen = new Set();
+    const combined = [...(state ? state.todayIntroducedIds.map(id => VOCAB_BY_ID.get(id)).filter(Boolean) : []), ...hardWordItems];
+    return combined.filter(w => {
+      if (seen.has(w.id)) return false;
+      seen.add(w.id);
+      return true;
+    });
+  }, [state && state.todayIntroducedIds, hardWordItems]);
   const canExtras = extrasUnlocked && extrasPool.length >= 1;
-  const canMatch = extrasUnlocked && extrasPool.length >= 2;
+  const canMatch = extrasUnlocked && matchPool.length >= 2;
+  const canHardPractice = extrasUnlocked && hardWordItems.length >= 1;
   const startFlash = () => {
     if (!state) return;
     const {
@@ -25695,8 +25738,30 @@ function OrdforradApp({
     setScreen('extras');
   };
   const startMatch = () => {
-    if (extrasPool.length < 2) return;
+    if (matchPool.length < 2) return;
     setScreen('match');
+  };
+  const startHardPractice = () => {
+    if (hardWordItems.length === 0) return;
+    const lastTypeLocal = {};
+    const queue = shuffle(hardWordItems).map(item => {
+      const extype = pickExtraExerciseType(item, lastTypeLocal[item.id]);
+      lastTypeLocal[item.id] = extype;
+      return {
+        ...item,
+        _exerciseType: extype,
+        _direction: randDirection()
+      };
+    });
+    setExtrasSession({
+      queue,
+      index: 0,
+      results: {
+        correct: 0,
+        incorrect: 0
+      }
+    });
+    setScreen('extras');
   };
   const resetProgress = () => {
     update(() => defaultAppState());
@@ -25758,7 +25823,8 @@ function OrdforradApp({
     } else {
       const prevEntry = state.learning[card.id] || {
         streak: 0,
-        everGoodOrEasy: false
+        everGoodOrEasy: false,
+        resets: 0
       };
       const prevStreak = prevEntry.streak || 0;
       let nextEverGoodOrEasy = prevEntry.everGoodOrEasy;
@@ -25776,7 +25842,8 @@ function OrdforradApp({
             ...prev.learning,
             [card.id]: {
               streak: 0,
-              everGoodOrEasy: nextEverGoodOrEasy
+              everGoodOrEasy: nextEverGoodOrEasy,
+              resets: (prevEntry.resets || 0) + 1
             }
           };
         } else {
@@ -25788,10 +25855,14 @@ function OrdforradApp({
             };
             delete restLearning[card.id];
             next.learning = restLearning;
+            const graduatedCard = gradeCard(undefined, g, now);
+            // Preserve the struggle signal: a word that needed several resets to
+            // finally graduate should still show up as "hard" afterward, not reset to 0.
+            graduatedCard.lapses = Math.max(graduatedCard.lapses, prevEntry.resets || 0);
             next.srs = {
               ...prev.srs,
               [card.id]: {
-                ...gradeCard(undefined, g, now),
+                ...graduatedCard,
                 graduatedAt: now.toISOString()
               }
             };
@@ -25807,7 +25878,8 @@ function OrdforradApp({
               ...prev.learning,
               [card.id]: {
                 streak: newStreak,
-                everGoodOrEasy: nextEverGoodOrEasy
+                everGoodOrEasy: nextEverGoodOrEasy,
+                resets: prevEntry.resets || 0
               }
             };
           }
@@ -25848,6 +25920,25 @@ function OrdforradApp({
         incorrect: prev.results.incorrect + (correct ? 0 : 1)
       }
     }));
+  };
+  const toggleHardWord = id => {
+    update(prev => {
+      const currentlyHard = isWordHard(prev, id);
+      const manual = new Set(prev.manualHardIds || []);
+      const dismissed = new Set(prev.dismissedHardIds || []);
+      if (currentlyHard) {
+        manual.delete(id);
+        dismissed.add(id);
+      } else {
+        manual.add(id);
+        dismissed.delete(id);
+      }
+      return {
+        ...prev,
+        manualHardIds: Array.from(manual),
+        dismissedHardIds: Array.from(dismissed)
+      };
+    });
   };
   if (!loaded || !state) {
     return /*#__PURE__*/React.createElement("div", {
@@ -25894,7 +25985,10 @@ function OrdforradApp({
     userName: userName,
     onLogout: onLogout,
     onUpdateName: onUpdateName,
-    onOpenProgress: () => setScreen('progress')
+    onOpenProgress: () => setScreen('progress'),
+    onOpenHardWords: () => setScreen('hardwords'),
+    hardWordCount: hardWordItems.length,
+    onOpenDictionary: () => setScreen('dictionary')
   }), screen === 'progress' && /*#__PURE__*/React.createElement(ProgressScreen, {
     state: state,
     onExit: () => setScreen('home')
@@ -25903,7 +25997,9 @@ function OrdforradApp({
     onGrade: handleFlashGrade,
     index: session.index,
     total: session.queue.length,
-    onExit: () => setScreen('home')
+    onExit: () => setScreen('home'),
+    isHard: isWordHard(state, currentCard.id),
+    onToggleHard: () => toggleHardWord(currentCard.id)
   }), screen === 'flash-summary' && session && /*#__PURE__*/React.createElement(SummaryScreen, {
     results: session.results,
     reviewed: session.index,
@@ -25920,7 +26016,16 @@ function OrdforradApp({
       setScreen('home');
     }
   }), screen === 'match' && /*#__PURE__*/React.createElement(MatchingGame, {
-    words: extrasPool.slice(0, 8),
+    words: matchPool.slice(0, 8),
+    onExit: () => setScreen('home')
+  }), screen === 'hardwords' && /*#__PURE__*/React.createElement(HardWordsScreen, {
+    words: hardWordItems,
+    state: state,
+    onToggleHard: toggleHardWord,
+    onPractice: startHardPractice,
+    canPractice: canHardPractice,
+    onExit: () => setScreen('home')
+  }), screen === 'dictionary' && /*#__PURE__*/React.createElement(DictionaryScreen, {
     onExit: () => setScreen('home')
   }));
 }
@@ -25951,7 +26056,10 @@ function HomeScreen({
   userName,
   onLogout,
   onOpenProgress,
-  onUpdateName
+  onUpdateName,
+  onOpenHardWords,
+  hardWordCount,
+  onOpenDictionary
 }) {
   const scopeLabel = state.scope === 'all' ? 'Alla ord — frequency order' : `Rivstart · Kapitel ${state.scope}`;
   let extrasHelperText = null;
@@ -26061,6 +26169,18 @@ function HomeScreen({
   }), " Matchningsspel"), extrasHelperText && /*#__PURE__*/React.createElement("div", {
     className: "ord-extras-helper"
   }, extrasHelperText), /*#__PURE__*/React.createElement("div", {
+    className: "ord-section-label"
+  }, "3 · VERKTYG"), /*#__PURE__*/React.createElement("button", {
+    className: "ord-extras-btn",
+    onClick: onOpenHardWords
+  }, /*#__PURE__*/React.createElement(Flag, {
+    size: 16
+  }), " Svåra ord ", hardWordCount > 0 ? `(${hardWordCount})` : ''), /*#__PURE__*/React.createElement("button", {
+    className: "ord-match-btn",
+    onClick: onOpenDictionary
+  }, /*#__PURE__*/React.createElement(BookOpen, {
+    size: 16
+  }), " Ordbok"), /*#__PURE__*/React.createElement("div", {
     className: "ord-progress-bar-wrap"
   }, /*#__PURE__*/React.createElement("div", {
     className: "ord-progress-label"
@@ -26442,15 +26562,37 @@ function FlashScreen({
   onGrade,
   index,
   total,
-  onExit
+  onExit,
+  isHard,
+  onToggleHard
 }) {
   return /*#__PURE__*/React.createElement("div", {
     className: "ord-review"
-  }, /*#__PURE__*/React.createElement(TopBar, {
-    index: index,
-    total: total,
-    onExit: onExit
-  }), /*#__PURE__*/React.createElement(FlashcardExercise, {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-top"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-exit-btn",
+    onClick: onExit
+  }, /*#__PURE__*/React.createElement(X, {
+    size: 18
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-progress"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-progress-track"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-progress-fill",
+    style: {
+      width: `${index / total * 100}%`
+    }
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "ord-review-progress-count"
+  }, index + 1, " / ", total)), /*#__PURE__*/React.createElement("button", {
+    className: "ord-flag-btn" + (isHard ? ' flagged' : ''),
+    onClick: onToggleHard,
+    title: isHard ? 'Ta bort från svåra ord' : 'Markera som svårt'
+  }, /*#__PURE__*/React.createElement(Flag, {
+    size: 16
+  }))), /*#__PURE__*/React.createElement(FlashcardExercise, {
     key: index,
     card: card,
     onGrade: onGrade
@@ -26864,6 +27006,208 @@ function MatchingGame({
   }, item.text)))));
 }
 
+/* ---------------- Hard Words screen (compiled list + practice launcher) ---------------- */
+
+function HardWordsScreen({
+  words,
+  state,
+  onToggleHard,
+  onPractice,
+  canPractice,
+  onExit
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-review"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-top"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-exit-btn",
+    onClick: onExit
+  }, /*#__PURE__*/React.createElement(ArrowLeft, {
+    size: 18
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "ord-eyebrow",
+    style: {
+      margin: 0
+    }
+  }, "SVÅRA ORD (", words.length, ")")), words.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty"
+  }, "Inga svåra ord ännu. Ord flaggas automatiskt om du missar dem upprepade gånger — eller flagga ett ord själv med flagg-ikonen under flashcards.") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    className: "ord-start-btn",
+    onClick: onPractice,
+    disabled: !canPractice,
+    style: {
+      marginTop: 6
+    }
+  }, "Öva svåra ord"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-hardword-list"
+  }, words.map(w => {
+    const manual = (state.manualHardIds || []).includes(w.id);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-row",
+      key: w.id
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-text"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-sv"
+    }, cleanAnswer(w.sv), w.g ? /*#__PURE__*/React.createElement("span", {
+      className: "ord-hardword-gender"
+    }, " (", w.g, ")") : null), /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-en"
+    }, cleanAnswer(w.en)), w.c && /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-conj"
+    }, w.c)), /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-meta"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ord-hardword-tag"
+    }, manual ? 'manuellt' : 'auto'), /*#__PURE__*/React.createElement("button", {
+      className: "ord-flag-btn flagged",
+      onClick: () => onToggleHard(w.id),
+      title: "Ta bort från svåra ord"
+    }, /*#__PURE__*/React.createElement(Flag, {
+      size: 14
+    }))));
+  }))));
+}
+
+/* ---------------- Dictionary screen (lazy-loaded Folkets Lexikon lookup) ---------------- */
+
+let dictionaryCache = null;
+let dictionaryReverseCache = null;
+function loadDictionary() {
+  if (dictionaryCache) return Promise.resolve(dictionaryCache);
+  return fetch('./dictionary.json').then(r => r.json()).then(data => {
+    dictionaryCache = data;
+    const reverse = {};
+    Object.entries(data).forEach(([sv, translations]) => {
+      translations.forEach(en => {
+        const key = en.toLowerCase();
+        if (!reverse[key]) reverse[key] = [];
+        reverse[key].push(sv);
+      });
+    });
+    dictionaryReverseCache = reverse;
+    return data;
+  });
+}
+function DictionaryScreen({
+  onExit
+}) {
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [direction, setDirection] = useState('sv-en');
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  useEffect(() => {
+    loadDictionary().then(() => setLoading(false)).catch(() => {
+      setLoadError(true);
+      setLoading(false);
+    });
+  }, []);
+  useEffect(() => {
+    if (loading || !query.trim()) {
+      setResults([]);
+      return;
+    }
+    const q = query.trim().toLowerCase();
+    const source = direction === 'sv-en' ? dictionaryCache : dictionaryReverseCache;
+    if (!source) return;
+    const prefixMatches = [];
+    const substringMatches = [];
+    for (const key of Object.keys(source)) {
+      const lk = key.toLowerCase();
+      if (lk.startsWith(q)) prefixMatches.push(key);else if (substringMatches.length < 300 && lk.includes(q)) substringMatches.push(key);
+    }
+    prefixMatches.sort((a, b) => {
+      const la = a.toLowerCase(),
+        lb = b.toLowerCase();
+      if (la === q && lb !== q) return -1;
+      if (lb === q && la !== q) return 1;
+      return la.length - lb.length || la.localeCompare(lb);
+    });
+    const combined = [...prefixMatches, ...substringMatches].slice(0, 40);
+    setResults(combined.map(key => ({
+      key,
+      translations: source[key]
+    })));
+  }, [query, direction, loading]);
+  const translateUrl = `https://translate.google.com/?sl=${direction === 'sv-en' ? 'sv' : 'en'}&tl=${direction === 'sv-en' ? 'en' : 'sv'}&text=${encodeURIComponent(query)}&op=translate`;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-review"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-top"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-exit-btn",
+    onClick: onExit
+  }, /*#__PURE__*/React.createElement(ArrowLeft, {
+    size: 18
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "ord-eyebrow",
+    style: {
+      margin: 0
+    }
+  }, "ORDBOK")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-toggle"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-dict-dir-btn" + (direction === 'sv-en' ? ' active' : ''),
+    onClick: () => {
+      setDirection('sv-en');
+      setResults([]);
+    }
+  }, "Svenska → Engelska"), /*#__PURE__*/React.createElement("button", {
+    className: "ord-dict-dir-btn" + (direction === 'en-sv' ? ' active' : ''),
+    onClick: () => {
+      setDirection('en-sv');
+      setResults([]);
+    }
+  }, "Engelska → Svenska")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-search"
+  }, /*#__PURE__*/React.createElement(Search, {
+    size: 16,
+    className: "ord-dict-search-icon"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: query,
+    onChange: e => setQuery(e.target.value),
+    placeholder: direction === 'sv-en' ? 'Sök ett svenskt ord...' : 'Search an English word...',
+    className: "ord-dict-input",
+    autoFocus: true
+  })), loading && /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty"
+  }, "Laddar ordbok..."), loadError && /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty"
+  }, "Kunde inte ladda ordboken. Kontrollera din anslutning."), !loading && !loadError && /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-results"
+  }, query.trim() && results.length === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty"
+  }, "Inga träffar för \"", query, "\"."), results.map(r => /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-row",
+    key: r.key
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-word"
+  }, r.key), /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-translations"
+  }, r.translations.join(', '))))), /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-external"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-section-title"
+  }, "Fler resurser"), /*#__PURE__*/React.createElement("a", {
+    className: "ord-dict-external-link",
+    href: translateUrl,
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, /*#__PURE__*/React.createElement(ExternalLink, {
+    size: 14
+  }), " Google Translate"), /*#__PURE__*/React.createElement("a", {
+    className: "ord-dict-external-link",
+    href: "https://folkets-lexikon.csc.kth.se/folkets/",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, /*#__PURE__*/React.createElement(ExternalLink, {
+    size: 14
+  }), " Folkets Lexikon (webb)")));
+}
+
 /* ---------------- Summary Screen (flashcards) ---------------- */
 
 function SummaryScreen({
@@ -27002,6 +27346,9 @@ function Style() {
       .ord-review { max-width: 460px; margin: 0 auto; min-height: 82vh; display: flex; flex-direction: column; }
       .ord-review-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
       .ord-exit-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--c-line); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--c-ink); flex-shrink: 0; }
+      .ord-flag-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--c-line); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #A39C86; flex-shrink: 0; }
+      .ord-flag-btn:hover { border-color: var(--c-red); color: var(--c-red); }
+      .ord-flag-btn.flagged { background: rgba(162,62,42,0.1); border-color: var(--c-red); color: var(--c-red); }
       .ord-exit-btn:hover { background: var(--c-line); }
       .ord-review-progress { flex: 1; display: flex; align-items: center; gap: 10px; }
       .ord-review-progress-track { flex: 1; height: 4px; background: var(--c-line); border-radius: 2px; overflow: hidden; }
@@ -27107,6 +27454,30 @@ function Style() {
       .ord-milestone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .ord-milestone-badge { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 6px; border-radius: 8px; border: 1.5px solid var(--c-line); background: #FBF9F4; color: #C9C2AC; font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
       .ord-milestone-badge.reached { border-color: var(--c-mustard); background: rgba(201,154,46,0.1); color: #8C6A1F; }
+
+      .ord-hardword-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+      .ord-hardword-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 8px; padding: 12px 14px; }
+      .ord-hardword-sv { font-family: var(--font-display); font-size: 16px; font-weight: 600; }
+      .ord-hardword-gender { font-family: var(--font-mono); font-size: 11px; color: #8a8570; font-weight: 400; }
+      .ord-hardword-en { font-size: 13px; color: #6b6656; margin-top: 2px; }
+      .ord-hardword-conj { font-family: var(--font-mono); font-size: 11px; color: var(--c-slate); margin-top: 3px; }
+      .ord-hardword-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+      .ord-hardword-tag { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.04em; color: #A39C86; text-transform: uppercase; }
+
+      .ord-dict-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 12px; }
+      .ord-dict-dir-btn { padding: 10px 8px; border-radius: 6px; border: 1.5px solid var(--c-line); background: #FBF9F4; font-family: var(--font-body); font-size: 12.5px; font-weight: 600; color: #8a8570; cursor: pointer; }
+      .ord-dict-dir-btn.active { border-color: var(--c-slate); background: rgba(62,92,107,0.08); color: var(--c-slate); }
+      .ord-dict-search { position: relative; margin-bottom: 16px; }
+      .ord-dict-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #A39C86; }
+      .ord-dict-input { width: 100%; padding: 12px 12px 12px 38px; border: 1.5px solid var(--c-line); border-radius: 8px; font-family: var(--font-body); font-size: 15px; background: #FBF9F4; color: var(--c-ink); }
+      .ord-dict-input:focus { outline: none; border-color: var(--c-red); }
+      .ord-dict-results { display: flex; flex-direction: column; gap: 6px; max-height: 45vh; overflow-y: auto; }
+      .ord-dict-row { padding: 10px 12px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 6px; }
+      .ord-dict-word { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; }
+      .ord-dict-translations { font-size: 12.5px; color: #6b6656; margin-top: 2px; }
+      .ord-dict-external { margin-top: 22px; padding-bottom: 20px; }
+      .ord-dict-external-link { display: flex; align-items: center; gap: 8px; padding: 12px 14px; margin-bottom: 8px; border: 1px solid var(--c-line); border-radius: 8px; color: var(--c-slate); font-family: var(--font-body); font-size: 13.5px; font-weight: 500; text-decoration: none; }
+      .ord-dict-external-link:hover { border-color: var(--c-slate); background: rgba(62,92,107,0.06); }
 
       .ord-save-error { max-width: 460px; margin: 0 auto 16px; padding: 10px 14px; background: rgba(162,62,42,0.1); border: 1px solid rgba(162,62,42,0.3); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--c-red); text-align: center; }
 
