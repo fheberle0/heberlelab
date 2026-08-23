@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'https://esm.sh/react@18.3.1';
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
-import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock, TrendingUp, Award, ArrowLeft, Flag, BookOpen, ExternalLink, Search } from './icons.js';
+import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock, TrendingUp, Award, ArrowLeft, Flag, BookOpen, ExternalLink, Search, Repeat } from './icons.js';
 import { supabaseClient } from './supabase-client.js';
 const SUPABASE_FUNCTIONS_URL = 'https://ttyfammnucxnypyfabks.supabase.co/functions/v1';
 
@@ -25200,6 +25200,1057 @@ const VOCAB = [{
   "c": "(-er, väckte, väckt)",
   "ch": 20
 }];
+const VERBS = [{
+  "id": 1,
+  "inf": "vara",
+  "pres": "är",
+  "past": "var",
+  "sup": "varit",
+  "en": "to be"
+}, {
+  "id": 2,
+  "inf": "ha",
+  "pres": "har",
+  "past": "hade",
+  "sup": "haft",
+  "en": "to have"
+}, {
+  "id": 3,
+  "inf": "kunna",
+  "pres": "kan",
+  "past": "kunde",
+  "sup": "kunnat",
+  "en": "can, be able to"
+}, {
+  "id": 4,
+  "inf": "unna",
+  "pres": "unnar",
+  "past": "unnade",
+  "sup": "unnat",
+  "en": "to not begrudge"
+}, {
+  "id": 5,
+  "inf": "få",
+  "pres": "får",
+  "past": "fick",
+  "sup": "fått",
+  "en": "to get, may"
+}, {
+  "id": 6,
+  "inf": "bli",
+  "pres": "blir",
+  "past": "blev",
+  "sup": "blivit",
+  "en": "to become"
+}, {
+  "id": 7,
+  "inf": "komma",
+  "pres": "kommer",
+  "past": "kom",
+  "sup": "kommit",
+  "en": "to come"
+}, {
+  "id": 8,
+  "inf": "vilja",
+  "pres": "vill",
+  "past": "ville",
+  "sup": "velat",
+  "en": "to want"
+}, {
+  "id": 9,
+  "inf": "göra",
+  "pres": "gör",
+  "past": "gjorde",
+  "sup": "gjort",
+  "en": "to do, make"
+}, {
+  "id": 10,
+  "inf": "finna",
+  "pres": "finner",
+  "past": "fann",
+  "sup": "funnit",
+  "en": "to find"
+}, {
+  "id": 11,
+  "inf": "ta",
+  "pres": "tar",
+  "past": "tog",
+  "sup": "tagit",
+  "en": "to take"
+}, {
+  "id": 12,
+  "inf": "se",
+  "pres": "ser",
+  "past": "såg",
+  "sup": "sett",
+  "en": "to see"
+}, {
+  "id": 13,
+  "inf": "gå",
+  "pres": "går",
+  "past": "gick",
+  "sup": "gått",
+  "en": "to go, walk"
+}, {
+  "id": 14,
+  "inf": "säga",
+  "pres": "säger",
+  "past": "sade",
+  "sup": "sagt",
+  "en": "to say"
+}, {
+  "id": 15,
+  "inf": "äga",
+  "pres": "äger",
+  "past": "ägde",
+  "sup": "ägt",
+  "en": "to own"
+}, {
+  "id": 16,
+  "inf": "betyda",
+  "pres": "betyder",
+  "past": "betydde",
+  "sup": "betytt",
+  "en": "to mean"
+}, {
+  "id": 17,
+  "inf": "ge",
+  "pres": "ger",
+  "past": "gav",
+  "sup": "gett",
+  "en": "to give"
+}, {
+  "id": 18,
+  "inf": "skriva",
+  "pres": "skriver",
+  "past": "skrev",
+  "sup": "skrivit",
+  "en": "to write"
+}, {
+  "id": 19,
+  "inf": "riva",
+  "pres": "river",
+  "past": "rev",
+  "sup": "rivit",
+  "en": "to tear down"
+}, {
+  "id": 20,
+  "inf": "börja",
+  "pres": "börjar",
+  "past": "började",
+  "sup": "börjat",
+  "en": "to begin"
+}, {
+  "id": 21,
+  "inf": "tro",
+  "pres": "tror",
+  "past": "trodde",
+  "sup": "trott",
+  "en": "to believe"
+}, {
+  "id": 22,
+  "inf": "tycka",
+  "pres": "tycker",
+  "past": "tyckte",
+  "sup": "tyckt",
+  "en": "to think, have an opinion"
+}, {
+  "id": 23,
+  "inf": "veta",
+  "pres": "vet",
+  "past": "visste",
+  "sup": "vetat",
+  "en": "to know"
+}, {
+  "id": 24,
+  "inf": "försöka",
+  "pres": "försöker",
+  "past": "försökte",
+  "sup": "försökt",
+  "en": "to try"
+}, {
+  "id": 25,
+  "inf": "behöva",
+  "pres": "behöver",
+  "past": "behövde",
+  "sup": "behövt",
+  "en": "to need"
+}, {
+  "id": 26,
+  "inf": "känna",
+  "pres": "känner",
+  "past": "kände",
+  "sup": "känt",
+  "en": "to feel, know (someone)"
+}, {
+  "id": 27,
+  "inf": "läsa",
+  "pres": "läser",
+  "past": "läste",
+  "sup": "läst",
+  "en": "to read"
+}, {
+  "id": 28,
+  "inf": "ro",
+  "pres": "ror",
+  "past": "rodde",
+  "sup": "rott",
+  "en": "to row"
+}, {
+  "id": 29,
+  "inf": "låta",
+  "pres": "låter",
+  "past": "lät",
+  "sup": "låtit",
+  "en": "to let, sound"
+}, {
+  "id": 30,
+  "inf": "stå",
+  "pres": "står",
+  "past": "stod",
+  "sup": "stått",
+  "en": "to stand"
+}, {
+  "id": 31,
+  "inf": "visa",
+  "pres": "visar",
+  "past": "visade",
+  "sup": "visat",
+  "en": "to show"
+}, {
+  "id": 32,
+  "inf": "använda",
+  "pres": "använder",
+  "past": "använde",
+  "sup": "använt",
+  "en": "to use"
+}, {
+  "id": 33,
+  "inf": "vända",
+  "pres": "vänder",
+  "past": "vände",
+  "sup": "vänt",
+  "en": "to turn"
+}, {
+  "id": 34,
+  "inf": "hålla",
+  "pres": "håller",
+  "past": "höll",
+  "sup": "hållit",
+  "en": "to hold"
+}, {
+  "id": 35,
+  "inf": "tänka",
+  "pres": "tänker",
+  "past": "tänkte",
+  "sup": "tänkt",
+  "en": "to think"
+}, {
+  "id": 36,
+  "inf": "söka",
+  "pres": "söker",
+  "past": "sökte",
+  "sup": "sökt",
+  "en": "to search, apply"
+}, {
+  "id": 37,
+  "inf": "ligga",
+  "pres": "ligger",
+  "past": "låg",
+  "sup": "legat",
+  "en": "to lie (down)"
+}, {
+  "id": 38,
+  "inf": "lägga",
+  "pres": "lägger",
+  "past": "lade",
+  "sup": "lagt",
+  "en": "to put, lay"
+}, {
+  "id": 39,
+  "inf": "anse",
+  "pres": "anser",
+  "past": "ansåg",
+  "sup": "ansett",
+  "en": "to consider"
+}, {
+  "id": 40,
+  "inf": "öva",
+  "pres": "övar",
+  "past": "övade",
+  "sup": "övat",
+  "en": "to practice"
+}, {
+  "id": 41,
+  "inf": "handla",
+  "pres": "handlar",
+  "past": "handlade",
+  "sup": "handlat",
+  "en": "to shop, act"
+}, {
+  "id": 42,
+  "inf": "öka",
+  "pres": "ökar",
+  "past": "ökade",
+  "sup": "ökat",
+  "en": "to increase"
+}, {
+  "id": 43,
+  "inf": "skapa",
+  "pres": "skapar",
+  "past": "skapade",
+  "sup": "skapat",
+  "en": "to create"
+}, {
+  "id": 44,
+  "inf": "kapa",
+  "pres": "kapar",
+  "past": "kapade",
+  "sup": "kapat",
+  "en": "to cut"
+}, {
+  "id": 45,
+  "inf": "gälla",
+  "pres": "gäller",
+  "past": "gällde",
+  "sup": "gällt",
+  "en": "to apply, be valid"
+}, {
+  "id": 46,
+  "inf": "verka",
+  "pres": "verkar",
+  "past": "verkade",
+  "sup": "verkat",
+  "en": "to seem, appear"
+}, {
+  "id": 47,
+  "inf": "tala",
+  "pres": "talar",
+  "past": "talade",
+  "sup": "talat",
+  "en": "to speak"
+}, {
+  "id": 48,
+  "inf": "bära",
+  "pres": "bär",
+  "past": "bar",
+  "sup": "burit",
+  "en": "to carry, wear"
+}, {
+  "id": 49,
+  "inf": "höra",
+  "pres": "hör",
+  "past": "hörde",
+  "sup": "hört",
+  "en": "to hear"
+}, {
+  "id": 50,
+  "inf": "innebära",
+  "pres": "innebär",
+  "past": "innebar",
+  "sup": "inneburit",
+  "en": "to mean, imply"
+}, {
+  "id": 51,
+  "inf": "välja",
+  "pres": "väljer",
+  "past": "valde",
+  "sup": "valt",
+  "en": "to choose"
+}, {
+  "id": 52,
+  "inf": "förstå",
+  "pres": "förstår",
+  "past": "förstod",
+  "sup": "förstått",
+  "en": "to understand"
+}, {
+  "id": 53,
+  "inf": "spela",
+  "pres": "spelar",
+  "past": "spelade",
+  "sup": "spelat",
+  "en": "to play"
+}, {
+  "id": 54,
+  "inf": "dra",
+  "pres": "drar",
+  "past": "drog",
+  "sup": "dragit",
+  "en": "to pull, leave"
+}, {
+  "id": 55,
+  "inf": "leda",
+  "pres": "leder",
+  "past": "ledde",
+  "sup": "lett",
+  "en": "to lead"
+}, {
+  "id": 56,
+  "inf": "lyckas",
+  "pres": "lyckas",
+  "past": "lyckades",
+  "sup": "lyckats",
+  "en": "to succeed"
+}, {
+  "id": 57,
+  "inf": "lära",
+  "pres": "lär",
+  "past": "lärde",
+  "sup": "lärt",
+  "en": "to teach, learn"
+}, {
+  "id": 58,
+  "inf": "sätta",
+  "pres": "sätter",
+  "past": "satte",
+  "sup": "satt",
+  "en": "to put, set"
+}, {
+  "id": 59,
+  "inf": "lämna",
+  "pres": "lämnar",
+  "past": "lämnade",
+  "sup": "lämnat",
+  "en": "to leave"
+}, {
+  "id": 60,
+  "inf": "bygga",
+  "pres": "bygger",
+  "past": "byggde",
+  "sup": "byggt",
+  "en": "to build"
+}, {
+  "id": 61,
+  "inf": "kalla",
+  "pres": "kallar",
+  "past": "kallade",
+  "sup": "kallat",
+  "en": "to call"
+}, {
+  "id": 62,
+  "inf": "leva",
+  "pres": "lever",
+  "past": "levde",
+  "sup": "levt",
+  "en": "to live"
+}, {
+  "id": 63,
+  "inf": "ställa",
+  "pres": "ställer",
+  "past": "ställde",
+  "sup": "ställt",
+  "en": "to place, ask"
+}, {
+  "id": 64,
+  "inf": "följa",
+  "pres": "följer",
+  "past": "följde",
+  "sup": "följt",
+  "en": "to follow"
+}, {
+  "id": 65,
+  "inf": "ske",
+  "pres": "sker",
+  "past": "skedde",
+  "sup": "skett",
+  "en": "to happen"
+}, {
+  "id": 66,
+  "inf": "kräva",
+  "pres": "kräver",
+  "past": "krävde",
+  "sup": "krävt",
+  "en": "to demand, require"
+}, {
+  "id": 67,
+  "inf": "ena",
+  "pres": "enar",
+  "past": "enade",
+  "sup": "enat",
+  "en": "to unite"
+}, {
+  "id": 68,
+  "inf": "svara",
+  "pres": "svarar",
+  "past": "svarade",
+  "sup": "svarat",
+  "en": "to answer"
+}, {
+  "id": 69,
+  "inf": "fortsätta",
+  "pres": "fortsätter",
+  "past": "fortsatte",
+  "sup": "fortsatt",
+  "en": "to continue"
+}, {
+  "id": 70,
+  "inf": "bruka",
+  "pres": "brukar",
+  "past": "brukade",
+  "sup": "brukat",
+  "en": "to usually do, use"
+}, {
+  "id": 71,
+  "inf": "mena",
+  "pres": "menar",
+  "past": "menade",
+  "sup": "menat",
+  "en": "to mean"
+}, {
+  "id": 72,
+  "inf": "slå",
+  "pres": "slår",
+  "past": "slog",
+  "sup": "slagit",
+  "en": "to hit, beat"
+}, {
+  "id": 73,
+  "inf": "hända",
+  "pres": "händer",
+  "past": "hände",
+  "sup": "hänt",
+  "en": "to happen"
+}, {
+  "id": 74,
+  "inf": "arbeta",
+  "pres": "arbetar",
+  "past": "arbetade",
+  "sup": "arbetat",
+  "en": "to work"
+}, {
+  "id": 75,
+  "inf": "fungera",
+  "pres": "fungerar",
+  "past": "fungerade",
+  "sup": "fungerat",
+  "en": "to function"
+}, {
+  "id": 76,
+  "inf": "beta",
+  "pres": "betar",
+  "past": "betade",
+  "sup": "betat",
+  "en": "to graze"
+}, {
+  "id": 77,
+  "inf": "köpa",
+  "pres": "köper",
+  "past": "köpte",
+  "sup": "köpt",
+  "en": "to buy"
+}, {
+  "id": 78,
+  "inf": "sitta",
+  "pres": "sitter",
+  "past": "satt",
+  "sup": "suttit",
+  "en": "to sit"
+}, {
+  "id": 79,
+  "inf": "berätta",
+  "pres": "berättar",
+  "past": "berättade",
+  "sup": "berättat",
+  "en": "to tell"
+}, {
+  "id": 80,
+  "inf": "rätta",
+  "pres": "rättar",
+  "past": "rättade",
+  "sup": "rättat",
+  "en": "to correct"
+}, {
+  "id": 81,
+  "inf": "sluta",
+  "pres": "slutar",
+  "past": "slutade",
+  "sup": "slutat",
+  "en": "to stop, end"
+}, {
+  "id": 82,
+  "inf": "åka",
+  "pres": "åker",
+  "past": "åkte",
+  "sup": "åkt",
+  "en": "to travel, go (by vehicle)"
+}, {
+  "id": 83,
+  "inf": "betala",
+  "pres": "betalar",
+  "past": "betalade",
+  "sup": "betalat",
+  "en": "to pay"
+}, {
+  "id": 84,
+  "inf": "utveckla",
+  "pres": "utvecklar",
+  "past": "utvecklade",
+  "sup": "utvecklat",
+  "en": "to develop"
+}, {
+  "id": 85,
+  "inf": "föra",
+  "pres": "för",
+  "past": "förde",
+  "sup": "fört",
+  "en": "to lead, carry"
+}, {
+  "id": 86,
+  "inf": "hjälpa",
+  "pres": "hjälper",
+  "past": "hjälpte",
+  "sup": "hjälpt",
+  "en": "to help"
+}, {
+  "id": 87,
+  "inf": "vinna",
+  "pres": "vinner",
+  "past": "vann",
+  "sup": "vunnit",
+  "en": "to win"
+}, {
+  "id": 88,
+  "inf": "vänta",
+  "pres": "väntar",
+  "past": "väntade",
+  "sup": "väntat",
+  "en": "to wait"
+}, {
+  "id": 89,
+  "inf": "jobba",
+  "pres": "jobbar",
+  "past": "jobbade",
+  "sup": "jobbat",
+  "en": "to work"
+}, {
+  "id": 90,
+  "inf": "klara",
+  "pres": "klarar",
+  "past": "klarade",
+  "sup": "klarat",
+  "en": "to manage, pass"
+}, {
+  "id": 91,
+  "inf": "prata",
+  "pres": "pratar",
+  "past": "pratade",
+  "sup": "pratat",
+  "en": "to talk"
+}, {
+  "id": 92,
+  "inf": "fråga",
+  "pres": "frågar",
+  "past": "frågade",
+  "sup": "frågat",
+  "en": "to ask"
+}, {
+  "id": 93,
+  "inf": "anmäla",
+  "pres": "anmäler",
+  "past": "anmälde",
+  "sup": "anmält",
+  "en": "to report, register"
+}, {
+  "id": 94,
+  "inf": "nå",
+  "pres": "når",
+  "past": "nådde",
+  "sup": "nått",
+  "en": "to reach"
+}, {
+  "id": 95,
+  "inf": "bo",
+  "pres": "bor",
+  "past": "bodde",
+  "sup": "bott",
+  "en": "to live, reside"
+}, {
+  "id": 96,
+  "inf": "stämma",
+  "pres": "stämmer",
+  "past": "stämde",
+  "sup": "stämt",
+  "en": "to be correct, tune"
+}, {
+  "id": 97,
+  "inf": "dela",
+  "pres": "delar",
+  "past": "delade",
+  "sup": "delat",
+  "en": "to share"
+}, {
+  "id": 98,
+  "inf": "köra",
+  "pres": "kör",
+  "past": "körde",
+  "sup": "kört",
+  "en": "to drive"
+}, {
+  "id": 99,
+  "inf": "hoppas",
+  "pres": "hoppas",
+  "past": "hoppades",
+  "sup": "hoppats",
+  "en": "to hope"
+}, {
+  "id": 100,
+  "inf": "förklara",
+  "pres": "förklarar",
+  "past": "förklarade",
+  "sup": "förklarat",
+  "en": "to explain"
+}, {
+  "id": 101,
+  "inf": "tvinga",
+  "pres": "tvingar",
+  "past": "tvingade",
+  "sup": "tvingat",
+  "en": "to force"
+}, {
+  "id": 102,
+  "inf": "påverka",
+  "pres": "påverkar",
+  "past": "påverkade",
+  "sup": "påverkat",
+  "en": "to influence"
+}, {
+  "id": 103,
+  "inf": "titta",
+  "pres": "tittar",
+  "past": "tittade",
+  "sup": "tittat",
+  "en": "to look"
+}, {
+  "id": 104,
+  "inf": "minska",
+  "pres": "minskar",
+  "past": "minskade",
+  "sup": "minskat",
+  "en": "to decrease"
+}, {
+  "id": 105,
+  "inf": "bestämma",
+  "pres": "bestämmer",
+  "past": "bestämde",
+  "sup": "bestämt",
+  "en": "to decide"
+}, {
+  "id": 106,
+  "inf": "skicka",
+  "pres": "skickar",
+  "past": "skickade",
+  "sup": "skickat",
+  "en": "to send"
+}, {
+  "id": 107,
+  "inf": "ändra",
+  "pres": "ändrar",
+  "past": "ändrade",
+  "sup": "ändrat",
+  "en": "to change"
+}, {
+  "id": 108,
+  "inf": "träffa",
+  "pres": "träffar",
+  "past": "träffade",
+  "sup": "träffat",
+  "en": "to meet"
+}, {
+  "id": 109,
+  "inf": "diskutera",
+  "pres": "diskuterar",
+  "past": "diskuterade",
+  "sup": "diskuterat",
+  "en": "to discuss"
+}, {
+  "id": 110,
+  "inf": "driva",
+  "pres": "driver",
+  "past": "drev",
+  "sup": "drivit",
+  "en": "to run, operate, drive"
+}, {
+  "id": 111,
+  "inf": "sälja",
+  "pres": "säljer",
+  "past": "sålde",
+  "sup": "sålt",
+  "en": "to sell"
+}, {
+  "id": 112,
+  "inf": "sakna",
+  "pres": "saknar",
+  "past": "saknade",
+  "sup": "saknat",
+  "en": "to miss"
+}, {
+  "id": 113,
+  "inf": "länka",
+  "pres": "länkar",
+  "past": "länkade",
+  "sup": "länkat",
+  "en": "to link"
+}, {
+  "id": 114,
+  "inf": "tyda",
+  "pres": "tyder",
+  "past": "tydde",
+  "sup": "tytt",
+  "en": "to interpret"
+}, {
+  "id": 115,
+  "inf": "genomföra",
+  "pres": "genomför",
+  "past": "genomförde",
+  "sup": "genomfört",
+  "en": "to carry out"
+}, {
+  "id": 116,
+  "inf": "räkna",
+  "pres": "räknar",
+  "past": "räknade",
+  "sup": "räknat",
+  "en": "to count"
+}, {
+  "id": 117,
+  "inf": "beskriva",
+  "pres": "beskriver",
+  "past": "beskrev",
+  "sup": "beskrivit",
+  "en": "to describe"
+}, {
+  "id": 118,
+  "inf": "möta",
+  "pres": "möter",
+  "past": "mötte",
+  "sup": "mött",
+  "en": "to meet"
+}, {
+  "id": 119,
+  "inf": "heta",
+  "pres": "heter",
+  "past": "hette",
+  "sup": "hetat",
+  "en": "to be called, named"
+}, {
+  "id": 120,
+  "inf": "äta",
+  "pres": "äter",
+  "past": "åt",
+  "sup": "ätit",
+  "en": "to eat"
+}, {
+  "id": 121,
+  "inf": "flytta",
+  "pres": "flyttar",
+  "past": "flyttade",
+  "sup": "flyttat",
+  "en": "to move"
+}, {
+  "id": 122,
+  "inf": "utgöra",
+  "pres": "utgör",
+  "past": "utgjorde",
+  "sup": "utgjort",
+  "en": "to constitute"
+}, {
+  "id": 123,
+  "inf": "röra",
+  "pres": "rör",
+  "past": "rörde",
+  "sup": "rört",
+  "en": "to move, touch"
+}, {
+  "id": 124,
+  "inf": "dö",
+  "pres": "dör",
+  "past": "dog",
+  "sup": "dött",
+  "en": "to die"
+}, {
+  "id": 125,
+  "inf": "växa",
+  "pres": "växer",
+  "past": "växte",
+  "sup": "växt",
+  "en": "to grow"
+}, {
+  "id": 126,
+  "inf": "våga",
+  "pres": "vågar",
+  "past": "vågade",
+  "sup": "vågat",
+  "en": "to dare"
+}, {
+  "id": 127,
+  "inf": "fatta",
+  "pres": "fattar",
+  "past": "fattade",
+  "sup": "fattat",
+  "en": "to grasp, understand"
+}, {
+  "id": 128,
+  "inf": "nämna",
+  "pres": "nämner",
+  "past": "nämnde",
+  "sup": "nämnt",
+  "en": "to mention"
+}, {
+  "id": 129,
+  "inf": "be",
+  "pres": "ber",
+  "past": "bad",
+  "sup": "bett",
+  "en": "to ask, pray"
+}, {
+  "id": 130,
+  "inf": "anta",
+  "pres": "antar",
+  "past": "antog",
+  "sup": "antagit",
+  "en": "to assume, accept"
+}, {
+  "id": 131,
+  "inf": "föreslå",
+  "pres": "föreslår",
+  "past": "föreslog",
+  "sup": "föreslagit",
+  "en": "to suggest"
+}, {
+  "id": 132,
+  "inf": "undra",
+  "pres": "undrar",
+  "past": "undrade",
+  "sup": "undrat",
+  "en": "to wonder"
+}, {
+  "id": 133,
+  "inf": "lyssna",
+  "pres": "lyssnar",
+  "past": "lyssnade",
+  "sup": "lyssnat",
+  "en": "to listen"
+}, {
+  "id": 134,
+  "inf": "delta",
+  "pres": "deltar",
+  "past": "deltog",
+  "sup": "deltagit",
+  "en": "to participate"
+}, {
+  "id": 135,
+  "inf": "falla",
+  "pres": "faller",
+  "past": "föll",
+  "sup": "fallit",
+  "en": "to fall"
+}, {
+  "id": 136,
+  "inf": "starta",
+  "pres": "startar",
+  "past": "startade",
+  "sup": "startat",
+  "en": "to start"
+}, {
+  "id": 137,
+  "inf": "inse",
+  "pres": "inser",
+  "past": "insåg",
+  "sup": "insett",
+  "en": "to realize"
+}, {
+  "id": 138,
+  "inf": "bidra",
+  "pres": "bidrar",
+  "past": "bidrog",
+  "sup": "bidragit",
+  "en": "to contribute"
+}, {
+  "id": 139,
+  "inf": "luta",
+  "pres": "lutar",
+  "past": "lutade",
+  "sup": "lutat",
+  "en": "to lean"
+}, {
+  "id": 140,
+  "inf": "bero",
+  "pres": "beror",
+  "past": "berodde",
+  "sup": "berott",
+  "en": "to depend"
+}, {
+  "id": 141,
+  "inf": "minnas",
+  "pres": "minns",
+  "past": "mindes",
+  "sup": "mints",
+  "en": "to remember"
+}, {
+  "id": 142,
+  "inf": "rösta",
+  "pres": "röstar",
+  "past": "röstade",
+  "sup": "röstat",
+  "en": "to vote"
+}, {
+  "id": 143,
+  "inf": "kommentera",
+  "pres": "kommenterar",
+  "past": "kommenterade",
+  "sup": "kommenterat",
+  "en": "to comment"
+}, {
+  "id": 144,
+  "inf": "gilla",
+  "pres": "gillar",
+  "past": "gillade",
+  "sup": "gillat",
+  "en": "to like"
+}, {
+  "id": 145,
+  "inf": "bryta",
+  "pres": "bryter",
+  "past": "bröt",
+  "sup": "brutit",
+  "en": "to break"
+}, {
+  "id": 146,
+  "inf": "innehålla",
+  "pres": "innehåller",
+  "past": "innehöll",
+  "sup": "innehållit",
+  "en": "to contain"
+}, {
+  "id": 147,
+  "inf": "bjuda",
+  "pres": "bjuder",
+  "past": "bjöd",
+  "sup": "bjudit",
+  "en": "to invite, offer"
+}, {
+  "id": 148,
+  "inf": "hävda",
+  "pres": "hävdar",
+  "past": "hävdade",
+  "sup": "hävdat",
+  "en": "to claim"
+}, {
+  "id": 149,
+  "inf": "hamna",
+  "pres": "hamnar",
+  "past": "hamnade",
+  "sup": "hamnat",
+  "en": "to end up"
+}, {
+  "id": 150,
+  "inf": "hinna",
+  "pres": "hinner",
+  "past": "hann",
+  "sup": "hunnit",
+  "en": "to have time"
+}];
 const VOCAB_BY_ID = new Map(VOCAB.map(v => [v.id, v]));
 const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const MILESTONES = [50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000];
@@ -25988,7 +27039,8 @@ function OrdforradApp({
     onOpenProgress: () => setScreen('progress'),
     onOpenHardWords: () => setScreen('hardwords'),
     hardWordCount: hardWordItems.length,
-    onOpenDictionary: () => setScreen('dictionary')
+    onOpenDictionary: () => setScreen('dictionary'),
+    onOpenVerbs: () => setScreen('verbs')
   }), screen === 'progress' && /*#__PURE__*/React.createElement(ProgressScreen, {
     state: state,
     onExit: () => setScreen('home')
@@ -26027,6 +27079,8 @@ function OrdforradApp({
     onExit: () => setScreen('home')
   }), screen === 'dictionary' && /*#__PURE__*/React.createElement(DictionaryScreen, {
     onExit: () => setScreen('home')
+  }), screen === 'verbs' && /*#__PURE__*/React.createElement(VerbsScreen, {
+    onExit: () => setScreen('home')
   }));
 }
 
@@ -26059,7 +27113,8 @@ function HomeScreen({
   onUpdateName,
   onOpenHardWords,
   hardWordCount,
-  onOpenDictionary
+  onOpenDictionary,
+  onOpenVerbs
 }) {
   const scopeLabel = state.scope === 'all' ? 'Alla ord — frequency order' : `Rivstart · Kapitel ${state.scope}`;
   let extrasHelperText = null;
@@ -26176,6 +27231,11 @@ function HomeScreen({
   }, /*#__PURE__*/React.createElement(Flag, {
     size: 16
   }), " Svåra ord ", hardWordCount > 0 ? `(${hardWordCount})` : ''), /*#__PURE__*/React.createElement("button", {
+    className: "ord-extras-btn",
+    onClick: onOpenVerbs
+  }, /*#__PURE__*/React.createElement(Repeat, {
+    size: 16
+  }), " Verb — böjningar"), /*#__PURE__*/React.createElement("button", {
     className: "ord-match-btn",
     onClick: onOpenDictionary
   }, /*#__PURE__*/React.createElement(BookOpen, {
@@ -27208,6 +28268,198 @@ function DictionaryScreen({
   }), " Folkets Lexikon (webb)")));
 }
 
+/* ---------------- Verbs screen: browse all forms, or drill them ---------------- */
+
+const VERB_FORM_LABELS = {
+  pres: 'Presens (nutid)',
+  past: 'Preteritum (dåtid)',
+  sup: 'Supinum (med har/hade)'
+};
+function VerbsScreen({
+  onExit
+}) {
+  const [mode, setMode] = useState('menu'); // menu | browse | practice-setup | practice
+  const [session, setSession] = useState(null);
+  const startPractice = () => {
+    const forms = ['pres', 'past', 'sup'];
+    const turns = shuffle(VERBS).slice(0, 20).map(v => ({
+      verb: v,
+      form: forms[Math.floor(Math.random() * forms.length)]
+    }));
+    setSession({
+      turns,
+      index: 0,
+      results: {
+        correct: 0,
+        incorrect: 0
+      }
+    });
+    setMode('practice');
+  };
+  const handleResult = correct => {
+    setSession(prev => ({
+      ...prev,
+      index: prev.index + 1,
+      results: {
+        correct: prev.results.correct + (correct ? 1 : 0),
+        incorrect: prev.results.incorrect + (correct ? 0 : 1)
+      }
+    }));
+  };
+  if (mode === 'browse') {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ord-review"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-review-top"
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "ord-exit-btn",
+      onClick: () => setMode('menu')
+    }, /*#__PURE__*/React.createElement(ArrowLeft, {
+      size: 18
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "ord-eyebrow",
+      style: {
+        margin: 0
+      }
+    }, "VERB (", VERBS.length, ")")), /*#__PURE__*/React.createElement("div", {
+      className: "ord-verb-table-head"
+    }, /*#__PURE__*/React.createElement("span", null, "Infinitiv"), /*#__PURE__*/React.createElement("span", null, "Presens"), /*#__PURE__*/React.createElement("span", null, "Preteritum"), /*#__PURE__*/React.createElement("span", null, "Supinum")), /*#__PURE__*/React.createElement("div", {
+      className: "ord-verb-list"
+    }, VERBS.map(v => /*#__PURE__*/React.createElement("div", {
+      className: "ord-verb-row",
+      key: v.id
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ord-verb-inf"
+    }, v.inf), /*#__PURE__*/React.createElement("span", null, v.pres), /*#__PURE__*/React.createElement("span", null, v.past), /*#__PURE__*/React.createElement("span", null, v.sup)))));
+  }
+  if (mode === 'practice' && session) {
+    const done = session.index >= session.turns.length;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ord-review"
+    }, /*#__PURE__*/React.createElement(TopBar, {
+      index: Math.min(session.index, session.turns.length - 1),
+      total: session.turns.length,
+      onExit: () => {
+        setSession(null);
+        setMode('menu');
+      }
+    }), done ? /*#__PURE__*/React.createElement("div", {
+      className: "ord-summary"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-eyebrow"
+    }, "VERBÖVNING KLAR"), /*#__PURE__*/React.createElement("h2", {
+      className: "ord-summary-title"
+    }, "Bra jobbat!"), /*#__PURE__*/React.createElement("div", {
+      className: "ord-summary-count"
+    }, session.results.correct, " rätt · ", session.results.incorrect, " fel"), /*#__PURE__*/React.createElement("button", {
+      className: "ord-start-btn",
+      onClick: () => {
+        setSession(null);
+        setMode('menu');
+      }
+    }, "Tillbaka")) : /*#__PURE__*/React.createElement(VerbPracticeTurn, {
+      key: session.index,
+      turn: session.turns[session.index],
+      onResult: handleResult
+    }));
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-review"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-top"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-exit-btn",
+    onClick: onExit
+  }, /*#__PURE__*/React.createElement(ArrowLeft, {
+    size: 18
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "ord-eyebrow",
+    style: {
+      margin: 0
+    }
+  }, "VERB — BÖJNINGAR")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty",
+    style: {
+      marginBottom: 16
+    }
+  }, VERBS.length, " av de vanligaste svenska verben, med presens, preteritum och supinum — oberoende av vilka ord du redan mött i flashcards."), /*#__PURE__*/React.createElement("button", {
+    className: "ord-start-btn",
+    onClick: startPractice
+  }, "Öva verbformer"), /*#__PURE__*/React.createElement("button", {
+    className: "ord-extras-btn",
+    onClick: () => setMode('browse')
+  }, /*#__PURE__*/React.createElement(BookOpen, {
+    size: 16
+  }), " Bläddra bland alla verb"));
+}
+function VerbPracticeTurn({
+  turn,
+  onResult
+}) {
+  const [value, setValue] = useState('');
+  const [revealed, setRevealed] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current && inputRef.current.focus();
+  }, []);
+  const target = turn.verb[turn.form];
+  const targetVariants = target.toLowerCase().split('/').map(s => s.trim());
+  const submit = () => {
+    if (revealed || !value.trim()) return;
+    setIsCorrect(targetVariants.includes(value.trim().toLowerCase()));
+    setRevealed(true);
+  };
+  useEffect(() => {
+    const onKey = e => {
+      if (e.key !== 'Enter') return;
+      if (!revealed) submit();else onResult(isCorrect);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [revealed, isCorrect, value]);
+  return /*#__PURE__*/React.createElement(ExerciseFrame, {
+    eyebrow: VERB_FORM_LABELS[turn.form],
+    stage: /*#__PURE__*/React.createElement("div", {
+      className: "ord-prompt-tile"
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        opacity: 0.7,
+        marginBottom: 8,
+        fontFamily: 'var(--font-mono)'
+      }
+    }, "INFINITIV"), turn.verb.inf, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        opacity: 0.6,
+        marginTop: 10
+      }
+    }, turn.verb.en)),
+    action: !revealed ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("input", {
+      ref: inputRef,
+      className: "ord-type-input",
+      value: value,
+      onChange: e => setValue(e.target.value),
+      placeholder: "Skriv formen...",
+      autoComplete: "off",
+      spellCheck: "false"
+    }), /*#__PURE__*/React.createElement("button", {
+      className: "ord-reveal-btn",
+      onClick: submit
+    }, "Kontrollera ", /*#__PURE__*/React.createElement("span", {
+      className: "ord-key-hint"
+    }, "enter"))) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      className: "ord-type-feedback" + (isCorrect ? ' correct' : ' incorrect')
+    }, isCorrect ? 'Rätt!' : `Rätt svar: ${target}`), /*#__PURE__*/React.createElement("button", {
+      className: "ord-reveal-btn",
+      onClick: () => onResult(isCorrect)
+    }, "Fortsätt ", /*#__PURE__*/React.createElement("span", {
+      className: "ord-key-hint"
+    }, "enter")))
+  });
+}
+
 /* ---------------- Summary Screen (flashcards) ---------------- */
 
 function SummaryScreen({
@@ -27478,6 +28730,11 @@ function Style() {
       .ord-dict-external { margin-top: 22px; padding-bottom: 20px; }
       .ord-dict-external-link { display: flex; align-items: center; gap: 8px; padding: 12px 14px; margin-bottom: 8px; border: 1px solid var(--c-line); border-radius: 8px; color: var(--c-slate); font-family: var(--font-body); font-size: 13.5px; font-weight: 500; text-decoration: none; }
       .ord-dict-external-link:hover { border-color: var(--c-slate); background: rgba(62,92,107,0.06); }
+
+      .ord-verb-table-head { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 0 10px 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: #9a927c; }
+      .ord-verb-list { display: flex; flex-direction: column; gap: 4px; max-height: 65vh; overflow-y: auto; }
+      .ord-verb-row { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 10px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 6px; font-size: 12.5px; align-items: center; }
+      .ord-verb-inf { font-family: var(--font-display); font-weight: 600; }
 
       .ord-save-error { max-width: 460px; margin: 0 auto 16px; padding: 10px 14px; background: rgba(162,62,42,0.1); border: 1px solid rgba(162,62,42,0.3); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--c-red); text-align: center; }
 
