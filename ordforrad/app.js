@@ -28855,7 +28855,7 @@ function Style() {
 
       .ord-verb-row-wrap { display: flex; flex-direction: column; }
       .ord-verb-row-wrap .ord-verb-row { cursor: pointer; }
-      .ord-verb-en-reveal { font-size: 12px; color: var(--c-slate); font-style: italic; padding: 2px 10px 8px; margin-top: -4px; }
+      .ord-verb-en-reveal { font-size: 12px; color: var(--c-slate); font-style: italic; padding: 6px 10px 8px; margin-top: 4px; }
 
       .ord-quizcell-input { width: 100%; min-width: 0; padding: 5px 6px; border: 1.5px solid var(--c-line); border-radius: 4px; font-family: var(--font-body); font-size: 12px; background: #fff; color: var(--c-ink); }
       .ord-quizcell-input:focus { outline: none; border-color: var(--c-slate); }
