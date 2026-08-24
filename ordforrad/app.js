@@ -28327,6 +28327,7 @@ function VerbsScreen({
       className: "ord-verb-list"
     }, VERBS.map(v => /*#__PURE__*/React.createElement("div", {
       className: "ord-verb-row",
+      title: v.en,
       key: v.id
     }, /*#__PURE__*/React.createElement("span", {
       className: "ord-verb-inf"
@@ -28733,7 +28734,8 @@ function Style() {
 
       .ord-verb-table-head { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 0 10px 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: #9a927c; }
       .ord-verb-list { display: flex; flex-direction: column; gap: 4px; max-height: 65vh; overflow-y: auto; }
-      .ord-verb-row { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 10px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 6px; font-size: 12.5px; align-items: center; }
+      .ord-verb-row { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 10px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 6px; font-size: 12.5px; align-items: center; cursor: default; }
+      .ord-verb-row:hover { border-color: var(--c-slate); background: rgba(62,92,107,0.06); }
       .ord-verb-inf { font-family: var(--font-display); font-weight: 600; }
 
       .ord-save-error { max-width: 460px; margin: 0 auto 16px; padding: 10px 14px; background: rgba(162,62,42,0.1); border: 1px solid rgba(162,62,42,0.3); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--c-red); text-align: center; }
