@@ -27606,6 +27606,14 @@ function ExerciseFrame({
   stage,
   action
 }) {
+  useEffect(() => {
+    // Every new turn remounts this frame — make sure the question itself is
+    // visible from the start, even if a mobile keyboard is about to shift things.
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto'
+    });
+  }, []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "ord-exercise-eyebrow"
   }, eyebrow), /*#__PURE__*/React.createElement("div", {
@@ -27613,6 +27621,9 @@ function ExerciseFrame({
   }, stage), /*#__PURE__*/React.createElement("div", {
     className: "ord-action-row"
   }, action));
+}
+function isTouchDevice() {
+  return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
 }
 
 /* ---------------- Flashcard screen (primary activity) ---------------- */
@@ -27867,7 +27878,7 @@ function TypeExercise({
   const [isCorrect, setIsCorrect] = useState(false);
   const inputRef = useRef(null);
   useEffect(() => {
-    inputRef.current && inputRef.current.focus();
+    if (!isTouchDevice()) inputRef.current && inputRef.current.focus();
   }, []);
   const prompt = direction === 'sv-en' ? card.sv : card.en;
   const targetRaw = direction === 'sv-en' ? card.en : card.sv;
@@ -27930,7 +27941,7 @@ function BlankExercise({
     return [card.es.slice(0, idx), card.es.slice(idx + blankWord.length)];
   }, [card.id, blankWord]);
   useEffect(() => {
-    inputRef.current && inputRef.current.focus();
+    if (!isTouchDevice()) inputRef.current && inputRef.current.focus();
   }, []);
   useEffect(() => {
     if (!blankWord) onResult(true);
@@ -28280,6 +28291,10 @@ function VerbsScreen({
 }) {
   const [mode, setMode] = useState('menu'); // menu | browse | practice-setup | practice
   const [session, setSession] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);
+  const [quizActive, setQuizActive] = useState(false);
+  const [quizBlanks, setQuizBlanks] = useState({});
+  const [quizKey, setQuizKey] = useState(0);
   const startPractice = () => {
     const forms = ['pres', 'past', 'sup'];
     const turns = shuffle(VERBS).slice(0, 20).map(v => ({
@@ -28306,6 +28321,25 @@ function VerbsScreen({
       }
     }));
   };
+  const generateQuizBlanks = () => {
+    const cols = ['pres', 'past', 'sup'];
+    const map = {};
+    VERBS.forEach(v => {
+      const n = 1 + Math.floor(Math.random() * 3); // 1, 2, or 3
+      map[v.id] = new Set(shuffle(cols).slice(0, n));
+    });
+    return map;
+  };
+  const startQuiz = () => {
+    setQuizBlanks(generateQuizBlanks());
+    setQuizActive(true);
+    setQuizKey(k => k + 1);
+    setExpandedId(null);
+  };
+  const resetQuiz = () => {
+    setQuizBlanks(generateQuizBlanks());
+    setQuizKey(k => k + 1);
+  };
   if (mode === 'browse') {
     return /*#__PURE__*/React.createElement("div", {
       className: "ord-review"
@@ -28313,7 +28347,10 @@ function VerbsScreen({
       className: "ord-review-top"
     }, /*#__PURE__*/React.createElement("button", {
       className: "ord-exit-btn",
-      onClick: () => setMode('menu')
+      onClick: () => {
+        setMode('menu');
+        setQuizActive(false);
+      }
     }, /*#__PURE__*/React.createElement(ArrowLeft, {
       size: 18
     })), /*#__PURE__*/React.createElement("div", {
@@ -28322,16 +28359,41 @@ function VerbsScreen({
         margin: 0
       }
     }, "VERB (", VERBS.length, ")")), /*#__PURE__*/React.createElement("div", {
+      className: "ord-verb-quiz-row"
+    }, !quizActive ? /*#__PURE__*/React.createElement("button", {
+      className: "ord-verb-quiz-btn",
+      onClick: startQuiz
+    }, "Quiza mig") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+      className: "ord-verb-quiz-btn",
+      onClick: resetQuiz
+    }, "Nytt quiz"), /*#__PURE__*/React.createElement("button", {
+      className: "ord-reset-link",
+      onClick: () => setQuizActive(false)
+    }, "Avsluta quiz"))), !quizActive && /*#__PURE__*/React.createElement("div", {
+      className: "ord-verb-hint"
+    }, "Tryck på ett ord för att se den engelska betydelsen."), /*#__PURE__*/React.createElement("div", {
       className: "ord-verb-table-head"
     }, /*#__PURE__*/React.createElement("span", null, "Infinitiv"), /*#__PURE__*/React.createElement("span", null, "Presens"), /*#__PURE__*/React.createElement("span", null, "Preteritum"), /*#__PURE__*/React.createElement("span", null, "Supinum")), /*#__PURE__*/React.createElement("div", {
       className: "ord-verb-list"
-    }, VERBS.map(v => /*#__PURE__*/React.createElement("div", {
-      className: "ord-verb-row",
-      title: v.en,
-      key: v.id
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "ord-verb-inf"
-    }, v.inf), /*#__PURE__*/React.createElement("span", null, v.pres), /*#__PURE__*/React.createElement("span", null, v.past), /*#__PURE__*/React.createElement("span", null, v.sup)))));
+    }, VERBS.map(v => {
+      const blanks = quizActive ? quizBlanks[v.id] : null;
+      return /*#__PURE__*/React.createElement("div", {
+        key: v.id,
+        className: "ord-verb-row-wrap"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "ord-verb-row",
+        onClick: quizActive ? undefined : () => setExpandedId(id => id === v.id ? null : v.id)
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ord-verb-inf"
+      }, v.inf), ['pres', 'past', 'sup'].map(col => blanks && blanks.has(col) ? /*#__PURE__*/React.createElement(QuizCell, {
+        key: quizKey + '-' + col,
+        correctValue: v[col]
+      }) : /*#__PURE__*/React.createElement("span", {
+        key: col
+      }, v[col]))), !quizActive && expandedId === v.id && /*#__PURE__*/React.createElement("div", {
+        className: "ord-verb-en-reveal"
+      }, v.en));
+    })));
   }
   if (mode === 'practice' && session) {
     const done = session.index >= session.turns.length;
@@ -28402,7 +28464,7 @@ function VerbPracticeTurn({
   const [isCorrect, setIsCorrect] = useState(false);
   const inputRef = useRef(null);
   useEffect(() => {
-    inputRef.current && inputRef.current.focus();
+    if (!isTouchDevice()) inputRef.current && inputRef.current.focus();
   }, []);
   const target = turn.verb[turn.form];
   const targetVariants = target.toLowerCase().split('/').map(s => s.trim());
@@ -28458,6 +28520,45 @@ function VerbPracticeTurn({
     }, "Fortsätt ", /*#__PURE__*/React.createElement("span", {
       className: "ord-key-hint"
     }, "enter")))
+  });
+}
+function QuizCell({
+  correctValue
+}) {
+  const [value, setValue] = useState('');
+  const [status, setStatus] = useState('blank'); // blank | correct | wrong
+  const inputRef = useRef(null);
+  const submit = e => {
+    e.stopPropagation();
+    if (status !== 'blank' || !value.trim()) return;
+    const ok = value.trim().toLowerCase() === correctValue.toLowerCase();
+    if (ok) {
+      setStatus('correct');
+    } else {
+      setStatus('wrong');
+      setTimeout(() => {
+        setStatus('blank');
+        setValue('');
+      }, 650);
+    }
+  };
+  if (status === 'correct') {
+    return /*#__PURE__*/React.createElement("span", {
+      className: "ord-quizcell correct"
+    }, correctValue);
+  }
+  return /*#__PURE__*/React.createElement("input", {
+    ref: inputRef,
+    className: "ord-quizcell-input" + (status === 'wrong' ? ' wrong' : ''),
+    value: value,
+    onChange: e => setValue(e.target.value),
+    onClick: e => e.stopPropagation(),
+    onKeyDown: e => {
+      if (e.key === 'Enter') submit(e);
+    },
+    disabled: status === 'wrong',
+    autoComplete: "off",
+    spellCheck: "false"
   });
 }
 
@@ -28673,6 +28774,15 @@ function Style() {
       .ord-summary-stat-label { font-size: 10.5px; color: #6b6656; margin-top: 2px; letter-spacing: 0.04em; }
 
       @media (prefers-reduced-motion: reduce) { .ord-flap, .ord-progress-fill, .ord-review-progress-fill { transition: none !important; } }
+
+      /* Mobile: the flex-centered stage created a huge gap above short content
+         (prompt tile / sentence) once the on-screen keyboard shrank the viewport,
+         sometimes pushing the actual question off the top of the screen. */
+      @media (max-width: 480px), (max-height: 700px) {
+        .ord-review { min-height: auto; }
+        .ord-stage { align-items: flex-start; padding-top: 6px; padding-bottom: 6px; }
+        .ord-card-stage { align-items: flex-start; padding-top: 6px; }
+      }
       button:focus-visible, .ord-flap:focus-visible, input:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
 
       .ord-progress-link { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: none; border: none; color: var(--c-slate); font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; cursor: pointer; padding: 6px; margin-bottom: 20px; text-decoration: underline; text-underline-offset: 3px; }
@@ -28737,6 +28847,20 @@ function Style() {
       .ord-verb-row { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 6px; padding: 10px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 6px; font-size: 12.5px; align-items: center; cursor: default; }
       .ord-verb-row:hover { border-color: var(--c-slate); background: rgba(62,92,107,0.06); }
       .ord-verb-inf { font-family: var(--font-display); font-weight: 600; }
+
+      .ord-verb-hint { font-family: var(--font-mono); font-size: 10.5px; color: #A39C86; text-align: center; margin-bottom: 10px; }
+      .ord-verb-quiz-row { display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 8px; }
+      .ord-verb-quiz-btn { padding: 10px 18px; background: var(--c-red); color: #FBF3E8; border: none; border-radius: 6px; font-family: var(--font-body); font-weight: 600; font-size: 13px; cursor: pointer; }
+      .ord-verb-quiz-btn:hover { background: #8C3220; }
+
+      .ord-verb-row-wrap { display: flex; flex-direction: column; }
+      .ord-verb-row-wrap .ord-verb-row { cursor: pointer; }
+      .ord-verb-en-reveal { font-size: 12px; color: var(--c-slate); font-style: italic; padding: 2px 10px 8px; margin-top: -4px; }
+
+      .ord-quizcell-input { width: 100%; min-width: 0; padding: 5px 6px; border: 1.5px solid var(--c-line); border-radius: 4px; font-family: var(--font-body); font-size: 12px; background: #fff; color: var(--c-ink); }
+      .ord-quizcell-input:focus { outline: none; border-color: var(--c-slate); }
+      .ord-quizcell-input.wrong { background: rgba(162,62,42,0.15); border-color: var(--c-red); color: var(--c-red); }
+      .ord-quizcell.correct { display: inline-block; padding: 5px 6px; background: rgba(69,98,63,0.15); border: 1.5px solid var(--c-forest); border-radius: 4px; color: var(--c-forest); font-weight: 600; }
 
       .ord-save-error { max-width: 460px; margin: 0 auto 16px; padding: 10px 14px; background: rgba(162,62,42,0.1); border: 1px solid rgba(162,62,42,0.3); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--c-red); text-align: center; }
 
