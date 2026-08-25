@@ -17420,7 +17420,8 @@ const VOCAB = [{
   "id": 8443,
   "sv": "Skriv",
   "en": "Write!",
-  "ch": 1
+  "ch": 1,
+  "t": "v"
 }, {
   "id": 8444,
   "sv": "Arbeta i par.",
@@ -17436,13 +17437,17 @@ const VOCAB = [{
   "sv": "rivstart",
   "en": "flying start",
   "c": "(-en,-er, -erna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8447,
   "sv": "kapitel",
   "en": "chapter",
   "c": "(kapitlet, –, kapitlen)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8448,
   "sv": "Du kan svenska",
@@ -17452,25 +17457,32 @@ const VOCAB = [{
   "id": 8449,
   "sv": "och",
   "en": "and",
-  "ch": 1
+  "ch": 1,
+  "t": "c"
 }, {
   "id": 8450,
   "sv": "hamburgare",
   "en": "hamburger",
   "c": "(-n, –, hamburgarna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8451,
   "sv": "kanelbulle",
   "en": "cinnamon roll/bun",
   "c": "(-n, -ar, -arna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8452,
   "sv": "konsonant",
   "en": "consonant",
   "c": "(-en, -er, -erna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8453,
   "sv": "Jag heter",
@@ -17480,7 +17492,8 @@ const VOCAB = [{
   "id": 8454,
   "sv": "jaha",
   "en": "I see",
-  "ch": 1
+  "ch": 1,
+  "t": "i"
 }, {
   "id": 8455,
   "sv": "vad bra",
@@ -17505,7 +17518,9 @@ const VOCAB = [{
   "id": 8459,
   "sv": "spanska",
   "en": "Spanish",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8460,
   "sv": "så klart",
@@ -17525,12 +17540,15 @@ const VOCAB = [{
   "id": 8463,
   "sv": "pyttelite",
   "en": "a tiny bit",
-  "ch": 1
+  "ch": 1,
+  "t": "a"
 }, {
   "id": 8464,
   "sv": "italienska",
   "en": "Italian",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8465,
   "sv": "Vad kul",
@@ -17545,7 +17563,8 @@ const VOCAB = [{
   "id": 8467,
   "sv": "inte",
   "en": "not",
-  "ch": 1
+  "ch": 1,
+  "t": "a"
 }, {
   "id": 8468,
   "sv": "sätta ett kryss make an x",
@@ -17555,68 +17574,85 @@ const VOCAB = [{
   "id": 8469,
   "sv": "alla",
   "en": "all/everyone",
-  "ch": 1
+  "ch": 1,
+  "t": "d"
 }, {
   "id": 8470,
   "sv": "frågeord",
   "en": "question words",
   "c": "( -et, –, -en)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8471,
   "sv": "mingla",
   "en": "mingle",
   "c": "(-r, -de, -t)",
-  "ch": 1
+  "ch": 1,
+  "t": "v"
 }, {
   "id": 8472,
   "sv": "Colombia",
   "en": "Colombia",
-  "ch": 1
+  "ch": 1,
+  "t": "pn"
 }, {
   "id": 8473,
   "sv": "Irland",
   "en": "Ireland",
-  "ch": 1
+  "ch": 1,
+  "t": "pn"
 }, {
   "id": 8474,
   "sv": "varandra",
   "en": "each other",
-  "ch": 1
+  "ch": 1,
+  "t": "p"
 }, {
   "id": 8475,
   "sv": "de",
   "en": "they",
-  "ch": 1
+  "ch": 1,
+  "t": "p"
 }, {
   "id": 8476,
   "sv": "subjektspronomen",
   "en": "subject pronoun",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8477,
   "sv": "pronomen",
   "en": "pronoun",
   "c": "(-et, –, -en)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8478,
   "sv": "busschaufför",
   "en": "bus driver",
   "c": "(-en, -er, -erna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8479,
   "sv": "webbdesigner",
   "en": "web designer",
   "c": "(-n, webbdesigner, webbdesignerna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8480,
   "sv": "nähä",
   "en": "I see",
   "c": "(ugs)",
-  "ch": 1
+  "ch": 1,
+  "t": "i"
 }, {
   "id": 8481,
   "sv": "lycka till",
@@ -17627,23 +17663,30 @@ const VOCAB = [{
   "sv": "negation",
   "en": "negation",
   "c": "(-en, -er, -erna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8483,
   "sv": "Ukraina",
   "en": "Ukraine",
-  "ch": 1
+  "ch": 1,
+  "t": "pn"
 }, {
   "id": 8484,
   "sv": "portugisiska",
   "en": "Portuguese",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8485,
   "sv": "IT-företag",
   "en": "IT company",
   "c": "(-et, –, -en)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8486,
   "sv": "IT IT",
@@ -17654,7 +17697,9 @@ const VOCAB = [{
   "sv": "förskolelärare",
   "en": "preschool teacher",
   "c": "(-n, –, -förskolelärarna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8488,
   "sv": "studera till",
@@ -17676,12 +17721,15 @@ const VOCAB = [{
   "sv": "schweizare",
   "en": "Swiss",
   "c": "(-n, –, schweizarna)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8492,
   "sv": "också",
   "en": "also too",
-  "ch": 1
+  "ch": 1,
+  "t": "a"
 }, {
   "id": 8493,
   "sv": "bo ihop",
@@ -17691,24 +17739,29 @@ const VOCAB = [{
   "id": 8494,
   "sv": "sedan",
   "en": "since",
-  "ch": 1
+  "ch": 1,
+  "t": "s"
 }, {
   "id": 8495,
   "sv": "separerad",
   "en": "separated",
   "c": "(separerat, separerade)",
-  "ch": 1
+  "ch": 1,
+  "t": "a"
 }, {
   "id": 8496,
   "sv": "bonusbarn",
   "en": "stepchild",
   "c": "(-et, –, -en)",
-  "ch": 1
+  "ch": 1,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8497,
   "sv": "Tjena",
   "en": "Hi!",
-  "ch": 2
+  "ch": 2,
+  "t": "i"
 }, {
   "id": 8498,
   "sv": "Hur mår du",
@@ -17748,12 +17801,14 @@ const VOCAB = [{
   "id": 8505,
   "sv": "kanonbra",
   "en": "great",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8506,
   "sv": "Hejsan",
   "en": "Hi there!",
-  "ch": 2
+  "ch": 2,
+  "t": "i"
 }, {
   "id": 8507,
   "sv": "Hur är det",
@@ -17773,13 +17828,15 @@ const VOCAB = [{
   "id": 8510,
   "sv": "jodå",
   "en": "allright",
-  "ch": 2
+  "ch": 2,
+  "t": "i"
 }, {
   "id": 8511,
   "sv": "Tja",
   "en": "Hey!, Hi!",
   "c": "(= Tjena!)",
-  "ch": 2
+  "ch": 2,
+  "t": "i"
 }, {
   "id": 8512,
   "sv": "så där",
@@ -17789,7 +17846,8 @@ const VOCAB = [{
   "id": 8513,
   "sv": "nja",
   "en": "we-ell…",
-  "ch": 2
+  "ch": 2,
+  "t": "i"
 }, {
   "id": 8514,
   "sv": "Hur står det till",
@@ -17814,7 +17872,8 @@ const VOCAB = [{
   "id": 8518,
   "sv": "Jättetrött",
   "en": "really tired",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8519,
   "sv": "Oj då",
@@ -17835,45 +17894,56 @@ const VOCAB = [{
   "sv": "betonad",
   "en": "emphasized",
   "c": "(betonat, betonade)",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8523,
   "sv": "intonation",
   "en": "intonation",
   "c": "(-en, -er, -erna)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8524,
   "sv": "thailändsk",
   "en": "Thai",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8525,
   "sv": "Norden",
   "en": "the Nordic countries",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8526,
   "sv": "Thailand",
   "en": "Thailand",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8527,
   "sv": "IT-ingenjör",
   "en": "computer engineer",
   "c": "(-en, -er, -erna)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8528,
   "sv": "spelföretag",
   "en": "gaming company",
   "c": "(-et, –, -en)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8529,
   "sv": "ibland",
   "en": "sometimes",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8530,
   "sv": "i sommar",
@@ -17888,65 +17958,78 @@ const VOCAB = [{
   "id": 8532,
   "sv": "Skandinavien",
   "en": "Scandinavia",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8533,
   "sv": "Danmark",
   "en": "Denmark",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8534,
   "sv": "Island",
   "en": "Iceland",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8535,
   "sv": "självstyrande",
   "en": "autonomous, self-governing",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8536,
   "sv": "Färöarna",
   "en": "Faroe Islands",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8537,
   "sv": "Grönland",
   "en": "Greenland",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8538,
   "sv": "Finland",
   "en": "Finland",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8539,
   "sv": "Åland",
   "en": "Aaland Islands",
-  "ch": 2
+  "ch": 2,
+  "t": "pn"
 }, {
   "id": 8540,
   "sv": "till exempel",
   "en": "for example",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8541,
   "sv": "ses",
   "en": "to meet",
   "c": "(ses, sågs, setts)",
-  "ch": 2
+  "ch": 2,
+  "t": "v"
 }, {
   "id": 8542,
   "sv": "höras",
   "en": "be in touch",
   "c": "(hörs, hördes, hörts)",
-  "ch": 2
+  "ch": 2,
+  "t": "v"
 }, {
   "id": 8543,
   "sv": "klasskompis",
   "en": "classmate",
   "c": "(-en, -ar, -arna)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8544,
   "sv": "det här",
@@ -17957,7 +18040,8 @@ const VOCAB = [{
   "sv": "träffas",
   "en": "to meet",
   "c": "(träffas, träffades, träffats)",
-  "ch": 2
+  "ch": 2,
+  "t": "v"
 }, {
   "id": 8546,
   "sv": "Kom in",
@@ -17968,17 +18052,22 @@ const VOCAB = [{
   "sv": "webb",
   "en": "Internet",
   "c": "(-en)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8548,
   "sv": "thai",
   "en": "Thai",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8549,
   "sv": "ska",
   "en": "will",
-  "ch": 2
+  "ch": 2,
+  "t": "v"
 }, {
   "id": 8550,
   "sv": "Vi ses",
@@ -18015,25 +18104,33 @@ const VOCAB = [{
   "sv": "tuggummipaket",
   "en": "pack of chewing gum",
   "c": "(-et, –, -en)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8557,
   "sv": "läsplatta",
   "en": "e-reader",
   "c": "(-n, -or, -orna)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8558,
   "sv": "cerat",
   "en": "chapstick, lip balm",
   "c": "(-et, –, -en)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8559,
   "sv": "suddgummi",
   "en": "eraser",
   "c": "(-t, -n, -na)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8560,
   "sv": "Tack så mycket.",
@@ -18049,13 +18146,17 @@ const VOCAB = [{
   "sv": "bussbiljett",
   "en": "bus ticket",
   "c": "(-en, -er, -erna)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8563,
   "sv": "läppglans",
   "en": "lip gloss",
   "c": "(-et)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8564,
   "sv": "flaska vatten",
@@ -18068,7 +18169,8 @@ const VOCAB = [{
   "sv": "pengar",
   "en": "money",
   "c": "(-na)",
-  "ch": 2
+  "ch": 2,
+  "t": "n"
 }, {
   "id": 8566,
   "sv": "par skor",
@@ -18081,12 +18183,16 @@ const VOCAB = [{
   "sv": "necessär",
   "en": "toiletry bag",
   "c": "(-en, -er, -erna)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8568,
   "sv": "singular",
   "en": "singular",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8569,
   "sv": "obestämd form",
@@ -18097,23 +18203,29 @@ const VOCAB = [{
   "sv": "obestämd",
   "en": "indefinite",
   "c": "(obestämt, obestämda)",
-  "ch": 2
+  "ch": 2,
+  "t": "a"
 }, {
   "id": 8571,
   "sv": "halsduk",
   "en": "scarf",
   "c": "(-en, -ar, -arna)",
-  "ch": 2
+  "ch": 2,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8572,
   "sv": "Sidan",
   "en": "27",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8573,
   "sv": "baklänges",
   "en": "backwards",
-  "ch": 3
+  "ch": 3,
+  "t": "a"
 }, {
   "id": 8574,
   "sv": "kasta tärning",
@@ -18124,13 +18236,17 @@ const VOCAB = [{
   "sv": "tärning",
   "en": "dice",
   "c": "(-en, -ar, -arna)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8576,
   "sv": "nummer",
   "en": "number",
   "c": "(numret, –, numren)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8577,
   "sv": "hur många",
@@ -18140,7 +18256,8 @@ const VOCAB = [{
   "id": 8578,
   "sv": "imorgon",
   "en": "tomorrow",
-  "ch": 3
+  "ch": 3,
+  "t": "a"
 }, {
   "id": 8579,
   "sv": "När är du född",
@@ -18150,7 +18267,8 @@ const VOCAB = [{
   "id": 8580,
   "sv": "född",
   "en": "born",
-  "ch": 3
+  "ch": 3,
+  "t": "a"
 }, {
   "id": 8581,
   "sv": "samma år som",
@@ -18165,7 +18283,8 @@ const VOCAB = [{
   "id": 8583,
   "sv": "jamen",
   "en": "yes, but",
-  "ch": 3
+  "ch": 3,
+  "t": "i"
 }, {
   "id": 8584,
   "sv": "faktiskt inte",
@@ -18232,12 +18351,15 @@ const VOCAB = [{
   "sv": "timme",
   "en": "hour",
   "c": "(-en, -ar, -arna)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8597,
   "sv": "Kanon",
   "en": "Great!",
-  "ch": 3
+  "ch": 3,
+  "t": "i"
 }, {
   "id": 8598,
   "sv": "vilken tid",
@@ -18253,7 +18375,9 @@ const VOCAB = [{
   "sv": "fikapaus",
   "en": "coffee break",
   "c": "(-en,-er, -erna)(= kaffepaus)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8601,
   "sv": "sista last",
@@ -18269,7 +18393,8 @@ const VOCAB = [{
   "sv": "ta",
   "en": "take",
   "c": "(tar, tog, tagit)",
-  "ch": 3
+  "ch": 3,
+  "t": "v"
 }, {
   "id": 8604,
   "sv": "ta en tupplur",
@@ -18281,19 +18406,23 @@ const VOCAB = [{
   "sv": "diska",
   "en": "wash the dishes",
   "c": "(-r, -de, -t)",
-  "ch": 3
+  "ch": 3,
+  "t": "v"
 }, {
   "id": 8606,
   "sv": "teve",
   "en": "tv",
   "c": "(-n, teveapparater, teveapparaterna)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8607,
   "sv": "chatta",
   "en": "chat (online)",
   "c": "(-r, -de, -t)",
-  "ch": 3
+  "ch": 3,
+  "t": "v"
 }, {
   "id": 8608,
   "sv": "gå och lägga sig",
@@ -18304,18 +18433,22 @@ const VOCAB = [{
   "sv": "jämföra",
   "en": "compare",
   "c": "(jämför, -de, -t)",
-  "ch": 3
+  "ch": 3,
+  "t": "v"
 }, {
   "id": 8610,
   "sv": "danskurs",
   "en": "dance course",
   "c": "(-en, -er, -erna)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8611,
   "sv": "idag",
   "en": "today",
-  "ch": 3
+  "ch": 3,
+  "t": "a"
 }, {
   "id": 8612,
   "sv": "pommes frites",
@@ -18326,7 +18459,9 @@ const VOCAB = [{
   "sv": "bearnaisesås",
   "en": "Bernaise sauce",
   "c": "(-en)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8614,
   "sv": "på eftermiddagen",
@@ -18337,13 +18472,17 @@ const VOCAB = [{
   "sv": "eftermiddag",
   "en": "afternoon",
   "c": "(-en, -ar, -arna)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8616,
   "sv": "favoritprogram",
   "en": "favorite show",
   "c": "(-met, –, -men)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8617,
   "sv": "sedan then",
@@ -18353,7 +18492,8 @@ const VOCAB = [{
   "id": 8618,
   "sv": "Tyskland",
   "en": "Germany",
-  "ch": 3
+  "ch": 3,
+  "t": "pn"
 }, {
   "id": 8619,
   "sv": "reflexiva verb",
@@ -18373,12 +18513,14 @@ const VOCAB = [{
   "id": 8622,
   "sv": "båda",
   "en": "both",
-  "ch": 3
+  "ch": 3,
+  "t": "p"
 }, {
   "id": 8623,
   "sv": "åh",
   "en": "oh",
-  "ch": 3
+  "ch": 3,
+  "t": "i"
 }, {
   "id": 8624,
   "sv": "God natt",
@@ -18394,7 +18536,9 @@ const VOCAB = [{
   "sv": "köpcentrum",
   "en": "mall",
   "c": "(köpcentret, –, köpcentren)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8627,
   "sv": "rakt fram",
@@ -18414,67 +18558,88 @@ const VOCAB = [{
   "id": 8630,
   "sv": "imperativ",
   "en": "imperative",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8631,
   "sv": "ordföljd",
   "en": "word order",
   "c": "(-en)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8632,
   "sv": "yoga",
   "en": "yoga",
   "c": "(-r, -de, -t)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8633,
   "sv": "örtte",
   "en": "herbal tea",
   "c": "(-t, -er, -erna)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8634,
   "sv": "mineralvatten",
   "en": "mineral water",
   "c": "(mineralvattnet)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8635,
   "sv": "champagne",
   "en": "champagne",
   "c": "(-n)",
-  "ch": 3
+  "ch": 3,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8636,
   "sv": "närbutik",
   "en": "local grocery store",
   "c": "(-n, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8637,
   "sv": "kontantkort",
   "en": "prepaid card",
   "c": "(-et, −, -en)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8638,
   "sv": "näsduk",
   "en": "handkerchief",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8639,
   "sv": "jättehungrig",
   "en": "really hungry",
   "c": "(-t, -a)",
-  "ch": 4
+  "ch": 4,
+  "t": "a"
 }, {
   "id": 8640,
   "sv": "kebabställe",
   "en": "kebab place",
   "c": "(-t, −, -ena)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8641,
   "sv": "gärna happily",
@@ -18496,7 +18661,9 @@ const VOCAB = [{
   "id": 8644,
   "sv": "hjälpverb",
   "en": "helping verbs, auxiliary verbs",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8645,
   "sv": "muntlig övning",
@@ -18522,7 +18689,8 @@ const VOCAB = [{
   "id": 8649,
   "sv": "mer",
   "en": "more",
-  "ch": 4
+  "ch": 4,
+  "t": "a"
 }, {
   "id": 8650,
   "sv": "nej tack",
@@ -18548,13 +18716,17 @@ const VOCAB = [{
   "sv": "leg",
   "en": "ID",
   "c": "(-et, -, -en) (legitimation)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8655,
   "sv": "falafelmeny",
   "en": "falafel menu",
   "c": "(-n, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8656,
   "sv": "Vill du äta här eller ta med",
@@ -18575,7 +18747,9 @@ const VOCAB = [{
   "sv": "tjuga",
   "en": "a twenty-kronor bill",
   "c": "(-n, -or, -orna) (en tjugolapp)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8660,
   "sv": "… tack.",
@@ -18587,7 +18761,9 @@ const VOCAB = [{
   "id": 8661,
   "sv": "latte",
   "en": "latte",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8662,
   "sv": "Vill du ha",
@@ -18598,7 +18774,9 @@ const VOCAB = [{
   "sv": "lyxbulle",
   "en": "luxury roll",
   "c": "(-en, -ar, arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8664,
   "sv": "Jag tar den.",
@@ -18608,7 +18786,8 @@ const VOCAB = [{
   "id": 8665,
   "sv": "varsågod",
   "en": "you’re welcome",
-  "ch": 4
+  "ch": 4,
+  "t": "i"
 }, {
   "id": 8666,
   "sv": "jag vill ha",
@@ -18629,7 +18808,9 @@ const VOCAB = [{
   "sv": "prislista",
   "en": "list of prices",
   "c": "(-n, -or, -orna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8670,
   "sv": "demonstrativa pronomen",
@@ -18640,97 +18821,129 @@ const VOCAB = [{
   "sv": "dosa",
   "en": "box (small)",
   "c": "(-n, -or, -orna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8672,
   "sv": "godispåse",
   "en": "bag of candy",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8673,
   "sv": "lunchrestaurang",
   "en": "lunch restaurant",
   "c": "(-en, -er, erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8674,
   "sv": "lasagne",
   "en": "lasagna",
   "c": "(-n, -r, -rna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8675,
   "sv": "ostsmörgås",
   "en": "cheese sandwich",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8676,
   "sv": "räksallad",
   "en": "shrimp salad",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8677,
   "sv": "sushi",
   "en": "sushi",
   "c": "(-n)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8678,
   "sv": "thaicurry",
   "en": "Thai curry",
   "c": "(-n)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8679,
   "sv": "wrap",
   "en": "wrap",
   "c": "(-en, -s, -sen)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8680,
   "sv": "brownie",
   "en": "brownie",
   "c": "(-n, -s)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8681,
   "sv": "chokladboll",
   "en": "chocolate ball",
   "c": "(-en, -ar- arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8682,
   "sv": "chokadruta",
   "en": "chocolate square",
   "c": "(-n, -or, -orna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8683,
   "sv": "dammsugare",
   "en": "vacuum cleaner (a type of marzipa treat)",
   "c": "(-n, −, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8684,
   "sv": "morotskaka",
   "en": "carrot cake",
   "c": "(-n, -or, -orna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8685,
   "sv": "mazarin",
   "en": "almond pastry",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8686,
   "sv": "wienerbröd",
   "en": "Danish pastry",
   "c": "(-et, -en, ena)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8687,
   "sv": "kan jag få",
@@ -18750,7 +18963,8 @@ const VOCAB = [{
   "id": 8690,
   "sv": "några",
   "en": "a few",
-  "ch": 4
+  "ch": 4,
+  "t": "d"
 }, {
   "id": 8691,
   "sv": "sammansatta ord",
@@ -18761,13 +18975,17 @@ const VOCAB = [{
   "sv": "snabbmatställe",
   "en": "fast food place",
   "c": "(-t, -n, -ena)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8693,
   "sv": "paprika",
   "en": "pepper",
   "c": "(-n, -or, -orna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8694,
   "sv": "druva/vindruva",
@@ -18779,7 +18997,9 @@ const VOCAB = [{
   "sv": "purjolök",
   "en": "leek",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8696,
   "sv": "Vad kostar det",
@@ -18790,13 +19010,17 @@ const VOCAB = [{
   "sv": "pluralform",
   "en": "plural form",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8698,
   "sv": "mataffär",
   "en": "grocery store",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8699,
   "sv": "till vänster",
@@ -18812,24 +19036,31 @@ const VOCAB = [{
   "sv": "bageri",
   "en": "bakery",
   "c": "(-et, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8702,
   "sv": "chark",
   "en": "cured meat, deli section",
   "c": "(-en)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8703,
   "sv": "snacks",
   "en": "snacks",
-  "ch": 4
+  "ch": 4,
+  "t": "n"
 }, {
   "id": 8704,
   "sv": "bakprodukt",
   "en": "baking ingredient",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8705,
   "sv": "Var finns …",
@@ -18840,7 +19071,9 @@ const VOCAB = [{
   "sv": "falukorv",
   "en": "Swedish bologna sausage",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8707,
   "sv": "Ursäkta har ni …",
@@ -18855,13 +19088,16 @@ const VOCAB = [{
   "id": 8709,
   "sv": "ehh",
   "en": "umm",
-  "ch": 4
+  "ch": 4,
+  "t": "i"
 }, {
   "id": 8710,
   "sv": "parmesanost",
   "en": "Parmesan cheese",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8711,
   "sv": "slut run out",
@@ -18877,91 +19113,121 @@ const VOCAB = [{
   "sv": "köttfärs",
   "en": "minced meat",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8714,
   "sv": "ostbåge",
   "en": "cheese curls, cheese puffs",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8715,
   "sv": "sill",
   "en": "herring",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8716,
   "sv": "saltlakrits",
   "en": "salty licorice",
   "c": "(-et)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8717,
   "sv": "fläskkotlett",
   "en": "pork chop",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8718,
   "sv": "duschkräm",
   "en": "body wash",
   "c": "(-en)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8719,
   "sv": "tub",
   "en": "tube",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8720,
   "sv": "kaviar",
   "en": "cod roe spread",
   "c": "(-en)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8721,
   "sv": "ketchup",
   "en": "ketchup",
   "c": "(-en)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8722,
   "sv": "knäckebröd",
   "en": "crisp bread",
   "c": "(-et)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8723,
   "sv": "lingonsylt",
   "en": "lingonberry preserves",
   "c": "(-en)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8724,
   "sv": "mjukost",
   "en": "cheese spread",
   "c": "(-en, -ar, -arna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8725,
   "sv": "schampo",
   "en": "shampoo",
   "c": "(-t, -n, -na)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8726,
   "sv": "tandkräm",
   "en": "toothpaste",
   "c": "(-en, -er, -erna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8727,
   "sv": "tandpetare",
   "en": "toothpick",
   "c": "(-n, −, -na)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8728,
   "sv": "Vad ska vi äta",
@@ -18976,7 +19242,8 @@ const VOCAB = [{
   "id": 8730,
   "sv": "sugen",
   "en": "have a craving",
-  "ch": 4
+  "ch": 4,
+  "t": "a"
 }, {
   "id": 8731,
   "sv": "pytt i panna",
@@ -18988,17 +19255,21 @@ const VOCAB = [{
   "sv": "id-kort",
   "en": "ID card",
   "c": "(-et, −, -en)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8733,
   "sv": "Australien",
   "en": "Australia",
-  "ch": 4
+  "ch": 4,
+  "t": "pn"
 }, {
   "id": 8734,
   "sv": "Spanien",
   "en": "Spain",
-  "ch": 4
+  "ch": 4,
+  "t": "pn"
 }, {
   "id": 8735,
   "sv": "Vad ska du äta till middag",
@@ -19009,7 +19280,9 @@ const VOCAB = [{
   "sv": "inköpslista",
   "en": "grocery list",
   "c": "(-n, -or, -orna)",
-  "ch": 4
+  "ch": 4,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8737,
   "sv": "riven ost",
@@ -19025,7 +19298,9 @@ const VOCAB = [{
   "sv": "experimentteater",
   "en": "experimental theater",
   "c": "(-n, experimentteatrar, experimentteatrarna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8740,
   "sv": "Vilken dag",
@@ -19071,7 +19346,9 @@ const VOCAB = [{
   "sv": "drömspel",
   "en": "dream play",
   "c": "(-et, −, -en)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8749,
   "sv": "inte precis",
@@ -19086,13 +19363,15 @@ const VOCAB = [{
   "id": 8751,
   "sv": "ikväll",
   "en": "tonight",
-  "ch": 5
+  "ch": 5,
+  "t": "a"
 }, {
   "id": 8752,
   "sv": "akrobatisk",
   "en": "acrobatic",
   "c": "(-t, -a)",
-  "ch": 5
+  "ch": 5,
+  "t": "a"
 }, {
   "id": 8753,
   "sv": "varför inte",
@@ -19148,12 +19427,16 @@ const VOCAB = [{
   "sv": "vattengympa",
   "en": "water aerobics",
   "c": "(vard)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8764,
   "sv": "stan",
   "en": "the city",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8765,
   "sv": "på landet",
@@ -19164,13 +19447,17 @@ const VOCAB = [{
   "sv": "teveserie",
   "en": "tv series",
   "c": "(-n, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8767,
   "sv": "polisserie",
   "en": "cop show, crime drama series",
   "c": "(-n, -r, -rna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8768,
   "sv": "på vintern",
@@ -19191,36 +19478,48 @@ const VOCAB = [{
   "sv": "adverb",
   "en": "adverb",
   "c": "(-et, −, -en)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8772,
   "sv": "special",
   "en": "special",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8773,
   "sv": "innebandy",
   "en": "floorball",
   "c": "(-n)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8774,
   "sv": "trumpet",
   "en": "trumpet",
   "c": "(-en, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8775,
   "sv": "skridsko",
   "en": "skate",
   "c": "(-n, -or, -orna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8776,
   "sv": "skateboard",
   "en": "skateboard",
   "c": "(-en, ar, -arna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8777,
   "sv": "Jag gillar att",
@@ -19236,19 +19535,25 @@ const VOCAB = [{
   "sv": "bioannons",
   "en": "film listings, movie showtimes",
   "c": "(-en, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8780,
   "sv": "skräckfilm",
   "en": "horror movie",
   "c": "(-en, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8781,
   "sv": "hemmakväll",
   "en": "a night in, an evening at home",
   "c": "(-en, -ar, -arna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8782,
   "sv": "i så fall",
@@ -19259,13 +19564,16 @@ const VOCAB = [{
   "sv": "fotbollsmatch",
   "en": "football game, soccer game",
   "c": "(-en, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8784,
   "sv": "koreansk",
   "en": "Korean",
   "c": "(-t, -a)",
-  "ch": 5
+  "ch": 5,
+  "t": "a"
 }, {
   "id": 8785,
   "sv": "tänk själv",
@@ -19281,19 +19589,24 @@ const VOCAB = [{
   "sv": "nyckelord",
   "en": "key words",
   "c": "(-et, −, -en)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8788,
   "sv": "jätterolig",
   "en": "really fun, funny",
   "c": "(-t, -a)",
-  "ch": 5
+  "ch": 5,
+  "t": "a"
 }, {
   "id": 8789,
   "sv": "actionfilm",
   "en": "action movie",
   "c": "(-en, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8790,
   "sv": "science",
@@ -19304,12 +19617,15 @@ const VOCAB = [{
   "sv": "thriller",
   "en": "thriller",
   "c": "(-n, -ers alt. -rar)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8792,
   "sv": "tillbaka",
   "en": "back",
-  "ch": 5
+  "ch": 5,
+  "t": "a"
 }, {
   "id": 8793,
   "sv": "Jag älskar dig",
@@ -19325,41 +19641,53 @@ const VOCAB = [{
   "sv": "toppenkväll",
   "en": "great night",
   "c": "(-en, -ar, -arna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8796,
   "sv": "preteritum",
   "en": "past tense",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8797,
   "sv": "ändelse",
   "en": "suffix",
   "c": "(-n, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8798,
   "sv": "fader",
   "en": "father",
   "c": "(fadern, fäder, fäderna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8799,
   "sv": "vampyr",
   "en": "vampire",
   "c": "(-en, -er, -erna)",
-  "ch": 5
+  "ch": 5,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8800,
   "sv": "förkyld",
   "en": "have a cold",
   "c": "(förkylt, -a)",
-  "ch": 5
+  "ch": 5,
+  "t": "a"
 }, {
   "id": 8801,
   "sv": "byt",
   "en": "change",
-  "ch": 5
+  "ch": 5,
+  "t": "v"
 }, {
   "id": 8802,
   "sv": "Hör du",
@@ -19370,7 +19698,8 @@ const VOCAB = [{
   "sv": "jogga",
   "en": "jogging",
   "c": "(-r, -de, -t)",
-  "ch": 5
+  "ch": 5,
+  "t": "v"
 }, {
   "id": 8804,
   "sv": "gå ut och äta",
@@ -19381,13 +19710,17 @@ const VOCAB = [{
   "sv": "Nobelpristagare",
   "en": "Nobel prize winner",
   "c": "(-n, −, -arna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8806,
   "sv": "stadshus",
   "en": "city hall",
   "c": "(-et, −, -en)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8807,
   "sv": "Är det sant",
@@ -19397,18 +19730,24 @@ const VOCAB = [{
   "id": 8808,
   "sv": "80-talet",
   "en": "eighties",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8809,
   "sv": "forskningsstipendium",
   "en": "research grant",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8810,
   "sv": "molekyl",
   "en": "molecule",
   "c": "(-en, -er, -erna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8811,
   "sv": "i höstas last fall",
@@ -19419,31 +19758,41 @@ const VOCAB = [{
   "sv": "plastförälder",
   "en": "step parent",
   "c": "(-n, plastföräldrar, plastföräldrarna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8813,
   "sv": "bonussyskon",
   "en": "step-siblings",
   "c": "(-et, −, -en)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8814,
   "sv": "släktmiddag",
   "en": "family dinner",
   "c": "(-en, -ar, -arna) (extended)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8815,
   "sv": "julmat",
   "en": "Christmas food",
   "c": "(-en)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8816,
   "sv": "prisutdelning",
   "en": "award ceremony",
   "c": "(-en, -ar, -arna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8817,
   "sv": "nästa gång",
@@ -19453,17 +19802,21 @@ const VOCAB = [{
   "id": 8818,
   "sv": "objektspronomen",
   "en": "object pronoun",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8819,
   "sv": "mig",
   "en": "me",
-  "ch": 6
+  "ch": 6,
+  "t": "p"
 }, {
   "id": 8820,
   "sv": "dig",
   "en": "you",
-  "ch": 6
+  "ch": 6,
+  "t": "p"
 }, {
   "id": 8821,
   "sv": "den/det",
@@ -19473,49 +19826,64 @@ const VOCAB = [{
   "id": 8822,
   "sv": "dem",
   "en": "them",
-  "ch": 6
+  "ch": 6,
+  "t": "p"
 }, {
   "id": 8823,
   "sv": "tidsadverb",
   "en": "adverbs of time",
   "c": "(-et, −, -en)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8824,
   "sv": "far",
   "en": "father",
   "c": "(fadern, fäder, fädren)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8825,
   "sv": "mor",
   "en": "mother",
   "c": "(modern, mödrar, mödrarna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8826,
   "sv": "plastpappa",
   "en": "stepfather",
   "c": "(-n, -or, -orna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8827,
   "sv": "låtsaspappa",
   "en": "stepfather",
   "c": "(-n, -or, -orna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8828,
   "sv": "regnbåge",
   "en": "rainbow",
   "c": "(-n, -ar, -arna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8829,
   "sv": "regnbågsfamilj",
   "en": "rainbow family",
   "c": "(-en, -er, -erna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8830,
   "sv": "relativt pronomen",
@@ -19526,19 +19894,24 @@ const VOCAB = [{
   "sv": "meteorolog",
   "en": "meteorologist",
   "c": "(-en, -er, -erna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8832,
   "sv": "ge",
   "en": "respons respond, react",
   "c": "(-r, gav, gett)",
-  "ch": 6
+  "ch": 6,
+  "t": "v"
 }, {
   "id": 8833,
   "sv": "dansare",
   "en": "dancer",
   "c": "(-n, −, -na)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8834,
   "sv": "Vad heter din …",
@@ -19553,12 +19926,14 @@ const VOCAB = [{
   "id": 8836,
   "sv": "Nämen",
   "en": "No, really!",
-  "ch": 6
+  "ch": 6,
+  "t": "i"
 }, {
   "id": 8837,
   "sv": "Nederländerna",
   "en": "Netherlands",
-  "ch": 6
+  "ch": 6,
+  "t": "pn"
 }, {
   "id": 8838,
   "sv": "possesiva pronomen",
@@ -19568,12 +19943,14 @@ const VOCAB = [{
   "id": 8839,
   "sv": "ditt",
   "en": "your",
-  "ch": 6
+  "ch": 6,
+  "t": "p"
 }, {
   "id": 8840,
   "sv": "dina",
   "en": "your",
-  "ch": 6
+  "ch": 6,
+  "t": "p"
 }, {
   "id": 8841,
   "sv": "Stämmer det",
@@ -19589,12 +19966,15 @@ const VOCAB = [{
   "sv": "dynamit",
   "en": "dynamite",
   "c": "(-en)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8844,
   "sv": "Nobeldagen",
   "en": "Nobel Day",
-  "ch": 6
+  "ch": 6,
+  "t": "pn"
 }, {
   "id": 8845,
   "sv": "Carl XIV Gustav",
@@ -19605,13 +19985,16 @@ const VOCAB = [{
   "sv": "konserthus",
   "en": "concert hall",
   "c": "(-et, −, -en)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8847,
   "sv": "riksbanken",
   "en": "the national bank",
   "c": "(-en, -er, -erna)",
-  "ch": 6
+  "ch": 6,
+  "t": "pn"
 }, {
   "id": 8848,
   "sv": "samma dag",
@@ -19622,19 +20005,25 @@ const VOCAB = [{
   "sv": "fredspris",
   "en": "peace prize",
   "c": "(-et)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8850,
   "sv": "prissumma",
   "en": "prize sum",
   "c": "(-n, or, -orna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8851,
   "sv": "festsal",
   "en": "ballroom",
   "c": "(-en, -ar, -arna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8852,
   "sv": "växa upp",
@@ -19645,7 +20034,9 @@ const VOCAB = [{
   "sv": "nitroglycerin",
   "en": "nitroglycerin",
   "c": "(-en, −, -et)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8854,
   "sv": "tjäna pengar",
@@ -19655,18 +20046,21 @@ const VOCAB = [{
   "id": 8855,
   "sv": "cirka",
   "en": "approximately",
-  "ch": 6
+  "ch": 6,
+  "t": "a"
 }, {
   "id": 8856,
   "sv": "understruken",
   "en": "underlined",
   "c": "(understrukna)",
-  "ch": 6
+  "ch": 6,
+  "t": "a"
 }, {
   "id": 8857,
   "sv": "Portugal",
   "en": "Portugal",
-  "ch": 6
+  "ch": 6,
+  "t": "pn"
 }, {
   "id": 8858,
   "sv": "alltså so",
@@ -19676,13 +20070,17 @@ const VOCAB = [{
   "id": 8859,
   "sv": "tenniskarriär",
   "en": "tennis career",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8860,
   "sv": "klädfirma",
   "en": "clothing company",
   "c": "(-n, -or, -orna)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8861,
   "sv": "Kan du säga det igen",
@@ -19702,7 +20100,8 @@ const VOCAB = [{
   "id": 8864,
   "sv": "Va",
   "en": "What?",
-  "ch": 6
+  "ch": 6,
+  "t": "i"
 }, {
   "id": 8865,
   "sv": "är känd för",
@@ -19723,37 +20122,48 @@ const VOCAB = [{
   "sv": "uppfinnare",
   "en": "inventor",
   "c": "(-n, −, -na)",
-  "ch": 6
+  "ch": 6,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8869,
   "sv": "jqshopping",
   "en": "shopping",
   "c": "(-en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8870,
   "sv": "galleria",
   "en": "mall, deparment store",
   "c": "(-n, -or, orna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8871,
   "sv": "småsaker",
   "en": "small things, odds and ends",
   "c": "(-na)",
-  "ch": 7
+  "ch": 7,
+  "t": "n"
 }, {
   "id": 8872,
   "sv": "hårvax",
   "en": "hair wax",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8873,
   "sv": "ansiktskräm",
   "en": "face cream",
   "c": "(-en, -er, -erna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8874,
   "sv": "i slutet av",
@@ -19764,19 +20174,24 @@ const VOCAB = [{
   "sv": "outlet",
   "en": "outlet",
   "c": "(-en, -s)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8876,
   "sv": "systemkamera",
   "en": "SLR camera",
   "c": "(-n, -or, -orna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8877,
   "sv": "jättedyr",
   "en": "really expensive",
   "c": "(-t, -a)",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8878,
   "sv": "fota (fotografera)",
@@ -19787,7 +20202,8 @@ const VOCAB = [{
   "id": 8879,
   "sv": "mest",
   "en": "mostly",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8880,
   "sv": "second hand-affär",
@@ -19798,31 +20214,39 @@ const VOCAB = [{
   "id": 8881,
   "sv": "femhundra",
   "en": "five hundred",
-  "ch": 7
+  "ch": 7,
+  "t": "num"
 }, {
   "id": 8882,
   "sv": "hårschampo",
   "en": "shampoo",
   "c": "(-t, -n, -na)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8883,
   "sv": "musikaffär",
   "en": "music store",
   "c": "(-en, -er, -erna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8884,
   "sv": "trumset",
   "en": "drumset",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8885,
   "sv": "begagnad",
   "en": "used, second hand",
   "c": "(-t, -e)",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8886,
   "sv": "i våras",
@@ -19833,25 +20257,32 @@ const VOCAB = [{
   "sv": "loppis",
   "en": "flea market",
   "c": "(-en, -ar, -arna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8888,
   "sv": "nätet",
   "en": "the internet",
   "c": "(internet)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8889,
   "sv": "fungera",
   "en": "work",
   "c": "(-r, -de, -t)",
-  "ch": 7
+  "ch": 7,
+  "t": "v"
 }, {
   "id": 8890,
   "sv": "textil",
   "en": "textile",
   "c": "(-en, -er, -erna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8891,
   "sv": "per person",
@@ -19867,66 +20298,81 @@ const VOCAB = [{
   "sv": "byxor",
   "en": "pants, trousers",
   "c": "(-na)",
-  "ch": 7
+  "ch": 7,
+  "t": "n"
 }, {
   "id": 8894,
   "sv": "trosor",
   "en": "womens’ underwear, knickers, pants",
   "c": "(-na)",
-  "ch": 7
+  "ch": 7,
+  "t": "n"
 }, {
   "id": 8895,
   "sv": "bh",
   "en": "bra",
   "c": "(-:n, -:ar, -:arna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8896,
   "sv": "kalsonger",
   "en": "mens’ underwear",
   "c": "(-na)",
-  "ch": 7
+  "ch": 7,
+  "t": "n"
 }, {
   "id": 8897,
   "sv": "randig",
   "en": "striped",
   "c": "(-t, a,)",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8898,
   "sv": "rutig",
   "en": "checkered",
   "c": "(-t, -a)",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8899,
   "sv": "prickig",
   "en": "spotted, polka-dot",
   "c": "(-t, -a)",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8900,
   "sv": "omodern",
   "en": "outdated, old-fashioned",
   "c": "(-t, -a)",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8901,
   "sv": "shoppingexperiment",
   "en": "shopping experiment",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8902,
   "sv": "singelmamma",
   "en": "single mother",
   "c": "(-n, -or, -orna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8903,
   "sv": "shoppingstrejk",
   "en": "shopping strike",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8904,
   "sv": "ute på stan",
@@ -19941,12 +20387,14 @@ const VOCAB = [{
   "id": 8906,
   "sv": "inget",
   "en": "no, nothing",
-  "ch": 7
+  "ch": 7,
+  "t": "d"
 }, {
   "id": 8907,
   "sv": "inga",
   "en": "no",
-  "ch": 7
+  "ch": 7,
+  "t": "d"
 }, {
   "id": 8908,
   "sv": "Bra, va?",
@@ -19962,25 +20410,33 @@ const VOCAB = [{
   "sv": "underlakan",
   "en": "sheet",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8911,
   "sv": "örngott",
   "en": "pillowcase",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8912,
   "sv": "påslakan",
   "en": "duvet cover",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8913,
   "sv": "sängavdelning",
   "en": "bed section",
   "c": "(-en , -ar, -arna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8914,
   "sv": "flytta ihop",
@@ -20002,7 +20458,9 @@ const VOCAB = [{
   "sv": "dubbelsäng",
   "en": "double bed",
   "c": "(-en, -ar, -arna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8918,
   "sv": "Det låter bra.",
@@ -20013,7 +20471,9 @@ const VOCAB = [{
   "sv": "kvalitet",
   "en": "quality",
   "c": "(-en, -er, -erna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8920,
   "sv": "just nu",
@@ -20023,13 +20483,17 @@ const VOCAB = [{
   "id": 8921,
   "sv": "specialerbjudande",
   "en": "special offer",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8922,
   "sv": "duntäcke",
   "en": "down duvet",
   "c": "(-t, -n, -na)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8923,
   "sv": "extra kostnad",
@@ -20040,7 +20504,9 @@ const VOCAB = [{
   "sv": "sänglampa",
   "en": "bedside lamp",
   "c": "(-n, -or, -orna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8925,
   "sv": "halva priset",
@@ -20050,7 +20516,9 @@ const VOCAB = [{
   "id": 8926,
   "sv": "plural",
   "en": "plural",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8927,
   "sv": "öppet köp",
@@ -20115,13 +20583,17 @@ const VOCAB = [{
   "sv": "bytesrätt",
   "en": "right to exchange",
   "c": "(-en, -er, -erna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8939,
   "sv": "ögonskugga",
   "en": "eye shadow",
   "c": "(-n, -or, -orna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8940,
   "sv": "då ska vi se",
@@ -20142,7 +20614,9 @@ const VOCAB = [{
   "sv": "löparsko",
   "en": "running shoe",
   "c": "( -n-, -r, -rna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8944,
   "sv": "Kan du hjälpa mig?",
@@ -20158,7 +20632,9 @@ const VOCAB = [{
   "sv": "löpband",
   "en": "treadmill",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8947,
   "sv": "Sitter de bra?",
@@ -20168,25 +20644,33 @@ const VOCAB = [{
   "id": 8948,
   "sv": "komparation",
   "en": "comparison",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8949,
   "sv": "vildmark",
   "en": "wilderness",
   "c": "(-en, −, -erna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8950,
   "sv": "fleece-tröja",
   "en": "fleece sweater",
   "c": "(-n, -or, -orna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8951,
   "sv": "sportstrumpa",
   "en": "sports socks",
   "c": "(-n, -or, -orna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8952,
   "sv": "Hur kan jag hjälpa dig?",
@@ -20264,7 +20748,9 @@ const VOCAB = [{
   "sv": "prislapp",
   "en": "price tag",
   "c": "(-en, -ar, -arna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8967,
   "sv": "Jag ska kolla.",
@@ -20280,13 +20766,17 @@ const VOCAB = [{
   "sv": "utrop",
   "en": "exclamation",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8970,
   "sv": "specialpris",
   "en": "special price",
   "c": "(-et, -er, -erna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8971,
   "sv": "förra året",
@@ -20297,36 +20787,46 @@ const VOCAB = [{
   "sv": "neongrön",
   "en": "neon green",
   "c": "(-t, -a)",
-  "ch": 7
+  "ch": 7,
+  "t": "a"
 }, {
   "id": 8973,
   "sv": "bagageband",
   "en": "bagage carousel",
   "c": "(-et, −, -en)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8974,
   "sv": "siden",
   "en": "silk",
   "c": "(-et)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8975,
   "sv": "sidenklänning",
   "en": "silk dress",
   "c": "(-en, -ar, -arna)",
-  "ch": 7
+  "ch": 7,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8976,
   "sv": "Skansen",
   "en": "Skansen",
-  "ch": 8
+  "ch": 8,
+  "t": "pn"
 }, {
   "id": 8977,
   "sv": "friluftsmuseum",
   "en": "open air museum",
   "c": "(-et, -er, -erna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8978,
   "sv": "vilda djur",
@@ -20337,29 +20837,37 @@ const VOCAB = [{
   "sv": "säl",
   "en": "seal",
   "c": "(-en, -ar, -arna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8980,
   "sv": "lodjur",
   "en": "lynx",
   "c": "(-et, −, -en)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8981,
   "sv": "SOFO",
   "en": "South of Folkungagatan, an area of Södermalm in Stockholm",
-  "ch": 8
+  "ch": 8,
+  "t": "pn"
 }, {
   "id": 8982,
   "sv": "Drottningholm",
   "en": "location of Drottningholm Palace, residence of royal family",
-  "ch": 8
+  "ch": 8,
+  "t": "pn"
 }, {
   "id": 8983,
   "sv": "slottsteater",
   "en": "palace theater",
   "c": "(-n, slottsteatrar, slottsteatrarna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8984,
   "sv": "första gången",
@@ -20369,25 +20877,30 @@ const VOCAB = [{
   "id": 8985,
   "sv": "Kanada",
   "en": "Canada",
-  "ch": 8
+  "ch": 8,
+  "t": "pn"
 }, {
   "id": 8986,
   "sv": "väderprognos",
   "en": "weather forecast",
   "c": "(-en, -er, -erna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 8987,
   "sv": "regnkläder",
   "en": "rainclothes",
   "c": "(-na)",
-  "ch": 8
+  "ch": 8,
+  "t": "n"
 }, {
   "id": 8988,
   "sv": "solglasögon",
   "en": "sunglasses",
   "c": "(-en)",
-  "ch": 8
+  "ch": 8,
+  "t": "n"
 }, {
   "id": 8989,
   "sv": "varm tröja",
@@ -20398,7 +20911,9 @@ const VOCAB = [{
   "sv": "myggmedel",
   "en": "moquito",
   "c": "(myggmedlet, −, myggmedlen)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 8991,
   "sv": "repellent hemma hos",
@@ -20429,7 +20944,8 @@ const VOCAB = [{
   "id": 8996,
   "sv": "designprylar",
   "en": "design stuff",
-  "ch": 8
+  "ch": 8,
+  "t": "n"
 }, {
   "id": 8997,
   "sv": "gå ut",
@@ -20445,7 +20961,8 @@ const VOCAB = [{
   "sv": "paddla",
   "en": "kanot go canoeing",
   "c": "(-r, -de, -t)",
-  "ch": 8
+  "ch": 8,
+  "t": "v"
 }, {
   "id": 9000,
   "sv": "tänk dig att",
@@ -20455,12 +20972,15 @@ const VOCAB = [{
   "id": 9001,
   "sv": "borde",
   "en": "should",
-  "ch": 8
+  "ch": 8,
+  "t": "v"
 }, {
   "id": 9002,
   "sv": "supinum",
   "en": "supine",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9003,
   "sv": "presens perfekt",
@@ -20471,53 +20991,65 @@ const VOCAB = [{
   "sv": "prickruta",
   "en": "dotted square",
   "c": "(-n)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9005,
   "sv": "ordningstal",
   "en": "ordinal numbers",
   "c": "(-et, −, -en)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9006,
   "sv": "trettonde",
   "en": "thirteenth",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9007,
   "sv": "fjortonde",
   "en": "fourteenth",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9008,
   "sv": "nfemtonde",
   "en": "fifteenth",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9009,
   "sv": "sextonde",
   "en": "sixteenth",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9010,
   "sv": "sjuttonde",
   "en": "seventeenth",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9011,
   "sv": "artonde",
   "en": "eighteenth",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9012,
   "sv": "tjugoförsta",
   "en": "twenty-first",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9013,
   "sv": "trettioförsta",
   "en": "thirty-first",
-  "ch": 8
+  "ch": 8,
+  "t": "num"
 }, {
   "id": 9014,
   "sv": "första i tolfte",
@@ -20533,7 +21065,9 @@ const VOCAB = [{
   "sv": "nationaldag",
   "en": "national day",
   "c": "(-en, -ar, -arna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9017,
   "sv": "o.s.v.",
@@ -20544,7 +21078,9 @@ const VOCAB = [{
   "sv": "sommarstuga",
   "en": "summer cottage,",
   "c": "(-n, -or, -orna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9019,
   "sv": "holiday",
@@ -20555,7 +21091,9 @@ const VOCAB = [{
   "sv": "karaoke",
   "en": "karaoke",
   "c": "(-n)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9021,
   "sv": "någon gång",
@@ -20571,7 +21109,8 @@ const VOCAB = [{
   "sv": "jättenervös",
   "en": "really nervous",
   "c": "(-t, -a)",
-  "ch": 8
+  "ch": 8,
+  "t": "a"
 }, {
   "id": 9024,
   "sv": "för … år sedan",
@@ -20582,7 +21121,8 @@ const VOCAB = [{
   "sv": "höjdrädd",
   "en": "afraid of heights",
   "c": "(-a)",
-  "ch": 8
+  "ch": 8,
+  "t": "a"
 }, {
   "id": 9026,
   "sv": "i present",
@@ -20598,12 +21138,16 @@ const VOCAB = [{
   "sv": "dansgolv",
   "en": "dance floor",
   "c": "(-et, −, -en)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9029,
   "sv": "tidspreposition",
   "en": "preposition of time",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9030,
   "sv": "åka snowboard",
@@ -20624,13 +21168,15 @@ const VOCAB = [{
   "sv": "tälta",
   "en": "go camping (in a tent)",
   "c": "(-r, -ade, -t)",
-  "ch": 8
+  "ch": 8,
+  "t": "v"
 }, {
   "id": 9034,
   "sv": "mejla",
   "en": "email",
   "c": "(-r, -de, -t)",
-  "ch": 8
+  "ch": 8,
+  "t": "v"
 }, {
   "id": 9035,
   "sv": "Vi ses snart!",
@@ -20640,7 +21186,8 @@ const VOCAB = [{
   "id": 9036,
   "sv": "Egypten",
   "en": "Egypt",
-  "ch": 8
+  "ch": 8,
+  "t": "pn"
 }, {
   "id": 9037,
   "sv": "Det är varmt.",
@@ -20721,19 +21268,25 @@ const VOCAB = [{
   "sv": "vinterjacka",
   "en": "winter coat",
   "c": "(-n, -or, -orna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9053,
   "sv": "Sverigeresa",
   "en": "trip to Sweden",
   "c": "(-n, -or, -orna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9054,
   "sv": "frågealternativ",
   "en": "multiple choice answers",
   "c": "(-en, −, -ena)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9055,
   "sv": "gå på klubb",
@@ -20744,7 +21297,9 @@ const VOCAB = [{
   "sv": "våffla",
   "en": "waffle",
   "c": "(-n, våfflor, våfflorna)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9057,
   "sv": "Ska vi bo på vandrarhem/hotell?",
@@ -20760,13 +21315,17 @@ const VOCAB = [{
   "sv": "ex",
   "en": "ex (-boyfriend, -girlfriend)",
   "c": "(-et, −, -en)",
-  "ch": 8
+  "ch": 8,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9060,
   "sv": "restaurangvagn",
   "en": "restaurant carriage, dining car",
   "c": "(-en, -ar, -arna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9061,
   "sv": "första till vänster",
@@ -20782,7 +21341,8 @@ const VOCAB = [{
   "sv": "max",
   "en": "max",
   "c": "(maximalt)",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9064,
   "sv": "Hur lång tid tar det?",
@@ -20793,24 +21353,31 @@ const VOCAB = [{
   "sv": "mack",
   "en": "gas station, petrol station",
   "c": "(-en ,-ar, -arna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9066,
   "sv": "avgångstid",
   "en": "departure time",
   "c": "(-en, -er, -erna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9067,
   "sv": "handbagage",
   "en": "hand luggage",
   "c": "(-et, −, -en)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9068,
   "sv": "Helsingfors",
   "en": "Helsinki",
-  "ch": 9
+  "ch": 9,
+  "t": "pn"
 }, {
   "id": 9069,
   "sv": "nästa station",
@@ -20831,12 +21398,15 @@ const VOCAB = [{
   "sv": "taxameter",
   "en": "taximeter",
   "c": "(-n, taxametrar, taxametrarna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9073,
   "sv": "Mexiko",
   "en": "Mexico",
-  "ch": 9
+  "ch": 9,
+  "t": "pn"
 }, {
   "id": 9074,
   "sv": "gå i tvåan",
@@ -20847,34 +21417,44 @@ const VOCAB = [{
   "sv": "nollåtta",
   "en": "oh-eight, Stocolmer",
   "c": "(stockholmare)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9076,
   "sv": "jättenöjd",
   "en": "very satisfied",
   "c": "(-t, -a)",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9077,
   "sv": "sjuttiosexa",
   "en": "someone born in -76",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9078,
   "sv": "åttiofemma",
   "en": "someone born in -85",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9079,
   "sv": "femtiosjua",
   "en": "the fifty-seven",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9080,
   "sv": "yngre",
   "en": "younger",
   "c": "(ung, yngre, yngst)",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9081,
   "sv": "sexa whiskey",
@@ -20892,25 +21472,33 @@ const VOCAB = [{
   "sv": "skostorlek",
   "en": "shoe size",
   "c": "(-en, -ar, -arna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9084,
   "sv": "födelseår",
   "en": "birth year",
   "c": "(-et, −, -en)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9085,
   "sv": "gatunummer",
   "en": "street number",
   "c": "(gatunumret, gatunumren)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9086,
   "sv": "våningsplan",
   "en": "floor, storey",
   "c": "(-et, −, -en)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9087,
   "sv": "centiliter alkohol",
@@ -20921,13 +21509,17 @@ const VOCAB = [{
   "sv": "tärningsslag",
   "en": "dice roll",
   "c": "(-et, −, -en)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9089,
   "sv": "årskurs",
   "en": "year, grade",
   "c": "(-en, -er, -erna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9090,
   "sv": "Kommer du ihåg?",
@@ -20937,25 +21529,31 @@ const VOCAB = [{
   "id": 9091,
   "sv": "Indien",
   "en": "India",
-  "ch": 9
+  "ch": 9,
+  "t": "pn"
 }, {
   "id": 9092,
   "sv": "partikelverb",
   "en": "phrasal verb",
   "c": "(-et,−, -en)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9093,
   "sv": "obetonad",
   "en": "unstressed",
   "c": "(-t,-e)",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9094,
   "sv": "pendeltåg",
   "en": "commuter train",
   "c": "(-et, −, -en)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9095,
   "sv": "ta flyget",
@@ -20966,22 +21564,28 @@ const VOCAB = [{
   "sv": "camping",
   "en": "camping",
   "c": "(-en, -ar, -arna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9097,
   "sv": "Köpenhamn",
   "en": "Copenhagen",
-  "ch": 9
+  "ch": 9,
+  "t": "pn"
 }, {
   "id": 9098,
   "sv": "Öresundsbron",
   "en": "Öresund bridge",
-  "ch": 9
+  "ch": 9,
+  "t": "pn"
 }, {
   "id": 9099,
   "sv": "framtidsadverb",
   "en": "adverbs for future",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9100,
   "sv": "varje dag",
@@ -21003,19 +21607,24 @@ const VOCAB = [{
   "sv": "försenad",
   "en": "delayed",
   "c": "(-t, -e)",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9104,
   "sv": "anslutningsbuss",
   "en": "connecting bus",
   "c": "(-en, -ar, -arna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9105,
   "sv": "flygbuss",
   "en": "airport bus",
   "c": "(-en, -ar, -arna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9106,
   "sv": "sista utrop",
@@ -21025,13 +21634,17 @@ const VOCAB = [{
   "id": 9107,
   "sv": "flight",
   "en": "flight",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9108,
   "sv": "gate",
   "en": "gate",
   "c": "(-n, -r, -rna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9109,
   "sv": "Hur kommer vi till …?",
@@ -21042,7 +21655,9 @@ const VOCAB = [{
   "sv": "receptionist",
   "en": "receptionist",
   "c": "(-en, -er, -erna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9111,
   "sv": "två dagar sen",
@@ -21053,13 +21668,16 @@ const VOCAB = [{
   "sv": "jättefin",
   "en": "really nice",
   "c": "(-t, -a)",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9113,
   "sv": "surrealism",
   "en": "surrealism",
   "c": "(-en)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9114,
   "sv": "så långt",
@@ -21084,7 +21702,8 @@ const VOCAB = [{
   "id": 9118,
   "sv": "och så vidare",
   "en": "and so on",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9119,
   "sv": "olika platser",
@@ -21100,12 +21719,15 @@ const VOCAB = [{
   "sv": "tobaksaffär",
   "en": "tobacco shop",
   "c": "(-en, -er, -erna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9122,
   "sv": "mittemot",
   "en": "opposite",
-  "ch": 9
+  "ch": 9,
+  "t": "a"
 }, {
   "id": 9123,
   "sv": "på kartan",
@@ -21116,7 +21738,9 @@ const VOCAB = [{
   "sv": "tvärgata",
   "en": "cross-street",
   "c": "(-n, -or, -orna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9125,
   "sv": "Där ligger…",
@@ -21147,30 +21771,38 @@ const VOCAB = [{
   "sv": "sms-konversation",
   "en": "text conversation",
   "c": "(-en, -er, -erna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9131,
   "sv": "slappa",
   "en": "relax",
   "c": "(-r, -de, -t)",
-  "ch": 9
+  "ch": 9,
+  "t": "v"
 }, {
   "id": 9132,
   "sv": "avslut",
   "en": "ending",
   "c": "(-a)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9133,
   "sv": "hörs",
   "en": "be in touch",
-  "ch": 9
+  "ch": 9,
+  "t": "v"
 }, {
   "id": 9134,
   "sv": "tolva",
   "en": "twelve",
   "c": "(-n, -or, -orna)",
-  "ch": 9
+  "ch": 9,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9135,
   "sv": "Lite om …",
@@ -21191,86 +21823,108 @@ const VOCAB = [{
   "sv": "polcirkel",
   "en": "Arctic circle",
   "c": "(-n, polcirklar, polcirklarna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9139,
   "sv": "kustlinje",
   "en": "coastline",
   "c": "(-n, -er, -erna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9140,
   "sv": "tiotusental",
   "en": "tens of thousands",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9141,
   "sv": "Gotland&nbsp;",
   "en": "Gotland, island in the Baltic",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9142,
   "sv": "Öland&nbsp;",
   "en": "Öland, island in the Baltic",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9143,
   "sv": "Östersjön",
   "en": "Baltic Sea",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9144,
   "sv": "ytan",
   "en": "the surface",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9145,
   "sv": "ursprungsbefolkning",
   "en": "indigenous people",
   "c": "(-en, -ar, -arna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9146,
   "sv": "meänkieli&nbsp;",
   "en": "meänkieli, Finnish dialect in Northern Sweden",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9147,
   "sv": "jordbruksland",
   "en": "farmland",
   "c": "(-et, -jordbruksländer, jordbruksländerna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9148,
   "sv": "emigrera",
   "en": "emigrate",
   "c": "(-r, -de, -t)",
-  "ch": 10
+  "ch": 10,
+  "t": "v"
 }, {
   "id": 9149,
   "sv": "Nordamerika",
   "en": "North America",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9150,
   "sv": "Sydeuropa",
   "en": "Southern Europe",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9151,
   "sv": "sämre",
   "en": "worse",
-  "ch": 10
+  "ch": 10,
+  "t": "a"
 }, {
   "id": 9152,
   "sv": "Latinamerika",
   "en": "Latin America",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9153,
   "sv": "Mellanöstern",
   "en": "Middle East",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9154,
   "sv": "forna Jugoslavien",
@@ -21281,13 +21935,17 @@ const VOCAB = [{
   "sv": "EU-medborgare",
   "en": "EU citizen",
   "c": "(-n, −, EU-medborgarna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9156,
   "sv": "femtedel",
   "en": "a fifth",
   "c": "(-en, -ar, -arna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9157,
   "sv": "wood",
@@ -21297,37 +21955,45 @@ const VOCAB = [{
   "id": 9158,
   "sv": "telekom",
   "en": "telecommunications",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9159,
   "sv": "skogsvaror",
   "en": "forestry goods",
-  "ch": 10
+  "ch": 10,
+  "t": "n"
 }, {
   "id": 9160,
   "sv": "mineralvaror",
   "en": "mineral goods",
-  "ch": 10
+  "ch": 10,
+  "t": "n"
 }, {
   "id": 9161,
   "sv": "kemivaror",
   "en": "chemical goods",
-  "ch": 10
+  "ch": 10,
+  "t": "n"
 }, {
   "id": 9162,
   "sv": "energivaror",
   "en": "energy goods",
-  "ch": 10
+  "ch": 10,
+  "t": "n"
 }, {
   "id": 9163,
   "sv": "verkstadsprodukter",
   "en": "manufactured goods",
-  "ch": 10
+  "ch": 10,
+  "t": "n"
 }, {
   "id": 9164,
   "sv": "övriga",
   "en": "other",
-  "ch": 10
+  "ch": 10,
+  "t": "d"
 }, {
   "id": 9165,
   "sv": "de flesta",
@@ -21338,19 +22004,25 @@ const VOCAB = [{
   "sv": "popstjärna",
   "en": "pop star",
   "c": "(-n, -or, -orna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9167,
   "sv": "idrottare",
   "en": "athlete",
   "c": "(-n, −, idrottarna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9168,
   "sv": "operasångare",
   "en": "opera singer",
   "c": "(-n, −, operasångarna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9169,
   "sv": "det mesta",
@@ -21361,31 +22033,40 @@ const VOCAB = [{
   "sv": "studenttidning",
   "en": "student paper",
   "c": "(-en, -ar, -arna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9171,
   "sv": "utbytesstudent",
   "en": "exchange student",
   "c": "(-en, -er, -erna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9172,
   "sv": "kilometer",
   "en": "kilometer",
   "c": "(-n)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9173,
   "sv": "fläskfilé",
   "en": "pork tenderloin",
   "c": "(-n, -er, -erna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9174,
   "sv": "jättekonstig",
   "en": "really strange",
   "c": "(-t, -a)",
-  "ch": 10
+  "ch": 10,
+  "t": "a"
 }, {
   "id": 9175,
   "sv": "mitt på dagen",
@@ -21401,29 +22082,35 @@ const VOCAB = [{
   "sv": "jättegullig",
   "en": "really cute",
   "c": "(-t, -a)",
-  "ch": 10
+  "ch": 10,
+  "t": "a"
 }, {
   "id": 9178,
   "sv": "föräldraledig",
   "en": "on parental leave",
   "c": "(-t, -a)",
-  "ch": 10
+  "ch": 10,
+  "t": "a"
 }, {
   "id": 9179,
   "sv": "Österrike",
   "en": "Austria",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9180,
   "sv": "köttbulle",
   "en": "meatball",
   "c": "(köttbullar, köttbullarna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9181,
   "sv": "Frankrike",
   "en": "France",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9182,
   "sv": "Usch!",
@@ -21433,19 +22120,23 @@ const VOCAB = [{
   "id": 9183,
   "sv": "Lettland",
   "en": "Latvia",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9184,
   "sv": "gullig",
   "en": "cute",
   "c": "(-t, -a)",
-  "ch": 10
+  "ch": 10,
+  "t": "a"
 }, {
   "id": 9185,
   "sv": "kvadratkilometer",
   "en": "kilometer squared",
   "c": "(-n, −, kvadratkilometrarna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9186,
   "sv": "konstitutionell monarki",
@@ -21455,7 +22146,8 @@ const VOCAB = [{
   "id": 9187,
   "sv": "Kebnekaise",
   "en": "Kebnekaise, Sweden's highest peak",
-  "ch": 10
+  "ch": 10,
+  "t": "pn"
 }, {
   "id": 9188,
   "sv": "Klarälven-Götaälv (Sveriges längsta älv)",
@@ -21477,90 +22169,120 @@ const VOCAB = [{
   "sv": "minoritetsspråk",
   "en": "minority language",
   "c": "(-et, −, -en)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9192,
   "sv": "statskick",
   "en": "government",
   "c": "(-et, , -en)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9193,
   "sv": "befokningstäthet",
   "en": "population density",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9194,
   "sv": "landsnummer",
   "en": "country code",
   "c": "(landsnumret, −, landsnumren)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9195,
   "sv": "bruttonationalprodukt",
   "en": "Gross Domestic Product, GDP",
   "c": "(BNP)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9196,
   "sv": "förnamn",
   "en": "first name, given name",
   "c": "(-et, −, -en)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9197,
   "sv": "tilltalsnamn",
   "en": "first name",
   "c": "(-et, −, -en)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9198,
   "sv": "kvinnonamn",
   "en": "woman’s name",
   "c": "(-et, −, -en)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9199,
   "sv": "mansnamn",
   "en": "man’s name",
   "c": "(-et, −, -en)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9200,
   "sv": "åkermark",
   "en": "field, farmland",
   "c": "(-en, -er, -erna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9201,
   "sv": "protestant",
   "en": "Protestant",
   "c": "(-en, -er, -erna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9202,
   "sv": "hindu",
   "en": "Hindu",
   "c": "(-n, -er, -erna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9203,
   "sv": "buddhist",
   "en": "Buddhist",
   "c": "(-en, -er, -erna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9204,
   "sv": "pappersmassa",
   "en": "wood pulp",
   "c": "(-n, pappersmassor, pappersmassorna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9205,
   "sv": "operasångerska",
   "en": "opera singer (female)",
   "c": "(-n, operasångerskor, operasångerskorna)",
-  "ch": 10
+  "ch": 10,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9206,
   "sv": "det bästa",
@@ -21578,7 +22300,9 @@ const VOCAB = [{
   "sv": "verbfras",
   "en": "verb phrase",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9209,
   "sv": "åka på semester",
@@ -21594,19 +22318,24 @@ const VOCAB = [{
   "sv": "konstutställning",
   "en": "art exhibit",
   "c": "(-en, -ar, -arna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9212,
   "sv": "språkkurs",
   "en": "language course",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9213,
   "sv": "dejta",
   "en": "date",
   "c": "(-r, -de, -t)",
-  "ch": 11
+  "ch": 11,
+  "t": "v"
 }, {
   "id": 9214,
   "sv": "vara trött",
@@ -21622,7 +22351,9 @@ const VOCAB = [{
   "sv": "tjejkompis",
   "en": "girl friend (platonic, female friend)",
   "c": "(-en, -ar, -arna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9217,
   "sv": "par personer",
@@ -21640,37 +22371,48 @@ const VOCAB = [{
   "sv": "dagisbarn",
   "en": "preschool children",
   "c": "(-et, −, -en)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9220,
   "sv": "nybörjarkurs",
   "en": "beginner’s course",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9221,
   "sv": "nätdejting",
   "en": "internet dating",
   "c": "(-en)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9222,
   "sv": "dejtingsajt",
   "en": "dating site",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9223,
   "sv": "barnfri",
   "en": "without children",
   "c": "(-tt, -a)",
-  "ch": 11
+  "ch": 11,
+  "t": "a"
 }, {
   "id": 9224,
   "sv": "singeltjej",
   "en": "single girl",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9225,
   "sv": "inget för mig",
@@ -21686,25 +22428,33 @@ const VOCAB = [{
   "sv": "sportbar",
   "en": "sports bar",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9228,
   "sv": "sporthatare",
   "en": "sports-hater",
   "c": "(-n, −, -sporthatarna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9229,
   "sv": "korvkiosk",
   "en": "hot dog stand",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9230,
   "sv": "älgstek",
   "en": "moose steak",
   "c": "(-en, -ar, -arna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9231,
   "sv": "i skogen",
@@ -21720,13 +22470,15 @@ const VOCAB = [{
   "sv": "äventyrlig",
   "en": "adventurous",
   "c": "(-t, -a)",
-  "ch": 11
+  "ch": 11,
+  "t": "a"
 }, {
   "id": 9234,
   "sv": "töntig",
   "en": "dorky, uncool",
   "c": "(-t, -a)",
-  "ch": 11
+  "ch": 11,
+  "t": "a"
 }, {
   "id": 9235,
   "sv": "Jag håller med.",
@@ -21741,19 +22493,25 @@ const VOCAB = [{
   "id": 9237,
   "sv": "Konjunktion",
   "en": "conjunction",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9238,
   "sv": "papperskorg",
   "en": "waste paper basket",
   "c": "(-en, -ar, -arna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9239,
   "sv": "sladd",
   "en": "cord",
   "c": "(-en, -ar, -arna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9240,
   "sv": "kursiv stil",
@@ -21765,7 +22523,9 @@ const VOCAB = [{
   "sv": "snabel-a",
   "en": "the @ symbol",
   "c": "(-:et, -:n, -:na)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9242,
   "sv": "fet stil",
@@ -21776,42 +22536,55 @@ const VOCAB = [{
   "sv": "bindestreck",
   "en": "hyphen",
   "c": "(-et, −, -en)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9244,
   "sv": "understreck",
   "en": "underline",
   "c": "(-et, −, -en)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9245,
   "sv": "utropstecken",
   "en": "exclamation point",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9246,
   "sv": "snedstreck",
   "en": "slash",
   "c": "(-et, −, -en)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9247,
   "sv": "typsnitt",
   "en": "font",
   "c": "(-et, −, -en)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9248,
   "sv": "krascha",
   "en": "crash",
   "c": "(-r, -de, -t)",
-  "ch": 11
+  "ch": 11,
+  "t": "v"
 }, {
   "id": 9249,
   "sv": "antivirusprogram",
   "en": "antivirus program",
   "c": "(-met, −, -men)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9250,
   "sv": "Pang!",
@@ -21827,7 +22600,9 @@ const VOCAB = [{
   "sv": "USB-ingång",
   "en": "USB port",
   "c": "(-en)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9253,
   "sv": "Klockan är mycket!",
@@ -21837,19 +22612,24 @@ const VOCAB = [{
   "id": 9254,
   "sv": "förbjudet",
   "en": "prohibited",
-  "ch": 11
+  "ch": 11,
+  "t": "a"
 }, {
   "id": 9255,
   "sv": "e-postadress",
   "en": "email address",
   "c": "(-en, -er, -erna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9256,
   "sv": "stavelse",
   "en": "syllable",
   "c": "(-n, -er, -rna)",
-  "ch": 11
+  "ch": 11,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9257,
   "sv": "bra idé",
@@ -21860,25 +22640,32 @@ const VOCAB = [{
   "sv": "råg",
   "en": "rye",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9259,
   "sv": "vardagsmat",
   "en": "simple, everyday food",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9260,
   "sv": "kokt",
   "en": "boiled",
   "c": "(-a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9261,
   "sv": "potatismos",
   "en": "mashed potatoes",
   "c": "(-et)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9262,
   "sv": "stekt potatis",
@@ -21889,7 +22676,9 @@ const VOCAB = [{
   "sv": "potatisgratäng",
   "en": "potato gratin",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9264,
   "sv": "bakad potatis",
@@ -21900,121 +22689,158 @@ const VOCAB = [{
   "sv": "potatissallad",
   "en": "potato salad",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9266,
   "sv": "färskpotatis",
   "en": "new potatoes",
   "c": "(-en, −, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9267,
   "sv": "nykokt",
   "en": "freshly boiled",
   "c": "(-a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9268,
   "sv": "1600-tal",
   "en": "17th century",
   "c": "(-et)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9269,
   "sv": "1800-tal",
   "en": "19th century",
   "c": "(-et)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9270,
   "sv": "rågmjöl",
   "en": "rye flour",
   "c": "(-et)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9271,
   "sv": "skafferi",
   "en": "pantry",
   "c": "(-t, -r, -rna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9272,
   "sv": "älgpark",
   "en": "moose park",
   "c": "(-en, -er, -erna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9273,
   "sv": "trettiotal",
   "en": "around thirty",
   "c": "(-et)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9274,
   "sv": "älgbulle",
   "en": "moose meatball",
   "c": "(-n, -ar, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9275,
   "sv": "älgburgare",
   "en": "moose burger",
   "c": "(-n, −, -na)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9276,
   "sv": "nötkött",
   "en": "beef",
   "c": "(-et)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9277,
   "sv": "ostkust",
   "en": "east coast",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9278,
   "sv": "västkust",
   "en": "west coast",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9279,
   "sv": "ättika",
   "en": "Swedish vinegar",
   "c": "(-n)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9280,
   "sv": "strömming",
   "en": "Baltic herring",
   "c": "(-en, -ar, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9281,
   "sv": "rökt",
   "en": "smoked",
   "c": "(-a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9282,
   "sv": "böckling",
   "en": "smoked Baltic herring",
   "c": "(-en, -ar, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9283,
   "sv": "surströmming",
   "en": "fermented Baltic herring",
   "c": "(-en, -ar, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9284,
   "sv": "fermenterad",
   "en": "fermented",
   "c": "(fermenterat, -e)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9285,
   "sv": "odlad lax",
@@ -22030,24 +22856,30 @@ const VOCAB = [{
   "sv": "festmat",
   "en": "party food, holiday food",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9288,
   "sv": "grillad",
   "en": "barbeque",
   "c": "(grillat, -e)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9289,
   "sv": "gravad",
   "en": "cured",
   "c": "(gravat, -e)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9290,
   "sv": "självplock",
   "en": "pick-your-own",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9291,
   "sv": "strawberry",
@@ -22063,25 +22895,32 @@ const VOCAB = [{
   "sv": "matvana",
   "en": "eating habits",
   "c": "(-n, matvanor, matvanorna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9294,
   "sv": "tillräckig",
   "en": "enough",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9295,
   "sv": "vegetarian",
   "en": "vegetarian",
   "c": "(-en, -er, -erna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9296,
   "sv": "pannkaka",
   "en": "pancake",
   "c": "(-n, pannkakor, pannkakorna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9297,
   "sv": "mörk choklad",
@@ -22091,7 +22930,9 @@ const VOCAB = [{
   "id": 9298,
   "sv": "mjölkchoklad",
   "en": "milk chocolate",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9299,
   "sv": "biff med lök",
@@ -22102,168 +22943,205 @@ const VOCAB = [{
   "sv": "kåldolme",
   "en": "cabbage roll",
   "c": "(-n, kåldolmar, kåldolmarna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9301,
   "sv": "småkakor",
   "en": "small cookies, biscuits",
   "c": "(-na)",
-  "ch": 12
+  "ch": 12,
+  "t": "n"
 }, {
   "id": 9302,
   "sv": "köttindustri",
   "en": "meat industry",
   "c": "(-n)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9303,
   "sv": "sparris",
   "en": "asparagus",
   "c": "(-en, -ar, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9304,
   "sv": "tofu",
   "en": "tofu",
   "c": "(-n)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9305,
   "sv": "urgod",
   "en": "super good, delicious",
   "c": "(urgott, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9306,
   "sv": "nudlar",
   "en": "noodles",
-  "ch": 12
+  "ch": 12,
+  "t": "n"
 }, {
   "id": 9307,
   "sv": "ripa",
   "en": "grouse",
   "c": "(-n, -or, -orna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9308,
   "sv": "bisats",
   "en": "subordinate clause",
   "c": "(-en, -er, -erna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9309,
   "sv": "subjunktion",
   "en": "subordinating conjunction",
   "c": "(-en, -er, -erna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9310,
   "sv": "australiensisk",
   "en": "Australian",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9311,
   "sv": "brasiliansk",
   "en": "Brasilian",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9312,
   "sv": "colombiansk",
   "en": "Colombian",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9313,
   "sv": "etiopisk",
   "en": "Ethiopian",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9314,
   "sv": "indonesisk",
   "en": "Indonesian",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9315,
   "sv": "kenyansk",
   "en": "Kenyan",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9316,
   "sv": "kubansk",
   "en": "Cuban",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9317,
   "sv": "libanesisk",
   "en": "Lebanese",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9318,
   "sv": "marockansk",
   "en": "Moroccan",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9319,
   "sv": "mexikansk",
   "en": "Mexican",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9320,
   "sv": "nyzeeländsk",
   "en": "New Zealander",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9321,
   "sv": "pakistansk",
   "en": "Pakistani",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9322,
   "sv": "sydafrikansk",
   "en": "South African",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9323,
   "sv": "tunisisk",
   "en": "Tunisian",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9324,
   "sv": "ungersk",
   "en": "Hungarian",
   "c": "(-t, -a)",
-  "ch": 12
+  "ch": 12,
+  "t": "a"
 }, {
   "id": 9325,
   "sv": "makaroner",
   "en": "macaroni",
   "c": "(-na)",
-  "ch": 12
+  "ch": 12,
+  "t": "n"
 }, {
   "id": 9326,
   "sv": "blodpudding",
   "en": "blood pudding, black pudding",
   "c": "(-en)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9327,
   "sv": "uteservering",
   "en": "outdoor dining area",
   "c": "(-en, -ar, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9328,
   "sv": "Kan vi få notan?",
@@ -22273,37 +23151,48 @@ const VOCAB = [{
   "id": 9329,
   "sv": "vissa",
   "en": "certain",
-  "ch": 12
+  "ch": 12,
+  "t": "d"
 }, {
   "id": 9330,
   "sv": "frasbetoning",
   "en": "phrase emphasis",
   "c": "(-en, -ar, -arna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9331,
   "sv": "jordgubbstårta",
   "en": "strawberry cake",
   "c": "(-n, jordgubbstårtor, jordgubbstårtorna)",
-  "ch": 12
+  "ch": 12,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9332,
   "sv": "skolklass",
   "en": "class",
   "c": "(-en, -er, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9333,
   "sv": "mikrobiolog",
   "en": "microbiologist",
   "c": "(-en, -er, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9334,
   "sv": "fotbollsproffs",
   "en": "football, soccer player",
   "c": "(-et, −, -en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9335,
   "sv": "jobba hemifrån",
@@ -22323,105 +23212,132 @@ const VOCAB = [{
   "id": 9338,
   "sv": "bortifrån",
   "en": "from over there",
-  "ch": 13
+  "ch": 13,
+  "t": "a"
 }, {
   "id": 9339,
   "sv": "ninifrån",
   "en": "from inside",
-  "ch": 13
+  "ch": 13,
+  "t": "a"
 }, {
   "id": 9340,
   "sv": "uppifrån",
   "en": "from above",
-  "ch": 13
+  "ch": 13,
+  "t": "a"
 }, {
   "id": 9341,
   "sv": "nnerifrån",
   "en": "from below",
-  "ch": 13
+  "ch": 13,
+  "t": "a"
 }, {
   "id": 9342,
   "sv": "framifrån",
   "en": "from in front",
-  "ch": 13
+  "ch": 13,
+  "t": "a"
 }, {
   "id": 9343,
   "sv": "toppjobb",
   "en": "great job",
   "c": "(-et, −, -en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9344,
   "sv": "läkemedelsföretag",
   "en": "pharmaceutical company",
   "c": "(-et, −, -en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9345,
   "sv": "doktorera",
   "en": "get a PhD",
   "c": "(-r, -de, -t)",
-  "ch": 13
+  "ch": 13,
+  "t": "v"
 }, {
   "id": 9346,
   "sv": "hushållsarbete",
   "en": "household chores",
   "c": "(-t, −, -n)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9347,
   "sv": "stressig",
   "en": "stressful",
   "c": "(-t, -a)",
-  "ch": 13
+  "ch": 13,
+  "t": "a"
 }, {
   "id": 9348,
   "sv": "försova",
   "en": "sig oversleep",
   "c": "(-er, försov, försovit)",
-  "ch": 13
+  "ch": 13,
+  "t": "v"
 }, {
   "id": 9349,
   "sv": "frukostmöte",
   "en": "breakfast meeting",
   "c": "(-t, -n, -na)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9350,
   "sv": "labb",
   "en": "lab, laboratory",
   "c": "(-et, −, -en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9351,
   "sv": "hämtmat",
   "en": "takeout food",
   "c": "(-en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9352,
   "sv": "kyckingfilé",
   "en": "chicken fillet",
   "c": "(-n, -er, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9353,
   "sv": "saffransrisotto",
   "en": "saffron risotto",
   "c": "(-n)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9354,
   "sv": "middagsgäst",
   "en": "dinner guest",
   "c": "(-en, -er, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9355,
   "sv": "duka",
   "en": "set the table",
   "c": "(-r, -de, -t)",
-  "ch": 13
+  "ch": 13,
+  "t": "v"
 }, {
   "id": 9356,
   "sv": "ringa på dörren",
@@ -22431,13 +23347,16 @@ const VOCAB = [{
   "id": 9357,
   "sv": "Genève",
   "en": "Geneva",
-  "ch": 13
+  "ch": 13,
+  "t": "pn"
 }, {
   "id": 9358,
   "sv": "videokonferens",
   "en": "video conference",
   "c": "(-en, -er, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9359,
   "sv": "ligga på topp",
@@ -22448,7 +23367,9 @@ const VOCAB = [{
   "sv": "flygvärdinna",
   "en": "air hostess, stewardess",
   "c": "(-n, flygvärdinnor, flygvärdinnorna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9361,
   "sv": "i förrgår",
@@ -22459,31 +23380,41 @@ const VOCAB = [{
   "sv": "trädgårdsmästare",
   "en": "gardener",
   "c": "(-n, −, trädgårdsmästarna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9363,
   "sv": "tennislärare",
   "en": "tennis instructor",
   "c": "(-n, −, tennislärarna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9364,
   "sv": "bröllopsfotograf",
   "en": "wedding photographer",
   "c": "(-en, −, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9365,
   "sv": "barnvakt",
   "en": "babysitter",
   "c": "(-en, -er, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9366,
   "sv": "simlärare",
   "en": "swimming instructor",
   "c": "(-n, −, simlärarna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9367,
   "sv": "personlig tränare",
@@ -22494,25 +23425,32 @@ const VOCAB = [{
   "sv": "taxichaufför",
   "en": "taxi driver",
   "c": "(-en, -er, -erna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9369,
   "sv": "datasupporttekniker",
   "en": "IT support technician",
   "c": "(-n, −, -na)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9370,
   "sv": "bilmekaniker",
   "en": "car mechanic",
   "c": "(-n, −, -na)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9371,
   "sv": "händig",
   "en": "dexterous, skillful",
   "c": "(-t, -a)",
-  "ch": 13
+  "ch": 13,
+  "t": "a"
 }, {
   "id": 9372,
   "sv": "gröna fingrar",
@@ -22523,31 +23461,41 @@ const VOCAB = [{
   "sv": "idrottslärare",
   "en": "physical education teacher",
   "c": "(-n, −, idrottslärarna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9374,
   "sv": "litteraturvetenskap",
   "en": "literature studies",
   "c": "(-en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9375,
   "sv": "extrajobb",
   "en": "extra work, part-time job",
   "c": "(-et, −, -en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9376,
   "sv": "infinitiv",
   "en": "infinitive",
   "c": "(-et, −, -en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9377,
   "sv": "vattengympapass",
   "en": "water arerobics session",
   "c": "(-et, −, -en)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9378,
   "sv": "stå i baren",
@@ -22558,13 +23506,17 @@ const VOCAB = [{
   "sv": "hotellfrukost",
   "en": "hotel breakfast",
   "c": "(-en, -ar, -arna)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9380,
   "sv": "mobiltelefoni",
   "en": "cell phone technology,",
   "c": "(-n)",
-  "ch": 13
+  "ch": 13,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9381,
   "sv": "mobile",
@@ -22580,18 +23532,22 @@ const VOCAB = [{
   "sv": "landställe",
   "en": "country home",
   "c": "(-t, -n, -na)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9384,
   "sv": "charmig",
   "en": "charming",
   "c": "(-t, -a)",
-  "ch": 14
+  "ch": 14,
+  "t": "a"
 }, {
   "id": 9385,
   "sv": "närmaste",
   "en": "closest",
-  "ch": 14
+  "ch": 14,
+  "t": "a"
 }, {
   "id": 9386,
   "sv": "åka båt",
@@ -22601,19 +23557,24 @@ const VOCAB = [{
   "id": 9387,
   "sv": "barfota",
   "en": "barefoot",
-  "ch": 14
+  "ch": 14,
+  "t": "a"
 }, {
   "id": 9388,
   "sv": "filmjölk",
   "en": "soured milk",
   "c": "(-en)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9389,
   "sv": "blåbär",
   "en": "blueberries",
   "c": "(-et, −, -en)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9390,
   "sv": "klippa gräs",
@@ -22625,29 +23586,36 @@ const VOCAB = [{
   "sv": "fritidshus",
   "en": "holiday home",
   "c": "(-et, −, -en)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9392,
   "sv": "numrera",
   "en": "number",
   "c": "(-r, -de, -t)",
-  "ch": 14
+  "ch": 14,
+  "t": "v"
 }, {
   "id": 9393,
   "sv": "uteplats",
   "en": "patio",
   "c": "(-en, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9394,
   "sv": "Skåne",
   "en": "Skåne, in southern Sweden",
-  "ch": 14
+  "ch": 14,
+  "t": "pn"
 }, {
   "id": 9395,
   "sv": "Småland",
   "en": "Småland, in the southeast",
-  "ch": 14
+  "ch": 14,
+  "t": "pn"
 }, {
   "id": 9396,
   "sv": "direkt tal",
@@ -22668,7 +23636,9 @@ const VOCAB = [{
   "sv": "bilfärja",
   "en": "car ferry",
   "c": "(-n, -or, -orna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9400,
   "sv": "titta efter",
@@ -22684,25 +23654,32 @@ const VOCAB = [{
   "sv": "mås",
   "en": "seagull",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9403,
   "sv": "färjeläge",
   "en": "ferry landing",
   "c": "(-t, -n, -na)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9404,
   "sv": "grusväg",
   "en": "gravel road",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9405,
   "sv": "glittra",
   "en": "glitter, shine",
   "c": "(-r, -de, -t)",
-  "ch": 14
+  "ch": 14,
+  "t": "v"
 }, {
   "id": 9406,
   "sv": "kliva ur",
@@ -22720,23 +23697,31 @@ const VOCAB = [{
   "sv": "dass",
   "en": "outhouse",
   "c": "(-et, −, -en)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9409,
   "sv": "nubbe",
   "en": "snaps, flavored vodka",
   "c": "(-n, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9410,
   "sv": "helan",
   "en": "the whole",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9411,
   "sv": "halvan",
   "en": "the half",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9412,
   "sv": "Skål!",
@@ -22757,7 +23742,9 @@ const VOCAB = [{
   "sv": "snapsvisa",
   "en": "drinking song",
   "c": "(-n, -or, -orna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9416,
   "sv": "varje år",
@@ -22772,31 +23759,40 @@ const VOCAB = [{
   "id": 9418,
   "sv": "medan",
   "en": "while",
-  "ch": 14
+  "ch": 14,
+  "t": "s"
 }, {
   "id": 9419,
   "sv": "kantarell",
   "en": "chanterelles",
   "c": "(-en, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9420,
   "sv": "vaniljsås",
   "en": "custard",
   "c": "(-en, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9421,
   "sv": "jaktkompis",
   "en": "hunting friends",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9422,
   "sv": "bastu",
   "en": "sauna",
   "c": "(-n, -r, -rna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9423,
   "sv": "Tack för ikväll!",
@@ -22812,7 +23808,8 @@ const VOCAB = [{
   "sv": "skåla",
   "en": "toast",
   "c": "(-r, -de, -t)",
-  "ch": 14
+  "ch": 14,
+  "t": "v"
 }, {
   "id": 9426,
   "sv": "dra sig hemåt",
@@ -22828,19 +23825,25 @@ const VOCAB = [{
   "sv": "yttersko",
   "en": "outdoor shoe",
   "c": "(-n, -r, -rna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9429,
   "sv": "innesko",
   "en": "indoor shoe",
   "c": "(-n, -r, -rna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9430,
   "sv": "värdinna",
   "en": "hostess",
   "c": "(-n, -or, -orna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9431,
   "sv": "Tack för senast!",
@@ -22851,37 +23854,49 @@ const VOCAB = [{
   "sv": "etikettsregel",
   "en": "rule of etiquette",
   "c": "(-n, etikettsregler, etikettsreglerna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9433,
   "sv": "70-årsfest",
   "en": "70th birthday party",
   "c": "(-en , -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9434,
   "sv": "kickoff",
   "en": "launch event",
   "c": "(-en, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9435,
   "sv": "barnkalas",
   "en": "children’s party",
   "c": "(-et, −, -en)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9436,
   "sv": "inflyttningsfest",
   "en": "housewarming party",
   "c": "(-en , -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9437,
   "sv": "klassfest",
   "en": "class party",
   "c": "(-en, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9438,
   "sv": "knytis (knytkalas)",
@@ -22893,7 +23908,9 @@ const VOCAB = [{
   "sv": "grillfest",
   "en": "barbeque party",
   "c": "(-en, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9440,
   "sv": "Kläder efter väder!",
@@ -22904,7 +23921,9 @@ const VOCAB = [{
   "sv": "vigsel",
   "en": "wedding ceremony",
   "c": "(-n, vigslar, vigslarna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9442,
   "sv": "äga rum",
@@ -22916,66 +23935,87 @@ const VOCAB = [{
   "sv": "festvåning",
   "en": "party venue",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9444,
   "sv": "O.S.A",
   "en": "please reply by",
-  "ch": 14
+  "ch": 14,
+  "t": "n"
 }, {
   "id": 9445,
   "sv": "önskelista",
   "en": "wish list, registry",
   "c": "(-n, -or, -orna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9446,
   "sv": "presentshopp",
   "en": "gift store",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9447,
   "sv": "brännboll",
   "en": "rounders",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9448,
   "sv": "brännbollsturnering",
   "en": "rounders tournament",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9449,
   "sv": "fotbollsplan",
   "en": "soccer, football field",
   "c": "(-en, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9450,
   "sv": "picknick",
   "en": "picnic",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9451,
   "sv": "gymnastiksal",
   "en": "gymnasium",
   "c": "(-en, -ar, -arna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9452,
   "sv": "danssko",
   "en": "dance shoe",
   "c": "(-n, -r, -rna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9453,
   "sv": "buffé",
   "en": "buffet",
   "c": "(-n, -er, -erna)",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9454,
   "sv": "valfri klädsel",
@@ -22985,7 +24025,9 @@ const VOCAB = [{
   "id": 9455,
   "sv": "toppendag",
   "en": "great day",
-  "ch": 14
+  "ch": 14,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9456,
   "sv": "bästa hälsningar",
@@ -22995,17 +24037,22 @@ const VOCAB = [{
   "id": 9457,
   "sv": "bör",
   "en": "should, must",
-  "ch": 14
+  "ch": 14,
+  "t": "v"
 }, {
   "id": 9458,
   "sv": "medelsvensson",
   "en": "the average Svensson, the average Swede",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9459,
   "sv": "hälften",
   "en": "half",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9460,
   "sv": "skilja sig",
@@ -23017,19 +24064,25 @@ const VOCAB = [{
   "sv": "starköl",
   "en": "strong beer, with alcohol content over 3.5%",
   "c": "(-en, -ar, -arna)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9462,
   "sv": "centiliter",
   "en": "centiliter",
   "c": "(-n, −, -na)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9463,
   "sv": "starksprit",
   "en": "spitits, liqor",
   "c": "(-en)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9464,
   "sv": "per vecka",
@@ -23039,18 +24092,21 @@ const VOCAB = [{
   "id": 9465,
   "sv": "mindre",
   "en": "less",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9466,
   "sv": "motionera",
   "en": "exercise",
   "c": "(-r, -de, -t)",
-  "ch": 15
+  "ch": 15,
+  "t": "v"
 }, {
   "id": 9467,
   "sv": "minst",
   "en": "at least",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9468,
   "sv": "reflexiva pronomen",
@@ -23060,7 +24116,8 @@ const VOCAB = [{
   "id": 9469,
   "sv": "trivs",
   "en": "thrive",
-  "ch": 15
+  "ch": 15,
+  "t": "v"
 }, {
   "id": 9470,
   "sv": "Varför då?",
@@ -23101,18 +24158,22 @@ const VOCAB = [{
   "sv": "dubbelbokad",
   "en": "double booked",
   "c": "(dubbelbokat, dubbelbokade)",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9478,
   "sv": "Försäkringskassan",
   "en": "Swedish Social Insurance Agency",
-  "ch": 15
+  "ch": 15,
+  "t": "pn"
 }, {
   "id": 9479,
   "sv": "föräldrapenning",
   "en": "parental benefits",
   "c": "(-en)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9480,
   "sv": "långt ifrån",
@@ -23123,18 +24184,22 @@ const VOCAB = [{
   "sv": "veckonummer",
   "en": "number of the week",
   "c": "(veckonumret, −, veckonumren)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9482,
   "sv": "småprata",
   "en": "make small talk",
   "c": "(-r, -de, -t)",
-  "ch": 15
+  "ch": 15,
+  "t": "v"
 }, {
   "id": 9483,
   "sv": "Arlanda",
   "en": "Arlanda, international airport near Stockholm",
-  "ch": 15
+  "ch": 15,
+  "t": "pn"
 }, {
   "id": 9484,
   "sv": "hela tiden",
@@ -23169,19 +24234,24 @@ const VOCAB = [{
   "sv": "deppig",
   "en": "depressed",
   "c": "(-t, -a)",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9490,
   "sv": "personnummer",
   "en": "social security number, identification number",
   "c": "(personnumret, −, personnumren)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9491,
   "sv": "badplats",
   "en": "beach, bath",
   "c": "(-en, -er, -erna)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9492,
   "sv": "självständiga pronomen",
@@ -23192,7 +24262,9 @@ const VOCAB = [{
   "sv": "fotbollsträning",
   "en": "soccer practice, football practice",
   "c": "(-en, -ar, -arna)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9494,
   "sv": "göra läxan",
@@ -23209,7 +24281,9 @@ const VOCAB = [{
   "sv": "medeltemperatur",
   "en": "average temperature",
   "c": "(-en)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9497,
   "sv": "grader Celsius",
@@ -23220,35 +24294,42 @@ const VOCAB = [{
   "sv": "blåsig",
   "en": "windy",
   "c": "(-t, -a)",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9499,
   "sv": "minusgrad",
   "en": "negative degree",
   "c": "(-en, -er, -erna)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9500,
   "sv": "snöig",
   "en": "snowy",
   "c": "(-t, -a)",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9501,
   "sv": "Sibirien",
   "en": "Siberia",
-  "ch": 15
+  "ch": 15,
+  "t": "pn"
 }, {
   "id": 9502,
   "sv": "Golfstömmen",
   "en": "Gulf Stream",
-  "ch": 15
+  "ch": 15,
+  "t": "pn"
 }, {
   "id": 9503,
   "sv": "ostadig",
   "en": "unsteady",
   "c": "(-t, -a)",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9504,
   "sv": "aprilväder (aprilvädret) (svenskt uttryck för omväxlande väder)",
@@ -23259,23 +24340,28 @@ const VOCAB = [{
   "id": 9505,
   "sv": "Kiruna",
   "en": "Kiruna, city in northern Sweden",
-  "ch": 15
+  "ch": 15,
+  "t": "pn"
 }, {
   "id": 9506,
   "sv": "meteorologi",
   "en": "meteorology",
   "c": "(-n)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9507,
   "sv": "värre",
   "en": "worse",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9508,
   "sv": "räcker",
   "en": "be enough",
-  "ch": 15
+  "ch": 15,
+  "t": "v"
 }, {
   "id": 9509,
   "sv": "stå stilla",
@@ -23287,7 +24373,9 @@ const VOCAB = [{
   "sv": "faktaruta",
   "en": "fact sheet, fact square",
   "c": "(-n, -or, -orna)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9511,
   "sv": "lager på lager",
@@ -23298,12 +24386,14 @@ const VOCAB = [{
   "sv": "långkalsonger",
   "en": "long underwear",
   "c": "(-na)",
-  "ch": 15
+  "ch": 15,
+  "t": "n"
 }, {
   "id": 9513,
   "sv": "helst",
   "en": "preferably",
-  "ch": 15
+  "ch": 15,
+  "t": "a"
 }, {
   "id": 9514,
   "sv": "röra på sig",
@@ -23315,7 +24405,9 @@ const VOCAB = [{
   "sv": "vante",
   "en": "glove",
   "c": "(-n, -ar, -arna)",
-  "ch": 15
+  "ch": 15,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9516,
   "sv": "första klass",
@@ -23336,65 +24428,85 @@ const VOCAB = [{
   "sv": "studier",
   "en": "studies",
   "c": "(-n, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n"
 }, {
   "id": 9520,
   "sv": "komvux",
   "en": "secondary education for adults",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9521,
   "sv": "samhällskunskap",
   "en": "social studies, civics",
   "c": "(-en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9522,
   "sv": "yrkesliv",
   "en": "working life",
   "c": "(-et)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9523,
   "sv": "utbildningssystem",
   "en": "education system",
   "c": "(-et, −, -en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9524,
   "sv": "det vill säga",
   "en": "that is to say",
-  "ch": 16
+  "ch": 16,
+  "t": "a"
 }, {
   "id": 9525,
   "sv": "hösttermin",
   "en": "fall semester, autumn term",
   "c": "(-en, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9526,
   "sv": "vårtermin",
   "en": "spring semester, spring term",
   "c": "(-en, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9527,
   "sv": "jullov",
   "en": "Christmas holiday, Christmas break",
   "c": "(-et)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9528,
   "sv": "sportlov",
   "en": "February break",
   "c": "(-et)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9529,
   "sv": "påsklov",
   "en": "Easter break",
   "c": "(-et)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9530,
   "sv": "icke godkänt",
@@ -23404,13 +24516,17 @@ const VOCAB = [{
   "id": 9531,
   "sv": "fordonsprogrammet",
   "en": "vehicle program",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9532,
   "sv": "studielån",
   "en": "student loan",
   "c": "(-et, −, -en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9533,
   "sv": "låna ut",
@@ -23422,18 +24538,24 @@ const VOCAB = [{
   "sv": "forskarutbildning",
   "en": "prostgraduate studies, doctoral program",
   "c": "(-en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9535,
   "sv": "doktorsexamen",
   "en": "doctoral degree, PhD",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9536,
   "sv": "industriland",
   "en": "industrialized country",
   "c": "(-et, industriländer, industriländerna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9537,
   "sv": "statlig skola",
@@ -23444,19 +24566,24 @@ const VOCAB = [{
   "sv": "plugghäst",
   "en": "nerd, someone who studies hard",
   "c": "(-en, -ar, -arna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9539,
   "sv": "extraövning",
   "en": "extra exercises",
   "c": "(-en, -ar, -arna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9540,
   "sv": "skolka",
   "en": "skip school",
   "c": "(-r, -de, -t)",
-  "ch": 16
+  "ch": 16,
+  "t": "v"
 }, {
   "id": 9541,
   "sv": "fint väder",
@@ -23467,30 +24594,38 @@ const VOCAB = [{
   "sv": "favoritämne",
   "en": "favorite subject",
   "c": "(-t, -n, -na)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9543,
   "sv": "småtråkig",
   "en": "a bit boring",
   "c": "(-t, -a)",
-  "ch": 16
+  "ch": 16,
+  "t": "a"
 }, {
   "id": 9544,
   "sv": "mattelärare",
   "en": "mathematics teacher",
   "c": "(-n)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9545,
   "sv": "historielärare",
   "en": "history teacher",
   "c": "(-n, −, -historielärarna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9546,
   "sv": "Sydamerika",
   "en": "South America",
-  "ch": 16
+  "ch": 16,
+  "t": "pn"
 }, {
   "id": 9547,
   "sv": "teknisk fysik",
@@ -23500,19 +24635,24 @@ const VOCAB = [{
   "id": 9548,
   "sv": "masterexamen",
   "en": "masters degree",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9549,
   "sv": "nanoteknik",
   "en": "nanotechnology",
   "c": "(-en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9550,
   "sv": "skoltrött",
   "en": "tired of school, lost motivation",
   "c": "(-a)",
-  "ch": 16
+  "ch": 16,
+  "t": "a"
 }, {
   "id": 9551,
   "sv": "spela gitarr",
@@ -23536,24 +24676,31 @@ const VOCAB = [{
   "sv": "bilverkstad",
   "en": "auto repair",
   "c": "(-en, bilverkstäder, bilverkstäderna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9555,
   "sv": "Berlin",
   "en": "Berlin",
-  "ch": 16
+  "ch": 16,
+  "t": "pn"
 }, {
   "id": 9556,
   "sv": "juristprogram",
   "en": "law program, law school",
   "c": "(-met, −, -men)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9557,
   "sv": "advokatbyrå",
   "en": "law firm",
   "c": "(-n, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9558,
   "sv": "andra chans",
@@ -23564,19 +24711,25 @@ const VOCAB = [{
   "sv": "stödord",
   "en": "key words",
   "c": "(-et, −, -en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9560,
   "sv": "naturkunskap",
   "en": "science",
   "c": "(-en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9561,
   "sv": "slöjd",
   "en": "shop class, woodwork",
   "c": "(-en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9562,
   "sv": "relativa bisatser",
@@ -23586,7 +24739,9 @@ const VOCAB = [{
   "id": 9563,
   "sv": "satsadverb",
   "en": "clause adverb",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9564,
   "sv": "verbpartikel verb",
@@ -23597,7 +24752,9 @@ const VOCAB = [{
   "sv": "byggnadsingenjör",
   "en": "structural engineer",
   "c": "(-en, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9566,
   "sv": "fast jobb",
@@ -23608,13 +24765,16 @@ const VOCAB = [{
   "sv": "frilansa",
   "en": "freelance",
   "c": "(-r, -de, -t)",
-  "ch": 16
+  "ch": 16,
+  "t": "v"
 }, {
   "id": 9568,
   "sv": "börsmäklare",
   "en": "stockbroker",
   "c": "(-n, −, börsmäklarna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9569,
   "sv": "KTH = Kungliga Tekniska Högskolan",
@@ -23625,43 +24785,57 @@ const VOCAB = [{
   "sv": "byggföretag",
   "en": "construction company",
   "c": "(-et, −, -en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9571,
   "sv": "tidsutryck",
   "en": "expressions of time",
   "c": "(-et, −, -en)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9572,
   "sv": "tandkirurg",
   "en": "dental surgeon",
   "c": "(-en, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9573,
   "sv": "skoltid",
   "en": "schooling",
   "c": "(-en, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9574,
   "sv": "framtidsplan",
   "en": "plan for the future",
   "c": "(-en, -er, -erna)",
-  "ch": 16
+  "ch": 16,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9575,
   "sv": "hyreslägenhet",
   "en": "rental apartment",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9576,
   "sv": "tvättstuga",
   "en": "laundry room",
   "c": "(-n, -or, -orna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9577,
   "sv": "öppen spis",
@@ -23694,13 +24868,16 @@ const VOCAB = [{
   "sv": "elda",
   "en": "make a fire",
   "c": "(-r, -de, -t)",
-  "ch": 17
+  "ch": 17,
+  "t": "v"
 }, {
   "id": 9583,
   "sv": "hyreskontrakt",
   "en": "rental contract, lease",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9584,
   "sv": "i andra hand",
@@ -23711,31 +24888,40 @@ const VOCAB = [{
   "sv": "månadsavgift",
   "en": "monthly fee",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9586,
   "sv": "nyrenoverad",
   "en": "newly renovated",
   "c": "(-e)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9587,
   "sv": "renoveringsobjekt",
   "en": "an object for renovation, a run-down place",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9588,
   "sv": "kakelugn",
   "en": "tile stove",
   "c": "(-en, -ar, -arna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9589,
   "sv": "kokvrå",
   "en": "kitchenette",
   "c": "(-n, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9590,
   "sv": "wc = water closet",
@@ -23747,25 +24933,33 @@ const VOCAB = [{
   "sv": "studentrum",
   "en": "studen room, dorm room",
   "c": "(-met, −, -men)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9592,
   "sv": "radhus",
   "en": "semi-detached",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9593,
   "sv": "parhus",
   "en": "semi-detached, two-family house",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9594,
   "sv": "husbåt",
   "en": "houseboat",
   "c": "(-en, -ar, -arna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9595,
   "sv": "tänka på",
@@ -23782,59 +24976,78 @@ const VOCAB = [{
   "sv": "singelhushåll",
   "en": "household with a single person",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9598,
   "sv": "urbanisering",
   "en": "urbanization",
   "c": "(-en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9599,
   "sv": "storstadsregion",
   "en": "metropolitan area",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9600,
   "sv": "andrahandslägenhet",
   "en": "sublet apartment",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9601,
   "sv": "närförort",
   "en": "inner suburb",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9602,
   "sv": "pendlingsavstånd",
   "en": "commuting distance",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9603,
   "sv": "inneboende",
   "en": "lodger",
   "c": "(-n)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9604,
   "sv": "hellre",
   "en": "rather",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9605,
   "sv": "bostadsannons",
   "en": "housing ad, house listings",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9606,
   "sv": "högstbjudande",
   "en": "highest bidder",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9607,
   "sv": "det står",
@@ -23849,25 +25062,30 @@ const VOCAB = [{
   "id": 9609,
   "sv": "sant",
   "en": "true",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9610,
   "sv": "sophämtning",
   "en": "garbage removal",
   "c": "(-en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9611,
   "sv": "sopor",
   "en": "garbage",
   "c": "(-na)",
-  "ch": 17
+  "ch": 17,
+  "t": "n"
 }, {
   "id": 9612,
   "sv": "jättehög",
   "en": "really high",
   "c": "(-t, -a)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9613,
   "sv": "lika ... som",
@@ -23884,18 +25102,22 @@ const VOCAB = [{
   "sv": "renoveringschans",
   "en": "opportunity for renovation",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9616,
   "sv": "opraktisk",
   "en": "impractical",
   "c": "(-t, -a)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9617,
   "sv": "närmare",
   "en": "closer",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9618,
   "sv": "fundera på",
@@ -23913,13 +25135,17 @@ const VOCAB = [{
   "sv": "bingo",
   "en": "bingo",
   "c": "(-n)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9621,
   "sv": "gräsklippning",
   "en": "mowing the lawn, cutting the grass",
   "c": "(-en, -ar, -arna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9622,
   "sv": "inte riktigt",
@@ -23930,19 +25156,25 @@ const VOCAB = [{
   "sv": "swimmingpool",
   "en": "swimming pool",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9624,
   "sv": "trädgårsdsarbete",
   "en": "yard work, gardening",
   "c": "(-t)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9625,
   "sv": "lägenhetsvisning",
   "en": "apartment viewing",
   "c": "(-en, -ar, -arna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9626,
   "sv": "hälsa välkommen",
@@ -23954,49 +25186,62 @@ const VOCAB = [{
   "sv": "prospekt",
   "en": "prospectus, brochure",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9628,
   "sv": "kristallkrona",
   "en": "crystal chandelier",
   "c": "(-n, -or, -orna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9629,
   "sv": "svartvit",
   "en": "black and white",
   "c": "(-t, -a)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9630,
   "sv": "färgglad",
   "en": "colorful",
   "c": "(färglatt, färgglada)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9631,
   "sv": "designlampa",
   "en": "designer lamp",
   "c": "(-n, -or, -orna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9632,
   "sv": "välplanerad",
   "en": "well planned",
   "c": "(välplanerat, välplanerade)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9633,
   "sv": "trägolv",
   "en": "wood floors",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9634,
   "sv": "innergård",
   "en": "inner courtyard",
   "c": "(-en, -ar, -arna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9635,
   "sv": "lägga ett bud",
@@ -24013,43 +25258,56 @@ const VOCAB = [{
   "sv": "soffbord",
   "en": "coffee table",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9638,
   "sv": "krukväxt",
   "en": "potted plant",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9639,
   "sv": "golvlampa",
   "en": "floorlamp",
   "c": "(-n, -or, -orna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9640,
   "sv": "irriterad",
   "en": "annoyed, irritated",
   "c": "(irriterat, irriterade)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9641,
   "sv": "matbord",
   "en": "dining table",
   "c": "(-et, −, -en)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9642,
   "sv": "skrivbordslampa",
   "en": "desk lamp",
   "c": "(-n, -or, -orna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9643,
   "sv": "drömlägenhet",
   "en": "dream apartment",
   "c": "(-en, -er, -erna)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9644,
   "sv": "Aldrig i livet!",
@@ -24059,31 +25317,39 @@ const VOCAB = [{
   "id": 9645,
   "sv": "fy",
   "en": "Yuck!",
-  "ch": 17
+  "ch": 17,
+  "t": "i"
 }, {
   "id": 9646,
   "sv": "drömboende",
   "en": "dream home",
   "c": "(-t, -n, -na)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9647,
   "sv": "luftig",
   "en": "airy",
   "c": "(-t, -a)",
-  "ch": 17
+  "ch": 17,
+  "t": "a"
 }, {
   "id": 9648,
   "sv": "hemmabio",
   "en": "home cinema system",
   "c": "(-n)",
-  "ch": 17
+  "ch": 17,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9649,
   "sv": "kaffeapparat",
   "en": "coffee maker",
   "c": "(-en, -er, -erna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9650,
   "sv": "kratta löv",
@@ -24100,7 +25366,8 @@ const VOCAB = [{
   "id": 9652,
   "sv": "äsch",
   "en": "oh",
-  "ch": 18
+  "ch": 18,
+  "t": "i"
 }, {
   "id": 9653,
   "sv": "handla om",
@@ -24111,13 +25378,16 @@ const VOCAB = [{
   "id": 9654,
   "sv": "dags",
   "en": "time",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9655,
   "sv": "suffix",
   "en": "suffix",
   "c": "(-et, −, -en)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9656,
   "sv": "hålla igång",
@@ -24128,42 +25398,54 @@ const VOCAB = [{
   "id": 9657,
   "sv": "kaffekonsumtion",
   "en": "coffee consumption",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9658,
   "sv": "oftare",
   "en": "more often",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9659,
   "sv": "samhällsfråga",
   "en": "a social issue",
   "c": "(-n, -or, -orna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9660,
   "sv": "koffein",
   "en": "caffeine",
   "c": "(-et)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9661,
   "sv": "koffeinfri",
   "en": "decaffeinated",
   "c": "(-tt, -a)",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9662,
   "sv": "kaffeimport",
   "en": "coffee imports",
   "c": "(-en)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9663,
   "sv": "snabbkaffe",
   "en": "instant coffee",
   "c": "(-t)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9664,
   "sv": "mer än hälften",
@@ -24179,7 +25461,8 @@ const VOCAB = [{
   "sv": "funka",
   "en": "work",
   "c": "(-r, -de, -t)",
-  "ch": 18
+  "ch": 18,
+  "t": "v"
 }, {
   "id": 9667,
   "sv": "bli över",
@@ -24191,48 +25474,63 @@ const VOCAB = [{
   "sv": "kopieringsmaskin",
   "en": "copier, copy machine",
   "c": "(-en, -er, -erna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9669,
   "sv": "kortläsare",
   "en": "card reader",
   "c": "(-n, −, kortläsarna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9670,
   "sv": "projektor",
   "en": "projector",
   "c": "(-n, -er, -erna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9671,
   "sv": "kaffebryggare",
   "en": "coffee maker",
   "c": "(-n, −, kaffebryggarna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9672,
   "sv": "skopa",
   "en": "scoop",
   "c": "(-n, -or, -orna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9673,
   "sv": "timer",
   "en": "timer",
   "c": "(-n)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9674,
   "sv": "matchande",
   "en": "matching",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9675,
   "sv": "adapter",
   "en": "adapter",
   "c": "(-n, -adaptrar, adaptrarna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9676,
   "sv": "stänga av",
@@ -24244,7 +25542,8 @@ const VOCAB = [{
   "sv": "dubbelsidig",
   "en": "double sided",
   "c": "(-t, -a)",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9678,
   "sv": "fyll på",
@@ -24256,7 +25555,9 @@ const VOCAB = [{
   "sv": "IT-avdelning",
   "en": "IT department",
   "c": "(-en, -ar, -arna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9680,
   "sv": "vara sist",
@@ -24268,7 +25569,9 @@ const VOCAB = [{
   "sv": "genitiv",
   "en": "genitive",
   "c": "(-et, −, -en)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9682,
   "sv": "plats i kön",
@@ -24291,109 +25594,139 @@ const VOCAB = [{
   "sv": "klippning",
   "en": "haircut",
   "c": "(-en, -ar, -arna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9686,
   "sv": "lånekort",
   "en": "library card",
   "c": "(-et, −, -en)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9687,
   "sv": "ännu",
   "en": "yet",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9688,
   "sv": "Barcelona",
   "en": "Barcelona",
-  "ch": 18
+  "ch": 18,
+  "t": "pn"
 }, {
   "id": 9689,
   "sv": "ingår",
   "en": "included",
-  "ch": 18
+  "ch": 18,
+  "t": "v"
 }, {
   "id": 9690,
   "sv": "senaste",
   "en": "latest",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9691,
   "sv": "spellista",
   "en": "playlist",
   "c": "(-n, -or, -orna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9692,
   "sv": "hörlurar",
   "en": "earphones",
   "c": "(-na)",
-  "ch": 18
+  "ch": 18,
+  "t": "n"
 }, {
   "id": 9693,
   "sv": "improvisera",
   "en": "improvise",
   "c": "(-r, -de, -t)",
-  "ch": 18
+  "ch": 18,
+  "t": "v"
 }, {
   "id": 9694,
   "sv": "sportbil",
   "en": "sports car",
   "c": "(-en, -ar, -arna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9695,
   "sv": "Spotify",
   "en": "Spotify",
-  "ch": 18
+  "ch": 18,
+  "t": "pn"
 }, {
   "id": 9696,
   "sv": "musikindustri",
   "en": "music industry",
   "c": "(-n, -er, -erna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9697,
   "sv": "strömmad",
   "en": "streamed",
-  "ch": 18
+  "ch": 18,
+  "t": "a"
 }, {
   "id": 9698,
   "sv": "webb-sida",
   "en": "web page",
   "c": "(-n, -or, -orna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9699,
   "sv": "internetbolag",
   "en": "internet company",
   "c": "(-et, −, -en)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9700,
   "sv": "miljonär",
   "en": "millionaire",
   "c": "(-en, -er, -erna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9701,
   "sv": "nörd",
   "en": "nerd",
   "c": "(-en, -ar, -arna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9702,
   "sv": "datanörd",
   "en": "computer nerd",
   "c": "(-en, -ar, -arna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9703,
   "sv": "personalavdelning",
   "en": "human resources department",
   "c": "(-en, -ar, -arna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9704,
   "sv": "Vem kan jag hälsa från?",
@@ -24404,13 +25737,16 @@ const VOCAB = [{
   "sv": "support",
   "en": "support",
   "c": "(-en)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9706,
   "sv": "be",
   "en": "ask",
   "c": "(ber, bad, bett)",
-  "ch": 18
+  "ch": 18,
+  "t": "v"
 }, {
   "id": 9707,
   "sv": "var god dröj",
@@ -24431,7 +25767,9 @@ const VOCAB = [{
   "sv": "tandklinik",
   "en": "dental clinic",
   "c": "(-en, -er, -erna)",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9711,
   "sv": "vabba (vard), ta ledigt för vård av sjukt barn",
@@ -24442,7 +25780,9 @@ const VOCAB = [{
   "id": 9712,
   "sv": "AW",
   "en": "After work drinks after work",
-  "ch": 18
+  "ch": 18,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9713,
   "sv": "vara ledig",
@@ -24458,25 +25798,33 @@ const VOCAB = [{
   "sv": "kroppsdel",
   "en": "body part",
   "c": "(-en, -ar, -arna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9716,
   "sv": "navel",
   "en": "bellybutton",
   "c": "(-n, -navlar, navlarna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9717,
   "sv": "stjärt",
   "en": "buttocks",
   "c": "(-en, -ar, -arna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9718,
   "sv": "doktor",
   "en": "doctor, physician",
   "c": "(-n, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9719,
   "sv": "ont i huvudet",
@@ -24492,7 +25840,9 @@ const VOCAB = [{
   "sv": "huvudvärkstablett",
   "en": "headache pill, painkiller",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9722,
   "sv": "om dagen",
@@ -24503,7 +25853,8 @@ const VOCAB = [{
   "sv": "snusa",
   "en": "use snus, use snuff",
   "c": "(-r, -de, -t)",
-  "ch": 19
+  "ch": 19,
+  "t": "v"
 }, {
   "id": 9724,
   "sv": "hel del",
@@ -24516,31 +25867,39 @@ const VOCAB = [{
   "sv": "croupier",
   "en": "croupier",
   "c": "(-n, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9726,
   "sv": "kasino",
   "en": "casino",
   "c": "(-t, -n, -na)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9727,
   "sv": "superkoncentrerad",
   "en": "super concentrated",
   "c": "(-e)",
-  "ch": 19
+  "ch": 19,
+  "t": "a"
 }, {
   "id": 9728,
   "sv": "koncentrerad",
   "en": "concentrated",
   "c": "(-e)",
-  "ch": 19
+  "ch": 19,
+  "t": "a"
 }, {
   "id": 9729,
   "sv": "hockeytränare",
   "en": "ice hockey coach",
   "c": "(-n, −, -hockeytränarna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9730,
   "sv": "ha fullt upp",
@@ -24556,7 +25915,8 @@ const VOCAB = [{
   "id": 9732,
   "sv": "Maldiverna",
   "en": "The Maldives",
-  "ch": 19
+  "ch": 19,
+  "t": "pn"
 }, {
   "id": 9733,
   "sv": "ja- och nej fråga",
@@ -24568,13 +25928,17 @@ const VOCAB = [{
   "sv": "kunglighet",
   "en": "royalty",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9735,
   "sv": "seriefigur",
   "en": "cartoon character",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9736,
   "sv": "betala räkningar",
@@ -24598,7 +25962,8 @@ const VOCAB = [{
   "sv": "svettas",
   "en": "to sweat",
   "c": "(svettas, svettades, svettats)",
-  "ch": 19
+  "ch": 19,
+  "t": "v"
 }, {
   "id": 9740,
   "sv": "svårt att andas",
@@ -24609,25 +25974,33 @@ const VOCAB = [{
   "sv": "blodtryck",
   "en": "blood pressure",
   "c": "(-et, −, -en)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9742,
   "sv": "blodtrycksmedicin",
   "en": "blood pressure medicine",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9743,
   "sv": "astmamedicin",
   "en": "asthma medicine",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9744,
   "sv": "slem",
   "en": "slime",
   "c": "(-met)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9745,
   "sv": "ont i magen",
@@ -24648,25 +26021,33 @@ const VOCAB = [{
   "sv": "febertermometer",
   "en": "thermometer",
   "c": "(-n, febertermometrar, febertermometrarna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9749,
   "sv": "hostmedicin",
   "en": "cough syrup",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9750,
   "sv": "hjärntumör",
   "en": "brain tumor",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9751,
   "sv": "migrän",
   "en": "migraine",
   "c": "(-en)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9752,
   "sv": "tycka synd om",
@@ -24678,19 +26059,25 @@ const VOCAB = [{
   "sv": "symtom",
   "en": "symptom",
   "c": "(-et, −, -en)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9754,
   "sv": "läkarbesök",
   "en": "visit to the doctor",
   "c": "(-et, −, -en)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9755,
   "sv": "relationsexpert",
   "en": "relationship expert",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9756,
   "sv": "vara ihop",
@@ -24702,19 +26089,24 @@ const VOCAB = [{
   "sv": "tevekväll",
   "en": "evening in front of the tv",
   "c": "(-en, -ar, -arna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9758,
   "sv": "skogspromenad",
   "en": "walk in the forest",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9759,
   "sv": "supertidig",
   "en": "super early",
   "c": "(-t, -a)",
-  "ch": 19
+  "ch": 19,
+  "t": "a"
 }, {
   "id": 9760,
   "sv": "få tillbaka",
@@ -24732,7 +26124,9 @@ const VOCAB = [{
   "sv": "fågelhatare",
   "en": "bird-hater",
   "c": "(-n, −, -na)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9763,
   "sv": "tänka positivt",
@@ -24744,25 +26138,31 @@ const VOCAB = [{
   "sv": "fågelfri",
   "en": "bird-free",
   "c": "(-tt, -a)",
-  "ch": 19
+  "ch": 19,
+  "t": "a"
 }, {
   "id": 9765,
   "sv": "sömntabletter",
   "en": "sleeping pills",
   "c": "(-en, -er, -erna)",
-  "ch": 19
+  "ch": 19,
+  "t": "n"
 }, {
   "id": 9766,
   "sv": "magproblem",
   "en": "stomach problems",
   "c": "(-et, −, -en)",
-  "ch": 19
+  "ch": 19,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9767,
   "sv": "underrubrik",
   "en": "subheading",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9768,
   "sv": "gå upp",
@@ -24774,13 +26174,17 @@ const VOCAB = [{
   "sv": "snökaos",
   "en": "snow chaos",
   "c": "(-et, −, -en)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9770,
   "sv": "arbetlöshet",
   "en": "unemployment",
   "c": "(-en)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9771,
   "sv": "gå ner",
@@ -24791,12 +26195,15 @@ const VOCAB = [{
   "id": 9772,
   "sv": "vann",
   "en": "won",
-  "ch": 20
+  "ch": 20,
+  "t": "v"
 }, {
   "id": 9773,
   "sv": "oavgjort",
   "en": "tie",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9774,
   "sv": "tomte, jultomte",
@@ -24808,30 +26215,38 @@ const VOCAB = [{
   "sv": "bostadslån",
   "en": "mortgage",
   "c": "(-et, −, -en)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9776,
   "sv": "seriekrock",
   "en": "pileup",
   "c": "(-en, -ar, -arna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9777,
   "sv": "färre",
   "en": "fewer",
-  "ch": 20
+  "ch": 20,
+  "t": "a"
 }, {
   "id": 9778,
   "sv": "chefsekonom",
   "en": "chief economist",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9779,
   "sv": "rekordlåg",
   "en": "record low",
   "c": "(-t, -a)",
-  "ch": 20
+  "ch": 20,
+  "t": "a"
 }, {
   "id": 9780,
   "sv": "gå ut hårt",
@@ -24848,25 +26263,33 @@ const VOCAB = [{
   "sv": "publikstöd",
   "en": "audience support",
   "c": "(-et)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9783,
   "sv": "trafikolycka",
   "en": "traffic accident",
   "c": "(-n, -or, -orna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9784,
   "sv": "bilist",
   "en": "driver",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9785,
   "sv": "snöoväder",
   "en": "snow storm",
   "c": "(snöovädret, −, snöovädren)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9786,
   "sv": "dela ut",
@@ -24884,24 +26307,30 @@ const VOCAB = [{
   "sv": "taxibolag",
   "en": "taxi company",
   "c": "(-et, −, -en)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9789,
   "sv": "specialutbildad",
   "en": "specially trained",
   "c": "(-e)",
-  "ch": 20
+  "ch": 20,
+  "t": "a"
 }, {
   "id": 9790,
   "sv": "Bahamas",
   "en": "Bahamas",
-  "ch": 20
+  "ch": 20,
+  "t": "pn"
 }, {
   "id": 9791,
   "sv": "storvinst",
   "en": "big win",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9792,
   "sv": "ta det lugnt",
@@ -24912,13 +26341,16 @@ const VOCAB = [{
   "sv": "tidningssida",
   "en": "newspaper page",
   "c": "(-n, -or, -orna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9794,
   "sv": "drabbas",
   "en": "be affected",
   "c": "(drabbas, drabbades, drabbats)",
-  "ch": 20
+  "ch": 20,
+  "t": "v"
 }, {
   "id": 9795,
   "sv": "göra i ordning",
@@ -24930,19 +26362,24 @@ const VOCAB = [{
   "sv": "banktjänsteman",
   "en": "bank official, bank clerk",
   "c": "(-nen, banktjänstemän, banktjänstemännen)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9797,
   "sv": "vinkonsumtion",
   "en": "wine consumption",
   "c": "(-en)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9798,
   "sv": "ekonominyheter",
   "en": "financial news",
   "c": "(-na)",
-  "ch": 20
+  "ch": 20,
+  "t": "n"
 }, {
   "id": 9799,
   "sv": "stå i",
@@ -24953,29 +26390,35 @@ const VOCAB = [{
   "id": 9800,
   "sv": "Norrland",
   "en": "Norrland, nothern region of Sweden",
-  "ch": 20
+  "ch": 20,
+  "t": "pn"
 }, {
   "id": 9801,
   "sv": "Svealand",
   "en": "Svealand, central region of Sweden",
-  "ch": 20
+  "ch": 20,
+  "t": "pn"
 }, {
   "id": 9802,
   "sv": "Götaland",
   "en": "Götaland, southern region of Sweden",
-  "ch": 20
+  "ch": 20,
+  "t": "pn"
 }, {
   "id": 9803,
   "sv": "fattas",
   "en": "missing",
   "c": "(fattas, fattades, fattats)",
-  "ch": 20
+  "ch": 20,
+  "t": "v"
 }, {
   "id": 9804,
   "sv": "kulturhistoriker",
   "en": "cultural historian",
   "c": "(-n, −, -na)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9805,
   "sv": "roa sig",
@@ -24987,7 +26430,9 @@ const VOCAB = [{
   "sv": "namninsamling",
   "en": "petition",
   "c": "(-en, -ar, -arna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9807,
   "sv": "ändra sig",
@@ -24998,7 +26443,8 @@ const VOCAB = [{
   "id": 9808,
   "sv": "Schweiz",
   "en": "Switzerland",
-  "ch": 20
+  "ch": 20,
+  "t": "pn"
 }, {
   "id": 9809,
   "sv": "föra över",
@@ -25022,19 +26468,25 @@ const VOCAB = [{
   "sv": "giftspindel",
   "en": "poisonous spider",
   "c": "(-n, -giftspindlar, giftspindlarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9813,
   "sv": "glasburk",
   "en": "glass jar",
   "c": "(-en, -ar, -arna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9814,
   "sv": "terrarium",
   "en": "terrarium",
   "c": "(terrariet, terrarier, terrarierna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9815,
   "sv": "krypa in",
@@ -25046,7 +26498,9 @@ const VOCAB = [{
   "sv": "medievana",
   "en": "habit of media consumption",
   "c": "(-n, -or, -orna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9817,
   "sv": "slå ihop",
@@ -25058,13 +26512,17 @@ const VOCAB = [{
   "sv": "kvällstidning",
   "en": "evening paper",
   "c": "(-en, -ar, -arna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9819,
   "sv": "webbradio",
   "en": "radio on the web",
   "c": "(-n)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9820,
   "sv": "Saco (Sveriges akademikers centralorganisation)",
@@ -25076,7 +26534,9 @@ const VOCAB = [{
   "sv": "biomedicin",
   "en": "medical biology",
   "c": "(-en)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9822,
   "sv": "biomedicinsk analytiker",
@@ -25087,19 +26547,25 @@ const VOCAB = [{
   "sv": "gymnasieäarare",
   "en": "high school teacher",
   "c": "(-n, −, -gymnasielärarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9824,
   "sv": "optimist",
   "en": "optimist",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9825,
   "sv": "kulturarbetare",
   "en": "worker in the culture sector",
   "c": "(-n, −, kulturarbetarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9826,
   "sv": "typ/typer av",
@@ -25110,89 +26576,118 @@ const VOCAB = [{
   "sv": "gruvteknik",
   "en": "mining technology",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9828,
   "sv": "skjutsköterska",
   "en": "nurse",
   "c": "(-n, -or, -orna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9829,
   "sv": "akuten",
   "en": "emergency room",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9830,
   "sv": "akutsjuksköterska",
   "en": "ER nurse",
   "c": "(-n, -or, -orna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9831,
   "sv": "operationssjukssköterska",
   "en": "surgical nurse",
   "c": "(-n, -or, -orna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9832,
   "sv": "systemutvecklare",
   "en": "system developer",
   "c": "(-n, −, systemutveckarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9833,
   "sv": "informatör",
   "en": "public relations specialist",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9834,
   "sv": "industriarbete",
   "en": "industrial worker",
   "c": "(-t, -n, -na)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "ett"
 }, {
   "id": 9835,
   "sv": "truckförare",
   "en": "truck driver",
   "c": "(-n, −, -na)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9836,
   "sv": "montör",
   "en": "fitter",
   "c": "(-en, -er, -erna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9837,
   "sv": "Högskoleverket",
   "en": "Swedish Agency for Higher Education",
-  "ch": 20
+  "ch": 20,
+  "t": "pn"
 }, {
   "id": 9838,
   "sv": "vägledare",
   "en": "councelor",
   "c": "(-n, −, -vägledarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9839,
   "sv": "studievägledare",
   "en": "academic counselor",
   "c": "(-n, −, studievägledarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9840,
   "sv": "yrkesvägledare",
   "en": "professional counselor",
   "c": "(-n, −, yrkesvägledarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9841,
   "sv": "nyhetsartikel",
   "en": "news article",
   "c": "(-n, nyhetsartiklar, nyhetsartiklarna)",
-  "ch": 20
+  "ch": 20,
+  "t": "n",
+  "g": "en"
 }, {
   "id": 9842,
   "sv": "väcka intresse",
@@ -26350,7 +27845,27 @@ const WORD_TYPE_LABELS = {
   p: 'pronoun',
   c: 'conj',
   s: 'subj',
-  d: 'det'
+  d: 'det',
+  i: 'interj',
+  pr: 'prep',
+  num: 'numeral',
+  pt: 'particle',
+  pn: 'proper name'
+};
+const POS_FILTER_LABELS = {
+  n: 'Substantiv',
+  v: 'Verb',
+  a: 'Adjektiv/Adverb',
+  p: 'Pronomen',
+  c: 'Konjunktion',
+  s: 'Subjunktion',
+  d: 'Determinerare',
+  i: 'Interjektion',
+  pr: 'Preposition',
+  num: 'Räkneord',
+  pt: 'Partikel',
+  pn: 'Egennamn',
+  '': 'Övrigt (otaggat)'
 };
 const STORAGE_KEY = 'ordforrad-state';
 const todayStr = () => new Date().toISOString().slice(0, 10);
@@ -26438,6 +27953,22 @@ function pickExtraExerciseType(card, lastType) {
 }
 function randDirection() {
   return Math.random() < 0.5 ? 'sv-en' : 'en-sv';
+}
+
+// Free-review mode: still honor the "Swedish-first until proven" rule for
+// words that haven't yet been graded Good/Easy; graduated words get random direction.
+function pickFreeReviewDirection(state, item) {
+  const learningEntry = state.learning[item.id];
+  if (learningEntry && !learningEntry.everGoodOrEasy) return 'sv-en';
+  return randDirection();
+}
+function pickRandomCard(pool, avoidId) {
+  if (pool.length === 1) return pool[0];
+  let candidate;
+  do {
+    candidate = pool[Math.floor(Math.random() * pool.length)];
+  } while (candidate.id === avoidId);
+  return candidate;
 }
 function defaultAppState() {
   return {
@@ -27040,7 +28571,8 @@ function OrdforradApp({
     onOpenHardWords: () => setScreen('hardwords'),
     hardWordCount: hardWordItems.length,
     onOpenDictionary: () => setScreen('dictionary'),
-    onOpenVerbs: () => setScreen('verbs')
+    onOpenVerbs: () => setScreen('verbs'),
+    onOpenFreeReview: () => setScreen('freereview')
   }), screen === 'progress' && /*#__PURE__*/React.createElement(ProgressScreen, {
     state: state,
     onExit: () => setScreen('home')
@@ -27081,6 +28613,9 @@ function OrdforradApp({
     onExit: () => setScreen('home')
   }), screen === 'verbs' && /*#__PURE__*/React.createElement(VerbsScreen, {
     onExit: () => setScreen('home')
+  }), screen === 'freereview' && /*#__PURE__*/React.createElement(FreeReviewScreen, {
+    state: state,
+    onExit: () => setScreen('home')
   }));
 }
 
@@ -27114,7 +28649,8 @@ function HomeScreen({
   onOpenHardWords,
   hardWordCount,
   onOpenDictionary,
-  onOpenVerbs
+  onOpenVerbs,
+  onOpenFreeReview
 }) {
   const scopeLabel = state.scope === 'all' ? 'Alla ord — frequency order' : `Rivstart · Kapitel ${state.scope}`;
   let extrasHelperText = null;
@@ -27236,6 +28772,11 @@ function HomeScreen({
   }, /*#__PURE__*/React.createElement(Repeat, {
     size: 16
   }), " Verb — böjningar"), /*#__PURE__*/React.createElement("button", {
+    className: "ord-extras-btn",
+    onClick: onOpenFreeReview
+  }, /*#__PURE__*/React.createElement(Sparkles, {
+    size: 16
+  }), " Fri repetition"), /*#__PURE__*/React.createElement("button", {
     className: "ord-match-btn",
     onClick: onOpenDictionary
   }, /*#__PURE__*/React.createElement(BookOpen, {
@@ -28286,6 +29827,144 @@ const VERB_FORM_LABELS = {
   past: 'Preteritum (dåtid)',
   sup: 'Supinum (med har/hade)'
 };
+
+/* ---------------- Free Review: unlimited random drill across everything introduced so far ---------------- */
+
+function FreeReviewScreen({
+  state,
+  onExit
+}) {
+  const [mode, setMode] = useState('setup'); // setup | active
+  const [selectedTypes, setSelectedTypes] = useState(null);
+  const [currentCard, setCurrentCard] = useState(null);
+  const [cardCount, setCardCount] = useState(0);
+  const [results, setResults] = useState({
+    again: 0,
+    hard: 0,
+    good: 0,
+    easy: 0
+  });
+  const introducedItems = useMemo(() => {
+    const ids = new Set([...Object.keys(state.srs), ...Object.keys(state.learning)].map(Number));
+    return Array.from(ids).map(id => VOCAB_BY_ID.get(id)).filter(Boolean);
+  }, [state.srs, state.learning]);
+  const categoryCounts = useMemo(() => {
+    const counts = {};
+    introducedItems.forEach(item => {
+      const key = item.t || '';
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    return counts;
+  }, [introducedItems]);
+  useEffect(() => {
+    if (selectedTypes === null && Object.keys(categoryCounts).length > 0) {
+      setSelectedTypes(new Set(Object.keys(categoryCounts)));
+    }
+  }, [categoryCounts, selectedTypes]);
+  const toggleType = key => {
+    setSelectedTypes(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);else next.add(key);
+      return next;
+    });
+  };
+  const filteredPool = useMemo(() => {
+    if (!selectedTypes) return [];
+    return introducedItems.filter(item => selectedTypes.has(item.t || ''));
+  }, [introducedItems, selectedTypes]);
+  const startSession = () => {
+    if (filteredPool.length === 0) return;
+    const first = filteredPool[Math.floor(Math.random() * filteredPool.length)];
+    setCurrentCard({
+      ...first,
+      _kind: 'review',
+      _direction: pickFreeReviewDirection(state, first)
+    });
+    setCardCount(1);
+    setResults({
+      again: 0,
+      hard: 0,
+      good: 0,
+      easy: 0
+    });
+    setMode('active');
+  };
+  const handleGrade = g => {
+    const gradeNames = ['again', 'hard', 'good', 'easy'];
+    setResults(prev => ({
+      ...prev,
+      [gradeNames[g]]: prev[gradeNames[g]] + 1
+    }));
+    const next = pickRandomCard(filteredPool, currentCard.id);
+    setCurrentCard({
+      ...next,
+      _kind: 'review',
+      _direction: pickFreeReviewDirection(state, next)
+    });
+    setCardCount(c => c + 1);
+  };
+  if (mode === 'active' && currentCard) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ord-review"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-review-top"
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "ord-exit-btn",
+      onClick: onExit
+    }, /*#__PURE__*/React.createElement(X, {
+      size: 18
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "ord-freereview-count"
+    }, cardCount, " kort · fri repetition")), /*#__PURE__*/React.createElement(FlashcardExercise, {
+      key: cardCount,
+      card: currentCard,
+      onGrade: handleGrade
+    }));
+  }
+  const available = Object.keys(categoryCounts);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ord-review"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-review-top"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-exit-btn",
+    onClick: onExit
+  }, /*#__PURE__*/React.createElement(ArrowLeft, {
+    size: 18
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "ord-eyebrow",
+    style: {
+      margin: 0
+    }
+  }, "FRI REPETITION")), introducedItems.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty"
+  }, "Du har inte introducerat några ord ännu. Gör dagens flashcards först.") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty",
+    style: {
+      marginBottom: 16
+    }
+  }, "Repetera fritt bland alla ", introducedItems.length, " ord du hittills introducerat, oavsett datum eller ämnesscope. Rundan fortsätter tills du avslutar den själv — inget påverkar din vanliga repetitionsplanering."), /*#__PURE__*/React.createElement("div", {
+    className: "ord-progress-section-title"
+  }, "Filtrera efter ordklass"), /*#__PURE__*/React.createElement("div", {
+    className: "ord-pos-filter-list"
+  }, available.map(key => /*#__PURE__*/React.createElement("label", {
+    className: "ord-pos-filter-item",
+    key: key || 'none'
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: selectedTypes ? selectedTypes.has(key) : true,
+    onChange: () => toggleType(key)
+  }), /*#__PURE__*/React.createElement("span", null, POS_FILTER_LABELS[key] || 'Övrigt'), /*#__PURE__*/React.createElement("span", {
+    className: "ord-pos-filter-count"
+  }, categoryCounts[key])))), /*#__PURE__*/React.createElement("button", {
+    className: "ord-start-btn",
+    onClick: startSession,
+    disabled: filteredPool.length === 0,
+    style: {
+      marginTop: 16
+    }
+  }, filteredPool.length > 0 ? `Starta (${filteredPool.length} ord)` : 'Välj minst en ordklass')));
+}
 function VerbsScreen({
   onExit
 }) {
@@ -28856,6 +30535,13 @@ function Style() {
       .ord-verb-row-wrap { display: flex; flex-direction: column; }
       .ord-verb-row-wrap .ord-verb-row { cursor: pointer; }
       .ord-verb-en-reveal { font-size: 12px; color: var(--c-slate); font-style: italic; padding: 6px 10px 8px; margin-top: 4px; }
+
+      .ord-pos-filter-list { display: flex; flex-direction: column; gap: 6px; }
+      .ord-pos-filter-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: #FBF9F4; border: 1.5px solid var(--c-line); border-radius: 8px; cursor: pointer; font-size: 13.5px; }
+      .ord-pos-filter-item input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--c-red); flex-shrink: 0; }
+      .ord-pos-filter-item span:nth-child(2) { flex: 1; }
+      .ord-pos-filter-count { font-family: var(--font-mono); font-size: 11px; color: #8a8570; }
+      .ord-freereview-count { flex: 1; font-family: var(--font-mono); font-size: 12px; color: #6b6656; text-align: center; }
 
       .ord-quizcell-input { width: 100%; min-width: 0; padding: 5px 6px; border: 1.5px solid var(--c-line); border-radius: 4px; font-family: var(--font-body); font-size: 12px; background: #fff; color: var(--c-ink); }
       .ord-quizcell-input:focus { outline: none; border-color: var(--c-slate); }
