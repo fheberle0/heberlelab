@@ -480,6 +480,11 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "recipes-beef-bourguignon",
+          title: 'Beef Bourguignon',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/beef-bourguignon/";
             },},{id: "recipes-beef-enchiladas",
           title: 'Beef Enchiladas',
           description: "",
@@ -495,16 +500,31 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/best-juicy-skillet-pork-chops/";
+            },},{id: "recipes-chicken-au-poivre",
+          title: 'Chicken au Poivre',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chicken-au-poivre/";
             },},{id: "recipes-chicken-soup",
           title: 'Chicken Soup',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/chicken-soup-mimi/";
+            },},{id: "recipes-chocolate-doughnut-muffins",
+          title: 'Chocolate Doughnut Muffins',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chocolate-doughnut-muffins/";
             },},{id: "recipes-cilantro-lime-rice",
           title: 'Cilantro Lime Rice',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/cilantro-lime-rice/";
+            },},{id: "recipes-everything-salmon-with-creamy-caper-sauce",
+          title: 'Everything Salmon with Creamy Caper Sauce',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/everything-salmon-caper-sauce/";
             },},{id: "recipes-how-to-cook-filet-mignon",
           title: 'How to Cook Filet Mignon',
           description: "",
@@ -570,11 +590,31 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/mississippi-chicken/";
+            },},{id: "recipes-old-fashioned-beef-stew",
+          title: 'Old-Fashioned Beef Stew',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/old-fashioned-beef-stew/";
             },},{id: "recipes-olive-garden-chicken-scampi-pasta",
           title: 'Olive Garden Chicken Scampi Pasta',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/olive-garden-chicken-scampi-pasta/";
+            },},{id: "recipes-one-pot-tortellini-with-prosciutto-and-peas",
+          title: 'One-Pot Tortellini with Prosciutto and Peas',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/one-pot-tortellini-prosciutto-peas/";
+            },},{id: "recipes-peanut-butter-noodles",
+          title: 'Peanut Butter Noodles',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/peanut-butter-noodles/";
+            },},{id: "recipes-pesto-beans",
+          title: 'Pesto Beans',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/pesto-beans/";
             },},{id: "recipes-sausage-broccoli-rigatoni",
           title: 'Sausage Broccoli Rigatoni',
           description: "",
