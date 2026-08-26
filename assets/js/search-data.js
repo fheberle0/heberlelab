@@ -480,6 +480,41 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "recipes-the-best-juicy-skillet-pork-chops",
+          title: 'The Best Juicy Skillet Pork Chops',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/best-juicy-skillet-pork-chops/";
+            },},{id: "recipes-chicken-soup",
+          title: 'Chicken Soup',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chicken-soup-mimi/";
+            },},{id: "recipes-cilantro-lime-rice",
+          title: 'Cilantro Lime Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/cilantro-lime-rice/";
+            },},{id: "recipes-instant-pot-beef-stew",
+          title: 'Instant Pot Beef Stew',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-beef-stew/";
+            },},{id: "recipes-instant-pot-chicken-thighs",
+          title: 'Instant Pot Chicken Thighs',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-chicken-thighs/";
+            },},{id: "recipes-mint-chocolate-cake-grasshopper-cake",
+          title: 'Mint Chocolate Cake (Grasshopper Cake)',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/mint-chocolate-cake/";
+            },},{id: "recipes-sausage-broccoli-rigatoni",
+          title: 'Sausage Broccoli Rigatoni',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/sausage-broccoli-rigatoni/";
             },},{id: "teachings-data-science-fundamentals",
           title: 'Data Science Fundamentals',
           description: "This course covers the foundational aspects of data science, including data collection, cleaning, analysis, and visualization. Students will learn practical skills for working with real-world datasets.",
