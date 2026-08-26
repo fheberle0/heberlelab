@@ -8,7 +8,7 @@ const SUPABASE_FUNCTIONS_URL = 'https://ttyfammnucxnypyfabks.supabase.co/functio
    ORDFÖRRÅD — Swedish vocabulary trainer
    Flow: Flashcards (primary, 3-correct-to-graduate) →
          unlocks Övningar (MCQ/Type/Blank) + Matchningsspel,
-         both scoped to *today's* introduced words only.
+         both scoped to *today's* introduced words only..
    ============================================================ */
 
 const VOCAB = [{
