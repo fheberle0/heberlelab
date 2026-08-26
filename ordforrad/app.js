@@ -144,11 +144,12 @@ const VOCAB = [{
   "id": 101,
   "sv": "skola",
   "en": "school",
-  "t": "a",
+  "t": "n",
   "es": "Barnen går till skolan.",
   "ee": "The children go to school.",
   "lv": "A1",
-  "wpm": 10411.19
+  "wpm": 10411.19,
+  "g": "en"
 }, {
   "id": 102,
   "sv": "jag",
@@ -264,19 +265,19 @@ const VOCAB = [{
 }, {
   "id": 114,
   "sv": "man",
-  "en": "man",
+  "en": "one (impersonal 'you')",
   "t": "p",
-  "es": "En man står där.",
-  "ee": "A man stands there.",
+  "es": "Man äter middag klockan sex.",
+  "ee": "One eats dinner at six.",
   "lv": "A1",
   "wpm": 4446.34
 }, {
   "id": 115,
   "sv": "de (vardagl. dom)",
-  "en": "they",
+  "en": "the",
   "t": "d",
-  "es": "De arbetar tillsammans.",
-  "ee": "They work together.",
+  "es": "De gamla husen är vackra.",
+  "ee": "The old houses are beautiful.",
   "lv": "A1",
   "wpm": 4437.26
 }, {
@@ -873,7 +874,7 @@ const VOCAB = [{
 }, {
   "id": 178,
   "sv": "vår (vardagl. våran)",
-  "en": "spring",
+  "en": "our",
   "t": "p",
   "es": "Vår bil är blå.",
   "ee": "Our car is blue.",
@@ -1577,10 +1578,10 @@ const VOCAB = [{
 }, {
   "id": 249,
   "sv": "utan",
-  "en": "without",
+  "en": "but (rather)",
   "t": "c",
-  "es": "Jag går utan jacka.",
-  "ee": "I go without a jacket.",
+  "es": "Inte blå utan grön.",
+  "ee": "Not blue but green.",
   "ch": 2,
   "lv": "A1",
   "wpm": 586.71
@@ -4145,7 +4146,7 @@ const VOCAB = [{
 }, {
   "id": 501,
   "sv": "fråga",
-  "en": "question",
+  "en": "to ask",
   "t": "v",
   "c": "(-r, -de, -t)",
   "es": "Jag frågar läraren.",
@@ -5969,10 +5970,10 @@ const VOCAB = [{
 }, {
   "id": 682,
   "sv": "få",
-  "en": "to get",
+  "en": "few",
   "t": "a",
-  "es": "Jag får ett brev.",
-  "ee": "I receive a letter.",
+  "es": "Få människor vet svaret.",
+  "ee": "Few people know the answer.",
   "ch": 2,
   "lv": "A1",
   "wpm": 148.91
@@ -6741,12 +6742,12 @@ const VOCAB = [{
 }, {
   "id": 759,
   "sv": "svensk",
-  "en": "Swedish",
+  "en": "a Swede",
   "t": "n",
   "g": "en",
   "c": "(-t, -a)",
-  "es": "Han är svensk.",
-  "ee": "He is Swedish.",
+  "es": "Han är en svensk.",
+  "ee": "He is a Swede.",
   "ch": 1,
   "lv": "A1",
   "wpm": 129.62
@@ -6803,12 +6804,12 @@ const VOCAB = [{
 }, {
   "id": 765,
   "sv": "tro",
-  "en": "to believe",
+  "en": "faith / belief",
   "t": "n",
   "g": "en",
   "c": "(tror, trodde, trott)",
   "es": "Hon har en stark tro.",
-  "ee": "She has a strong belief.",
+  "ee": "She has a strong faith.",
   "ch": 2,
   "lv": "A1",
   "wpm": 129.11
@@ -7174,11 +7175,11 @@ const VOCAB = [{
 }, {
   "id": 801,
   "sv": "ro",
-  "en": "to row",
+  "en": "calm / peace",
   "t": "n",
   "g": "en",
-  "es": "De ror på sjön.",
-  "ee": "They row on the lake.",
+  "es": "Vi behöver lite ro.",
+  "ee": "We need some peace.",
   "lv": "A1",
   "wpm": 124.53
 }, {
@@ -7784,10 +7785,10 @@ const VOCAB = [{
 }, {
   "id": 861,
   "sv": "fara",
-  "en": "danger",
+  "en": "to travel",
   "t": "v",
-  "es": "Faran är över.",
-  "ee": "The danger is over.",
+  "es": "Han far till Stockholm.",
+  "ee": "He travels to Stockholm.",
   "lv": "A1",
   "wpm": 114.82
 }, {
@@ -9181,12 +9182,14 @@ const VOCAB = [{
 }, {
   "id": 1000,
   "sv": "resa",
-  "en": "trip",
+  "en": "to travel",
   "t": "v",
   "c": "(-er, -te, -t)",
   "ch": 6,
   "lv": "A1",
-  "wpm": 95.16
+  "wpm": 95.16,
+  "es": "Jag reser till Spanien.",
+  "ee": "I travel to Spain."
 }, {
   "id": 1001,
   "sv": "förbättra",
@@ -9517,10 +9520,10 @@ const VOCAB = [{
 }, {
   "id": 1034,
   "sv": "var",
-  "en": "where",
-  "t": "a",
-  "es": "Var bor du?",
-  "ee": "Where do you live?",
+  "en": "was",
+  "t": "v",
+  "es": "Han var glad igår.",
+  "ee": "He was happy yesterday.",
   "lv": "A1",
   "wpm": 92.16
 }, {
@@ -9900,12 +9903,12 @@ const VOCAB = [{
 }, {
   "id": 1072,
   "sv": "vilja",
-  "en": "to want",
+  "en": "will / willpower",
   "t": "n",
   "g": "en",
   "c": "(vill, ville, velat)",
   "es": "Hon har stark vilja.",
-  "ee": "She has strong will.",
+  "ee": "She has a strong will.",
   "ch": 4,
   "lv": "A1",
   "wpm": 89.16
@@ -10331,8 +10334,8 @@ const VOCAB = [{
   "sv": "jo",
   "en": "yes (contradicting)",
   "t": "i",
-  "es": "Jo",
-  "ee": "det är sant.",
+  "es": "Jo, det är sant.",
+  "ee": "Yes it is, actually.",
   "ch": 11,
   "lv": "A1",
   "wpm": 85.95
@@ -10945,10 +10948,10 @@ const VOCAB = [{
 }, {
   "id": 1177,
   "sv": "än (el. ännu)",
-  "en": "than",
+  "en": "yet / still",
   "t": "a",
-  "es": "Hon är äldre än jag.",
-  "ee": "She is older than I am.",
+  "es": "Inte än.",
+  "ee": "Not yet.",
   "lv": "A1",
   "wpm": 80.5
 }, {
@@ -11924,13 +11927,15 @@ const VOCAB = [{
 }, {
   "id": 1275,
   "sv": "vara",
-  "en": "to be",
+  "en": "goods / product",
   "t": "n",
   "g": "en",
   "c": "(är, var, varit)",
   "ch": 1,
   "lv": "A1",
-  "wpm": 72.57
+  "wpm": 72.57,
+  "es": "Butiken säljer varor.",
+  "ee": "The shop sells goods."
 }, {
   "id": 1276,
   "sv": "undantag",
@@ -14070,10 +14075,10 @@ const VOCAB = [{
 }, {
   "id": 1450,
   "sv": "skada",
-  "en": "injury",
+  "en": "to harm / injure",
   "t": "v",
-  "es": "Han får en skada.",
-  "ee": "He gets an injury.",
+  "es": "Han skadar sig lätt.",
+  "ee": "He injures himself easily.",
   "lv": "A2",
   "wpm": 61.02
 }, {
@@ -14321,11 +14326,11 @@ const VOCAB = [{
 }, {
   "id": 1637,
   "sv": "plan",
-  "en": "plan",
+  "en": "level / court (surface)",
   "t": "n",
   "g": "ett",
-  "es": "Vi gör en plan.",
-  "ee": "We make a plan.",
+  "es": "De spelar på planen.",
+  "ee": "They play on the court.",
   "lv": "A2",
   "wpm": 52.0
 }, {
@@ -14505,12 +14510,12 @@ const VOCAB = [{
 }, {
   "id": 1760,
   "sv": "visa",
-  "en": "to show",
+  "en": "song / ballad",
   "t": "n",
   "g": "en",
   "c": "(-r, -de, -t)",
-  "es": "Han visar vägen.",
-  "ee": "He shows the way.",
+  "es": "Han sjunger en visa.",
+  "ee": "He sings a ballad.",
   "ch": 2,
   "lv": "A2",
   "wpm": 46.94
@@ -14642,10 +14647,10 @@ const VOCAB = [{
 }, {
   "id": 1831,
   "sv": "för",
-  "en": "for",
+  "en": "because",
   "t": "c",
-  "es": "Detta är för dig.",
-  "ee": "This is for you.",
+  "es": "Jag stannar hemma, för jag är sjuk.",
+  "ee": "I'm staying home, because I'm sick.",
   "lv": "A2",
   "wpm": 44.36
 }, {
@@ -14717,11 +14722,11 @@ const VOCAB = [{
 }, {
   "id": 1881,
   "sv": "kort",
-  "en": "short",
+  "en": "card / photo",
   "t": "n",
   "g": "ett",
-  "es": "Mötet är kort.",
-  "ee": "The meeting is short.",
+  "es": "Jag har ett foto på kortet.",
+  "ee": "I have a photo on the card.",
   "lv": "A2",
   "wpm": 43.02
 }, {
@@ -15046,13 +15051,15 @@ const VOCAB = [{
 }, {
   "id": 2081,
   "sv": "lära",
-  "en": "to learn",
+  "en": "teaching / doctrine",
   "t": "n",
   "g": "en",
   "c": "(lär, lärde, lärt)",
   "ch": 11,
   "lv": "A2",
-  "wpm": 36.63
+  "wpm": 36.63,
+  "es": "Han följer en gammal lära.",
+  "ee": "He follows an old teaching."
 }, {
   "id": 2096,
   "sv": "över",
@@ -15134,11 +15141,11 @@ const VOCAB = [{
 }, {
   "id": 2147,
   "sv": "militär",
-  "en": "military",
+  "en": "serviceman / soldier",
   "t": "n",
   "g": "en",
-  "es": "Det är en militär bas.",
-  "ee": "It is a military base.",
+  "es": "Han är en militär.",
+  "ee": "He is a serviceman.",
   "lv": "A2",
   "wpm": 34.9
 }, {
@@ -15155,11 +15162,11 @@ const VOCAB = [{
 }, {
   "id": 2152,
   "sv": "hälsa",
-  "en": "health",
+  "en": "to greet",
   "t": "v",
   "c": "(-r, -de, -t)",
-  "es": "Hälsan förbättras.",
-  "ee": "Health improves.",
+  "es": "Jag hälsar på min granne.",
+  "ee": "I greet my neighbor.",
   "ch": 2,
   "lv": "A2",
   "wpm": 34.8
@@ -15993,11 +16000,11 @@ const VOCAB = [{
 }, {
   "id": 3066,
   "sv": "djup",
-  "en": "deep",
+  "en": "depth",
   "t": "n",
   "g": "ett",
-  "es": "Sjön är djup.",
-  "ee": "The lake is deep.",
+  "es": "Sjöns djup är okänt.",
+  "ee": "The lake's depth is unknown.",
   "lv": "B1",
   "wpm": 20.27
 }, {
@@ -16120,10 +16127,10 @@ const VOCAB = [{
 }, {
   "id": 3269,
   "sv": "vid",
-  "en": "by / at",
+  "en": "wide",
   "t": "a",
-  "es": "Vi sitter vid bordet.",
-  "ee": "We sit at the table.",
+  "es": "Floden är vid.",
+  "ee": "The river is wide.",
   "ch": 3,
   "lv": "B1",
   "wpm": 18.24
@@ -16219,10 +16226,10 @@ const VOCAB = [{
 }, {
   "id": 3416,
   "sv": "mobil",
-  "en": "mobile phone",
+  "en": "mobile (movable)",
   "t": "a",
-  "es": "Mobilen är ny.",
-  "ee": "The phone is new.",
+  "es": "Det är en mobil enhet.",
+  "ee": "It's a mobile unit.",
   "lv": "B1",
   "wpm": 16.93
 }, {
@@ -16352,12 +16359,12 @@ const VOCAB = [{
 }, {
   "id": 3687,
   "sv": "ton",
-  "en": "tone",
+  "en": "ton (metric weight)",
   "t": "n",
   "g": "en",
   "c": "(-en, -er, -erna)",
-  "es": "Tonen är vänlig.",
-  "ee": "The tone is friendly.",
+  "es": "Bilen väger ett ton.",
+  "ee": "The car weighs a ton.",
   "ch": 2,
   "lv": "B1",
   "wpm": 14.81
@@ -16414,11 +16421,11 @@ const VOCAB = [{
 }, {
   "id": 3862,
   "sv": "val",
-  "en": "election",
+  "en": "whale",
   "t": "n",
   "g": "en",
-  "es": "Valet är viktigt.",
-  "ee": "The election is important.",
+  "es": "Valen simmar i havet.",
+  "ee": "The whale swims in the sea.",
   "lv": "B1",
   "wpm": 13.73
 }, {
@@ -16468,12 +16475,12 @@ const VOCAB = [{
 }, {
   "id": 3955,
   "sv": "stämma",
-  "en": "to be correct / to tune",
+  "en": "voice (singing part)",
   "t": "n",
   "g": "en",
   "c": "(-er, stämde, stämt)",
-  "es": "Det stämmer.",
-  "ee": "That is correct.",
+  "es": "Hon sjunger andra stämman.",
+  "ee": "She sings the second voice.",
   "ch": 16,
   "lv": "B1",
   "wpm": 13.18
@@ -16761,11 +16768,11 @@ const VOCAB = [{
 }, {
   "id": 4947,
   "sv": "lik",
-  "en": "similar",
+  "en": "corpse",
   "t": "n",
   "g": "ett",
-  "es": "De två husen är lika.",
-  "ee": "The two houses are similar.",
+  "es": "Liket hittades i floden.",
+  "ee": "The corpse was found in the river.",
   "lv": "B2",
   "wpm": 8.81
 }, {
@@ -16979,12 +16986,12 @@ const VOCAB = [{
 }, {
   "id": 5755,
   "sv": "hög",
-  "en": "high",
+  "en": "pile / heap",
   "t": "n",
   "g": "en",
   "c": "(-t, -a)",
-  "es": "Huset är högt.",
-  "ee": "The house is tall.",
+  "es": "Det ligger en hög med böcker.",
+  "ee": "There's a pile of books.",
   "ch": 17,
   "lv": "C1",
   "wpm": 6.77
@@ -17077,11 +17084,13 @@ const VOCAB = [{
 }, {
   "id": 5997,
   "sv": "röra",
-  "en": "to move / touch",
+  "en": "mess",
   "t": "n",
   "g": "en",
   "lv": "C1",
-  "wpm": 6.37
+  "wpm": 6.37,
+  "es": "Rummet är en enda röra.",
+  "ee": "The room is a total mess."
 }, {
   "id": 6013,
   "sv": "destination",
