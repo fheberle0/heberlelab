@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="{% if page.bilingual %}en{% else %}en{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }} · Heberle Lab Recipe Book</title>
+  <link rel="stylesheet" href="{{ '/assets/css/recipebook.css' | relative_url }}">
+</head>
+<body>
+
+<header class="rb-header">
+  <a class="rb-home-link" href="{{ '/recipebook/' | relative_url }}">Recipe Book</a>
+</header>
+
+<div class="rb-timer-bar" aria-live="polite"></div>
+
+<main class="rb-recipe" data-base-servings="{{ page.servings | default: 4 }}">
+
+  <div class="rb-kurbits-divider" aria-hidden="true">
+    <span class="rb-leaf rb-leaf-gold"></span>
+    <span class="rb-leaf rb-leaf-red"></span>
+  </div>
+
+  <h1 class="rb-title">
+    <span class="rb-lang-primary rb-lang-en">{{ page.title }}</span>
+    {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ page.title_bg }}</span>{% endif %}
+  </h1>
+
+  <p class="rb-meta">
+    {% if page.category %}<span class="rb-pill">{{ page.category | capitalize }}</span>{% endif %}
+    {% if page.total_time %}<span class="rb-pill">{{ page.total_time }} min</span>{% endif %}
+  </p>
+
+  <div class="rb-controls">
+    <div class="rb-control-group">
+      <label for="rb-servings">Servings</label>
+      <button type="button" class="rb-step-btn" data-step="-1" aria-label="Decrease servings">–</button>
+      <input type="number" id="rb-servings" min="1" value="{{ page.servings | default: 4 }}">
+      <button type="button" class="rb-step-btn" data-step="1" aria-label="Increase servings">+</button>
+      <button type="button" class="rb-reset-btn" title="Reset to the original serving size">Reset</button>
+    </div>
+
+    <div class="rb-control-group rb-unit-toggle" role="group" aria-label="Units">
+      <button type="button" class="rb-toggle-btn is-active" data-unit="us">US</button>
+      <button type="button" class="rb-toggle-btn" data-unit="metric">Metric</button>
+    </div>
+
+    {% if page.bilingual %}
+    <div class="rb-control-group rb-lang-toggle" role="group" aria-label="Language">
+      <button type="button" class="rb-toggle-btn is-active" data-lang="en">English</button>
+      <button type="button" class="rb-toggle-btn" data-lang="bg">Български</button>
+    </div>
+    {% endif %}
+
+    {% assign sv_items = page.ingredients | map: "item_sv" | compact %}
+    {% if sv_items.size > 0 %}
+    <div class="rb-control-group rb-ingredient-lang-toggle" role="group" aria-label="Ingredient name language">
+      <button type="button" class="rb-toggle-btn is-active" data-ing-lang="en">EN</button>
+      <button type="button" class="rb-toggle-btn" data-ing-lang="sv">SV</button>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if page.source.name %}
+  <p class="rb-source">
+    Adapted from
+    {% if page.source.url %}<a href="{{ page.source.url }}" target="_blank" rel="noopener">{{ page.source.name }}</a>{% else %}{{ page.source.name }}{% endif %}
+  </p>
+  {% endif %}
+
+  <div class="rb-body">
+    <section class="rb-ingredients">
+      <h2>Ingredients</h2>
+
+      {% assign sections = page.ingredients | map: "section" | uniq %}
+      {% if sections.size > 1 or sections.first %}
+        {% for section in sections %}
+          {% if section %}<h3 class="rb-section-title">{{ section }}</h3>{% endif %}
+          <ul class="rb-ingredient-list">
+            {% for ing in page.ingredients %}
+              {% if ing.section == section %}
+              <li class="rb-ingredient"
+                  data-amount-us="{{ ing.amount_us }}"
+                  data-unit-us="{{ ing.unit_us }}"
+                  data-amount-metric="{{ ing.amount_metric }}"
+                  data-unit-metric="{{ ing.unit_metric }}">
+                <span class="rb-amount rb-amount-us">{{ ing.amount_us }}{% if ing.unit_us %} {{ ing.unit_us }}{% endif %}</span>
+                {% if ing.amount_metric %}<span class="rb-amount rb-amount-metric">{{ ing.amount_metric }}{% if ing.unit_metric %} {{ ing.unit_metric }}{% endif %}</span>{% endif %}
+                <span class="rb-item">
+                  <span class="rb-lang-primary rb-lang-en"><span class="rb-item-name" data-en="{{ ing.item }}" data-sv="{{ ing.item_sv | default: ing.item }}">{{ ing.item }}</span></span>
+                  {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
+                </span>
+              </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endfor %}
+      {% else %}
+        <ul class="rb-ingredient-list">
+          {% for ing in page.ingredients %}
+          <li class="rb-ingredient"
+              data-amount-us="{{ ing.amount_us }}"
+              data-unit-us="{{ ing.unit_us }}"
+              data-amount-metric="{{ ing.amount_metric }}"
+              data-unit-metric="{{ ing.unit_metric }}">
+            <span class="rb-amount rb-amount-us">{{ ing.amount_us }}{% if ing.unit_us %} {{ ing.unit_us }}{% endif %}</span>
+            {% if ing.amount_metric %}<span class="rb-amount rb-amount-metric">{{ ing.amount_metric }}{% if ing.unit_metric %} {{ ing.unit_metric }}{% endif %}</span>{% endif %}
+            <span class="rb-item">
+              <span class="rb-lang-primary rb-lang-en"><span class="rb-item-name" data-en="{{ ing.item }}" data-sv="{{ ing.item_sv | default: ing.item }}">{{ ing.item }}</span></span>
+              {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+
+    <section class="rb-steps">
+      <h2>Method</h2>
+      <ol class="rb-step-list">
+        {% assign last_section = "" %}
+        {% for step in page.steps %}
+          {% if step.section and step.section != last_section %}
+            <li class="rb-step-section-title">{{ step.section }}</li>
+            {% assign last_section = step.section %}
+          {% endif %}
+          <li class="rb-step">
+            <span class="rb-lang-primary rb-lang-en">{% if step.text %}{{ step.text }}{% else %}{{ step }}{% endif %}</span>
+            {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ step.text_bg }}</span>{% endif %}
+            {% if step.timer_minutes %}
+            <button type="button" class="rb-step-timer-btn" data-minutes="{{ step.timer_minutes }}" data-label="{% if step.text %}{{ step.text | truncate: 34 }}{% else %}{{ step | truncate: 34 }}{% endif %}">⏱ Start {{ step.timer_minutes }} min</button>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  </div>
+
+  {% if page.notes.size > 0 %}
+  <section class="rb-notes">
+    <h2>Notes</h2>
+    <ul>
+      {% for note in page.notes %}<li>{{ note }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+</main>
+
+<script src="{{ '/assets/js/recipebook.js' | relative_url }}"></script>
+</body>
+</html>

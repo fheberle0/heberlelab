@@ -1,0 +1,434 @@
+/* Heberle Lab Recipe Book — falu red / linen / kurbits
+   Deliberately self-contained: does not import or reuse the main site's SCSS. */
+
+:root {
+  --rb-linen: #F7F3E9;
+  --rb-linen-dark: #EFE6D2;
+  --rb-red: #C1440E;
+  --rb-red-dark: #8f3309;
+  --rb-gold: #8E7A3B;
+  --rb-walnut: #3A2E22;
+  --rb-walnut-soft: #6B5A3E;
+  --rb-line: #DEC9A0;
+  --rb-border: #DDD6C8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--rb-linen);
+  color: var(--rb-walnut);
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.6;
+}
+
+.rb-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rb-border);
+  background: var(--rb-walnut);
+}
+
+/* --- sticky timer bar --- */
+.rb-timer-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  background: var(--rb-walnut);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease, padding 0.25s ease;
+}
+.rb-timer-bar.is-visible {
+  display: flex;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+}
+.rb-timer-chip {
+  position: relative;
+  background: var(--rb-red);
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.5rem 2.25rem 0.6rem 1rem;
+  text-align: center;
+}
+.rb-timer-chip-label {
+  display: block;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.78rem;
+  opacity: 0.85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+.rb-timer-chip-time {
+  display: block;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: clamp(2.4rem, 9vw, 3.4rem);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+.rb-timer-chip-cancel {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  background: rgba(255,255,255,0.25);
+  border: none;
+  color: #fff;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 1rem;
+}
+.rb-timer-chip-cancel:hover { background: rgba(255,255,255,0.4); }
+
+.rb-home-link {
+  color: var(--rb-linen);
+  text-decoration: none;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+}
+.rb-home-link:hover { color: var(--rb-gold); }
+
+.rb-recipe {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+/* kurbits divider: small leaf motif, used sparingly (top of page only) */
+.rb-kurbits-divider {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+.rb-leaf {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50% 50% 50% 0;
+}
+.rb-leaf-gold { background: var(--rb-gold); transform: rotate(45deg); }
+.rb-leaf-red { background: var(--rb-red); transform: rotate(-135deg); }
+
+.rb-title {
+  font-size: 2rem;
+  font-weight: 400;
+  margin: 0 0 0.25rem;
+}
+
+.rb-meta { margin: 0.75rem 0; }
+.rb-pill {
+  display: inline-block;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;
+  background: var(--rb-linen-dark);
+  color: var(--rb-walnut-soft);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-right: 6px;
+}
+
+.rb-source {
+  font-size: 0.85rem;
+  color: var(--rb-walnut-soft);
+  font-style: italic;
+  margin: 0.5rem 0 1.5rem;
+}
+.rb-source a { color: var(--rb-red-dark); }
+
+/* --- controls --- */
+.rb-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--rb-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1.25rem 0;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.rb-control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rb-control-group label {
+  font-size: 0.8rem;
+  color: var(--rb-walnut-soft);
+  margin-right: 0.25rem;
+}
+
+#rb-servings {
+  width: 3rem;
+  text-align: center;
+  border: 1px solid var(--rb-border);
+  border-radius: 4px;
+  padding: 0.25rem;
+  font-family: inherit;
+}
+
+.rb-step-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 1px solid var(--rb-border);
+  background: var(--rb-linen);
+  color: var(--rb-walnut);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+.rb-step-btn:hover { background: var(--rb-linen-dark); }
+
+.rb-reset-btn {
+  margin-left: 0.35rem;
+  border: 1px solid var(--rb-border);
+  background: transparent;
+  color: var(--rb-red-dark);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.rb-reset-btn:hover { background: var(--rb-linen-dark); }
+
+.rb-toggle-btn {
+  border: 1px solid var(--rb-border);
+  background: var(--rb-linen);
+  color: var(--rb-walnut-soft);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+.rb-toggle-btn:first-child { border-radius: 6px 0 0 6px; }
+.rb-toggle-btn:last-child { border-radius: 0 6px 6px 0; }
+.rb-toggle-btn.is-active {
+  background: var(--rb-red);
+  border-color: var(--rb-red);
+  color: #fff;
+}
+
+/* --- language display ---
+   Whichever language is "main" is both larger AND on top. This needs actual
+   reordering, not just resizing, so every bilingual container is a flex
+   column and order flips with data-lang-mode. */
+
+.rb-title,
+.rb-item,
+.rb-step {
+  display: flex;
+  flex-direction: column;
+}
+
+.rb-lang-primary { order: 1; }
+.rb-lang-secondary { order: 2; }
+[data-lang-mode="bg"] .rb-lang-primary { order: 2; }
+[data-lang-mode="bg"] .rb-lang-secondary { order: 1; }
+
+.rb-lang-primary, .rb-lang-secondary {
+  transition: font-size 0.32s ease, color 0.32s ease, font-weight 0.32s ease, font-style 0.32s ease;
+}
+
+/* title */
+.rb-title .rb-lang-primary.rb-lang-en {
+  font-size: 2rem;
+  border-bottom: 4px solid var(--rb-red);
+  padding-bottom: 0.25rem;
+}
+.rb-title .rb-lang-secondary.rb-lang-bg {
+  font-size: 1.1rem;
+  color: var(--rb-walnut-soft);
+  font-style: italic;
+}
+[data-lang-mode="bg"] .rb-title .rb-lang-secondary.rb-lang-bg {
+  font-size: 2rem;
+  color: var(--rb-walnut);
+  font-style: normal;
+  border-bottom: 4px solid var(--rb-red);
+  padding-bottom: 0.25rem;
+}
+[data-lang-mode="bg"] .rb-title .rb-lang-primary.rb-lang-en {
+  font-size: 1.1rem;
+  color: var(--rb-walnut-soft);
+  font-style: italic;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* ingredients + steps */
+.rb-item .rb-lang-primary.rb-lang-en,
+.rb-step .rb-lang-primary.rb-lang-en {
+  font-size: 1rem;
+  color: var(--rb-walnut);
+  font-weight: 500;
+}
+.rb-item .rb-lang-secondary.rb-lang-bg,
+.rb-step .rb-lang-secondary.rb-lang-bg {
+  font-size: 0.85rem;
+  color: var(--rb-walnut-soft);
+  font-style: italic;
+}
+[data-lang-mode="bg"] .rb-item .rb-lang-primary.rb-lang-en,
+[data-lang-mode="bg"] .rb-step .rb-lang-primary.rb-lang-en {
+  font-size: 0.85rem;
+  color: var(--rb-walnut-soft);
+  font-style: italic;
+  font-weight: 400;
+}
+[data-lang-mode="bg"] .rb-item .rb-lang-secondary.rb-lang-bg,
+[data-lang-mode="bg"] .rb-step .rb-lang-secondary.rb-lang-bg {
+  font-size: 1rem;
+  color: var(--rb-walnut);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* --- body layout --- */
+.rb-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 640px) {
+  .rb-body { grid-template-columns: 1fr 1.4fr; }
+}
+
+.rb-ingredients h2,
+.rb-steps h2,
+.rb-notes h2 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rb-red-dark);
+  border-bottom: 1px solid var(--rb-line);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.rb-section-title, .rb-step-section-title {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rb-gold);
+  margin: 1rem 0 0.4rem;
+  list-style: none;
+}
+
+.rb-ingredient-list, .rb-step-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rb-ingredient {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed var(--rb-line);
+  align-items: baseline;
+}
+.rb-amount {
+  font-weight: 500;
+  min-width: 4.5rem;
+  color: var(--rb-red-dark);
+}
+.rb-amount-metric { display: none; }
+/* only hide the US amount in metric mode if there's an actual metric value to replace it with */
+[data-unit-mode="metric"] .rb-ingredient:has(.rb-amount-metric) .rb-amount-us { display: none; }
+[data-unit-mode="metric"] .rb-amount-metric { display: inline; }
+
+.rb-step-list {
+  counter-reset: step;
+}
+.rb-step {
+  counter-increment: step;
+  padding: 0.6rem 0 0.6rem 2.25rem;
+  position: relative;
+  border-bottom: 1px solid var(--rb-line);
+}
+.rb-step::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--rb-linen-dark);
+  color: var(--rb-walnut);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rb-step-timer-btn {
+  display: block;
+  margin-top: 0.5rem;
+  border: 1px solid var(--rb-red);
+  background: var(--rb-linen);
+  color: var(--rb-red-dark);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.rb-step-timer-btn:hover { background: var(--rb-linen-dark); }
+.rb-step-timer-btn.is-running {
+  background: var(--rb-red);
+  color: #fff;
+}
+.rb-step-timer-btn.is-done {
+  background: var(--rb-gold);
+  border-color: var(--rb-gold);
+  color: #fff;
+}
+
+@keyframes rb-timer-flash {
+  0%, 100% { background: transparent; }
+  25%, 75% { background: var(--rb-linen-dark); }
+}
+.rb-timer-done-flash {
+  animation: rb-timer-flash 1s ease-in-out 4;
+  border-radius: 6px;
+}
+
+.rb-notes {
+  margin-top: 2rem;
+  background: #fff;
+  border-left: 3px solid var(--rb-gold);
+  border-radius: 0;
+  padding: 1rem 1.25rem;
+}
+.rb-notes h2 {
+  border: none;
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+.rb-notes ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  color: var(--rb-walnut-soft);
+}

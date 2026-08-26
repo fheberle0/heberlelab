@@ -168,6 +168,9 @@ collections:
     output: true
   teachings:
     output: true
+  recipes:
+    output: true
+    permalink: /recipebook/:path/
 
 # -----------------------------------------------------------------------------
 # Jekyll settings

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | default: "Recipe Book" }} · Heberle Lab</title>
+  <link rel="stylesheet" href="{{ '/assets/css/recipebook.css' | relative_url }}">
+</head>
+<body>
+
+<header class="rb-header">
+  <span class="rb-home-link" style="cursor:default;">Recipe Book</span>
+</header>
+
+<main class="rb-recipe">
+
+  <div class="rb-kurbits-divider" aria-hidden="true">
+    <span class="rb-leaf rb-leaf-gold"></span>
+    <span class="rb-leaf rb-leaf-red"></span>
+  </div>
+
+  <h1 class="rb-title" style="display:block;">
+    <span class="rb-lang-primary rb-lang-en" style="border-bottom:4px solid var(--rb-red); padding-bottom:0.25rem;">Recipe Book</span>
+  </h1>
+  <p class="rb-source" style="margin-top:0.75rem;">The Heberle family recipe collection — imperial and metric, English and Swedish, all in one place.</p>
+
+  {% assign grouped = site.recipes | group_by: "category" %}
+  {% assign grouped = grouped | sort: "name" %}
+
+  {% for group in grouped %}
+    <section class="rb-ingredients" style="margin-top: 2.5rem;">
+      <h2>{{ group.name | capitalize }}</h2>
+      <ul class="rb-ingredient-list">
+        {% assign items = group.items | sort: "title" %}
+        {% for recipe in items %}
+        <li class="rb-ingredient" style="border-bottom: 1px dashed var(--rb-line);">
+          <a href="{{ recipe.url | relative_url }}" style="color: var(--rb-walnut); text-decoration: none; font-weight: 500;">
+            {{ recipe.title }}
+          </a>
+          {% if recipe.bilingual %}<span class="rb-pill" style="margin-left:8px;">EN / BG</span>{% endif %}
+          {% if recipe.total_time %}<span class="rb-pill" style="margin-left:8px;">{{ recipe.total_time }} min</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+
+</main>
+
+</body>
+</html>
