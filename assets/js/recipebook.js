@@ -117,7 +117,7 @@
     btn.addEventListener("click", function () {
       unitBtns.forEach(function (b) { b.classList.remove("is-active"); });
       btn.classList.add("is-active");
-      main.dataset.unitMode = btn.dataset.unit;
+      main.classList.toggle("rb-metric-mode", btn.dataset.unit === "metric");
     });
   });
 
@@ -156,7 +156,7 @@
       before.push({ el: el, rect: el.getBoundingClientRect() });
     });
 
-    main.dataset.langMode = newMode;
+    main.classList.toggle("rb-bg-mode", newMode === "bg");
 
     before.forEach(function (record) {
       var after = record.el.getBoundingClientRect();

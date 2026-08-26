@@ -228,7 +228,10 @@ body {
 /* --- language display ---
    Whichever language is "main" is both larger AND on top. This needs actual
    reordering, not just resizing, so every bilingual container is a flex
-   column and order flips with data-lang-mode. */
+   column and order flips with the .rb-bg-mode class on .rb-recipe.
+   Uses a class rather than an attribute selector — the site's CSS minifier
+   silently drops attribute-selector rules (e.g. [data-lang-mode="bg"]),
+   so a class is the only reliable option here. */
 
 .rb-title,
 .rb-item,
@@ -239,8 +242,8 @@ body {
 
 .rb-lang-primary { order: 1; }
 .rb-lang-secondary { order: 2; }
-[data-lang-mode="bg"] .rb-lang-primary { order: 2; }
-[data-lang-mode="bg"] .rb-lang-secondary { order: 1; }
+.rb-recipe.rb-bg-mode .rb-lang-primary { order: 2; }
+.rb-recipe.rb-bg-mode .rb-lang-secondary { order: 1; }
 
 .rb-lang-primary, .rb-lang-secondary {
   transition: font-size 0.32s ease, color 0.32s ease, font-weight 0.32s ease, font-style 0.32s ease;
@@ -257,14 +260,14 @@ body {
   color: var(--rb-walnut-soft);
   font-style: italic;
 }
-[data-lang-mode="bg"] .rb-title .rb-lang-secondary.rb-lang-bg {
+.rb-recipe.rb-bg-mode .rb-title .rb-lang-secondary.rb-lang-bg {
   font-size: 2rem;
   color: var(--rb-walnut);
   font-style: normal;
   border-bottom: 4px solid var(--rb-red);
   padding-bottom: 0.25rem;
 }
-[data-lang-mode="bg"] .rb-title .rb-lang-primary.rb-lang-en {
+.rb-recipe.rb-bg-mode .rb-title .rb-lang-primary.rb-lang-en {
   font-size: 1.1rem;
   color: var(--rb-walnut-soft);
   font-style: italic;
@@ -285,15 +288,15 @@ body {
   color: var(--rb-walnut-soft);
   font-style: italic;
 }
-[data-lang-mode="bg"] .rb-item .rb-lang-primary.rb-lang-en,
-[data-lang-mode="bg"] .rb-step .rb-lang-primary.rb-lang-en {
+.rb-recipe.rb-bg-mode .rb-item .rb-lang-primary.rb-lang-en,
+.rb-recipe.rb-bg-mode .rb-step .rb-lang-primary.rb-lang-en {
   font-size: 0.85rem;
   color: var(--rb-walnut-soft);
   font-style: italic;
   font-weight: 400;
 }
-[data-lang-mode="bg"] .rb-item .rb-lang-secondary.rb-lang-bg,
-[data-lang-mode="bg"] .rb-step .rb-lang-secondary.rb-lang-bg {
+.rb-recipe.rb-bg-mode .rb-item .rb-lang-secondary.rb-lang-bg,
+.rb-recipe.rb-bg-mode .rb-step .rb-lang-secondary.rb-lang-bg {
   font-size: 1rem;
   color: var(--rb-walnut);
   font-style: normal;
@@ -355,8 +358,8 @@ body {
 /* only hide the US amount in metric mode if there's an actual metric value to replace it with —
    marked at build time with .rb-has-metric rather than relying on :has(), which some
    minifiers/browsers handle unreliably */
-[data-unit-mode="metric"] .rb-ingredient.rb-has-metric .rb-amount-us { display: none; }
-[data-unit-mode="metric"] .rb-amount-metric { display: inline; }
+.rb-recipe.rb-metric-mode .rb-ingredient.rb-has-metric .rb-amount-us { display: none; }
+.rb-recipe.rb-metric-mode .rb-amount-metric { display: inline; }
 
 .rb-step-list {
   counter-reset: step;
