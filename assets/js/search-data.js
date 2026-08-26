@@ -480,6 +480,11 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "recipes-authentic-greek-lemon-potatoes",
+          title: 'Authentic Greek Lemon Potatoes',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/authentic-greek-lemon-potatoes/";
             },},{id: "recipes-beef-bourguignon",
           title: 'Beef Bourguignon',
           description: "",
@@ -500,6 +505,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/best-juicy-skillet-pork-chops/";
+            },},{id: "recipes-cheesy-green-chile-bean-bake",
+          title: 'Cheesy Green Chile Bean Bake',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/cheesy-green-chile-bean-bake/";
             },},{id: "recipes-chicken-au-poivre",
           title: 'Chicken au Poivre',
           description: "",
@@ -520,6 +530,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/cilantro-lime-rice/";
+            },},{id: "recipes-cornish-hen-with-homemade-classic-stuffing",
+          title: 'Cornish Hen with Homemade Classic Stuffing',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/cornish-hen-stuffing/";
             },},{id: "recipes-creamy-spicy-tomato-beans-and-greens",
           title: 'Creamy, Spicy Tomato Beans and Greens',
           description: "",
@@ -545,6 +560,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/garlic-roasted-chicken-vegetables/";
+            },},{id: "recipes-greek-lemon-potatoes",
+          title: 'Greek Lemon Potatoes',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/greek-lemon-potatoes-nyt/";
             },},{id: "recipes-grilled-chicken-marinade",
           title: 'Grilled Chicken Marinade',
           description: "",
@@ -580,6 +600,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-lemon-chicken-rice/";
+            },},{id: "recipes-instant-pot-mexican-rice",
+          title: 'Instant Pot Mexican Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-mexican-rice/";
             },},{id: "recipes-instant-pot-pot-roast-and-potatoes",
           title: 'Instant Pot Pot Roast and Potatoes',
           description: "",
@@ -620,6 +645,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/olive-garden-chicken-scampi-pasta/";
+            },},{id: "recipes-one-pot-chicken-meatballs-with-greens",
+          title: 'One-Pot Chicken Meatballs with Greens',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/one-pot-chicken-meatballs-greens/";
             },},{id: "recipes-one-pot-chicken-and-rice-with-caramelized-lemon",
           title: 'One-Pot Chicken and Rice with Caramelized Lemon',
           description: "",
@@ -660,6 +690,16 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/sausage-broccoli-rigatoni/";
+            },},{id: "recipes-sausage-with-peppers-and-onions",
+          title: 'Sausage with Peppers and Onions',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/sausage-peppers-onions/";
+            },},{id: "recipes-scalloped-potatoes-and-ham",
+          title: 'Scalloped Potatoes and Ham',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/scalloped-potatoes-ham/";
             },},{id: "recipes-classic-shepherd-39-s-pie",
           title: 'Classic Shepherd&amp;#39;s Pie',
           description: "",
