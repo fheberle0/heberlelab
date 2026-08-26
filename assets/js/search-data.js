@@ -480,6 +480,16 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "recipes-beef-enchiladas",
+          title: 'Beef Enchiladas',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/beef-enchiladas/";
+            },},{id: "recipes-the-best-beef-stroganoff",
+          title: 'The Best Beef Stroganoff',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/best-beef-stroganoff/";
             },},{id: "recipes-the-best-juicy-skillet-pork-chops",
           title: 'The Best Juicy Skillet Pork Chops',
           description: "",
@@ -495,6 +505,16 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/cilantro-lime-rice/";
+            },},{id: "recipes-how-to-cook-filet-mignon",
+          title: 'How to Cook Filet Mignon',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/filet-mignon/";
+            },},{id: "recipes-fluffy-stovetop-rice",
+          title: 'Fluffy Stovetop Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/fluffy-stovetop-rice/";
             },},{id: "recipes-garlic-roasted-chicken-with-vegetables",
           title: 'Garlic Roasted Chicken with Vegetables',
           description: "",
@@ -525,11 +545,21 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-honey-garlic-chicken-rice/";
+            },},{id: "recipes-instant-pot-korean-style-beef",
+          title: 'Instant Pot Korean-Style Beef',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-korean-style-beef/";
             },},{id: "recipes-instant-pot-lemon-chicken-and-rice",
           title: 'Instant Pot Lemon Chicken and Rice',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-lemon-chicken-rice/";
+            },},{id: "recipes-instant-pot-pot-roast-and-potatoes",
+          title: 'Instant Pot Pot Roast and Potatoes',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-pot-roast-potatoes/";
             },},{id: "recipes-mint-chocolate-cake-grasshopper-cake",
           title: 'Mint Chocolate Cake (Grasshopper Cake)',
           description: "",
@@ -550,6 +580,21 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/sausage-broccoli-rigatoni/";
+            },},{id: "recipes-classic-shepherd-39-s-pie",
+          title: 'Classic Shepherd&amp;#39;s Pie',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/shepherds-pie/";
+            },},{id: "recipes-smash-burger",
+          title: 'Smash Burger',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/smash-burger/";
+            },},{id: "recipes-sour-cream-noodle-bake",
+          title: 'Sour Cream Noodle Bake',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/sour-cream-noodle-bake/";
             },},{id: "teachings-data-science-fundamentals",
           title: 'Data Science Fundamentals',
           description: "This course covers the foundational aspects of data science, including data collection, cleaning, analysis, and visualization. Students will learn practical skills for working with real-world datasets.",
