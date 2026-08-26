@@ -245,6 +245,11 @@ defaults:
       path: "assets"
     values:
       sitemap: false
+  - scope:
+      path: ""
+      type: "recipes"
+    values:
+      layout: "recipe"
 
 sass:
   style: compressed
