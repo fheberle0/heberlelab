@@ -79,7 +79,7 @@
           <ul class="rb-ingredient-list">
             {% for ing in page.ingredients %}
               {% if ing.section == section %}
-              <li class="rb-ingredient"
+              <li class="rb-ingredient{% if ing.amount_metric %} rb-has-metric{% endif %}"
                   data-amount-us="{{ ing.amount_us }}"
                   data-unit-us="{{ ing.unit_us }}"
                   data-amount-metric="{{ ing.amount_metric }}"
@@ -98,7 +98,7 @@
       {% else %}
         <ul class="rb-ingredient-list">
           {% for ing in page.ingredients %}
-          <li class="rb-ingredient"
+          <li class="rb-ingredient{% if ing.amount_metric %} rb-has-metric{% endif %}"
               data-amount-us="{{ ing.amount_us }}"
               data-unit-us="{{ ing.unit_us }}"
               data-amount-metric="{{ ing.amount_metric }}"

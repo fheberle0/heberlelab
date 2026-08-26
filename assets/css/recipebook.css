@@ -352,8 +352,10 @@ body {
   color: var(--rb-red-dark);
 }
 .rb-amount-metric { display: none; }
-/* only hide the US amount in metric mode if there's an actual metric value to replace it with */
-[data-unit-mode="metric"] .rb-ingredient:has(.rb-amount-metric) .rb-amount-us { display: none; }
+/* only hide the US amount in metric mode if there's an actual metric value to replace it with —
+   marked at build time with .rb-has-metric rather than relying on :has(), which some
+   minifiers/browsers handle unreliably */
+[data-unit-mode="metric"] .rb-ingredient.rb-has-metric .rb-amount-us { display: none; }
 [data-unit-mode="metric"] .rb-amount-metric { display: inline; }
 
 .rb-step-list {
