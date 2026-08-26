@@ -520,6 +520,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/cilantro-lime-rice/";
+            },},{id: "recipes-creamy-spicy-tomato-beans-and-greens",
+          title: 'Creamy, Spicy Tomato Beans and Greens',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/creamy-spicy-tomato-beans-greens/";
             },},{id: "recipes-everything-salmon-with-creamy-caper-sauce",
           title: 'Everything Salmon with Creamy Caper Sauce',
           description: "",
@@ -580,6 +585,21 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-pot-roast-potatoes/";
+            },},{id: "recipes-lemon-garlic-linguine",
+          title: 'Lemon-Garlic Linguine',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/lemon-garlic-linguine/";
+            },},{id: "recipes-lentil-tomato-soup",
+          title: 'Lentil Tomato Soup',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/lentil-tomato-soup/";
+            },},{id: "recipes-microwave-chocolate-pudding-cake",
+          title: 'Microwave Chocolate Pudding Cake',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/microwave-chocolate-pudding-cake/";
             },},{id: "recipes-mint-chocolate-cake-grasshopper-cake",
           title: 'Mint Chocolate Cake (Grasshopper Cake)',
           description: "",
@@ -600,11 +620,26 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/olive-garden-chicken-scampi-pasta/";
+            },},{id: "recipes-one-pot-chicken-and-rice-with-caramelized-lemon",
+          title: 'One-Pot Chicken and Rice with Caramelized Lemon',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/one-pot-chicken-rice-caramelized-lemon/";
             },},{id: "recipes-one-pot-tortellini-with-prosciutto-and-peas",
           title: 'One-Pot Tortellini with Prosciutto and Peas',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/one-pot-tortellini-prosciutto-peas/";
+            },},{id: "recipes-paprika-chicken-and-potatoes",
+          title: 'Paprika Chicken and Potatoes',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/paprika-chicken-potatoes/";
+            },},{id: "recipes-parmesan-crusted-chicken",
+          title: 'Parmesan-Crusted Chicken',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/parmesan-crusted-chicken/";
             },},{id: "recipes-peanut-butter-noodles",
           title: 'Peanut Butter Noodles',
           description: "",
@@ -615,6 +650,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/pesto-beans/";
+            },},{id: "recipes-roasted-chicken-thighs-with-hot-honey-and-lime",
+          title: 'Roasted Chicken Thighs with Hot Honey and Lime',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/roasted-chicken-thighs-hot-honey-lime/";
             },},{id: "recipes-sausage-broccoli-rigatoni",
           title: 'Sausage Broccoli Rigatoni',
           description: "",
