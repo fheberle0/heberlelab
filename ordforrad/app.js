@@ -2618,8 +2618,8 @@ const VOCAB = [{
   "sv": "ja",
   "en": "yes",
   "t": "i",
-  "es": "Ja",
-  "ee": "jag kommer.",
+  "es": "Ja, jag kommer.",
+  "ee": "Yes, I will come.",
   "ch": 1,
   "lv": "A1",
   "wpm": 353.15
@@ -3676,8 +3676,8 @@ const VOCAB = [{
   "sv": "nej",
   "en": "no",
   "t": "i",
-  "es": "Nej",
-  "ee": "jag vill inte.",
+  "es": "Nej, jag vill inte.",
+  "ee": "No, I don't want to.",
   "lv": "A1",
   "wpm": 237.61
 }, {
@@ -5278,7 +5278,7 @@ const VOCAB = [{
   "en": "namely",
   "t": "a",
   "es": "Han kommer nämligen idag.",
-  "ee": "He comes today namely.",
+  "ee": "He is coming today, you see.",
   "lv": "A1",
   "wpm": 165.98
 }, {
@@ -10799,8 +10799,8 @@ const VOCAB = [{
   "sv": "hej",
   "en": "hello",
   "t": "i",
-  "es": "Hej",
-  "ee": "hur mår du?",
+  "es": "Hej, hur mår du?",
+  "ee": "Hi, how are you?",
   "ch": 1,
   "lv": "A1",
   "wpm": 81.45
@@ -11552,10 +11552,10 @@ const VOCAB = [{
 }, {
   "id": 1237,
   "sv": "slippa",
-  "en": "to avoid",
+  "en": "to not have to / be excused from",
   "t": "v",
   "es": "Jag slipper jobbet.",
-  "ee": "I avoid the work.",
+  "ee": "I don't have to do the job.",
   "lv": "A1",
   "wpm": 75.51
 }, {
@@ -16933,8 +16933,8 @@ const VOCAB = [{
   "en": "no",
   "t": "n",
   "g": "ett",
-  "es": "Nej",
-  "ee": "jag vill inte.",
+  "es": "Nej, jag vill inte.",
+  "ee": "No, I don't want to.",
   "ch": 1,
   "lv": "B2",
   "wpm": 7.32
