@@ -495,21 +495,56 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/cilantro-lime-rice/";
+            },},{id: "recipes-garlic-roasted-chicken-with-vegetables",
+          title: 'Garlic Roasted Chicken with Vegetables',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/garlic-roasted-chicken-vegetables/";
+            },},{id: "recipes-grilled-chicken-marinade",
+          title: 'Grilled Chicken Marinade',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/grilled-chicken-marinade/";
             },},{id: "recipes-instant-pot-beef-stew",
           title: 'Instant Pot Beef Stew',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-beef-stew/";
+            },},{id: "recipes-instant-pot-chicken-and-rice",
+          title: 'Instant Pot Chicken and Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-chicken-and-rice-natashaskitchen/";
             },},{id: "recipes-instant-pot-chicken-thighs",
           title: 'Instant Pot Chicken Thighs',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-chicken-thighs/";
+            },},{id: "recipes-instant-pot-honey-garlic-chicken-and-rice",
+          title: 'Instant Pot Honey Garlic Chicken and Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-honey-garlic-chicken-rice/";
+            },},{id: "recipes-instant-pot-lemon-chicken-and-rice",
+          title: 'Instant Pot Lemon Chicken and Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-lemon-chicken-rice/";
             },},{id: "recipes-mint-chocolate-cake-grasshopper-cake",
           title: 'Mint Chocolate Cake (Grasshopper Cake)',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/mint-chocolate-cake/";
+            },},{id: "recipes-mississippi-chicken",
+          title: 'Mississippi Chicken',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/mississippi-chicken/";
+            },},{id: "recipes-olive-garden-chicken-scampi-pasta",
+          title: 'Olive Garden Chicken Scampi Pasta',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/olive-garden-chicken-scampi-pasta/";
             },},{id: "recipes-sausage-broccoli-rigatoni",
           title: 'Sausage Broccoli Rigatoni',
           description: "",
