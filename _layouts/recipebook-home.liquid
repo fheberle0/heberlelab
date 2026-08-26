@@ -22,16 +22,26 @@
   <h1 class="rb-title" style="display:block;">
     <span class="rb-lang-primary rb-lang-en" style="border-bottom:4px solid var(--rb-red); padding-bottom:0.25rem;">Recipe Book</span>
   </h1>
-  <p class="rb-source" style="margin-top:0.75rem;">The Heberle family recipe collection — imperial and metric, English and Swedish, all in one place.</p>
+  <p class="rb-source" style="margin-top:0.75rem;">The Heberle-Doktorova family recipe collection — imperial and metric, English and Swedish, all in one place.</p>
+
+  <div class="rb-search-wrap">
+    <input type="text" id="rb-search-input" class="rb-search-input" placeholder="Search recipes…" autocomplete="off">
+    <div id="rb-search-results" class="rb-search-results" hidden></div>
+  </div>
+
+  <div class="rb-category-controls">
+    <button type="button" class="rb-reset-btn" id="rb-expand-all">Expand all</button>
+    <button type="button" class="rb-reset-btn" id="rb-collapse-all">Collapse all</button>
+  </div>
 
   {% assign grouped = site.recipes | group_by: "category" %}
   {% assign grouped = grouped | sort: "name" %}
 
   {% for group in grouped %}
-    <section class="rb-ingredients" style="margin-top: 2.5rem;">
-      <h2>{{ group.name | capitalize }}</h2>
+    {% assign items = group.items | sort: "title" %}
+    <details class="rb-category" open>
+      <summary class="rb-category-summary">{{ group.name | capitalize }} <span class="rb-category-count">({{ items.size }})</span></summary>
       <ul class="rb-ingredient-list">
-        {% assign items = group.items | sort: "title" %}
         {% for recipe in items %}
         <li class="rb-ingredient" style="border-bottom: 1px dashed var(--rb-line);">
           <a href="{{ recipe.url | relative_url }}" style="color: var(--rb-walnut); text-decoration: none; font-weight: 500;">
@@ -42,10 +52,18 @@
         </li>
         {% endfor %}
       </ul>
-    </section>
+    </details>
   {% endfor %}
 
 </main>
 
+<script>
+  var RECIPE_INDEX = [
+    {% for recipe in site.recipes %}
+    { title: {{ recipe.title | jsonify }}, url: {{ recipe.url | relative_url | jsonify }}, category: {{ recipe.category | capitalize | jsonify }} }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+</script>
+<script src="{{ '/assets/js/recipebook-home.js' | relative_url }}"></script>
 </body>
 </html>

@@ -432,3 +432,110 @@ body {
   font-size: 0.9rem;
   color: var(--rb-walnut-soft);
 }
+
+/* --- homepage: search --- */
+.rb-search-wrap {
+  position: relative;
+  margin: 1.5rem 0 0.75rem;
+}
+.rb-search-input {
+  width: 100%;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--rb-border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--rb-walnut);
+}
+.rb-search-input:focus {
+  outline: none;
+  border-color: var(--rb-red);
+}
+.rb-search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--rb-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(58, 46, 34, 0.12);
+  z-index: 30;
+  max-height: 340px;
+  overflow-y: auto;
+}
+.rb-search-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.9rem;
+  text-decoration: none;
+  color: var(--rb-walnut);
+  border-bottom: 1px dashed var(--rb-line);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.92rem;
+}
+.rb-search-result:last-child { border-bottom: none; }
+.rb-search-result:hover { background: var(--rb-linen); }
+.rb-search-result-title { font-weight: 500; }
+.rb-search-result-cat {
+  font-size: 0.72rem;
+  color: var(--rb-walnut-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.rb-search-empty {
+  padding: 0.75rem 0.9rem;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.88rem;
+  color: var(--rb-walnut-soft);
+  font-style: italic;
+}
+
+/* --- homepage: expand/collapse controls --- */
+.rb-category-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- homepage: collapsible category sections --- */
+.rb-category {
+  margin-top: 1.25rem;
+  border-bottom: 1px solid var(--rb-line);
+  padding-bottom: 0.5rem;
+}
+.rb-category-summary {
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rb-red-dark);
+  padding-bottom: 0.4rem;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.rb-category-summary::-webkit-details-marker { display: none; }
+.rb-category-summary::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 0.8em;
+  transition: transform 0.15s ease;
+}
+.rb-category[open] > .rb-category-summary::before {
+  transform: rotate(90deg);
+}
+.rb-category-count {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--rb-walnut-soft);
+}
+.rb-category .rb-ingredient-list {
+  margin-top: 0.5rem;
+}
