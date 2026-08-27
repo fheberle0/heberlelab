@@ -1,6 +1,7 @@
 ---
 title: Cilantro Lime Rice
 category: rice
+favorite: true
 tags: [instant pot, side dish, mexican]
 servings: 12
 prep_time: 5

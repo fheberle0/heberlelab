@@ -47,8 +47,8 @@
       <ul class="rb-ingredient-list">
         {% for recipe in items %}
         <li class="rb-ingredient" style="border-bottom: 1px dashed var(--rb-line);">
-          <a href="{{ recipe.url | relative_url }}" style="color: var(--rb-walnut); text-decoration: none; font-weight: 500;">
-            {{ recipe.title }}
+          <a href="{{ recipe.url | relative_url }}" style="text-decoration: none; {% if recipe.favorite %}color: var(--rb-red); font-weight: 700;{% else %}color: var(--rb-walnut); font-weight: 500;{% endif %}">
+            {% if recipe.favorite %}<span style="color: var(--rb-red);" aria-hidden="true">★</span> {% endif %}{{ recipe.title }}
           </a>
           {% if recipe.bilingual %}<span class="rb-pill" style="margin-left:8px;">EN / BG</span>{% endif %}
           {% if recipe.total_time %}<span class="rb-pill" style="margin-left:8px;">{{ recipe.total_time }} min</span>{% endif %}

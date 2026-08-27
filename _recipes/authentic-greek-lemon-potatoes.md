@@ -1,6 +1,7 @@
 ---
 title: Authentic Greek Lemon Potatoes
 category: potatoes
+favorite: true
 tags: [side dish, greek, oven roasted]
 servings: 4
 prep_time: 35

@@ -1,6 +1,7 @@
 ---
 title: The Best Juicy Skillet Pork Chops
 category: pork
+favorite: true
 tags: [skillet, weeknight, pan sauce]
 servings: 4
 prep_time: 30

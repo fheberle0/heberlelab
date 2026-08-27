@@ -2,6 +2,7 @@
 title: Chicken with Rice
 title_bg: Пиле с ориз
 category: chicken
+favorite: true
 tags: [family recipe, bulgarian, mimi, baked]
 bilingual: true
 servings: 4

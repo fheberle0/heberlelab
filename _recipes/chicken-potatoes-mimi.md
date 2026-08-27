@@ -2,6 +2,7 @@
 title: Chicken with Potatoes
 title_bg: Пиле с картофи
 category: chicken
+favorite: true
 tags: [family recipe, bulgarian, mimi]
 bilingual: true
 servings: 4

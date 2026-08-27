@@ -2,6 +2,7 @@
 title: Chicken Soup
 title_bg: Пилешка супа
 category: soups
+favorite: true
 tags: [family recipe, bulgarian, mimi]
 bilingual: true
 servings: 4

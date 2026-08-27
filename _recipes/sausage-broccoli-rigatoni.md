@@ -1,6 +1,7 @@
 ---
 title: Sausage Broccoli Rigatoni
 category: pasta
+favorite: true
 tags: [pasta, sausage, one-pot]
 servings: 6
 prep_time: 15

@@ -1,6 +1,7 @@
 ---
 title: Lemon Chicken
 category: chicken
+favorite: true
 tags: [marinated, skillet, weeknight]
 servings: 4
 prep_time: 15

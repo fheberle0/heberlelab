@@ -1,6 +1,7 @@
 ---
 title: Instant Pot Chicken Thighs
 category: chicken
+favorite: true
 tags: [instant pot, weeknight, gravy]
 servings: 4
 prep_time: 10

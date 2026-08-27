@@ -1,6 +1,7 @@
 ---
 title: Instant Pot Beef Stew
 category: beef
+favorite: true
 tags: [instant pot, stew, comfort food]
 servings: 4
 prep_time: 15
