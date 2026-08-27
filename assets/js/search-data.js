@@ -515,6 +515,16 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/chicken-au-poivre/";
+            },},{id: "recipes-chicken-with-potatoes",
+          title: 'Chicken with Potatoes',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chicken-potatoes-mimi/";
+            },},{id: "recipes-chicken-with-rice",
+          title: 'Chicken with Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chicken-rice-mimi/";
             },},{id: "recipes-chicken-soup",
           title: 'Chicken Soup',
           description: "",
@@ -630,6 +640,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/mint-chocolate-cake/";
+            },},{id: "recipes-mish-mash",
+          title: 'Mish-Mash',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/mish-mash-mimi/";
             },},{id: "recipes-mississippi-chicken",
           title: 'Mississippi Chicken',
           description: "",
@@ -680,6 +695,16 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/pesto-beans/";
+            },},{id: "recipes-potato-stew",
+          title: 'Potato Stew',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/potato-stew-mimi/";
+            },},{id: "recipes-potatoes-with-peas",
+          title: 'Potatoes with Peas',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/potatoes-peas-mimi/";
             },},{id: "recipes-roasted-chicken-thighs-with-hot-honey-and-lime",
           title: 'Roasted Chicken Thighs with Hot Honey and Lime',
           description: "",
@@ -715,6 +740,16 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/sour-cream-noodle-bake/";
+            },},{id: "recipes-spinach-and-rice-with-baked-eggs",
+          title: 'Spinach and Rice with Baked Eggs',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/spinach-rice-baked-eggs-mimi/";
+            },},{id: "recipes-zucchini-and-rice-bake",
+          title: 'Zucchini and Rice Bake',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/zucchini-rice-bake-mimi/";
             },},{id: "teachings-data-science-fundamentals",
           title: 'Data Science Fundamentals',
           description: "This course covers the foundational aspects of data science, including data collection, cleaning, analysis, and visualization. Students will learn practical skills for working with real-world datasets.",
