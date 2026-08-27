@@ -505,6 +505,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/best-juicy-skillet-pork-chops/";
+            },},{id: "recipes-boom-boom-sauce-copycat",
+          title: 'Boom-Boom Sauce (Copycat)',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/boom-boom-sauce-copycat/";
             },},{id: "recipes-cheesy-green-chile-bean-bake",
           title: 'Cheesy Green Chile Bean Bake',
           description: "",
