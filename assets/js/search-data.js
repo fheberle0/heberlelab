@@ -510,6 +510,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/cheesy-green-chile-bean-bake/";
+            },},{id: "recipes-chicka-chicka-boom-boom-enchiladas",
+          title: 'Chicka-Chicka Boom-Boom Enchiladas',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chicka-chicka-boom-boom-enchiladas/";
             },},{id: "recipes-chicken-au-poivre",
           title: 'Chicken au Poivre',
           description: "",
@@ -595,11 +600,21 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/ground-beef-tacos/";
+            },},{id: "recipes-homemade-green-enchilada-sauce",
+          title: 'Homemade Green Enchilada Sauce',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/homemade-green-enchilada-sauce/";
             },},{id: "recipes-instant-pot-beef-stew",
           title: 'Instant Pot Beef Stew',
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-beef-stew/";
+            },},{id: "recipes-instant-pot-butter-chicken",
+          title: 'Instant Pot Butter Chicken',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-butter-chicken/";
             },},{id: "recipes-instant-pot-chicken-and-rice",
           title: 'Instant Pot Chicken and Rice',
           description: "",
@@ -645,6 +660,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/lemon-butter-salmon-rice-stovetop/";
+            },},{id: "recipes-lemon-chicken",
+          title: 'Lemon Chicken',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/lemon-chicken/";
             },},{id: "recipes-lemon-garlic-linguine",
           title: 'Lemon-Garlic Linguine',
           description: "",
@@ -705,6 +725,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/one-pot-tortellini-prosciutto-peas/";
+            },},{id: "recipes-pan-seared-chicken-with-harissa-dates-and-citrus",
+          title: 'Pan-Seared Chicken with Harissa, Dates and Citrus',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/pan-seared-chicken-harissa-dates-citrus/";
             },},{id: "recipes-paprika-chicken-and-potatoes",
           title: 'Paprika Chicken and Potatoes',
           description: "",
