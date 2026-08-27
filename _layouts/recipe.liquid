@@ -90,8 +90,10 @@
                 <span class="rb-amount rb-amount-us">{{ ing.amount_us }}{% if ing.unit_us %} {{ ing.unit_us }}{% endif %}</span>
                 {% if ing.amount_metric %}<span class="rb-amount rb-amount-metric">{{ ing.amount_metric }}{% if ing.unit_metric %} {{ ing.unit_metric }}{% endif %}</span>{% endif %}
                 <span class="rb-item">
+                  {% if ing.link %}<a href="{{ ing.link }}" class="rb-ingredient-link">{% endif %}
                   <span class="rb-lang-primary rb-lang-en"><span class="rb-item-name" data-en="{{ ing.item }}" data-sv="{{ ing.item_sv | default: ing.item }}">{{ ing.item }}</span></span>
                   {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
+                  {% if ing.link %}</a>{% endif %}
                 </span>
               </li>
               {% endif %}
@@ -109,8 +111,10 @@
             <span class="rb-amount rb-amount-us">{{ ing.amount_us }}{% if ing.unit_us %} {{ ing.unit_us }}{% endif %}</span>
             {% if ing.amount_metric %}<span class="rb-amount rb-amount-metric">{{ ing.amount_metric }}{% if ing.unit_metric %} {{ ing.unit_metric }}{% endif %}</span>{% endif %}
             <span class="rb-item">
+              {% if ing.link %}<a href="{{ ing.link }}" class="rb-ingredient-link">{% endif %}
               <span class="rb-lang-primary rb-lang-en"><span class="rb-item-name" data-en="{{ ing.item }}" data-sv="{{ ing.item_sv | default: ing.item }}">{{ ing.item }}</span></span>
               {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
+              {% if ing.link %}</a>{% endif %}
             </span>
           </li>
           {% endfor %}

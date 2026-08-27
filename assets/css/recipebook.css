@@ -349,6 +349,13 @@ body {
   border-bottom: 1px dashed var(--rb-line);
   align-items: baseline;
 }
+.rb-ingredient-link {
+  color: var(--rb-red-dark);
+  text-decoration: underline;
+}
+.rb-ingredient-link:hover {
+  color: var(--rb-red);
+}
 .rb-amount {
   font-weight: 500;
   min-width: 4.5rem;

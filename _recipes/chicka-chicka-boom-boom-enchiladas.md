@@ -18,6 +18,7 @@ ingredients:
     unit_metric: g
   - item: Boom-Boom sauce (from Chuy's)
     item_sv: "\"Boom-Boom\"-sås (från restaurangkedjan Chuy's, eller hemgjord grön enchiladasås)"
+    link: /recipebook/boom-boom-sauce-copycat/
     amount_us: "2"
     unit_us: pint
     amount_metric: "950"
@@ -56,5 +57,5 @@ steps:
   - text: Uncover and bake 5 more minutes if needed to finish melting the cheese.
     timer_minutes: 5
 notes:
-  - "\"Boom-Boom sauce\" is a specialty sauce from the Chuy's restaurant chain (US) and may not be available outside the US — the Homemade Green Enchilada Sauce recipe on this site works well as a substitute if you can't source or make a copycat version."
+  - "\"Boom-Boom sauce\" is a specialty sauce from the Chuy's restaurant chain (US) and may not be available outside the US — try the <a href=\"/recipebook/boom-boom-sauce-copycat/\">Boom-Boom Sauce (Copycat)</a> recipe on this site as a substitute."
 ---
