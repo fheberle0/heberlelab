@@ -48,7 +48,7 @@
         {% for recipe in items %}
         <li class="rb-ingredient" style="border-bottom: 1px dashed var(--rb-line);">
           <a href="{{ recipe.url | relative_url }}" style="text-decoration: none; {% if recipe.favorite %}color: var(--rb-red); font-weight: 700;{% else %}color: var(--rb-walnut); font-weight: 500;{% endif %}">
-            {% if recipe.favorite %}<span style="color: var(--rb-red);" aria-hidden="true">★</span> {% endif %}{{ recipe.title }}
+            {% if recipe.favorite %}<svg viewBox="0 0 64 64" width="19" height="19" style="vertical-align:-4px; margin-right:5px;" aria-hidden="true"><line x1="32" y1="48" x2="32" y2="28" style="stroke: var(--rb-gold);" stroke-width="4" stroke-linecap="round"/><path d="M 32 33 C 22 32 14 27 11 19 C 19 17 27 20 31 27 C 32 29 32 31 32 33 Z" style="fill: var(--rb-gold);"/><path d="M 32 33 C 42 32 50 27 53 19 C 45 17 37 20 33 27 C 32 29 32 31 32 33 Z" style="fill: var(--rb-gold);"/><path d="M 32 6 C 25 6 20 12 21 19 C 22 24 26 27 32 28 C 38 27 42 24 43 19 C 44 12 39 6 32 6 Z" style="fill: var(--rb-red);"/></svg>{% endif %}{{ recipe.title }}
           </a>
           {% if recipe.bilingual %}<span class="rb-pill" style="margin-left:8px;">EN / BG</span>{% endif %}
           {% if recipe.total_time %}<span class="rb-pill" style="margin-left:8px;">{{ recipe.total_time }} min</span>{% endif %}

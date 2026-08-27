@@ -207,9 +207,20 @@
       return m + ":" + (s < 10 ? "0" : "") + s;
     }
 
+    var audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) { /* Web Audio unavailable */ }
+      }
+      return audioCtx;
+    }
+
     function beep() {
+      var ctx = getAudioCtx();
+      if (!ctx) return;
       try {
-        var ctx = new (window.AudioContext || window.webkitAudioContext)();
         [0, 0.22, 0.44].forEach(function (delay) {
           var osc = ctx.createOscillator();
           var gain = ctx.createGain();
@@ -221,7 +232,7 @@
           osc.start(ctx.currentTime + delay);
           osc.stop(ctx.currentTime + delay + 0.18);
         });
-      } catch (e) { /* Web Audio unavailable, skip sound */ }
+      } catch (e) { /* ignore */ }
     }
 
     var originalTitle = document.title;
@@ -259,6 +270,8 @@
       var timer = timers[id];
       if (!timer) return;
       clearInterval(timer.intervalId);
+      if (timer.beepIntervalId) clearInterval(timer.beepIntervalId);
+      if (timer.beepTimeoutId) clearTimeout(timer.beepTimeoutId);
       if (timer.chipEl.parentNode) timer.chipEl.parentNode.removeChild(timer.chipEl);
       resetButton(timer.btnEl);
       delete timers[id];
@@ -270,21 +283,34 @@
       if (!timer) return;
       clearInterval(timer.intervalId);
       timer.stepEl.classList.add("rb-timer-done-flash");
-      timer.btnEl.textContent = "Done";
+      timer.btnEl.textContent = "Done (tap to stop)";
       timer.btnEl.classList.remove("is-running");
       timer.btnEl.classList.add("is-done");
-      beep();
       flashTitle();
-      setTimeout(function () {
-        if (timer.chipEl.parentNode) timer.chipEl.parentNode.removeChild(timer.chipEl);
-        timer.stepEl.classList.remove("rb-timer-done-flash");
-        resetButton(timer.btnEl);
-        delete timers[id];
-        updateBarVisibility();
-      }, 8000);
+
+      // Repeat the alert every 2s for up to 60s, or until dismissed via the
+      // chip's × button or the step button — whichever comes first.
+      beep();
+      timer.beepIntervalId = setInterval(beep, 2000);
+      timer.beepTimeoutId = setTimeout(function () {
+        stopAlert(id);
+      }, 60000);
+    }
+
+    function stopAlert(id) {
+      var timer = timers[id];
+      if (!timer) return;
+      if (timer.beepIntervalId) clearInterval(timer.beepIntervalId);
+      if (timer.beepTimeoutId) clearTimeout(timer.beepTimeoutId);
+      if (timer.chipEl.parentNode) timer.chipEl.parentNode.removeChild(timer.chipEl);
+      timer.stepEl.classList.remove("rb-timer-done-flash");
+      resetButton(timer.btnEl);
+      delete timers[id];
+      updateBarVisibility();
     }
 
     function startTimer(btn) {
+      getAudioCtx();
       var minutes = parseFloat(btn.dataset.minutes);
       var stepEl = btn.closest(".rb-step");
       var label = btn.dataset.label || "Timer";
