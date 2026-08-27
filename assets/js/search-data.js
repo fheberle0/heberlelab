@@ -540,6 +540,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/cilantro-lime-rice/";
+            },},{id: "recipes-classic-scalloped-potatoes",
+          title: 'Classic Scalloped Potatoes',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/classic-scalloped-potatoes/";
             },},{id: "recipes-cornish-hen-with-homemade-classic-stuffing",
           title: 'Cornish Hen with Homemade Classic Stuffing',
           description: "",
@@ -550,6 +555,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/creamy-spicy-tomato-beans-greens/";
+            },},{id: "recipes-double-strawberry-sugar-cookies",
+          title: 'Double Strawberry Sugar Cookies',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/double-strawberry-sugar-cookies/";
             },},{id: "recipes-everything-salmon-with-creamy-caper-sauce",
           title: 'Everything Salmon with Creamy Caper Sauce',
           description: "",
@@ -580,6 +590,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/grilled-chicken-marinade/";
+            },},{id: "recipes-our-favorite-ground-beef-tacos",
+          title: 'Our Favorite Ground Beef Tacos',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/ground-beef-tacos/";
             },},{id: "recipes-instant-pot-beef-stew",
           title: 'Instant Pot Beef Stew',
           description: "",
@@ -605,6 +620,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-korean-style-beef/";
+            },},{id: "recipes-instant-pot-lemon-butter-salmon-with-rice",
+          title: 'Instant Pot Lemon Butter Salmon with Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-lemon-butter-salmon-rice/";
             },},{id: "recipes-instant-pot-lemon-chicken-and-rice",
           title: 'Instant Pot Lemon Chicken and Rice',
           description: "",
@@ -620,6 +640,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-pot-roast-potatoes/";
+            },},{id: "recipes-lemon-butter-salmon-with-rice",
+          title: 'Lemon Butter Salmon with Rice',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/lemon-butter-salmon-rice-stovetop/";
             },},{id: "recipes-lemon-garlic-linguine",
           title: 'Lemon-Garlic Linguine',
           description: "",
@@ -640,6 +665,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/mint-chocolate-cake/";
+            },},{id: "recipes-miracle-no-knead-bread",
+          title: 'Miracle No-Knead Bread',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/miracle-no-knead-bread/";
             },},{id: "recipes-mish-mash",
           title: 'Mish-Mash',
           description: "",
@@ -705,6 +735,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/potatoes-peas-mimi/";
+            },},{id: "recipes-red-enchilada-sauce",
+          title: 'Red Enchilada Sauce',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/red-enchilada-sauce/";
             },},{id: "recipes-roasted-chicken-thighs-with-hot-honey-and-lime",
           title: 'Roasted Chicken Thighs with Hot Honey and Lime',
           description: "",
@@ -720,6 +755,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/sausage-peppers-onions/";
+            },},{id: "recipes-scalloped-potatoes-with-ham-classic-roux-method",
+          title: 'Scalloped Potatoes with Ham (Classic Roux Method)',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/scalloped-potatoes-ham-classic/";
             },},{id: "recipes-scalloped-potatoes-and-ham",
           title: 'Scalloped Potatoes and Ham',
           description: "",
