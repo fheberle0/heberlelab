@@ -8,7 +8,7 @@ const SUPABASE_FUNCTIONS_URL = 'https://ttyfammnucxnypyfabks.supabase.co/functio
    ORDFÖRRÅD — Swedish vocabulary trainer
    Flow: Flashcards (primary, 3-correct-to-graduate) →
          unlocks Övningar (MCQ/Type/Blank) + Matchningsspel,
-         both scoped to *today's* introduced words only..
+         both scoped to *today's* introduced words only.
    ============================================================ */
 
 const VOCAB = [{
@@ -27829,6 +27829,8 @@ function computeGrowthSeries(srs) {
 const HARD_LAPSES_THRESHOLD = 2;
 const HARD_EF_THRESHOLD = 1.8;
 const HARD_RESETS_THRESHOLD = 2;
+const HARD_GRADE_THRESHOLD = 2; // explicit "Hard" clicks, tracked independently so later Good grades can't erase the signal
+
 function computeHardWordIds(state) {
   const auto = new Set();
   Object.entries(state.srs).forEach(([id, c]) => {
@@ -27837,12 +27839,15 @@ function computeHardWordIds(state) {
   Object.entries(state.learning).forEach(([id, c]) => {
     if ((c.resets || 0) >= HARD_RESETS_THRESHOLD) auto.add(Number(id));
   });
+  Object.entries(state.hardGradeCounts || {}).forEach(([id, count]) => {
+    if (count >= HARD_GRADE_THRESHOLD) auto.add(Number(id));
+  });
   (state.manualHardIds || []).forEach(id => auto.add(id));
   (state.dismissedHardIds || []).forEach(id => auto.delete(id));
   return auto;
 }
 function isWordHard(state, id) {
-  const auto = state.srs[id] && ((state.srs[id].lapses || 0) >= HARD_LAPSES_THRESHOLD || (state.srs[id].ef || 2.5) <= HARD_EF_THRESHOLD) || state.learning[id] && (state.learning[id].resets || 0) >= HARD_RESETS_THRESHOLD;
+  const auto = state.srs[id] && ((state.srs[id].lapses || 0) >= HARD_LAPSES_THRESHOLD || (state.srs[id].ef || 2.5) <= HARD_EF_THRESHOLD) || state.learning[id] && (state.learning[id].resets || 0) >= HARD_RESETS_THRESHOLD || ((state.hardGradeCounts || {})[id] || 0) >= HARD_GRADE_THRESHOLD;
   const manual = (state.manualHardIds || []).includes(id);
   const dismissed = (state.dismissedHardIds || []).includes(id);
   return (auto || manual) && !dismissed;
@@ -27993,6 +27998,8 @@ function defaultAppState() {
     // ids the user explicitly flagged as hard
     dismissedHardIds: [],
     // ids the user explicitly un-flagged (suppresses auto-detection)
+    hardGradeCounts: {},
+    // id -> count of explicit "Hard" grades (main flashcard flow only)
     requiredReps: 3,
     newIntroducedToday: 0,
     bonusNewToday: 0,
@@ -28095,6 +28102,7 @@ function useAppState(userId) {
       if (s.seenMilestones === undefined) s.seenMilestones = [];
       if (s.manualHardIds === undefined) s.manualHardIds = [];
       if (s.dismissedHardIds === undefined) s.dismissedHardIds = [];
+      if (s.hardGradeCounts === undefined) s.hardGradeCounts = {};
       s = rolloverDay(s);
       if (!cancelled) {
         setState(s);
@@ -28392,7 +28400,11 @@ function OrdforradApp({
         },
         totalReviews: prev.totalReviews + 1,
         lastStudyDate: todayStr(),
-        streak: prev.lastStudyDate === todayStr() ? prev.streak : prev.streak + 1
+        streak: prev.lastStudyDate === todayStr() ? prev.streak : prev.streak + 1,
+        hardGradeCounts: g === 1 ? {
+          ...prev.hardGradeCounts,
+          [card.id]: ((prev.hardGradeCounts || {})[card.id] || 0) + 1
+        } : prev.hardGradeCounts
       }));
       let nextQueue = session.queue;
       if (g === 0) {
@@ -28426,7 +28438,11 @@ function OrdforradApp({
           ...prev,
           totalReviews: prev.totalReviews + 1,
           lastStudyDate: todayStr(),
-          streak: prev.lastStudyDate === todayStr() ? prev.streak : prev.streak + 1
+          streak: prev.lastStudyDate === todayStr() ? prev.streak : prev.streak + 1,
+          hardGradeCounts: g === 1 ? {
+            ...prev.hardGradeCounts,
+            [card.id]: ((prev.hardGradeCounts || {})[card.id] || 0) + 1
+          } : prev.hardGradeCounts
         };
         if (g === 0) {
           next.learning = {
@@ -28624,7 +28640,8 @@ function OrdforradApp({
     onExit: () => setScreen('home')
   }), screen === 'freereview' && /*#__PURE__*/React.createElement(FreeReviewScreen, {
     state: state,
-    onExit: () => setScreen('home')
+    onExit: () => setScreen('home'),
+    onToggleHard: toggleHardWord
   }));
 }
 
@@ -29841,7 +29858,8 @@ const VERB_FORM_LABELS = {
 
 function FreeReviewScreen({
   state,
-  onExit
+  onExit,
+  onToggleHard
 }) {
   const [mode, setMode] = useState('setup'); // setup | active
   const [selectedTypes, setSelectedTypes] = useState(null);
@@ -29924,7 +29942,13 @@ function FreeReviewScreen({
       size: 18
     })), /*#__PURE__*/React.createElement("div", {
       className: "ord-freereview-count"
-    }, cardCount, " kort · fri repetition")), /*#__PURE__*/React.createElement(FlashcardExercise, {
+    }, cardCount, " kort · fri repetition"), /*#__PURE__*/React.createElement("button", {
+      className: "ord-flag-btn" + (isWordHard(state, currentCard.id) ? ' flagged' : ''),
+      onClick: () => onToggleHard(currentCard.id),
+      title: isWordHard(state, currentCard.id) ? 'Ta bort från svåra ord' : 'Markera som svårt'
+    }, /*#__PURE__*/React.createElement(Flag, {
+      size: 16
+    }))), /*#__PURE__*/React.createElement(FlashcardExercise, {
       key: cardCount,
       card: currentCard,
       onGrade: handleGrade
