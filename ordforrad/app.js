@@ -1400,7 +1400,7 @@ const VOCAB = [{
   "id": 231,
   "sv": "enligt",
   "en": "according to",
-  "t": "p",
+  "t": "pr",
   "es": "Enligt läraren är det rätt.",
   "ee": "According to the teacher it is correct.",
   "ch": 15,
@@ -1449,7 +1449,7 @@ const VOCAB = [{
 }, {
   "id": 236,
   "sv": "eftersom",
-  "en": "because",
+  "en": "because / since",
   "t": "s",
   "es": "Jag stannar eftersom jag är trött.",
   "ee": "I stay because I am tired.",
