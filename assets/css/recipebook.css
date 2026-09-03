@@ -551,3 +551,48 @@ body {
 .rb-category .rb-ingredient-list {
   margin-top: 0.5rem;
 }
+
+/* --- grocery list --- */
+.rb-grocery-item {
+  align-items: center;
+}
+.rb-grocery-checkbox {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--rb-red);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.rb-grocery-name {
+  flex: 1;
+  font-weight: 500;
+}
+.rb-grocery-item.is-checked .rb-grocery-name {
+  text-decoration: line-through;
+  color: var(--rb-walnut-soft);
+  font-weight: 400;
+}
+.rb-grocery-note {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.78rem;
+  color: var(--rb-walnut-soft);
+  white-space: nowrap;
+}
+.rb-grocery-delete {
+  border: none;
+  background: transparent;
+  color: var(--rb-walnut-soft);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.3rem;
+  flex-shrink: 0;
+}
+.rb-grocery-delete:hover { color: var(--rb-red); }
+.rb-grocery-empty {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  color: var(--rb-walnut-soft);
+  font-style: italic;
+  padding: 0.5rem 0 1rem;
+}

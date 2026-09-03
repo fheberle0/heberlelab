@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="{% if page.bilingual %}en{% else %}en{% endif %}">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page.title }} · Heberle Lab Recipe Book</title>
+  <title>{{ page.title | default: "Grocery List" }} · Heberle Lab</title>
   <link rel="stylesheet" href="{{ '/assets/css/recipebook.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   <link rel="icon" type="image/svg+xml" href="{{ '/assets/img/recipebook-favicon.svg' | relative_url }}">
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAEUElEQVRYhcWXTUxcVRiGn3Pu3BkYmAGKMLT8ZJxQbAoC1rZTsEmpC2PEVd2YJpoYd7ogcaMbu9GFuDBs3LkzWhOjG1sb09ofLCLaRkpLFdoMDEKhbYowwMzc+bnHBcN0hs7tzJDWvrt7vvec9z053/nOdwUFwu9vdsuI2SsQL6JUBwIvUJkKL6GYRohR4KwwbCeHJiZWCllX5CMc7PC1mCbvI3gdcBboN6zguCnpHxkN3NiSga6uhlKx5vgIVB9gK1B4M+IKNeAIqWPnp6ejBRvwd/p2aibfA225JhysMOh2GTQ4EgDMGjZ+XXFwcdmByulD/KbpiSO/XA7O5zXQ1dH8nFDmT0DN5phDKt7dscKu0nhOmb8jOp/fcmGYOfc1mzRV78i1qbHMQZn54e/07bQSBzhas2YpDrCrNM7RmjWrcIMmxcl9rd66nAZ6vN4STfGtlXiNnuSA27AU38ABt4FHT1qa0DV5oqurofQBAzG39jGKDquZz5bF8l8Z1s+01Rl7GOV5Vu0fZBk42OFrSWW7JSq13OmVk2t7OFcI3ts4ChtA6p6nr1r9dhcv7N2Bu9yOUvBvyGDbdADikYIMbKtzc8Tvo8rtQAgIrcYYunSLufl0bSrXNXkMeEf4/c1uLWLOk1FknKU2+t7ei91+P0f1UIjawQtY3LOM7cHtQz0kXK70UCxmMvDFJSLRRHpMwZo09O1SRsxeNlW4cCTBmaFg1rpxt5twQ2Pe3Ycbm7LEAc4MBbPEUz7LKEm8ojV5tvUBezYvNH97larKEjw1Zekxo7YWGY+jLy0/kJAKQdjrZbmtDcT96Nhfdzl7MUhOCLWoNdZWfYigPld8MrBImdPODk95aoIg6vEQrfOsixgxkrpOtKGepfZ2wk1NWeKXxxb44XQAZXlsMi662313gaesKAC7W6p56ZCXCpfjYbQ0lkJRTg8GuT55Lx/1juhu9xmAPR9T0yRtz1TT2VpLU30FUmbHTRNm5pYZHb/DtYl7JJNmIV6Ngg1kwmHXqN/u4o3XdgPw5XfXmZtfwYhZVkBLAxIIFT0rliQQXEp/B4JLWxEHWJYoprYy89FABGSqjXoy8kpdkcDZJ2XARP0s7cmSEwosH/HHBQVrDtN5Sp4fH18Fvvm/DQjE1+fHx1clgCnpB6xbnUePmFTaJ5DqB0ZGAzcUaqDYVWbmQszMFX2LEYrPLl6dDEBGU9rj9ZbE3No5UAeKXrEoqOGKsHb41M2bRpYBgH2t3jpdk78D+d/dLUHcUkLbP3xlcm5jJKui/zE+vZA01avA7GNQ/0cp9XKm+AMGAEauTY1pmtwDDD46bTUcT5r7h68Grm6OaLnoMwuL4TZX9fGoTZkI9ooiH6sMxBR8WhnW3rowEVjORcjbaafy4piCNwWU5ePDepERQn0lTb1/I9utUEirD0BPa2t53BbtxVSHTUGngKfJ+D1XMAX8KYU6pyecP6YKXF78B1PCjkspJ/p9AAAAAElFTkSuQmCC">
@@ -13,163 +13,36 @@
 
 <header class="rb-header" style="display:flex; justify-content:space-between; align-items:center;">
   <a class="rb-home-link" href="{{ '/recipebook/' | relative_url }}">Recipe Book</a>
-  <a class="rb-home-link" href="{{ '/recipebook/list/' | relative_url }}">Grocery List</a>
+  <span class="rb-home-link" style="cursor:default;">Grocery List</span>
 </header>
 
-<div class="rb-timer-bar" aria-live="polite"></div>
-
-<main class="rb-recipe" data-base-servings="{{ page.servings | default: 4 }}">
+<main class="rb-recipe">
 
   <div class="rb-kurbits-divider" aria-hidden="true">
     <span class="rb-leaf rb-leaf-gold"></span>
     <span class="rb-leaf rb-leaf-red"></span>
   </div>
 
-  <h1 class="rb-title">
-    <span class="rb-lang-primary rb-lang-en">{{ page.title }}</span>
-    {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ page.title_bg }}</span>{% endif %}
+  <h1 class="rb-title" style="display:block;">
+    <span class="rb-lang-primary rb-lang-en" style="border-bottom:4px solid var(--rb-red); padding-bottom:0.25rem;">Grocery List</span>
   </h1>
+  <p class="rb-source" style="margin-top:0.75rem;">Shared and synced instantly between Fred and Milka.</p>
 
-  <p class="rb-meta">
-    {% if page.category %}<span class="rb-pill">{{ page.category | capitalize }}</span>{% endif %}
-    {% if page.total_time %}<span class="rb-pill">{{ page.total_time }} min</span>{% endif %}
-  </p>
-
-  <div class="rb-controls">
-    {% if page.scale_unit %}
-    <div class="rb-control-group">
-      <label for="rb-servings">{{ page.scale_unit }}</label>
-      <button type="button" class="rb-step-btn" data-step="-1" aria-label="Decrease {{ page.scale_unit }}">–</button>
-      <input type="number" id="rb-servings" min="1" step="1" value="1" data-scale-mode="batch" data-per-unit-servings="{{ page.servings | default: 1 }}">
-      <button type="button" class="rb-step-btn" data-step="1" aria-label="Increase {{ page.scale_unit }}">+</button>
-      <button type="button" class="rb-reset-btn" title="Reset to 1 {{ page.scale_unit }}">Reset</button>
-      <span id="rb-servings-note" style="font-size: 0.78rem; color: var(--rb-walnut-soft); margin-left: 0.4rem;">≈ {{ page.servings }} servings</span>
-    </div>
-    {% elsif page.scalable == false %}
-    <div class="rb-control-group">
-      <span style="font-size: 0.8rem; color: var(--rb-walnut-soft);">Makes {{ page.servings }} servings — not scalable (fixed pan size)</span>
-    </div>
-    {% else %}
-    <div class="rb-control-group">
-      <label for="rb-servings">Servings</label>
-      <button type="button" class="rb-step-btn" data-step="-1" aria-label="Decrease servings">–</button>
-      <input type="number" id="rb-servings" min="1" value="{{ page.servings | default: 4 }}">
-      <button type="button" class="rb-step-btn" data-step="1" aria-label="Increase servings">+</button>
-      <button type="button" class="rb-reset-btn" title="Reset to the original serving size">Reset</button>
-    </div>
-    {% endif %}
-
-    <div class="rb-control-group rb-unit-toggle" role="group" aria-label="Units">
-      <button type="button" class="rb-toggle-btn is-active" data-unit="us">US</button>
-      <button type="button" class="rb-toggle-btn" data-unit="metric">Metric</button>
-    </div>
-
-    {% if page.bilingual %}
-    <div class="rb-control-group rb-lang-toggle" role="group" aria-label="Language">
-      <button type="button" class="rb-toggle-btn is-active" data-lang="en">English</button>
-      <button type="button" class="rb-toggle-btn" data-lang="bg">Български</button>
-    </div>
-    {% endif %}
-
-    {% assign sv_items = page.ingredients | map: "item_sv" | compact %}
-    {% if sv_items.size > 0 %}
-    <div class="rb-control-group rb-ingredient-lang-toggle" role="group" aria-label="Ingredient name language">
-      <button type="button" class="rb-toggle-btn is-active" data-ing-lang="en">EN</button>
-      <button type="button" class="rb-toggle-btn" data-ing-lang="sv">SV</button>
-    </div>
-    {% endif %}
+  <div class="rb-control-group" id="rb-grocery-identity" style="margin-bottom:1.5rem;">
+    <label style="font-size:0.8rem; color:var(--rb-walnut-soft); margin-right:0.25rem;">Adding as</label>
+    <button type="button" class="rb-toggle-btn" data-user="Fred">Fred</button>
+    <button type="button" class="rb-toggle-btn" data-user="Milka">Milka</button>
   </div>
 
-  {% if page.source.name %}
-  <p class="rb-source">
-    Adapted from
-    {% if page.source.url %}<a href="{{ page.source.url }}" target="_blank" rel="noopener">{{ page.source.name }}</a>{% else %}{{ page.source.name }}{% endif %}
-  </p>
-  {% endif %}
+  <form id="rb-grocery-add-form" class="rb-search-wrap" style="margin: 0 0 1.5rem;">
+    <input type="text" id="rb-grocery-add-input" class="rb-search-input" placeholder="Add an item…" autocomplete="off">
+    <div id="rb-grocery-add-results" class="rb-search-results" hidden></div>
+  </form>
 
-  <div class="rb-body">
-    <section class="rb-ingredients">
-      <h2>Ingredients</h2>
-
-      {% assign sections = page.ingredients | map: "section" | uniq %}
-      {% if sections.size > 1 or sections.first %}
-        {% for section in sections %}
-          {% if section %}<h3 class="rb-section-title">{{ section }}</h3>{% endif %}
-          <ul class="rb-ingredient-list">
-            {% for ing in page.ingredients %}
-              {% if ing.section == section %}
-              <li class="rb-ingredient{% if ing.amount_metric %} rb-has-metric{% endif %}"
-                  data-amount-us="{{ ing.amount_us }}"
-                  data-unit-us="{{ ing.unit_us }}"
-                  data-amount-metric="{{ ing.amount_metric }}"
-                  data-unit-metric="{{ ing.unit_metric }}">
-                <span class="rb-amount rb-amount-us">{{ ing.amount_us }}{% if ing.unit_us %} {{ ing.unit_us }}{% endif %}</span>
-                {% if ing.amount_metric %}<span class="rb-amount rb-amount-metric">{{ ing.amount_metric }}{% if ing.unit_metric %} {{ ing.unit_metric }}{% endif %}</span>{% endif %}
-                <span class="rb-item">
-                  {% if ing.link %}<a href="{{ ing.link }}" class="rb-ingredient-link">{% endif %}
-                  <span class="rb-lang-primary rb-lang-en"><span class="rb-item-name" data-en="{{ ing.item }}" data-sv="{{ ing.item_sv | default: ing.item }}">{{ ing.item }}</span></span>
-                  {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
-                  {% if ing.link %}</a>{% endif %}
-                </span>
-              </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        {% endfor %}
-      {% else %}
-        <ul class="rb-ingredient-list">
-          {% for ing in page.ingredients %}
-          <li class="rb-ingredient{% if ing.amount_metric %} rb-has-metric{% endif %}"
-              data-amount-us="{{ ing.amount_us }}"
-              data-unit-us="{{ ing.unit_us }}"
-              data-amount-metric="{{ ing.amount_metric }}"
-              data-unit-metric="{{ ing.unit_metric }}">
-            <span class="rb-amount rb-amount-us">{{ ing.amount_us }}{% if ing.unit_us %} {{ ing.unit_us }}{% endif %}</span>
-            {% if ing.amount_metric %}<span class="rb-amount rb-amount-metric">{{ ing.amount_metric }}{% if ing.unit_metric %} {{ ing.unit_metric }}{% endif %}</span>{% endif %}
-            <span class="rb-item">
-              {% if ing.link %}<a href="{{ ing.link }}" class="rb-ingredient-link">{% endif %}
-              <span class="rb-lang-primary rb-lang-en"><span class="rb-item-name" data-en="{{ ing.item }}" data-sv="{{ ing.item_sv | default: ing.item }}">{{ ing.item }}</span></span>
-              {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
-              {% if ing.link %}</a>{% endif %}
-            </span>
-          </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </section>
-
-    <section class="rb-steps">
-      <h2>Method</h2>
-      <ol class="rb-step-list">
-        {% assign last_section = "" %}
-        {% for step in page.steps %}
-          {% if step.section and step.section != last_section %}
-            <li class="rb-step-section-title">{{ step.section }}</li>
-            {% assign last_section = step.section %}
-          {% endif %}
-          <li class="rb-step">
-            <span class="rb-lang-primary rb-lang-en">{% if step.text %}{{ step.text }}{% else %}{{ step }}{% endif %}</span>
-            {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ step.text_bg }}</span>{% endif %}
-            {% if step.timer_minutes %}
-            <button type="button" class="rb-step-timer-btn" data-minutes="{{ step.timer_minutes }}" data-label="{% if step.text %}{{ step.text | truncate: 34 }}{% else %}{{ step | truncate: 34 }}{% endif %}">⏱ Start {{ step.timer_minutes }} min</button>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ol>
-    </section>
-  </div>
-
-  {% if page.notes.size > 0 %}
-  <section class="rb-notes">
-    <h2>Notes</h2>
-    <ul>
-      {% for note in page.notes %}<li>{{ note }}</li>{% endfor %}
-    </ul>
-  </section>
-  {% endif %}
+  <div id="rb-grocery-list-root"></div>
 
 </main>
 
-<script src="{{ '/assets/js/recipebook.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+<script type="module" src="{{ '/assets/js/recipebook-grocery-list.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </body>
 </html>
