@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'https://esm.sh/react@18.3.1';
 import { createRoot } from 'https://esm.sh/react-dom@18.3.1/client';
-import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock, TrendingUp, Award, ArrowLeft, Flag, BookOpen, ExternalLink, Search, Repeat } from './icons.js';
+import { Flame, Clock, CheckCircle2, Sparkles, ChevronDown, RotateCcw, X, Grid3x3, PenLine, ListChecks, Lock, TrendingUp, Award, ArrowLeft, Flag, BookOpen, ExternalLink, Search, Repeat, AlertCircle } from './icons.js';
 import { supabaseClient } from './supabase-client.js';
 const SUPABASE_FUNCTIONS_URL = 'https://ttyfammnucxnypyfabks.supabase.co/functions/v1';
 
@@ -27984,6 +27984,29 @@ function pickRandomCard(pool, avoidId) {
   } while (candidate.id === avoidId);
   return candidate;
 }
+
+// Words the person has actually seen — the union of graduated (srs) and in-progress (learning) words.
+function computeIntroducedIds(state) {
+  return new Set([...Object.keys(state.srs), ...Object.keys(state.learning)].map(Number));
+}
+function computeIntroducedItems(state) {
+  const ids = computeIntroducedIds(state);
+  return Array.from(ids).map(id => VOCAB_BY_ID.get(id)).filter(Boolean);
+}
+
+// MCQ distractor pool: words already seen, plus a small buffer of "coming up next"
+// words (by frequency rank) so multiple choice never quizzes against a total stranger.
+const NEAR_FUTURE_BUFFER = 20;
+function computeMCQPool(state) {
+  const introducedIds = computeIntroducedIds(state);
+  const introduced = VOCAB.filter(v => introducedIds.has(v.id));
+  const upcoming = [];
+  for (const v of VOCAB) {
+    if (upcoming.length >= NEAR_FUTURE_BUFFER) break;
+    if (!introducedIds.has(v.id)) upcoming.push(v);
+  }
+  return [...introduced, ...upcoming];
+}
 function defaultAppState() {
   return {
     srs: {},
@@ -28619,6 +28642,7 @@ function OrdforradApp({
     }
   }), screen === 'extras' && extrasSession && /*#__PURE__*/React.createElement(ExtrasScreen, {
     session: extrasSession,
+    state: state,
     onResult: handleExtrasResult,
     onExit: () => {
       setExtrasSession(null);
@@ -28891,6 +28915,98 @@ function EditName({
     onClick: () => setOpen(false),
     disabled: saving
   }, "Avbryt"));
+}
+function ReportError({
+  card,
+  direction,
+  context
+}) {
+  const [open, setOpen] = useState(false);
+  const [note, setNote] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const [errorMsg, setErrorMsg] = useState('');
+  const submit = async e => {
+    e.preventDefault();
+    if (status === 'sending') return;
+    setStatus('sending');
+    setErrorMsg('');
+    try {
+      const {
+        data: {
+          session
+        }
+      } = await supabaseClient.auth.getSession();
+      const res = await fetch(`${SUPABASE_FUNCTIONS_URL}/report-word-error`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({
+          wordId: card.id,
+          sv: card.sv,
+          en: card.en,
+          t: card.t,
+          g: card.g,
+          c: card.c,
+          es: card.es || '',
+          ee: card.ee || '',
+          direction,
+          context,
+          note: note.trim()
+        })
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || 'Något gick fel');
+      setStatus('sent');
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err.message || 'Något gick fel');
+    }
+  };
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    className: "ord-flag-btn",
+    onClick: () => setOpen(o => !o),
+    title: "Rapportera fel i det här ordet"
+  }, /*#__PURE__*/React.createElement(AlertCircle, {
+    size: 16
+  })), open && /*#__PURE__*/React.createElement("div", {
+    className: "ord-report-panel"
+  }, status === 'sent' ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "ord-type-feedback correct"
+  }, "Tack! Rapporten är skickad."), /*#__PURE__*/React.createElement("button", {
+    className: "ord-reset-link",
+    onClick: () => {
+      setOpen(false);
+      setStatus('idle');
+      setNote('');
+    }
+  }, "Stäng")) : /*#__PURE__*/React.createElement("form", {
+    onSubmit: submit
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ord-report-word"
+  }, "Rapportera fel: ", /*#__PURE__*/React.createElement("strong", null, cleanAnswer(card.sv)), " → ", cleanAnswer(card.en)), /*#__PURE__*/React.createElement("textarea", {
+    value: note,
+    onChange: e => setNote(e.target.value),
+    placeholder: "Vad verkar fel? (valfritt)",
+    className: "ord-report-textarea",
+    rows: 2
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "ord-report-actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "ord-start-btn",
+    type: "submit",
+    disabled: status === 'sending',
+    style: {
+      marginBottom: 0
+    }
+  }, status === 'sending' ? 'Skickar...' : 'Skicka rapport'), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "ord-reset-link",
+    onClick: () => setOpen(false)
+  }, "Avbryt")), status === 'error' && /*#__PURE__*/React.createElement("div", {
+    className: "ord-type-feedback incorrect"
+  }, errorMsg))));
 }
 function InviteFriend() {
   const [open, setOpen] = useState(false);
@@ -29230,7 +29346,11 @@ function FlashScreen({
     title: isHard ? 'Ta bort från svåra ord' : 'Markera som svårt'
   }, /*#__PURE__*/React.createElement(Flag, {
     size: 16
-  }))), /*#__PURE__*/React.createElement(FlashcardExercise, {
+  })), /*#__PURE__*/React.createElement(ReportError, {
+    card: card,
+    direction: card._direction,
+    context: "Flashcards"
+  })), /*#__PURE__*/React.createElement(FlashcardExercise, {
     key: index,
     card: card,
     onGrade: onGrade
@@ -29326,6 +29446,7 @@ function FlashcardExercise({
 
 function ExtrasScreen({
   session,
+  state,
   onResult,
   onExit
 }) {
@@ -29351,11 +29472,13 @@ function ExtrasScreen({
   }, "Tillbaka")) : /*#__PURE__*/React.createElement(ExtraTurn, {
     key: session.index,
     card: current,
+    state: state,
     onResult: onResult
   }));
 }
 function ExtraTurn({
   card,
+  state,
   onResult
 }) {
   if (card._exerciseType === 'blank') return /*#__PURE__*/React.createElement(BlankExercise, {
@@ -29370,12 +29493,14 @@ function ExtraTurn({
   return /*#__PURE__*/React.createElement(MCQExercise, {
     card: card,
     direction: card._direction,
+    state: state,
     onResult: onResult
   });
 }
 function MCQExercise({
   card,
   direction,
+  state,
   onResult
 }) {
   const [selected, setSelected] = useState(null);
@@ -29389,14 +29514,15 @@ function MCQExercise({
     const promptText = direction === 'sv-en' ? card.sv : card.en;
     const correctRaw = direction === 'sv-en' ? card.en : card.sv;
     const correctText = cleanAnswer(correctRaw).split('/')[0].trim();
-    const distractors = pickDistractors(VOCAB, card, direction, 3);
+    const pool = computeMCQPool(state);
+    const distractors = pickDistractors(pool, card, direction, 3);
     return {
       prompt: promptText,
       correct: correctText,
       options: shuffle([correctText, ...distractors]),
       promptLabel: direction === 'sv-en' ? 'SVENSKA' : 'ENGLISH'
     };
-  }, [card.id, direction]);
+  }, [card.id, direction, state]);
   const choose = useCallback(opt => {
     setSelected(sel => {
       if (sel !== null) return sel; // already answered
@@ -29654,6 +29780,16 @@ function HardWordsScreen({
   canPractice,
   onExit
 }) {
+  const [query, setQuery] = useState('');
+  const sortedWords = useMemo(() => {
+    return [...words].sort((a, b) => cleanAnswer(a.sv).localeCompare(cleanAnswer(b.sv), 'sv'));
+  }, [words]);
+  const introducedItems = useMemo(() => computeIntroducedItems(state), [state.srs, state.learning]);
+  const searchResults = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return introducedItems.filter(item => cleanAnswer(item.sv).toLowerCase().includes(q) || cleanAnswer(item.en).toLowerCase().includes(q)).slice(0, 20);
+  }, [query, introducedItems]);
   return /*#__PURE__*/React.createElement("div", {
     className: "ord-review"
   }, /*#__PURE__*/React.createElement("div", {
@@ -29668,9 +29804,50 @@ function HardWordsScreen({
     style: {
       margin: 0
     }
-  }, "SVÅRA ORD (", words.length, ")")), words.length === 0 ? /*#__PURE__*/React.createElement("div", {
+  }, "SVÅRA ORD (", words.length, ")")), /*#__PURE__*/React.createElement("div", {
+    className: "ord-dict-search",
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement(Search, {
+    size: 16,
+    className: "ord-dict-search-icon"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: query,
+    onChange: e => setQuery(e.target.value),
+    placeholder: "Sök bland dina ord för att lägga till...",
+    className: "ord-dict-input"
+  })), query.trim() && /*#__PURE__*/React.createElement("div", {
+    className: "ord-hardword-list",
+    style: {
+      marginBottom: 18
+    }
+  }, searchResults.length === 0 ? /*#__PURE__*/React.createElement("div", {
     className: "ord-growth-empty"
-  }, "Inga svåra ord ännu. Ord flaggas automatiskt om du missar dem upprepade gånger — eller flagga ett ord själv med flagg-ikonen under flashcards.") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  }, "Inga träffar bland orden du redan mött.") : searchResults.map(w => {
+    const hard = isWordHard(state, w.id);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-row",
+      key: w.id
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-text"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-sv"
+    }, cleanAnswer(w.sv), w.g ? /*#__PURE__*/React.createElement("span", {
+      className: "ord-hardword-gender"
+    }, " (", w.g, ")") : null), /*#__PURE__*/React.createElement("div", {
+      className: "ord-hardword-en"
+    }, cleanAnswer(w.en))), /*#__PURE__*/React.createElement("button", {
+      className: "ord-flag-btn" + (hard ? ' flagged' : ''),
+      onClick: () => onToggleHard(w.id),
+      title: hard ? 'Ta bort från svåra ord' : 'Lägg till som svårt'
+    }, /*#__PURE__*/React.createElement(Flag, {
+      size: 14
+    })));
+  })), words.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "ord-growth-empty"
+  }, "Inga svåra ord ännu. Ord flaggas automatiskt om du missar dem upprepade gånger — eller sök upp ett ord ovan, eller flagga det själv med flagg-ikonen under flashcards.") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     className: "ord-start-btn",
     onClick: onPractice,
     disabled: !canPractice,
@@ -29679,7 +29856,7 @@ function HardWordsScreen({
     }
   }, "Öva svåra ord"), /*#__PURE__*/React.createElement("div", {
     className: "ord-hardword-list"
-  }, words.map(w => {
+  }, sortedWords.map(w => {
     const manual = (state.manualHardIds || []).includes(w.id);
     return /*#__PURE__*/React.createElement("div", {
       className: "ord-hardword-row",
@@ -29871,10 +30048,7 @@ function FreeReviewScreen({
     good: 0,
     easy: 0
   });
-  const introducedItems = useMemo(() => {
-    const ids = new Set([...Object.keys(state.srs), ...Object.keys(state.learning)].map(Number));
-    return Array.from(ids).map(id => VOCAB_BY_ID.get(id)).filter(Boolean);
-  }, [state.srs, state.learning]);
+  const introducedItems = useMemo(() => computeIntroducedItems(state), [state.srs, state.learning]);
   const categoryCounts = useMemo(() => {
     const counts = {};
     introducedItems.forEach(item => {
@@ -29948,7 +30122,11 @@ function FreeReviewScreen({
       title: isWordHard(state, currentCard.id) ? 'Ta bort från svåra ord' : 'Markera som svårt'
     }, /*#__PURE__*/React.createElement(Flag, {
       size: 16
-    }))), /*#__PURE__*/React.createElement(FlashcardExercise, {
+    })), /*#__PURE__*/React.createElement(ReportError, {
+      card: currentCard,
+      direction: currentCard._direction,
+      context: "Fri repetition"
+    })), /*#__PURE__*/React.createElement(FlashcardExercise, {
       key: cardCount,
       card: currentCard,
       onGrade: handleGrade
@@ -30410,11 +30588,18 @@ function Style() {
 
       /* Unified session layout: top bar (fixed) -> stage (flex:1, centered) -> action row (fixed) */
       .ord-review { max-width: 460px; margin: 0 auto; min-height: 82vh; display: flex; flex-direction: column; }
-      .ord-review-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+      .ord-review-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
       .ord-exit-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--c-line); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--c-ink); flex-shrink: 0; }
       .ord-flag-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--c-line); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #A39C86; flex-shrink: 0; }
       .ord-flag-btn:hover { border-color: var(--c-red); color: var(--c-red); }
       .ord-flag-btn.flagged { background: rgba(162,62,42,0.1); border-color: var(--c-red); color: var(--c-red); }
+
+      .ord-report-panel { width: 100%; margin-top: 4px; padding: 12px; background: #FBF9F4; border: 1px solid var(--c-line); border-radius: 8px; }
+      .ord-report-word { font-size: 12.5px; color: var(--c-slate); margin-bottom: 8px; }
+      .ord-report-textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--c-line); border-radius: 6px; font-family: var(--font-body); font-size: 13px; background: #fff; color: var(--c-ink); resize: vertical; box-sizing: border-box; }
+      .ord-report-textarea:focus { outline: none; border-color: var(--c-red); }
+      .ord-report-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+      .ord-report-actions .ord-start-btn { flex: 0 0 auto; padding: 10px 18px; }
       .ord-exit-btn:hover { background: var(--c-line); }
       .ord-review-progress { flex: 1; display: flex; align-items: center; gap: 10px; }
       .ord-review-progress-track { flex: 1; height: 4px; background: var(--c-line); border-radius: 2px; overflow: hidden; }
