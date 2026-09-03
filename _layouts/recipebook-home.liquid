@@ -43,7 +43,7 @@
 
   {% for group in grouped %}
     {% assign items = group.items | sort: "title" %}
-    <details class="rb-category" open>
+    <details class="rb-category">
       <summary class="rb-category-summary">{{ group.name | capitalize }} <span class="rb-category-count">({{ items.size }})</span></summary>
       <ul class="rb-ingredient-list">
         {% for recipe in items %}

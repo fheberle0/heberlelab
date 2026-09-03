@@ -111,6 +111,7 @@
                   {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
                   {% if ing.link %}</a>{% endif %}
                 </span>
+                <button type="button" class="rb-grocery-add-btn" aria-label="Add to grocery list" title="Add to grocery list">+</button>
               </li>
               {% endif %}
             {% endfor %}
@@ -132,6 +133,7 @@
               {% if page.bilingual %}<span class="rb-lang-secondary rb-lang-bg">{{ ing.item_bg }}</span>{% endif %}
               {% if ing.link %}</a>{% endif %}
             </span>
+            <button type="button" class="rb-grocery-add-btn" aria-label="Add to grocery list" title="Add to grocery list">+</button>
           </li>
           {% endfor %}
         </ul>
@@ -171,5 +173,6 @@
 </main>
 
 <script src="{{ '/assets/js/recipebook.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+<script type="module" src="{{ '/assets/js/recipebook-add-to-grocery.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </body>
 </html>

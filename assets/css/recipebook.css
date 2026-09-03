@@ -356,6 +356,26 @@ body {
 .rb-ingredient-link:hover {
   color: var(--rb-red);
 }
+.rb-grocery-add-btn {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--rb-border);
+  background: var(--rb-linen);
+  color: var(--rb-red-dark);
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.rb-grocery-add-btn:hover { background: var(--rb-linen-dark); }
+.rb-grocery-add-btn.is-added {
+  background: var(--rb-gold);
+  border-color: var(--rb-gold);
+  color: #fff;
+  cursor: default;
+}
 .rb-amount {
   font-weight: 500;
   min-width: 4.5rem;

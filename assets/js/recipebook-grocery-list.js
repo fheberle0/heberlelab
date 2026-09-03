@@ -31,28 +31,6 @@ function esc(s) {
   return div.innerHTML;
 }
 
-// --- identity (which household member is adding items) ---
-var identityBar = document.getElementById("rb-grocery-identity");
-var currentUser = localStorage.getItem("rb-grocery-user") || null;
-
-function renderIdentity() {
-  if (!identityBar) return;
-  identityBar.querySelectorAll("[data-user]").forEach(function (btn) {
-    btn.classList.toggle("is-active", btn.dataset.user === currentUser);
-  });
-}
-
-if (identityBar) {
-  identityBar.querySelectorAll("[data-user]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      currentUser = btn.dataset.user;
-      localStorage.setItem("rb-grocery-user", currentUser);
-      renderIdentity();
-    });
-  });
-  renderIdentity();
-}
-
 // --- add-item form + autocomplete ---
 var addInput = document.getElementById("rb-grocery-add-input");
 var addResults = document.getElementById("rb-grocery-add-results");
@@ -89,7 +67,6 @@ async function addItemToList(rawName) {
     name: match ? match.name : name,
     category: category,
     note: null,
-    addedBy: currentUser,
     checked: false,
     createdAt: serverTimestamp()
   });
