@@ -21,6 +21,7 @@ const db = getFirestore(app);
 
 const ITEMS_COLLECTION = "groceryItems";
 const LIST_COLLECTION = "groceryList";
+const PURCHASE_RETENTION_DAYS = 7;
 
 var itemsCache = [];   // full grocery catalog, kept live via onSnapshot
 var listCache = [];    // current live list, kept live via onSnapshot
@@ -155,7 +156,10 @@ if (addForm) {
 
 // --- toggle / delete / clear-checked ---
 function toggleChecked(id, checked) {
-  updateDoc(doc(db, LIST_COLLECTION, id), { checked: checked }).catch(function () {});
+  updateDoc(doc(db, LIST_COLLECTION, id), {
+    checked: checked,
+    checkedAt: checked ? serverTimestamp() : null
+  }).catch(function () {});
 }
 
 function deleteItem(id) {
@@ -185,6 +189,35 @@ function renderRow(i) {
     (i.note ? '<span class="rb-grocery-note">' + esc(i.note) + '</span>' : '') +
     '<button type="button" class="rb-grocery-delete" data-id="' + i.id + '" aria-label="Remove">×</button>' +
     '</li>';
+}
+
+function dayKey(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+function dayLabel(d) {
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  var yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  var dd = new Date(d);
+  dd.setHours(0, 0, 0, 0);
+  if (dd.getTime() === today.getTime()) return "Today";
+  if (dd.getTime() === yesterday.getTime()) return "Yesterday";
+  return dd.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+}
+
+async function purgeOldPurchases() {
+  var cutoff = Date.now() - PURCHASE_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+  var stale = listCache.filter(function (i) {
+    return i.checked && i.checkedAt && i.checkedAt.toDate && i.checkedAt.toDate().getTime() < cutoff;
+  });
+  if (!stale.length) return;
+  var batch = writeBatch(db);
+  stale.forEach(function (i) {
+    batch.delete(doc(db, LIST_COLLECTION, i.id));
+  });
+  await batch.commit();
 }
 
 function renderList() {
@@ -227,12 +260,39 @@ function renderList() {
   });
 
   if (checked.length) {
-    html += '<details class="rb-category">';
-    html += '<summary class="rb-category-summary">Checked <span class="rb-category-count">(' + checked.length + ')</span></summary>';
-    html += '<ul class="rb-ingredient-list">';
-    checked.forEach(function (i) { html += renderRow(i); });
-    html += '</ul></details>';
-    html += '<button type="button" class="rb-reset-btn" id="rb-grocery-clear-checked-dyn" style="margin-top:0.75rem;">Clear checked</button>';
+    var cutoff = Date.now() - PURCHASE_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+    var visibleChecked = checked.filter(function (i) {
+      var d = i.checkedAt && i.checkedAt.toDate ? i.checkedAt.toDate() : new Date();
+      return d.getTime() >= cutoff;
+    });
+
+    if (visibleChecked.length) {
+      var byDay = {};
+      visibleChecked.forEach(function (i) {
+        var d = i.checkedAt && i.checkedAt.toDate ? i.checkedAt.toDate() : new Date();
+        var key = dayKey(d);
+        if (!byDay[key]) byDay[key] = { label: dayLabel(d), items: [] };
+        byDay[key].items.push(i);
+      });
+      var dayKeys = Object.keys(byDay).sort().reverse();
+
+      html += '<details class="rb-category">';
+      html += '<summary class="rb-category-summary">Recently Purchased <span class="rb-category-count">(' + visibleChecked.length + ')</span></summary>';
+      dayKeys.forEach(function (key) {
+        var group = byDay[key];
+        group.items.sort(function (a, b) {
+          var ta = a.checkedAt && a.checkedAt.toDate ? a.checkedAt.toDate().getTime() : 0;
+          var tb = b.checkedAt && b.checkedAt.toDate ? b.checkedAt.toDate().getTime() : 0;
+          return tb - ta;
+        });
+        html += '<h3 class="rb-section-title">' + esc(group.label) + '</h3>';
+        html += '<ul class="rb-ingredient-list">';
+        group.items.forEach(function (i) { html += renderRow(i); });
+        html += '</ul>';
+      });
+      html += '<button type="button" class="rb-reset-btn" id="rb-grocery-clear-checked-dyn" style="margin-top:0.75rem;">Clear purchase history</button>';
+      html += '</details>';
+    }
   }
 
   listRoot.innerHTML = html;
@@ -262,5 +322,6 @@ onSnapshot(query(collection(db, LIST_COLLECTION), orderBy("createdAt")), functio
   listCache = snapshot.docs.map(function (d) {
     return Object.assign({ id: d.id }, d.data());
   });
+  purgeOldPurchases().catch(function () {});
   renderList();
 });
