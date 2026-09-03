@@ -28304,7 +28304,7 @@ function OrdforradApp({
   }, [state && state.todayIntroducedIds, hardWordItems]);
   const canExtras = extrasUnlocked && extrasPool.length >= 1;
   const canMatch = extrasUnlocked && matchPool.length >= 2;
-  const canHardPractice = extrasUnlocked && hardWordItems.length >= 1;
+  const canHardPractice = hardWordItems.length >= 1;
   const startFlash = () => {
     if (!state) return;
     const {
