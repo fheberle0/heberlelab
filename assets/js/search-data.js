@@ -770,6 +770,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/red-enchilada-sauce/";
+            },},{id: "recipes-rhubarb-and-strawberry-loaf",
+          title: 'Rhubarb and Strawberry Loaf',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/rhubarb-strawberry-loaf/";
             },},{id: "recipes-roasted-chicken-thighs-with-hot-honey-and-lime",
           title: 'Roasted Chicken Thighs with Hot Honey and Lime',
           description: "",
