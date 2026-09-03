@@ -35,6 +35,20 @@
   </p>
 
   <div class="rb-controls">
+    {% if page.scale_unit %}
+    <div class="rb-control-group">
+      <label for="rb-servings">{{ page.scale_unit }}</label>
+      <button type="button" class="rb-step-btn" data-step="-1" aria-label="Decrease {{ page.scale_unit }}">–</button>
+      <input type="number" id="rb-servings" min="1" step="1" value="1" data-scale-mode="batch" data-per-unit-servings="{{ page.servings | default: 1 }}">
+      <button type="button" class="rb-step-btn" data-step="1" aria-label="Increase {{ page.scale_unit }}">+</button>
+      <button type="button" class="rb-reset-btn" title="Reset to 1 {{ page.scale_unit }}">Reset</button>
+      <span id="rb-servings-note" style="font-size: 0.78rem; color: var(--rb-walnut-soft); margin-left: 0.4rem;">≈ {{ page.servings }} servings</span>
+    </div>
+    {% elsif page.scalable == false %}
+    <div class="rb-control-group">
+      <span style="font-size: 0.8rem; color: var(--rb-walnut-soft);">Makes {{ page.servings }} servings — not scalable (fixed pan size)</span>
+    </div>
+    {% else %}
     <div class="rb-control-group">
       <label for="rb-servings">Servings</label>
       <button type="button" class="rb-step-btn" data-step="-1" aria-label="Decrease servings">–</button>
@@ -42,6 +56,7 @@
       <button type="button" class="rb-step-btn" data-step="1" aria-label="Increase servings">+</button>
       <button type="button" class="rb-reset-btn" title="Reset to the original serving size">Reset</button>
     </div>
+    {% endif %}
 
     <div class="rb-control-group rb-unit-toggle" role="group" aria-label="Units">
       <button type="button" class="rb-toggle-btn is-active" data-unit="us">US</button>

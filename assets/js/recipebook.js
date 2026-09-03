@@ -76,8 +76,22 @@
   }
 
   function applyServings() {
-    var target = parseFloat(servingsInput.value) || baseServings;
-    var multiplier = target / baseServings;
+    var isBatchMode = servingsInput.dataset.scaleMode === "batch";
+    var fallback = isBatchMode ? 1 : baseServings;
+    var target = parseFloat(servingsInput.value) || fallback;
+
+    if (isBatchMode) {
+      target = Math.max(1, Math.round(target));
+      servingsInput.value = target;
+    }
+
+    var multiplier = isBatchMode ? target : (target / baseServings);
+
+    if (isBatchMode) {
+      var perUnit = parseFloat(servingsInput.dataset.perUnitServings) || 0;
+      var note = document.getElementById("rb-servings-note");
+      if (note) note.textContent = "≈ " + Math.round(perUnit * multiplier) + " servings";
+    }
 
     ingredientEls.forEach(function (el) {
       var usSpan = el.querySelector(".rb-amount-us");
@@ -104,7 +118,8 @@
     stepBtns.forEach(function (btn) {
       btn.addEventListener("click", function () {
         var step = parseFloat(btn.dataset.step);
-        var current = parseFloat(servingsInput.value) || baseServings;
+        var fallback = servingsInput.dataset.scaleMode === "batch" ? 1 : baseServings;
+        var current = parseFloat(servingsInput.value) || fallback;
         var next = Math.max(1, current + step);
         servingsInput.value = next;
         applyServings();
@@ -187,7 +202,7 @@
   var resetBtn = document.querySelector(".rb-reset-btn");
   if (resetBtn && servingsInput) {
     resetBtn.addEventListener("click", function () {
-      servingsInput.value = baseServings;
+      servingsInput.value = servingsInput.dataset.scaleMode === "batch" ? 1 : baseServings;
       applyServings();
     });
   }
