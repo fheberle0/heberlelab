@@ -52,32 +52,42 @@ if (addBtns.length) {
     return "";
   }
 
-  function getVisibleName(li) {
+  function getIngredientNames(li) {
     var nameSpan = li.querySelector(".rb-item-name");
-    return nameSpan ? nameSpan.textContent.trim() : "";
+    if (!nameSpan) return { en: "", sv: "" };
+    return {
+      en: (nameSpan.dataset.en || "").trim(),
+      sv: (nameSpan.dataset.sv || "").trim()
+    };
   }
 
-  async function addIngredientToGroceryList(name, amount) {
+  async function addIngredientToGroceryList(name, nameSv, amount) {
     var match = findExactMatch(name);
-    var itemId, category;
+    var itemId, category, listNameSv;
 
     if (match) {
       itemId = match.id;
       category = match.category || null;
-      updateDoc(doc(db, ITEMS_COLLECTION, match.id), { useCount: increment(1) }).catch(function () {});
+      listNameSv = match.nameSv || nameSv || null;
+      var updates = { useCount: increment(1) };
+      if (!match.nameSv && nameSv) updates.nameSv = nameSv; // backfill the catalog if we now have a translation
+      updateDoc(doc(db, ITEMS_COLLECTION, match.id), updates).catch(function () {});
     } else {
       var newItemRef = await addDoc(collection(db, ITEMS_COLLECTION), {
         name: name,
+        nameSv: nameSv || null,
         category: null,
         useCount: 1
       });
       itemId = newItemRef.id;
       category = null;
+      listNameSv = nameSv || null;
     }
 
     await addDoc(collection(db, LIST_COLLECTION), {
       itemId: itemId,
       name: match ? match.name : name,
+      nameSv: listNameSv,
       category: category,
       note: amount || null,
       checked: false,
@@ -90,13 +100,13 @@ if (addBtns.length) {
       if (btn.classList.contains("is-added")) return;
       var li = btn.closest(".rb-ingredient");
       if (!li) return;
-      var name = getVisibleName(li);
+      var names = getIngredientNames(li);
       var amount = getVisibleAmount(li);
-      if (!name) return;
+      if (!names.en) return;
 
       btn.disabled = true;
       try {
-        await addIngredientToGroceryList(name, amount);
+        await addIngredientToGroceryList(names.en, names.sv, amount);
         btn.textContent = "✓";
         btn.classList.add("is-added");
         btn.setAttribute("aria-label", "Added to grocery list");

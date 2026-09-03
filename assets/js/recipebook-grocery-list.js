@@ -31,6 +31,20 @@ function esc(s) {
   return div.innerHTML;
 }
 
+// --- item name language (English / Swedish) ---
+var currentLang = "en";
+var langToggle = document.getElementById("rb-grocery-lang-toggle");
+if (langToggle) {
+  langToggle.querySelectorAll("[data-ing-lang]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      langToggle.querySelectorAll("[data-ing-lang]").forEach(function (b) { b.classList.remove("is-active"); });
+      btn.classList.add("is-active");
+      currentLang = btn.dataset.ingLang;
+      renderList();
+    });
+  });
+}
+
 // --- add-item form + autocomplete ---
 var addInput = document.getElementById("rb-grocery-add-input");
 var addResults = document.getElementById("rb-grocery-add-results");
@@ -55,6 +69,7 @@ async function addItemToList(rawName) {
   } else {
     var newItemRef = await addDoc(collection(db, ITEMS_COLLECTION), {
       name: name,
+      nameSv: null,
       category: null,
       useCount: 1
     });
@@ -65,6 +80,7 @@ async function addItemToList(rawName) {
   await addDoc(collection(db, LIST_COLLECTION), {
     itemId: itemId,
     name: match ? match.name : name,
+    nameSv: match ? (match.nameSv || null) : null,
     category: category,
     note: null,
     checked: false,
@@ -160,9 +176,12 @@ async function clearChecked() {
 var listRoot = document.getElementById("rb-grocery-list-root");
 
 function renderRow(i) {
+  var en = i.name || "";
+  var sv = i.nameSv || en;
+  var displayName = currentLang === "sv" ? sv : en;
   return '<li class="rb-ingredient rb-grocery-item' + (i.checked ? ' is-checked' : '') + '">' +
     '<input type="checkbox" class="rb-grocery-checkbox" data-id="' + i.id + '"' + (i.checked ? ' checked' : '') + '>' +
-    '<span class="rb-grocery-name">' + esc(i.name) + '</span>' +
+    '<span class="rb-grocery-name">' + esc(displayName) + '</span>' +
     (i.note ? '<span class="rb-grocery-note">' + esc(i.note) + '</span>' : '') +
     '<button type="button" class="rb-grocery-delete" data-id="' + i.id + '" aria-label="Remove">×</button>' +
     '</li>';
