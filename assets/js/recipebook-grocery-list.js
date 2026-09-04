@@ -155,11 +155,14 @@ if (addForm) {
 }
 
 // --- toggle / delete / clear-checked ---
-function toggleChecked(id, checked) {
+function toggleChecked(id, checked, itemId) {
   updateDoc(doc(db, LIST_COLLECTION, id), {
     checked: checked,
     checkedAt: checked ? serverTimestamp() : null
   }).catch(function () {});
+  if (checked && itemId) {
+    updateDoc(doc(db, ITEMS_COLLECTION, itemId), { lastPurchasedAt: serverTimestamp() }).catch(function () {});
+  }
 }
 
 function deleteItem(id) {
@@ -179,14 +182,36 @@ async function clearChecked() {
 // --- rendering the list ---
 var listRoot = document.getElementById("rb-grocery-list-root");
 
+function relativeTime(date) {
+  var diffMs = Date.now() - date.getTime();
+  var diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000));
+  if (diffDays <= 0) return "today";
+  if (diffDays === 1) return "yesterday";
+  if (diffDays < 7) return diffDays + " days ago";
+  if (diffDays < 14) return "1 week ago";
+  if (diffDays < 30) return Math.floor(diffDays / 7) + " weeks ago";
+  if (diffDays < 60) return "1 month ago";
+  return Math.floor(diffDays / 30) + " months ago";
+}
+
 function renderRow(i) {
   var en = i.name || "";
   var sv = i.nameSv || en;
   var displayName = currentLang === "sv" ? sv : en;
+
+  var lastPurchasedHint = "";
+  if (!i.checked && i.itemId) {
+    var catalogItem = itemsCache.find(function (x) { return x.id === i.itemId; });
+    if (catalogItem && catalogItem.lastPurchasedAt && catalogItem.lastPurchasedAt.toDate) {
+      lastPurchasedHint = '<span class="rb-grocery-note">(bought ' + esc(relativeTime(catalogItem.lastPurchasedAt.toDate())) + ')</span>';
+    }
+  }
+
   return '<li class="rb-ingredient rb-grocery-item' + (i.checked ? ' is-checked' : '') + '">' +
-    '<input type="checkbox" class="rb-grocery-checkbox" data-id="' + i.id + '"' + (i.checked ? ' checked' : '') + '>' +
+    '<input type="checkbox" class="rb-grocery-checkbox" data-id="' + i.id + '" data-item-id="' + (i.itemId || "") + '"' + (i.checked ? ' checked' : '') + '>' +
     '<span class="rb-grocery-name">' + esc(displayName) + '</span>' +
     (i.note ? '<span class="rb-grocery-note">' + esc(i.note) + '</span>' : '') +
+    lastPurchasedHint +
     '<button type="button" class="rb-grocery-delete" data-id="' + i.id + '" aria-label="Remove">×</button>' +
     '</li>';
 }
@@ -299,7 +324,7 @@ function renderList() {
 
   listRoot.querySelectorAll(".rb-grocery-checkbox").forEach(function (cb) {
     cb.addEventListener("change", function () {
-      toggleChecked(cb.dataset.id, cb.checked);
+      toggleChecked(cb.dataset.id, cb.checked, cb.dataset.itemId || null);
     });
   });
   listRoot.querySelectorAll(".rb-grocery-delete").forEach(function (btn) {

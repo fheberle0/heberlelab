@@ -216,6 +216,32 @@
     var timers = {};
     var nextId = 1;
 
+    // --- screen wake lock: keep the screen on while a timer is running,
+    // so the alert actually has a chance to be seen/heard. Only helps while
+    // the tab is in the foreground (e.g. phone propped on the counter) —
+    // it can't wake a locked screen or a backgrounded tab; that would need
+    // real push notifications and a backend to send them.
+    var wakeLock = null;
+
+    async function requestWakeLock() {
+      if (!("wakeLock" in navigator)) return;
+      try {
+        wakeLock = await navigator.wakeLock.request("screen");
+        wakeLock.addEventListener("release", function () {
+          wakeLock = null;
+        });
+      } catch (e) {
+        // unavailable (unsupported browser, battery saver, etc.) — fail silently
+      }
+    }
+
+    function releaseWakeLock() {
+      if (wakeLock) {
+        wakeLock.release().catch(function () {});
+        wakeLock = null;
+      }
+    }
+
     function formatTime(sec) {
       var m = Math.floor(sec / 60);
       var s = sec % 60;
@@ -266,7 +292,13 @@
     }
 
     function updateBarVisibility() {
-      bar.classList.toggle("is-visible", Object.keys(timers).length > 0);
+      var hasActiveTimers = Object.keys(timers).length > 0;
+      bar.classList.toggle("is-visible", hasActiveTimers);
+      if (hasActiveTimers && !wakeLock) {
+        requestWakeLock();
+      } else if (!hasActiveTimers && wakeLock) {
+        releaseWakeLock();
+      }
     }
 
     function updateChip(timer) {
@@ -381,6 +413,7 @@
         var remaining = updateChip(timer);
         if (remaining <= 0) completeTimer(id);
       });
+      if (Object.keys(timers).length > 0) requestWakeLock();
     });
   })();
 })();
