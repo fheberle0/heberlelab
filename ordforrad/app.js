@@ -1064,6 +1064,26 @@ const VERBS = [{
   "en": "to have time"
 }];
 const VOCAB_BY_ID = new Map(VOCAB.map(v => [v.id, v]));
+
+// Words whose English gloss is shared with at least one other Swedish word (e.g. "to" for
+// both "till" and "åt"). Going en->sv on these without sentence context means several answers
+// could be defensibly "correct" — so these get routed to the blank exercise instead, which
+// disambiguates via the actual sentence.
+const AMBIGUOUS_IDS = (() => {
+  const byGloss = new Map();
+  for (const v of VOCAB) {
+    const primary = cleanAnswer(v.en).split('/')[0].trim().toLowerCase();
+    if (!primary) continue;
+    if (!byGloss.has(primary)) byGloss.set(primary, []);
+    byGloss.get(primary).push(v.id);
+  }
+  const ids = new Set();
+  for (const group of byGloss.values()) {
+    if (group.length > 1) group.forEach(id => ids.add(id));
+  }
+  return ids;
+})();
+
 const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const MILESTONES = [50, 100, 250, 500, 1000, 1500, 2000, 2500, 3000];
 function computeProgressStats(vocab, srs) {
@@ -1266,9 +1286,15 @@ function pickDistractors(pool, correctItem, direction, count) {
   }
   return chosen;
 }
-function pickExtraExerciseType(card, lastType) {
+function pickExtraExerciseType(card, lastType, direction) {
+  const blankAvailable = !!findBlankWord(card._es, card.sv, card.t);
+  // Ambiguous word + en->sv direction: several Swedish words could defensibly answer
+  // the shown English gloss, so always disambiguate via the sentence-with-blank.
+  if (direction === 'en-sv' && AMBIGUOUS_IDS.has(card.id) && blankAvailable) {
+    return 'blank';
+  }
   const candidates = ['mcq', 'type'];
-  if (findBlankWord(card._es, card.sv, card.t)) candidates.push('blank');
+  if (blankAvailable) candidates.push('blank');
   const filtered = candidates.filter(t => t !== lastType);
   const pool = filtered.length ? filtered : candidates;
   return pool[Math.floor(Math.random() * pool.length)];
@@ -1666,12 +1692,13 @@ function OrdforradApp({
     const lastTypeLocal = {};
     const queue = shuffle(extrasPool).map(item => {
       const withExample = { ...item, ...pickExample(item) };
-      const extype = pickExtraExerciseType(withExample, lastTypeLocal[item.id]);
+      const direction = randDirection();
+      const extype = pickExtraExerciseType(withExample, lastTypeLocal[item.id], direction);
       lastTypeLocal[item.id] = extype;
       return {
         ...withExample,
         _exerciseType: extype,
-        _direction: randDirection()
+        _direction: direction
       };
     });
     setExtrasSession({
@@ -1693,12 +1720,13 @@ function OrdforradApp({
     const lastTypeLocal = {};
     const queue = shuffle(hardWordItems).map(item => {
       const withExample = { ...item, ...pickExample(item) };
-      const extype = pickExtraExerciseType(withExample, lastTypeLocal[item.id]);
+      const direction = randDirection();
+      const extype = pickExtraExerciseType(withExample, lastTypeLocal[item.id], direction);
       lastTypeLocal[item.id] = extype;
       return {
         ...withExample,
         _exerciseType: extype,
-        _direction: randDirection()
+        _direction: direction
       };
     });
     setExtrasSession({
@@ -2748,7 +2776,9 @@ function FlashcardExercise({
       className: "ord-flap-word"
     }, front), card.t && WORD_TYPE_LABELS[card.t] && /*#__PURE__*/React.createElement("div", {
       className: "ord-flap-tag"
-    }, WORD_TYPE_LABELS[card.t], card.g ? ` · ${card.g}` : ''), /*#__PURE__*/React.createElement("div", {
+    }, WORD_TYPE_LABELS[card.t], card.g ? ` · ${card.g}` : ''), direction === 'en-sv' && AMBIGUOUS_IDS.has(card.id) && card._ee && /*#__PURE__*/React.createElement("div", {
+      className: "ord-flap-front-context"
+    }, card._ee), /*#__PURE__*/React.createElement("div", {
       className: "ord-flap-hint"
     }, "tap, space, or enter to flip")), /*#__PURE__*/React.createElement("div", {
       className: "ord-flap-face ord-flap-back"
@@ -2842,6 +2872,7 @@ function ExtraTurn({
   if (card._exerciseType === 'type') return /*#__PURE__*/React.createElement(TypeExercise, {
     card: card,
     direction: card._direction,
+    state: state,
     onResult: onResult
   });
   return /*#__PURE__*/React.createElement(MCQExercise, {
@@ -2918,11 +2949,13 @@ function MCQExercise({
 function TypeExercise({
   card,
   direction,
+  state,
   onResult
 }) {
   const [value, setValue] = useState('');
   const [revealed, setRevealed] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [showChoices, setShowChoices] = useState(false);
   const inputRef = useRef(null);
   useEffect(() => {
     if (!isTouchDevice()) inputRef.current && inputRef.current.focus();
@@ -2931,25 +2964,47 @@ function TypeExercise({
   const targetRaw = direction === 'sv-en' ? card.en : card.sv;
   const promptLabel = direction === 'sv-en' ? 'SVENSKA' : 'ENGLISH';
   const answerHint = direction === 'sv-en' ? 'Skriv på engelska' : 'Skriv på svenska';
+  const correctText = cleanAnswer(targetRaw).split('/')[0].trim();
+  const choices = useMemo(() => {
+    if (!showChoices) return null;
+    const pool = computeMCQPool(state);
+    const distractors = pickDistractors(pool, card, direction, 3);
+    return shuffle([correctText, ...distractors]);
+  }, [showChoices]);
   const submit = () => {
     if (revealed || !value.trim()) return;
     setIsCorrect(checkTyped(value, targetRaw));
     setRevealed(true);
   };
+  const choose = opt => {
+    if (revealed) return;
+    setIsCorrect(opt === correctText);
+    setRevealed(true);
+  };
   useEffect(() => {
     const onKey = e => {
       if (e.key !== 'Enter') return;
-      if (!revealed) submit();else onResult(isCorrect);
+      if (!revealed) {
+        if (!showChoices) submit();
+      } else onResult(isCorrect);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [revealed, isCorrect, value]);
+  }, [revealed, isCorrect, value, showChoices]);
   return /*#__PURE__*/React.createElement(ExerciseFrame, {
     eyebrow: `${promptLabel} · SKRIV ORDET`,
     stage: /*#__PURE__*/React.createElement("div", {
       className: "ord-prompt-tile"
     }, prompt),
-    action: !revealed ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("input", {
+    action: !revealed ? showChoices ? /*#__PURE__*/React.createElement("div", {
+      className: "ord-mcq-grid"
+    }, choices.map((opt, i) => /*#__PURE__*/React.createElement("button", {
+      key: i,
+      className: "ord-mcq-opt",
+      onClick: () => choose(opt)
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ord-mcq-key"
+    }, i + 1), opt))) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("input", {
       ref: inputRef,
       className: "ord-type-input",
       value: value,
@@ -2963,7 +3018,10 @@ function TypeExercise({
       onClick: submit
     }, "Kontrollera ", /*#__PURE__*/React.createElement("span", {
       className: "ord-key-hint"
-    }, "enter"))) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    }, "enter")), /*#__PURE__*/React.createElement("button", {
+      className: "ord-type-fallback-link",
+      onClick: () => setShowChoices(true)
+    }, "Vet inte — visa flerval istället")) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
       className: "ord-type-feedback" + (isCorrect ? ' correct' : ' incorrect')
     }, isCorrect ? 'Rätt!' : `Rätt svar: ${cleanAnswer(targetRaw)}`), /*#__PURE__*/React.createElement("button", {
       className: "ord-reveal-btn",
@@ -4171,6 +4229,8 @@ function Style() {
 
       .ord-reset-zone { margin-top: 22px; text-align: center; }
       .ord-reset-link { background: none; border: none; color: #A39C86; font-family: var(--font-mono); font-size: 11px; text-decoration: underline; cursor: pointer; padding: 4px; }
+      .ord-type-fallback-link { display: block; margin: 10px auto 0; background: none; border: none; color: #A39C86; font-family: var(--font-mono); font-size: 11.5px; text-decoration: underline; cursor: pointer; padding: 4px; }
+      .ord-type-fallback-link:hover { color: var(--c-slate); }
       .ord-reset-link:hover { color: var(--c-red); }
       .ord-reset-confirm { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px; background: rgba(162,62,42,0.06); border: 1px solid rgba(162,62,42,0.25); border-radius: 8px; }
       .ord-reset-confirm span { font-size: 12.5px; color: var(--c-ink); }
@@ -4219,6 +4279,7 @@ function Style() {
       .ord-flap-conj { font-family: var(--font-mono); font-size: 13px; color: #E4DCC8; margin-top: 10px; }
       .ord-flap-example { margin-top: 18px; font-size: 13.5px; color: #EDE7D8; line-height: 1.5; font-style: italic; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 14px; }
       .ord-flap-example-en { color: #C9C2AC; margin-top: 3px; font-style: normal; font-size: 12.5px; }
+      .ord-flap-front-context { margin-top: 16px; font-size: 13px; color: #A39C86; line-height: 1.45; font-style: italic; max-width: 85%; text-align: center; }
 
       .ord-key-hint { font-family: var(--font-mono); font-size: 9.5px; opacity: 0.6; margin-left: 6px; font-weight: 400; }
 
