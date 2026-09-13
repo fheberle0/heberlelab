@@ -3125,7 +3125,11 @@ function MatchingGame({
 }
 
 function tokenizeSentence(sv) {
-  return sv.trim().split(/\s+/).filter(Boolean);
+  // Strip leading/trailing punctuation from each word so no tile visibly carries
+  // a period, comma, etc. that would give away its position in the sentence.
+  // Internal characters (hyphens in compounds, apostrophes) are left alone.
+  const punct = /^[.,!?:;"'""''—–()]+|[.,!?:;"'""''—–()]+$/g;
+  return sv.trim().split(/\s+/).filter(Boolean).map(w => w.replace(punct, '')).filter(Boolean);
 }
 function UnscrambleScreen({
   session,
@@ -3237,7 +3241,7 @@ function UnscrambleTurn({
     }, tile.text)))),
     action: status !== 'active' ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
       className: "ord-type-feedback" + (status === 'correct' ? ' correct' : ' incorrect')
-    }, status === 'correct' ? 'Rätt!' : `Rätt: ${turn.exampleSv}`), /*#__PURE__*/React.createElement("button", {
+    }, status === 'correct' ? `Rätt! ${turn.exampleSv}` : `Rätt: ${turn.exampleSv}`), /*#__PURE__*/React.createElement("button", {
       className: "ord-reveal-btn",
       onClick: continueNext
     }, "Fortsätt ", /*#__PURE__*/React.createElement("span", {
