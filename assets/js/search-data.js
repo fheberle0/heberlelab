@@ -545,6 +545,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/chocolate-doughnut-muffins/";
+            },},{id: "recipes-chocolate-raspberry-loaf",
+          title: 'Chocolate Raspberry Loaf',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chocolate-raspberry-loaf/";
             },},{id: "recipes-cilantro-lime-rice",
           title: 'Cilantro Lime Rice',
           description: "",
