@@ -545,6 +545,16 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/chocolate-doughnut-muffins/";
+            },},{id: "recipes-chocolate-orange-loaf",
+          title: 'Chocolate Orange Loaf',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chocolate-orange-loaf/";
+            },},{id: "recipes-chocolate-orange-marble-loaf",
+          title: 'Chocolate Orange Marble Loaf',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/chocolate-orange-marble-loaf/";
             },},{id: "recipes-chocolate-raspberry-loaf",
           title: 'Chocolate Raspberry Loaf',
           description: "",
