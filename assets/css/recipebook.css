@@ -29,7 +29,6 @@ body {
   background: var(--rb-walnut);
 }
 
-/* --- sticky timer bar --- */
 .rb-timer-bar {
   position: sticky;
   top: 0;
@@ -106,7 +105,6 @@ body {
   padding: 2rem 1.25rem 4rem;
 }
 
-/* kurbits divider: small leaf motif, used sparingly (top of page only) */
 .rb-kurbits-divider {
   display: flex;
   justify-content: center;
@@ -139,6 +137,10 @@ body {
   border-radius: 20px;
   margin-right: 6px;
 }
+.rb-pill-experimental {
+  background: var(--rb-gold);
+  color: #fff;
+}
 
 .rb-source {
   font-size: 0.85rem;
@@ -148,7 +150,6 @@ body {
 }
 .rb-source a { color: var(--rb-red-dark); }
 
-/* --- controls --- */
 .rb-controls {
   display: flex;
   flex-wrap: wrap;
@@ -225,14 +226,6 @@ body {
   color: #fff;
 }
 
-/* --- language display ---
-   Whichever language is "main" is both larger AND on top. This needs actual
-   reordering, not just resizing, so every bilingual container is a flex
-   column and order flips with the .rb-bg-mode class on .rb-recipe.
-   Uses a class rather than an attribute selector — the site's CSS minifier
-   silently drops attribute-selector rules (e.g. [data-lang-mode="bg"]),
-   so a class is the only reliable option here. */
-
 .rb-title,
 .rb-item,
 .rb-step {
@@ -249,7 +242,6 @@ body {
   transition: font-size 0.32s ease, color 0.32s ease, font-weight 0.32s ease, font-style 0.32s ease;
 }
 
-/* title */
 .rb-title .rb-lang-primary.rb-lang-en {
   font-size: 2rem;
   border-bottom: 4px solid var(--rb-red);
@@ -275,7 +267,6 @@ body {
   padding-bottom: 0;
 }
 
-/* ingredients + steps */
 .rb-item .rb-lang-primary.rb-lang-en,
 .rb-step .rb-lang-primary.rb-lang-en {
   font-size: 1rem;
@@ -303,7 +294,6 @@ body {
   font-weight: 500;
 }
 
-/* --- body layout --- */
 .rb-body {
   display: grid;
   grid-template-columns: 1fr;
@@ -382,9 +372,6 @@ body {
   color: var(--rb-red-dark);
 }
 .rb-amount-metric { display: none; }
-/* only hide the US amount in metric mode if there's an actual metric value to replace it with —
-   marked at build time with .rb-has-metric rather than relying on :has(), which some
-   minifiers/browsers handle unreliably */
 .rb-recipe.rb-metric-mode .rb-ingredient.rb-has-metric .rb-amount-us { display: none; }
 .rb-recipe.rb-metric-mode .rb-amount-metric { display: inline; }
 
