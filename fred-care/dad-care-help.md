@@ -48,7 +48,7 @@ The calendar below shows who's covering what, and where the open gaps are. See a
 | Who | For | Number |
 |---|---|---|
 | **Emergency** | Any medical emergency | **911** |
-| Andy, Caroline, Mary, or Susie | General questions about helping | *(numbers pending)* |
+| Andy, Caroline, Mary, or Susie | General questions about helping | *(group chat)* |
 | Group chat | General coordination, claiming shifts, questions | *(ask Sam for the invite if you're not in it yet)* |
 | Tim Blaisdell — Senior Center | Lunch pickup/drop-off; also has walkers, wheelchairs, and shower chairs to borrow | **406-346-2878** |
 | PALS (Toni Potts) | Home care coordination | **406-346-4234** |
