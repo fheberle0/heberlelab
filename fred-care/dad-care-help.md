@@ -11,6 +11,13 @@ Thank you for being willing to help. This page has everything you need to pitch 
 The calendar below shows who's covering what, and where the open gaps are. See an open slot you can fill? **Post in the group chat and you'll be added to it.**
 
 <style>
+  .refresh-notice { background: #fdf3e7; border-left: 3px solid #b8752e; padding: 0.8rem 1.1rem; border-radius: 3px; font-size: 0.92rem; color: #6b4a1e; margin-bottom: 0.8rem; }
+</style>
+<div class="refresh-notice">
+🔄 <strong>If you're checking for a recent update, refresh this page</strong> (reload the browser) — the calendar below doesn't always update live on its own.
+</div>
+
+<style>
   .calendar-embed iframe { display: block; width: 100%; height: 720px; border: 0; }
   .calendar-embed .agenda-view { display: none; }
   @media (max-width: 480px) {
@@ -41,7 +48,7 @@ The calendar below shows who's covering what, and where the open gaps are. See a
 | Who | For | Number |
 |---|---|---|
 | **Emergency** | Any medical emergency | **911** |
-| Andy | General questions about helping | **607-592-6169** |
+| Andy, Caroline, Mary, or Susie | General questions about helping | *(numbers pending)* |
 | Group chat | General coordination, claiming shifts, questions | *(ask Sam for the invite if you're not in it yet)* |
 | Tim Blaisdell — Senior Center | Lunch pickup/drop-off; also has walkers, wheelchairs, and shower chairs to borrow | **406-346-2878** |
 | PALS (Toni Potts) | Home care coordination | **406-346-4234** |
