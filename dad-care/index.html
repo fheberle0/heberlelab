@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helping with Dad's Care</title>
+<style>
+  :root {
+    --ink: #2b2822;
+    --ink-soft: #5a564c;
+    --paper: #fbf9f5;
+    --line: #ddd7c9;
+    --accent: #6b7a5e;
+    --accent-soft: #e9edE3;
+    --danger: #a3402f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, "Times New Roman", serif;
+    line-height: 1.6;
+    font-size: 17px;
+  }
+
+  .wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  h1 {
+    font-size: 1.9rem;
+    font-weight: 600;
+    margin: 0 0 0.6rem;
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  h2 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin: 3rem 0 1rem;
+  }
+
+  section:first-of-type h2 { margin-top: 0; }
+
+  p { max-width: 62ch; }
+
+  ul, ol { padding-left: 1.3rem; }
+  li { margin-bottom: 0.5rem; max-width: 58ch; }
+
+  .calendar-frame {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+  }
+
+  .calendar-frame iframe {
+    display: block;
+    width: 100%;
+    height: 720px;
+    border: 0;
+  }
+
+  .calendar-frame .agenda-view {
+    display: none;
+  }
+
+  .calendar-note {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin-top: 0.6rem;
+  }
+
+  .cta-line {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 0.9rem 1.1rem;
+    border-radius: 3px;
+    font-size: 0.98rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  th {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .emergency-row td {
+    color: var(--danger);
+    font-weight: 600;
+  }
+
+  .todo {
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  footer {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  a { color: var(--accent); }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 2rem 1.1rem 4rem; }
+    h1 { font-size: 1.55rem; }
+    .calendar-frame .week-view { display: none; }
+    .calendar-frame .agenda-view { display: block; }
+    .calendar-frame iframe { height: 480px; }
+    table, thead, tbody, th, td, tr { display: block; }
+    th { display: none; }
+    td { border-bottom: none; padding: 0.25rem 0; }
+    tr { padding-bottom: 0.9rem; margin-bottom: 0.9rem; border-bottom: 1px solid var(--line); }
+    td:first-child { font-weight: 600; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Helping with Dad's Care</h1>
+    <p>Thank you for being willing to help. This page has the schedule, what a visit typically looks like, and who to call. Questions that aren't answered here — ask in the group chat.</p>
+  </header>
+
+  <section>
+    <h2>Coverage Schedule</h2>
+    <p>The calendar below shows who's covering what, and where the open gaps are.</p>
+    <div class="cta-line">
+      See an open slot you can fill? Post in the group chat, and you'll be added to it.
+    </div>
+    <div class="calendar-frame" style="margin-top: 1rem;">
+      <iframe class="week-view" src="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver&mode=WEEK"></iframe>
+      <iframe class="agenda-view" src="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver&mode=AGENDA"></iframe>
+    </div>
+    <p class="calendar-note">If the calendar doesn't load, <a href="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver">view it directly here</a>.</p>
+  </section>
+
+  <section>
+    <h2>How You Can Help</h2>
+    <ul>
+      <li><strong>Claim a shift:</strong> find an open slot above, post in the group chat (e.g. "I can take Thursday afternoon"), and it'll be confirmed and added.</li>
+      <li><strong>Pacing:</strong> he tends to move faster than is safe for him right now — a gentle reminder to slow down goes a long way.</li>
+      <li><strong>O2 tubing:</strong> keep an eye on it while he's up and moving so it doesn't become a trip hazard.</li>
+      <li><strong>Just visiting counts:</strong> conversation and company are as valuable as any task.</li>
+      <li><strong>Meals:</strong> home-cooked food is always welcome (a crockpot meal works great) — coordinate timing in the group chat so we don't double up.</li>
+      <li><strong>Rides:</strong> if you can help with transportation to the Senior Center, church, or appointments, post in the group chat.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Key Phone Numbers</h2>
+    <table>
+      <thead>
+        <tr><th>Who</th><th>For</th><th>Number</th></tr>
+      </thead>
+      <tbody>
+        <tr class="emergency-row">
+          <td>Emergency</td>
+          <td>Any medical emergency</td>
+          <td>911</td>
+        </tr>
+        <tr>
+          <td>Andy</td>
+          <td>General questions about helping</td>
+          <td>607-592-6169</td>
+        </tr>
+        <tr>
+          <td>Group chat</td>
+          <td>Coordination, claiming shifts, questions</td>
+          <td class="todo">ask Sam for the invite</td>
+        </tr>
+        <tr>
+          <td>Tim Blaisdell — Senior Center</td>
+          <td>Lunch pickup/drop-off; also lends walkers, wheelchairs, shower chairs</td>
+          <td>406-346-2878</td>
+        </tr>
+        <tr>
+          <td>PALS (Toni Potts)</td>
+          <td>Home care coordination</td>
+          <td>406-346-4234</td>
+        </tr>
+        <tr>
+          <td>Pastor Bill — Church</td>
+          <td>Church visits</td>
+          <td class="todo">add number</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Equipment</h2>
+    <p>The <strong>Forsyth Senior Center</strong> (contact Tim Blaisdell, above) has walkers, wheelchairs, and shower chairs available to borrow — check with them before buying anything new.</p>
+  </section>
+
+  <footer>
+    Questions? Reach out to Andy or post in the group chat. Thank you again for helping take care of Dad.
+  </footer>
+
+</div>
+</body>
+</html>
