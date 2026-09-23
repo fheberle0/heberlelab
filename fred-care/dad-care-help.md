@@ -31,7 +31,7 @@ The calendar below shows who's covering what, and where the open gaps are. See a
 <iframe class="agenda-view" src="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver&mode=AGENDA" frameborder="0" scrolling="no"></iframe>
 </div>
 
-*(Shows week view on larger screens, and a simpler agenda/list view on phones. If the calendar doesn't load, [view it directly here](https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver).)*
+*(Shows week view on larger screens, and a simpler agenda/list view on phones. If the calendar doesn't load, <a href="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver" target="_blank" rel="noopener noreferrer">view it directly here</a> (opens in a new tab).)*
 
 ## How You Can Help
 
@@ -43,16 +43,23 @@ The calendar below shows who's covering what, and where the open gaps are. See a
 - **Meals:** If you'd like to help with a meal, home-cooked food (a crockpot meal works great) is always welcome — just coordinate timing in the group chat so we don't double up.
 - **Transportation:** If you're able to help with rides (to the Senior Center, church, or appointments), post in the group chat.
 
+## Daily Schedule to Keep in Mind
+
+- **Morning medications:** given after breakfast. He needs to stay upright (not lie down) for 30 minutes afterward.
+- **Evening medication:** given right after dinner.
+- **Nebulizer treatments:** 4 times a day, roughly 8am / 12pm / 4pm / 8pm.
+- If you're not sure whether something's been given already, check the group chat or ask whoever was here before you.
+
 ## Key Phone Numbers
 
 | Who | For | Number |
 |---|---|---|
 | **Emergency** | Any medical emergency | **911** |
-| Andy, Caroline, Mary, or Susie | General questions about helping | *(group chat)* |
-| Group chat | General coordination, claiming shifts, questions | *(ask Sam for the invite if you're not in it yet)* |
+| Caroline, Mary, or Susie | Coordination, claiming shifts, questions | *(group chat)* |
 | Tim Blaisdell — Senior Center | Lunch pickup/drop-off; also has walkers, wheelchairs, and shower chairs to borrow | **406-346-2878** |
 | PALS (Toni Potts) | Home care coordination | **406-346-4234** |
 | Pastor Bill — Church | Church visits | *(add number)* |
+| Andy | Website suggestions or questions | **607-592-6169** |
 
 ## Care Tips
 
@@ -68,4 +75,6 @@ The **Forsyth Senior Center** (contact Tim Blaisdell, above) has walkers, wheelc
 
 ---
 
-*Questions? Reach out to Andy or post in the group chat. Thank you again for helping take care of Fred.*
+*Questions or suggestions for this webpage? Reach out to Andy or post in the group chat.*
+
+*Thank you again for helping take care of Fred.*
