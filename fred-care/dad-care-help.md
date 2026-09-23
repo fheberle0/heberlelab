@@ -58,7 +58,7 @@ The calendar below shows who's covering what, and where the open gaps are. See a
 | Caroline, Mary, or Susie | Coordination, claiming shifts, questions | *(group chat)* |
 | Tim Blaisdell — Senior Center | Lunch pickup/drop-off; also has walkers, wheelchairs, and shower chairs to borrow | **406-346-2878** |
 | PALS (Toni Potts) | Home care coordination | **406-346-4234** |
-| Pastor Bill — Church | Church visits | *(add number)* |
+| Pastor Bill Sikes — Church | Church visits | **406-351-3785** |
 | Andy | Website suggestions or questions | **607-592-6169** |
 
 ## Care Tips
