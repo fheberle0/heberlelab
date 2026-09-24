@@ -8,34 +8,23 @@ Thank you for being willing to help. This page has everything you need to pitch 
 
 ## Coverage Schedule
 
-The calendar below shows who's covering what, and where the open gaps are. See an open slot you can fill? **Post in the group chat and you'll be added to it.**
+The schedule below shows who's covering what, and where the open slots are. It updates live — no need to refresh. See an open slot? **Type your name at the top and click it to claim it. Click your own slot again to release it.**
 
 <style>
-  .refresh-notice { background: #fdf3e7; border-left: 3px solid #b8752e; padding: 0.8rem 1.1rem; border-radius: 3px; font-size: 0.92rem; color: #6b4a1e; margin-bottom: 0.8rem; }
-</style>
-<div class="refresh-notice">
-🔄 <strong>If you're checking for a recent update, refresh this page</strong> (reload the browser) — the calendar below doesn't always update live on its own.
-</div>
-
-<style>
-  .calendar-embed iframe { display: block; width: 100%; height: 720px; border: 0; }
-  .calendar-embed .agenda-view { display: none; }
+  .schedule-iframe { display: block; width: 100%; height: 780px; border: 0; }
   @media (max-width: 480px) {
-    .calendar-embed .week-view { display: none; }
-    .calendar-embed .agenda-view { display: block; }
-    .calendar-embed iframe { height: 480px; }
+    .schedule-iframe { height: 620px; }
   }
 </style>
 <div class="calendar-embed">
-<iframe class="week-view" src="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver&mode=WEEK" frameborder="0" scrolling="no"></iframe>
-<iframe class="agenda-view" src="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver&mode=AGENDA" frameborder="0" scrolling="no"></iframe>
+<iframe class="schedule-iframe" src="https://heberlelab.com/fred-schedule/"></iframe>
 </div>
 
-*(Shows week view on larger screens, and a simpler agenda/list view on phones. If the calendar doesn't load, <a href="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver" target="_blank" rel="noopener noreferrer">view it directly here</a> (opens in a new tab).)*
+*(Having trouble with the embed? <a href="https://heberlelab.com/fred-schedule/" target="_blank" rel="noopener noreferrer">open the schedule directly here</a> (opens in a new tab).)*
 
 ## How You Can Help
 
-- **Claim a shift:** Look at the calendar above, find an open slot, and post in the group chat (e.g., "I can take Thursday afternoon"). It'll be confirmed and added.
+- **Claim a shift:** Find an open slot on the schedule above, type your name at the top, and click it. It's claimed instantly — no need to post in the group chat first, though letting people know is still nice.
 - **What a visit usually looks like:**
   - Help him move slowly and carefully — he tends to move faster than is safe for him right now, so gentle reminders to take his time really matter.
   - If it's a mealtime, keep an eye on the O2 tubing so it doesn't become a trip hazard while he's up and moving.
