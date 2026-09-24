@@ -284,11 +284,9 @@
 
   <div class="week-nav">
     <button id="prevWeek">&larr; Prev</button>
+    <button class="today-btn" id="todayBtn">This Week</button>
     <div class="label" id="weekLabel">Loading&hellip;</div>
     <button id="nextWeek">Next &rarr;</button>
-  </div>
-  <div style="text-align:center; margin-bottom: 0.5rem;">
-    <button class="today-btn" id="todayBtn" style="border-radius:6px; padding:0.35rem 0.9rem; font-size:0.85rem; cursor:pointer;">This Week</button>
   </div>
 
   <div class="legend">
@@ -321,16 +319,15 @@
 
 <script>
 // =========================================================================
-// SETUP REQUIRED: paste your Firebase project's config below.
-// Get this from: Firebase Console -> Project Settings -> General -> Your apps -> SDK setup and configuration
+// Firebase config for the "fred-care" project.
 // =========================================================================
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCN7zMKYK9CH_CtRVj4JwwyZUUzioaxgPo",
+  authDomain: "fred-care.firebaseapp.com",
+  projectId: "fred-care",
+  storageBucket: "fred-care.firebasestorage.app",
+  messagingSenderId: "205429336895",
+  appId: "1:205429336895:web:7aac9f1253cb2081e4418a"
 };
 
 // -------------------------------------------------------------------------
