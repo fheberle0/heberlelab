@@ -76,15 +76,9 @@
     background: white;
   }
 
-  .calendar-frame iframe {
+  .schedule-iframe {
     display: block;
-    width: 100%;
-    height: 720px;
-    border: 0;
-  }
-
-  .calendar-frame .agenda-view {
-    display: none;
+    height: 780px;
   }
 
   .calendar-note {
@@ -99,16 +93,6 @@
     padding: 0.9rem 1.1rem;
     border-radius: 3px;
     font-size: 0.98rem;
-  }
-
-  .refresh-notice {
-    background: #fdf3e7;
-    border-left: 3px solid #b8752e;
-    padding: 0.8rem 1.1rem;
-    border-radius: 3px;
-    font-size: 0.92rem;
-    color: #6b4a1e;
-    margin-top: 0.8rem;
   }
 
   table {
@@ -158,9 +142,7 @@
   @media (max-width: 480px) {
     .wrap { padding: 2rem 1.1rem 4rem; }
     h1 { font-size: 1.55rem; }
-    .calendar-frame .week-view { display: none; }
-    .calendar-frame .agenda-view { display: block; }
-    .calendar-frame iframe { height: 480px; }
+    .schedule-iframe { height: 620px; }
     table, thead, tbody, th, td, tr { display: block; }
     th { display: none; }
     td { border-bottom: none; padding: 0.25rem 0; }
@@ -179,18 +161,14 @@
 
   <section>
     <h2>Coverage Schedule</h2>
-    <p>The calendar below shows who's covering what, and where the open gaps are.</p>
+    <p>The schedule below shows who's covering what, and where the open slots are. It updates live &mdash; no need to refresh.</p>
     <div class="cta-line">
-      See an open slot you can fill? Post in the group chat, and you'll be added to it.
-    </div>
-    <div class="refresh-notice">
-      🔄 <strong>If you're checking for a recent update, refresh this page</strong> (reload the browser) — the calendar below doesn't always update live on its own.
+      See an open slot? Type your name at the top and click it to claim it. Click your own slot again to release it.
     </div>
     <div class="calendar-frame" style="margin-top: 1rem;">
-      <iframe class="week-view" src="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver&mode=WEEK"></iframe>
-      <iframe class="agenda-view" src="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver&mode=AGENDA"></iframe>
+      <iframe class="schedule-iframe" src="https://heberlelab.com/fred-schedule/" style="width: 100%; border: 0;"></iframe>
     </div>
-    <p class="calendar-note">If the calendar doesn't load, <a href="https://calendar.google.com/calendar/embed?src=01456fc5d9864f1836219b14b97e2b654b6d0460ecc2e21e761981e46f7e3309%40group.calendar.google.com&ctz=America%2FDenver" target="_blank" rel="noopener noreferrer">view it directly here</a> (opens in a new tab).</p>
+    <p class="calendar-note">Having trouble with the embed? <a href="https://heberlelab.com/fred-schedule/" target="_blank" rel="noopener noreferrer">open the schedule directly here</a> (opens in a new tab).</p>
   </section>
 
   <section>
