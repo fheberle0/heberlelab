@@ -273,10 +273,12 @@
       &nbsp;<a href="#" id="adminSignOutLink" style="color: var(--ink-soft); font-weight:400;">(sign out)</a>
     </span>
   </div>
-  <div id="adminForm" style="display:none; background:white; border:1px solid var(--line); border-radius:8px; padding:0.7rem 0.9rem; margin-bottom:0.75rem; display:none;">
-    <input type="email" id="adminEmail" placeholder="Admin email" style="margin-right:0.4rem; padding:0.35rem 0.5rem; border:1px solid var(--line); border-radius:5px;">
-    <input type="password" id="adminPassword" placeholder="Password" style="margin-right:0.4rem; padding:0.35rem 0.5rem; border:1px solid var(--line); border-radius:5px;">
-    <button id="adminSignInBtn" style="background:var(--accent); color:white; border:none; border-radius:5px; padding:0.35rem 0.8rem; cursor:pointer;">Sign in</button>
+  <div id="adminForm" style="display:none; background:white; border:1px solid var(--line); border-radius:8px; padding:0.7rem 0.9rem; margin-bottom:0.75rem;">
+    <form id="adminSignInForm" autocomplete="on">
+      <input type="email" id="adminEmail" name="email" autocomplete="username" placeholder="Admin email" style="margin-right:0.4rem; padding:0.35rem 0.5rem; border:1px solid var(--line); border-radius:5px;">
+      <input type="password" id="adminPassword" name="password" autocomplete="current-password" placeholder="Password" style="margin-right:0.4rem; padding:0.35rem 0.5rem; border:1px solid var(--line); border-radius:5px;">
+      <button type="submit" id="adminSignInBtn" style="background:var(--accent); color:white; border:none; border-radius:5px; padding:0.35rem 0.8rem; cursor:pointer;">Sign in</button>
+    </form>
     <div id="adminError" style="color:#a3402f; font-size:0.8rem; margin-top:0.4rem;"></div>
   </div>
 
@@ -323,12 +325,12 @@
 // Get this from: Firebase Console -> Project Settings -> General -> Your apps -> SDK setup and configuration
 // =========================================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyCN7zMKYK9CH_CtRVj4JwwyZUUzioaxgPo",
-  authDomain: "fred-care.firebaseapp.com",
-  projectId: "fred-care",
-  storageBucket: "fred-care.firebasestorage.app",
-  messagingSenderId: "205429336895",
-  appId: "1:205429336895:web:7aac9f1253cb2081e4418a"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 // -------------------------------------------------------------------------
@@ -383,7 +385,8 @@ document.getElementById("adminToggleLink").addEventListener("click", (e) => {
   e.preventDefault();
   document.getElementById("adminForm").style.display = "block";
 });
-document.getElementById("adminSignInBtn").addEventListener("click", async () => {
+document.getElementById("adminSignInForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
   const email = document.getElementById("adminEmail").value.trim();
   const pw = document.getElementById("adminPassword").value;
   const errEl = document.getElementById("adminError");
