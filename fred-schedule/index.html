@@ -150,9 +150,6 @@
     text-align: center;
     border-bottom: 1px solid var(--line);
     background: var(--paper);
-    position: sticky;
-    top: var(--sticky-offset, 90px);
-    z-index: 10;
   }
 
   table.grid th .day-date {
@@ -276,6 +273,7 @@
       <button class="today-btn" id="todayBtn">This Week</button>
       <button id="nextWeek">Next &rarr;</button>
     </div>
+    <div id="weekLabel" style="text-align:center; font-weight:600; font-size:1rem; margin-top:0.5rem; color: var(--ink);">Loading&hellip;</div>
   </div>
 
   <div class="grid-scroll">
@@ -496,20 +494,14 @@ function buildSkeleton() {
     });
     body.appendChild(tr);
   }
+
+  document.getElementById("weekLabel").textContent =
+    `${days[0].toLocaleDateString(undefined,{month:"short",day:"numeric"})} \u2013 ${days[6].toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}`;
 }
 
 // ---- Load / listen to this week's slots ----
-function updateStickyOffset() {
-  const el = document.querySelector(".sticky-controls");
-  if (el) {
-    document.documentElement.style.setProperty("--sticky-offset", el.offsetHeight + "px");
-  }
-}
-window.addEventListener("resize", updateStickyOffset);
-
 function loadWeek() {
   buildSkeleton();
-  updateStickyOffset();
   if (unsubscribe) unsubscribe();
 
   const firstISO = fmtDateISO(weekStart);
