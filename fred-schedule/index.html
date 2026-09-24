@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fred's Care Schedule</title>
+<style>
+  :root {
+    --ink: #2b2822;
+    --ink-soft: #5a564c;
+    --paper: #fbf9f5;
+    --line: #ddd7c9;
+    --accent: #6b7a5e;
+    --accent-soft: #e9ede3;
+    --open-bg: #ffffff;
+    --open-border: #c7cdbe;
+    --mine-bg: #6b7a5e;
+    --other-bg: #ede9df;
+    --other-text: #8a8578;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  header {
+    margin-bottom: 1.25rem;
+  }
+
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin: 0 0 0.3rem;
+    color: var(--ink);
+  }
+
+  header p {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .name-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+
+  .name-bar label {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .name-bar input {
+    flex: 1;
+    min-width: 140px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+
+  .name-bar button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .name-bar button:hover { opacity: 0.9; }
+
+  .week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1.25rem 0 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .week-nav .label {
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-align: center;
+    flex: 1;
+  }
+
+  .week-nav button {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
+  .week-nav button:hover { background: var(--accent-soft); }
+
+  .today-btn {
+    background: var(--accent-soft) !important;
+    border-color: var(--accent) !important;
+    font-weight: 600;
+  }
+
+  .legend {
+    display: flex;
+    gap: 1.2rem;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin: 0.5rem 0 1rem;
+    flex-wrap: wrap;
+  }
+
+  .legend span { display: flex; align-items: center; gap: 0.35rem; }
+
+  .swatch {
+    width: 12px; height: 12px; border-radius: 3px; display: inline-block;
+  }
+
+  .grid-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+  }
+
+  table.grid {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 620px;
+  }
+
+  table.grid th {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    padding: 0.5rem 0.3rem;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+  }
+
+  table.grid th .day-date {
+    display: block;
+    font-weight: 400;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+  }
+
+  table.grid td.time-label {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    padding: 0.2rem 0.5rem;
+    text-align: right;
+    border-right: 1px solid var(--line);
+    background: var(--paper);
+    position: sticky;
+    left: 0;
+  }
+
+  table.grid td.slot-cell {
+    padding: 3px;
+    text-align: center;
+    border-bottom: 1px solid #f1efe8;
+  }
+
+  .slot-btn {
+    width: 100%;
+    min-width: 72px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--open-border);
+    background: var(--open-bg);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--accent);
+    padding: 2px 4px;
+    line-height: 1.15;
+    transition: background 0.12s ease;
+  }
+
+  .slot-btn:hover { background: var(--accent-soft); }
+
+  .slot-btn.claimed {
+    color: white;
+    border-color: transparent;
+  }
+
+  .slot-btn.claimed.mine {
+    box-shadow: inset 0 0 0 2px var(--ink);
+  }
+
+  .slot-btn.claimed.event {
+    border: 2px dashed rgba(255,255,255,0.75);
+  }
+
+  .slot-btn.loading { opacity: 0.5; cursor: wait; }
+
+  .status-line {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-top: 0.75rem;
+    min-height: 1.2em;
+  }
+
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 1rem 0.6rem 2.5rem; }
+    h1 { font-size: 1.35rem; }
+    .slot-btn { min-width: 58px; font-size: 0.68rem; height: 34px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Fred's Care Schedule</h1>
+    <p>Click an open slot to claim it. Click your own claimed slot to release it.</p>
+  </header>
+
+  <div class="name-bar">
+    <label for="nameInput">Your name:</label>
+    <input type="text" id="nameInput" placeholder="e.g. Susie" maxlength="40">
+    <button id="saveNameBtn">Save</button>
+  </div>
+
+  <div id="adminBar" style="text-align:right; font-size:0.8rem; margin-bottom:0.5rem;">
+    <a href="#" id="adminToggleLink" style="color: var(--ink-soft);">Admin sign in</a>
+    <span id="adminStatus" style="display:none; color: var(--accent); font-weight:600;">
+      Admin mode &mdash; click any slot to release it &nbsp;
+      <label style="font-weight:400; color: var(--ink-soft); cursor:pointer;">
+        <input type="checkbox" id="appointmentModeToggle"> click an open slot to add an appointment instead
+      </label>
+      &nbsp;<a href="#" id="adminSignOutLink" style="color: var(--ink-soft); font-weight:400;">(sign out)</a>
+    </span>
+  </div>
+  <div id="adminForm" style="display:none; background:white; border:1px solid var(--line); border-radius:8px; padding:0.7rem 0.9rem; margin-bottom:0.75rem; display:none;">
+    <input type="email" id="adminEmail" placeholder="Admin email" style="margin-right:0.4rem; padding:0.35rem 0.5rem; border:1px solid var(--line); border-radius:5px;">
+    <input type="password" id="adminPassword" placeholder="Password" style="margin-right:0.4rem; padding:0.35rem 0.5rem; border:1px solid var(--line); border-radius:5px;">
+    <button id="adminSignInBtn" style="background:var(--accent); color:white; border:none; border-radius:5px; padding:0.35rem 0.8rem; cursor:pointer;">Sign in</button>
+    <div id="adminError" style="color:#a3402f; font-size:0.8rem; margin-top:0.4rem;"></div>
+  </div>
+
+  <div class="week-nav">
+    <button id="prevWeek">&larr; Prev</button>
+    <div class="label" id="weekLabel">Loading&hellip;</div>
+    <button id="nextWeek">Next &rarr;</button>
+  </div>
+  <div style="text-align:center; margin-bottom: 0.5rem;">
+    <button class="today-btn" id="todayBtn" style="border-radius:6px; padding:0.35rem 0.9rem; font-size:0.85rem; cursor:pointer;">This Week</button>
+  </div>
+
+  <div class="legend">
+    <span><span class="swatch" style="background:var(--open-bg); border:1px solid var(--open-border);"></span> Open</span>
+    <span><span class="swatch" style="background:var(--accent); box-shadow: inset 0 0 0 2px var(--ink);"></span> Your slot (outlined)</span>
+    <span><span class="swatch" style="background:var(--accent);"></span> Someone's slot (color = their name)</span>
+    <span><span class="swatch" style="background:var(--accent); border: 2px dashed white; box-sizing: border-box;"></span> Appointment (dashed)</span>
+  </div>
+  <p style="text-align:center; font-size:0.8rem; color:var(--ink-soft); margin: -0.5rem 0 1rem;">Each person's name always shows in the same color, everywhere on the schedule.</p>
+
+  <div class="grid-scroll">
+    <table class="grid" id="scheduleGrid">
+      <thead><tr id="gridHead"></tr></thead>
+      <tbody id="gridBody"></tbody>
+    </table>
+  </div>
+
+  <div class="status-line" id="statusLine">Connecting&hellip;</div>
+
+  <footer>
+    Questions or suggestions for this schedule? Reach out to Andy or post in the group chat.
+  </footer>
+
+</div>
+
+<!-- Firebase (compat SDK, no build step needed) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+// =========================================================================
+// SETUP REQUIRED: paste your Firebase project's config below.
+// Get this from: Firebase Console -> Project Settings -> General -> Your apps -> SDK setup and configuration
+// =========================================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyCN7zMKYK9CH_CtRVj4JwwyZUUzioaxgPo",
+  authDomain: "fred-care.firebaseapp.com",
+  projectId: "fred-care",
+  storageBucket: "fred-care.firebasestorage.app",
+  messagingSenderId: "205429336895",
+  appId: "1:205429336895:web:7aac9f1253cb2081e4418a"
+};
+
+// -------------------------------------------------------------------------
+// Config: hours shown (8am - 6pm in 1-hour blocks) and collection name
+// -------------------------------------------------------------------------
+const START_HOUR = 8;   // 8am
+const END_HOUR = 18;    // 6pm (last slot is 5pm-6pm)
+const COLLECTION = "slots";
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let isAdmin = false;
+let myName = localStorage.getItem("fredSchedule_name") || "";
+let weekStart = startOfWeek(new Date());
+let unsubscribe = null;
+let slotData = {}; // slotId -> {name, claimedAt, type, note}
+
+// ---- Deterministic color-per-name (same name = same color, always, everywhere) ----
+const NAME_PALETTE = [
+  "#6b7a5e", "#8a5a6b", "#4a6b8a", "#a3684a", "#5a8a7a",
+  "#7a5a8a", "#8a7a3a", "#3a7a8a", "#8a4a4a", "#5a7a4a"
+];
+function colorForName(name) {
+  const s = (name || "").trim().toLowerCase();
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
+  }
+  return NAME_PALETTE[hash % NAME_PALETTE.length];
+}
+
+function isMine(data) {
+  return data && myName && data.name.trim().toLowerCase() === myName.trim().toLowerCase();
+}
+
+const nameInput = document.getElementById("nameInput");
+const statusLine = document.getElementById("statusLine");
+nameInput.value = myName;
+
+document.getElementById("saveNameBtn").addEventListener("click", () => {
+  const v = nameInput.value.trim();
+  if (!v) { alert("Please enter your name first."); return; }
+  myName = v;
+  localStorage.setItem("fredSchedule_name", myName);
+  renderGrid(); // re-render so button states reflect any name change
+});
+
+// ---- Admin sign-in ----
+document.getElementById("adminToggleLink").addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("adminForm").style.display = "block";
+});
+document.getElementById("adminSignInBtn").addEventListener("click", async () => {
+  const email = document.getElementById("adminEmail").value.trim();
+  const pw = document.getElementById("adminPassword").value;
+  const errEl = document.getElementById("adminError");
+  errEl.textContent = "";
+  try {
+    await auth.signInWithEmailAndPassword(email, pw);
+    document.getElementById("adminForm").style.display = "none";
+  } catch (err) {
+    errEl.textContent = "Sign-in failed: " + err.message;
+  }
+});
+document.getElementById("adminSignOutLink").addEventListener("click", async (e) => {
+  e.preventDefault();
+  await auth.signOut();
+  // drop back to an anonymous session automatically via onAuthStateChanged below
+});
+
+document.getElementById("prevWeek").addEventListener("click", () => { shiftWeek(-7); });
+document.getElementById("nextWeek").addEventListener("click", () => { shiftWeek(7); });
+document.getElementById("todayBtn").addEventListener("click", () => {
+  weekStart = startOfWeek(new Date());
+  loadWeek();
+});
+
+function shiftWeek(days) {
+  weekStart = addDays(weekStart, days);
+  loadWeek();
+}
+
+function startOfWeek(d) {
+  const date = new Date(d);
+  const day = date.getDay(); // 0 = Sunday
+  const diff = day === 0 ? -6 : 1 - day; // start Monday
+  date.setDate(date.getDate() + diff);
+  date.setHours(0,0,0,0);
+  return date;
+}
+
+function addDays(d, n) {
+  const r = new Date(d);
+  r.setDate(r.getDate() + n);
+  return r;
+}
+
+function fmtDateISO(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+
+function fmtHour(h) {
+  const period = h < 12 ? "am" : "pm";
+  let hr = h % 12; if (hr === 0) hr = 12;
+  return `${hr}${period}`;
+}
+
+function slotId(dateISO, hour) {
+  return `${dateISO}_${String(hour).padStart(2,"0")}`;
+}
+
+// ---- Auth: sign in anonymously by default (just a write gate), or as admin if signed in ----
+// Note: since claim/unclaim is now matched by NAME (not by browser), the anonymous
+// sign-in here only serves to keep the database from accepting writes from outside
+// the app entirely (e.g. a stranger hitting Firestore directly) -- it no longer
+// determines who "owns" a slot.
+statusLine.textContent = "Connecting…";
+auth.onAuthStateChanged(user => {
+  if (user) {
+    isAdmin = !user.isAnonymous; // any non-anonymous account = admin, per setup instructions
+    document.getElementById("adminStatus").style.display = isAdmin ? "inline" : "none";
+    document.getElementById("adminToggleLink").style.display = isAdmin ? "none" : "inline";
+    statusLine.textContent = "";
+    loadWeek();
+  } else {
+    auth.signInAnonymously().catch(err => {
+      statusLine.textContent = "Connection error: " + err.message;
+    });
+  }
+});
+if (!auth.currentUser) {
+  auth.signInAnonymously().catch(err => {
+    statusLine.textContent = "Connection error: " + err.message;
+  });
+}
+
+// ---- Build grid skeleton for the current week ----
+function buildSkeleton() {
+  const head = document.getElementById("gridHead");
+  const body = document.getElementById("gridBody");
+  head.innerHTML = "";
+  body.innerHTML = "";
+
+  const th0 = document.createElement("th");
+  th0.textContent = "";
+  head.appendChild(th0);
+
+  const dayNames = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(weekStart, i);
+    days.push(d);
+    const th = document.createElement("th");
+    th.innerHTML = `${dayNames[i]}<span class="day-date">${d.getMonth()+1}/${d.getDate()}</span>`;
+    head.appendChild(th);
+  }
+
+  for (let h = START_HOUR; h < END_HOUR; h++) {
+    const tr = document.createElement("tr");
+    const tdLabel = document.createElement("td");
+    tdLabel.className = "time-label";
+    tdLabel.textContent = `${fmtHour(h)}\u2013${fmtHour(h+1)}`;
+    tr.appendChild(tdLabel);
+
+    days.forEach(d => {
+      const iso = fmtDateISO(d);
+      const id = slotId(iso, h);
+      const td = document.createElement("td");
+      td.className = "slot-cell";
+      const btn = document.createElement("button");
+      btn.className = "slot-btn";
+      btn.dataset.slotId = id;
+      btn.dataset.date = iso;
+      btn.dataset.hour = h;
+      btn.textContent = "Open";
+      btn.addEventListener("click", () => onSlotClick(id, iso, h));
+      td.appendChild(btn);
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  }
+
+  document.getElementById("weekLabel").textContent =
+    `${days[0].toLocaleDateString(undefined,{month:"short",day:"numeric"})} \u2013 ${days[6].toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}`;
+}
+
+// ---- Load / listen to this week's slots ----
+function loadWeek() {
+  buildSkeleton();
+  if (unsubscribe) unsubscribe();
+
+  const firstISO = fmtDateISO(weekStart);
+  const lastISO = fmtDateISO(addDays(weekStart, 6));
+
+  unsubscribe = db.collection(COLLECTION)
+    .where(firebase.firestore.FieldPath.documentId(), ">=", firstISO + "_00")
+    .where(firebase.firestore.FieldPath.documentId(), "<=", lastISO + "_23")
+    .onSnapshot(snap => {
+      slotData = {};
+      snap.forEach(doc => { slotData[doc.id] = doc.data(); });
+      renderGrid();
+    }, err => {
+      statusLine.textContent = "Error loading schedule: " + err.message;
+    });
+}
+
+function renderGrid() {
+  document.querySelectorAll(".slot-btn").forEach(btn => {
+    const id = btn.dataset.slotId;
+    const data = slotData[id];
+    btn.classList.remove("mine","other","claimed","event","loading");
+    btn.style.background = "";
+    btn.style.cursor = "";
+    btn.title = "";
+
+    if (!data) {
+      btn.textContent = "Open";
+      btn.title = "Click to claim this slot";
+      return;
+    }
+
+    const mine = isMine(data);
+    const isEvent = data.type === "event";
+    const noteText = data.note ? ` \u2014 ${data.note}` : "";
+
+    btn.classList.add("claimed");
+    if (isEvent) btn.classList.add("event");
+    btn.style.background = colorForName(data.name);
+
+    if (mine) {
+      btn.classList.add("mine");
+      btn.textContent = data.name + (isEvent ? "" : " (you)");
+      btn.title = "Click to release this slot" + noteText;
+    } else if (isAdmin) {
+      btn.classList.add("other");
+      btn.textContent = data.name + " \u2715";
+      btn.title = `${isEvent ? "Appointment" : "Claimed by " + data.name}${noteText} \u2014 click to release (admin)`;
+    } else {
+      btn.classList.add("other");
+      btn.textContent = data.name;
+      btn.style.cursor = "default";
+      btn.title = isEvent
+        ? `Appointment: ${data.name}${noteText}`
+        : `Claimed by ${data.name}${noteText} \u2014 type the same name above to release it, or ask an admin`;
+    }
+  });
+}
+
+// ---- Claim / unclaim ----
+async function onSlotClick(id, dateISO, hour) {
+  const data = slotData[id];
+  const btn = document.querySelector(`.slot-btn[data-slot-id="${id}"]`);
+  const appointmentMode = isAdmin && document.getElementById("appointmentModeToggle").checked;
+
+  if (data && !isMine(data) && !isAdmin) {
+    return; // someone else's slot, no-op unless you're an admin
+  }
+
+  if (data) {
+    // releasing — either your own slot (name match), or an admin releasing anyone's
+    btn.classList.add("loading");
+    try {
+      await db.collection(COLLECTION).doc(id).delete();
+    } catch (err) {
+      alert("Something went wrong: " + err.message);
+    } finally {
+      btn.classList.remove("loading");
+    }
+    return;
+  }
+
+  // Slot is open — either a normal claim, or (admin + appointment mode) a new event
+  if (appointmentMode) {
+    const label = window.prompt("Appointment label (e.g. \"PALS\", \"Dr. Trotsky visit\"):", "");
+    if (!label || !label.trim()) return;
+    const note = window.prompt("Optional note (location, details):", "") || "";
+    btn.classList.add("loading");
+    try {
+      await db.collection(COLLECTION).doc(id).set({
+        name: label.trim(),
+        note: note.trim(),
+        type: "event",
+        claimedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch (err) {
+      alert("Something went wrong: " + err.message);
+    } finally {
+      btn.classList.remove("loading");
+    }
+    return;
+  }
+
+  if (!myName) {
+    alert("Please enter your name above first.");
+    nameInput.focus();
+    return;
+  }
+
+  btn.classList.add("loading");
+  try {
+    await db.collection(COLLECTION).doc(id).set({
+      name: myName,
+      type: "shift",
+      claimedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch (err) {
+    alert("Something went wrong: " + err.message);
+  } finally {
+    btn.classList.remove("loading");
+  }
+}
+</script>
+</body>
+</html>
