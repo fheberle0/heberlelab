@@ -835,6 +835,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/spinach-rice-baked-eggs-mimi/";
+            },},{id: "recipes-summer-macaroni-salad",
+          title: 'Summer Macaroni Salad',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/summer-macaroni-salad/";
             },},{id: "recipes-zucchini-and-rice-bake",
           title: 'Zucchini and Rice Bake',
           description: "",
