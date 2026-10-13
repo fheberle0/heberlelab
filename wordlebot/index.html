@@ -226,6 +226,8 @@ permalink: /wordlebot/
     .cand-table td { padding: 4px 6px; border-bottom: 1px solid #f0f0f0; }
     .cand-table tr.cand-current td { background: #f7fbf7; font-weight: 700; }
     .cand-table tr.cand-best td:first-child::before { content: '★ '; color: #6ca965; }
+    .cand-table tr.cand-elim td { color: #bbb; text-decoration: line-through; }
+    .cand-table tr.cand-elim td:last-child { text-decoration: none; }
 
     /* Undo button (challenge mode) */
     .undo-guess-btn {
@@ -279,6 +281,26 @@ permalink: /wordlebot/
 
     hr.divider { border: none; border-top: 1px solid #e8e8e8; margin: 10px 0; }
   </style>
+  <!-- Firebase SDK (loaded via CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <!-- Firebase config — fill in your project values after setup -->
+  <script>
+  // ────────────────────────────────────────────────────────────────────
+  // REPLACE THESE VALUES with your Firebase project config
+  // Firebase Console → Project Settings → Your apps → Web app → Config
+  // ────────────────────────────────────────────────────────────────────
+  const FIREBASE_CONFIG = {
+    apiKey:            "AIzaSyCSQSZd--OqZeJqGyc5ET7s6AaIpFW50fE",
+    authDomain:        "wordlebot-5e0aa.firebaseapp.com",
+    projectId:         "wordlebot-5e0aa",
+    storageBucket:     "wordlebot-5e0aa.firebasestorage.app",
+    messagingSenderId: "250511580847",
+    appId:             "1:250511580847:web:b654bdde71bf8a7e727e5a"
+  };
+  const FIREBASE_ENABLED = !FIREBASE_CONFIG.apiKey.startsWith('REPLACE');
+  </script>
 </head>
 <body>
 <div class="wb-wrap">
@@ -394,9 +416,60 @@ permalink: /wordlebot/
 
   </div><!-- /wb-main -->
 </div><!-- /wb-wrap -->
+<!-- ── Admin: Confirm Today's Wordle ──────────────────────────────────── -->
+<div id="adminPanel" style="
+  max-width:700px; margin:20px auto; padding:12px 16px;
+  background:#f9f9f9; border:1px solid #ddd; border-radius:8px;
+  font-size:0.85em; color:#555;
+" hidden>
+  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <strong style="color:#333;">Admin</strong>
+    <button id="fbSignIn" onclick="fbSignIn()" style="
+      padding:4px 10px; background:#4285f4; color:#fff;
+      border:none; border-radius:4px; cursor:pointer; font-size:0.9em;">
+      Sign in with Google
+    </button>
+    <span id="fbSignOut" style="display:none;">
+      <span id="adminEmail" style="color:#888;"></span>
+      <button onclick="fbSignOut()" style="
+        margin-left:8px; padding:2px 8px; background:#eee;
+        border:1px solid #ccc; border-radius:4px; cursor:pointer;">Sign out</button>
+    </span>
+  </div>
+
+  <div id="adminConfirmForm" style="display:none; margin-top:12px;">
+    <p style="margin:0 0 8px; color:#444; font-weight:600;">Confirm today's Wordle answer:</p>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+      <input id="confirmNum" type="number" placeholder="Puzzle #" min="0" max="9999"
+        style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px; font-size:1em;">
+      <input id="confirmWord" type="text" placeholder="WORD" maxlength="5"
+        oninput="this.value=this.value.toUpperCase()"
+        style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px;
+               font-size:1em; letter-spacing:2px; text-transform:uppercase;">
+      <button onclick="confirmTodayAnswer()"
+        style="padding:5px 14px; background:#5cb85c; color:#fff;
+               border:none; border-radius:4px; cursor:pointer;">Confirm</button>
+    </div>
+    <p id="confirmStatus" style="margin:6px 0 0; min-height:1.2em; color:#555;"></p>
+  </div>
+</div>
+
+<script>
+// Show admin panel only if Firebase is enabled
+if (FIREBASE_ENABLED) {
+  document.getElementById('adminPanel').removeAttribute('hidden');
+}
+</script>
 
 <script>
 "use strict";
+
+// ── Firebase state ────────────────────────────────────────────────────────
+let fbApp      = null;
+let fbDb       = null;
+let fbAuth     = null;
+let fbUser     = null;  // signed-in user (null if not signed in)
+let fbSynced   = false; // true once Firebase data has been loaded
 
 // ── State ──────────────────────────────────────────────────────────────────
 let gameData            = null;   // loaded from precomputed.json
@@ -413,6 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') submitWord();
   });
   loadData();
+  if (FIREBASE_ENABLED) initFirebase();
 });
 
 function loadData() {
@@ -420,7 +494,10 @@ function loadData() {
   gameData = INLINE_DATA;
   // Pre-fill the starting word
   onStartWordChange(document.getElementById('startWordSelect').value);
-  setPanel('<p style="color:#6ca965;font-weight:700">Ready! Enter your first guess.</p>');
+  const syncMsg = FIREBASE_ENABLED
+    ? ' <span id="fbSyncStatus" style="font-size:0.78em;color:#888">⏳ syncing...</span>'
+    : '';
+  setPanel(`<p style="color:#6ca965;font-weight:700">Ready! Enter your first guess.${syncMsg}</p>`);
 }
 
 // ── Grid construction ──────────────────────────────────────────────────────
@@ -535,10 +612,6 @@ function scoreChallengeCandidate(word) {
   if (existing >= 0) challengeCandidates[existing] = entry;
   else challengeCandidates.push(entry);
 
-  // Sort by score ascending (best first) for display
-  const sorted = [...challengeCandidates].sort((a, b) => a.score - b.score);
-  const bestScore = sorted[0].score;
-
   const rankMsg = betterCount === 0
     ? `<span style="color:#6ca965;font-weight:700;">🏆 Optimal! No guess could do better.</span>`
     : `${betterCount.toLocaleString()} ${poolLabel} would be better`;
@@ -547,25 +620,7 @@ function scoreChallengeCandidate(word) {
     : `<div style="color:#787c7f;font-size:0.85rem;">✗ Not a possible solution (valid guess only)</div>`;
   const pastBadge = isPast ? '<span class="badge badge-past">PAST</span>' : '';
 
-  // Build comparison table
-  let tableRows = sorted.map(c => {
-    const isCurrent = c.word === word;
-    const isBest    = Math.abs(c.score - bestScore) < 0.0001;
-    const rowClass  = isCurrent ? 'cand-current' : (isBest ? 'cand-best' : '');
-    const solMark   = c.isSol  ? '<span class="badge badge-sol" style="font-size:0.65rem;">SOL</span>' : '';
-    const pastMark  = c.isPast ? '<span class="badge badge-past" style="font-size:0.65rem;">PAST</span>' : '';
-    return `<tr class="${rowClass}">
-      <td>${c.word.toUpperCase()}</td>
-      <td>${c.score.toFixed(2)}</td>
-      <td>${solMark}${pastMark}</td>
-    </tr>`;
-  }).join('');
-
-  const tableHtml = challengeCandidates.length > 1 ? `
-    <table class="cand-table">
-      <thead><tr><th>Word</th><th>Avg remaining</th><th></th></tr></thead>
-      <tbody>${tableRows}</tbody>
-    </table>` : '';
+  const tableHtml = buildCandidateTable(word);
 
   setPanel(`
     <p class="remaining-header"><strong>${remaining.length}</strong> solutions still possible</p>
@@ -586,10 +641,68 @@ function scoreChallengeCandidate(word) {
   `);
 }
 
+// ── Build the shared candidate comparison table ───────────────────────────
+function buildCandidateTable(currentWord) {
+  if (challengeCandidates.length < 1) return '';
+  const activeCands = challengeCandidates.filter(c => !c.eliminated);
+  if (activeCands.length === 0 && challengeCandidates.length > 0) {
+    return `<p class="hint-text" style="margin-top:8px;color:#aaa;">
+      All ${challengeCandidates.length} scored word${challengeCandidates.length>1?'s':''} eliminated by your guess.</p>`;
+  }
+  const sorted    = [...challengeCandidates].sort((a, b) => {
+    if (a.eliminated !== b.eliminated) return a.eliminated ? 1 : -1;
+    return a.score - b.score;
+  });
+  const bestScore = activeCands.length ? Math.min(...activeCands.map(c => c.score)) : Infinity;
+  const rows = sorted.map(c => {
+    const isCurrent = c.word === currentWord;
+    const isBest    = !c.eliminated && Math.abs(c.score - bestScore) < 0.0001;
+    const rowClass  = c.eliminated ? 'cand-elim'
+                    : isCurrent    ? 'cand-current'
+                    : isBest       ? 'cand-best' : '';
+    const solMark  = c.isSol  ? '<span class="badge badge-sol"  style="font-size:0.65rem;">SOL</span>'  : '';
+    const pastMark = c.isPast ? '<span class="badge badge-past" style="font-size:0.65rem;">PAST</span>' : '';
+    const elimMark = c.eliminated ? '<span style="font-size:0.7rem;color:#ccc;">✗</span>' : '';
+    return `<tr class="${rowClass}">
+      <td>${c.word.toUpperCase()}</td>
+      <td>${c.eliminated ? '—' : c.score.toFixed(2)}</td>
+      <td>${solMark}${pastMark}${elimMark}</td>
+    </tr>`;
+  }).join('');
+  return `<table class="cand-table" style="margin-top:10px;">
+    <thead><tr><th>Word</th><th>Avg remaining</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ── Refresh candidate scores after a guess is committed ───────────────────
+function refreshCandidateScores() {
+  if (!challengeCandidates.length) return;
+  const excludeUsed = document.getElementById('excludeUsed').checked;
+  const result      = computeResult(guessHistory, excludeUsed);
+  const remaining   = result.remainingWords;
+  const remainSet   = new Set(remaining);
+  const useFullPool = remaining.length <= 500;
+  const guessPool   = useFullPool ? gameData.meta.allWords : remaining;
+  const poolLabel   = useFullPool ? 'possible guesses' : 'solution guesses';
+
+  challengeCandidates = challengeCandidates.map(c => {
+    if (remaining.length === 0) {
+      return { ...c, score: 0, isSol: false, betterCount: 0, poolLabel, eliminated: true };
+    }
+    const newScore = scoreGuess(c.word, remaining);
+    const isSol    = remainSet.has(c.word);
+    let betterCount = 0;
+    for (const w of guessPool) {
+      if (scoreGuess(w, remaining) < newScore - 0.0001) betterCount++;
+    }
+    return { ...c, score: newScore, isSol, betterCount, poolLabel, eliminated: false };
+  });
+}
+
 // ── Challenge: commit a played guess (enter colors) ────────────────────────
 function startRecordGuess(word) {
   if (guessHistory.length >= 6) return;
-  challengeCandidates = []; // reset table for next turn
   pendingWord   = word;
   pendingColors = [0, 0, 0, 0, 0];
 
@@ -636,6 +749,7 @@ function confirmColors() {
   guessHistory.push({ word: pendingWord, colors });
   pendingWord = pendingColors = null;
   updateKeyboard(guessHistory);
+  if (appMode === 'challenge') refreshCandidateScores();
 
   document.getElementById('colorRow').style.display  = 'none';
   document.getElementById('colorHint').style.display = 'none';
@@ -800,6 +914,7 @@ function showChallengeScore(history) {
          </details>`
       : ''}
     ${after.length > 1 ? '<p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>' : ''}
+    ${buildCandidateTable()}
     <button class="undo-guess-btn" onclick="undoLastGuess()">↩ Try a different guess</button>
   `;
   setPanel(html);
@@ -807,6 +922,7 @@ function showChallengeScore(history) {
 
 function undoLastGuess() {
   if (guessHistory.length === 0) return;
+  challengeCandidates = []; // scores are stale after undoing
   const row = guessHistory.length - 1;
   for (let c = 0; c < 5; c++) {
     const tile = document.getElementById(`tile-${row}-${c}`);
@@ -1015,6 +1131,162 @@ function resetGame() {
   }
   document.getElementById('wordInput').focus();
 }
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Firebase integration
+// ══════════════════════════════════════════════════════════════════════════════
+
+function initFirebase() {
+  try {
+    fbApp  = firebase.initializeApp(FIREBASE_CONFIG);
+    fbDb   = firebase.firestore();
+    fbAuth = firebase.auth();
+
+    // Listen for auth state changes
+    fbAuth.onAuthStateChanged(user => {
+      fbUser = user;
+      updateAdminUI();
+    });
+
+    // Load word data from Firebase
+    loadFirebaseData();
+  } catch (e) {
+    console.warn('Firebase init failed:', e);
+    document.getElementById('fbSyncStatus') && (document.getElementById('fbSyncStatus').textContent = '');
+  }
+}
+
+async function loadFirebaseData() {
+  try {
+    const doc = await fbDb.collection('wordle').doc('answers').get();
+    if (!doc.exists) {
+      console.warn('Firebase: no wordle/answers document found');
+      setSyncStatus('❌ no data');
+      return;
+    }
+    const data = doc.data();
+    const fbUsedWords = data.usedWords || [];  // sorted lowercase array
+    mergeFirebaseUsedWords(fbUsedWords);
+    fbSynced = true;
+    const el = document.getElementById('fbSyncStatus');
+    if (el) el.textContent = `✓ synced (${fbUsedWords.length} past answers)`;
+    updateAdminUI();
+  } catch (e) {
+    console.warn('Firebase load failed:', e);
+    const el = document.getElementById('fbSyncStatus');
+    if (el) el.textContent = '⚠ offline';
+  }
+}
+
+function mergeFirebaseUsedWords(fbUsedWords) {
+  if (!gameData || !fbUsedWords.length) return;
+  const merged = new Set([...gameData.meta.usedWords, ...fbUsedWords]);
+  gameData.meta.usedWords = [...merged].sort();
+  // No need to recompute — usedWords is filtered at query time
+}
+
+function setSyncStatus(msg) {
+  const el = document.getElementById('fbSyncStatus');
+  if (el) el.textContent = msg;
+}
+
+// ── Admin UI (confirm today's answer) ────────────────────────────────────────
+
+function updateAdminUI() {
+  const signInBtn  = document.getElementById('fbSignIn');
+  const signOutBtn = document.getElementById('fbSignOut');
+  const adminForm  = document.getElementById('adminConfirmForm');
+  const adminEmail = document.getElementById('adminEmail');
+  if (!signInBtn) return;
+
+  if (fbUser) {
+    signInBtn.style.display  = 'none';
+    signOutBtn.style.display = 'inline';
+    if (adminEmail) adminEmail.textContent = fbUser.email;
+    if (adminForm) adminForm.style.display = 'block';
+  } else {
+    signInBtn.style.display  = 'inline';
+    signOutBtn.style.display = 'none';
+    if (adminForm) adminForm.style.display = 'none';
+  }
+}
+
+function fbSignIn() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ login_hint: 'fred.heberle@gmail.com' });
+  fbAuth.signInWithPopup(provider).catch(e => alert('Sign-in failed: ' + e.message));
+}
+
+function fbSignOut() {
+  fbAuth.signOut();
+}
+
+async function confirmTodayAnswer() {
+  if (!fbUser) { alert('Please sign in first.'); return; }
+
+  const wordEl = document.getElementById('confirmWord');
+  const numEl  = document.getElementById('confirmNum');
+  const statusEl = document.getElementById('confirmStatus');
+
+  const word = wordEl.value.trim().toLowerCase();
+  const num  = parseInt(numEl.value.trim(), 10);
+
+  if (word.length !== 5 || !/^[a-z]+$/.test(word)) {
+    statusEl.textContent = '❌ Must be a 5-letter word.';
+    return;
+  }
+  if (isNaN(num) || num < 0 || num > 9999) {
+    statusEl.textContent = '❌ Invalid puzzle number.';
+    return;
+  }
+
+  // Validate word is in the known word list
+  if (gameData && !gameData.meta.allWords.includes(word)) {
+    statusEl.textContent = '❌ Word not in valid word list.';
+    return;
+  }
+
+  statusEl.textContent = '⏳ Saving...';
+
+  try {
+    const doc = await fbDb.collection('wordle').doc('answers').get();
+    const data = doc.exists ? doc.data() : {};
+    const byNumber = data.byNumber || {};
+
+    if (byNumber[String(num)]) {
+      if (byNumber[String(num)] === word) {
+        statusEl.textContent = `✓ Already recorded: #${num} = ${word.toUpperCase()}`;
+      } else {
+        statusEl.textContent = `⚠ #${num} already has '${byNumber[String(num)].toUpperCase()}'. Contact admin.`;
+      }
+      return;
+    }
+
+    byNumber[String(num)] = word;
+    const usedSet = new Set(Object.values(byNumber));
+    const usedList = [...usedSet].sort();
+
+    await fbDb.collection('wordle').doc('answers').set({
+      byNumber,
+      usedWords: usedList,
+      lastPuzzleNum: num,
+      lastPuzzleWord: word,
+      lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+      totalPuzzles: Object.keys(byNumber).length,
+    }, { merge: true });
+
+    // Also update local gameData
+    mergeFirebaseUsedWords([word]);
+
+    statusEl.textContent = `✓ Saved! #${num} = ${word.toUpperCase()} (${usedList.length} total past answers)`;
+    wordEl.value = '';
+  } catch (e) {
+    console.error(e);
+    statusEl.textContent = '❌ Error: ' + e.message;
+  }
+}
+
 </script>
 </body>
 </html>
