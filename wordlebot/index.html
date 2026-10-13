@@ -1,6 +1,32 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Wordle Bot</title> <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{font-family:'Clear Sans','Helvetica Neue',Arial,sans-serif;background:#fff;color:#1a1a1b}.wb-wrap{max-width:860px;margin:0 auto;padding:16px 12px 40px}.wb-header{text-align:center;border-bottom:1px solid #d3d6da;padding-bottom:10px;margin-bottom:20px}.wb-header h1{font-size:1.9rem;font-weight:800;letter-spacing:4px;text-transform:uppercase}.wb-header p{font-size:.82rem;color:#666;margin-top:3px}.wb-main{display:flex;gap:28px;align-items:flex-start}@media(max-width:580px){.wb-main{flex-direction:column}}.wb-board{flex:0 0 auto}.grid{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}.grid-row{display:flex;gap:5px}.tile{width:62px;height:62px;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;text-transform:uppercase;border:2px solid #d3d6da;user-select:none;transition:background .08s,border-color .08s}@media(max-width:400px){.tile{width:54px;height:54px;font-size:1.7rem}}.tile.has-letter{border-color:#878a8c;color:#1a1a1b}.tile.clickable{cursor:pointer}.tile.clickable:hover{opacity:.85}.tile.gray{background:#787c7f;border-color:#787c7f;color:#fff}.tile.yellow{background:#c8b653;border-color:#c8b653;color:#fff}.tile.green{background:#6ca965;border-color:#6ca965;color:#fff}.tile.candidate{background:#fff;border-color:#333;color:#1a1a1b}.keyboard{margin-top:10px;margin-bottom:4px;display:flex;flex-direction:column;gap:5px}.kb-row{display:flex;gap:5px;justify-content:center}.kb-key{min-width:30px;height:38px;padding:0 5px;border-radius:4px;border:0;background:#d3d6da;color:#1a1a1b;font-size:.78rem;font-weight:700;text-transform:uppercase;display:flex;align-items:center;justify-content:center;user-select:none;cursor:pointer;transition:background .15s,color .15s}.kb-key:active{opacity:.7}.kb-key.wide{min-width:44px;font-size:.72rem}.kb-key.gray{background:#787c7f;color:#fff}.kb-key.yellow{background:#c8b653;color:#fff}.kb-key.green{background:#6ca965;color:#fff}.controls{display:flex;flex-direction:column;gap:10px}.ctrl-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{font-size:.88rem;color:#555}select,input[type="text"]{padding:8px 10px;border:1px solid #d3d6da;border-radius:4px;font-size:.95rem;font-family:inherit}input[type="text"]{text-transform:uppercase;letter-spacing:3px;width:130px}button{padding:8px 14px;border:0;border-radius:4px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .1s}button:hover{opacity:.85}.btn-green{background:#6ca965;color:#fff}.btn-gray{background:#878a8c;color:#fff}.btn-yellow{background:#c8b653;color:#fff}.btn-reset{background:#f0f0f0;color:#555;border:1px solid #ccc}.mode-toggle{display:flex;align-items:center;gap:8px;margin-bottom:4px}.toggle-label{font-size:.85rem;font-weight:700;color:#555}input[type="checkbox"]{width:15px;height:15px;cursor:pointer}.color-hint-row{font-size:.78rem;color:#777;line-height:1.7}.swatch{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:middle;margin:0 1px}.wb-suggestions{flex:1;min-width:0}.remaining-header{font-size:1rem;margin-bottom:10px;color:#333}.remaining-header strong{font-size:1.2rem}.computed-badge{font-size:.7rem;background:#f0f0f0;color:#888;padding:2px 6px;border-radius:10px;margin-left:6px;vertical-align:middle}.section-label{font-size:.78rem;font-weight:700;letter-spacing:1px;color:#888;text-transform:uppercase;margin:10px 0 5px;display:flex;justify-content:space-between;align-items:baseline}.score-col-label{font-size:.72rem;font-weight:400;letter-spacing:0;text-transform:none;color:#aaa}.suggestion-list{display:flex;flex-direction:column;gap:3px;max-height:420px;overflow-y:auto}.suggestion-item{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:4px;border:1px solid transparent}.suggestion-item.is-sol{background:#f0faf0;border-color:#c3e8c3}.sugg-rank{font-size:.75rem;color:#aaa;width:20px;text-align:right;flex-shrink:0}.sugg-word{font-weight:800;letter-spacing:1px;font-size:.95rem;width:60px;flex-shrink:0}.sugg-score{font-size:.8rem;color:#777;width:40px;flex-shrink:0}.badge{font-size:.65rem;font-weight:700;padding:1px 5px;border-radius:8px;flex-shrink:0}.badge-sol{background:#6ca965;color:#fff}.badge-past{background:#878a8c;color:#fff}.cand-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:10px}.cand-table th{text-align:left;font-size:.72rem;color:#aaa;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px 4px;border-bottom:1px solid #e8e8e8}.cand-table td{padding:4px 6px;border-bottom:1px solid #f0f0f0}.cand-table tr.cand-current td{background:#f7fbf7;font-weight:700}.cand-table tr.cand-best td:first-child::before{content:'★ ';color:#6ca965}.undo-guess-btn{margin-top:10px;padding:5px 12px;font-size:.82rem;background:#fff;border:1px solid #ccc;border-radius:6px;cursor:pointer;color:#555}
-.undo-guess-btn:hover{background:#f5f5f5}.challenge-score{margin:8px 0;padding:12px 14px;border-radius:6px;background:#f8f8f8;border:1px solid #e0e0e0;font-size:.95rem;line-height:1.6}.challenge-score .pct{font-size:1.4rem;font-weight:800}.challenge-score .rank-line{font-size:.8rem;color:#888;margin-top:2px}details.rem-details{margin-top:10px;font-size:.82rem;color:#555}details.rem-details summary{cursor:pointer;color:#6ca965;font-weight:700}.rem-words{margin-top:6px;line-height:1.8;color:#333}.hint-text{font-size:.88rem;color:#888}.no-solutions{color:#c0392b;font-size:.9rem}.solved-msg{font-size:1.2rem;font-weight:700;color:#6ca965}.error-msg{font-size:.85rem;color:#c0392b}.loading-msg{font-size:.88rem;color:#888;font-style:italic}hr.divider{border:0;border-top:1px solid #e8e8e8;margin:10px 0}</style> </head> <body> <div class="wb-wrap"> <div class="wb-header"> <h1>Wordle Bot</h1> <p>Enter your guesses and the colors Wordle gave you — get optimal next-guess suggestions.</p> </div> <div class="wb-main"> <div class="wb-board"> <div class="grid" id="grid"></div> <div class="keyboard" id="keyboard"> <div class="kb-row"> <div class="kb-key" id="key-q" onclick="kbPress('Q')">Q</div> <div class="kb-key" id="key-w" onclick="kbPress('W')">W</div> <div class="kb-key" id="key-e" onclick="kbPress('E')">E</div> <div class="kb-key" id="key-r" onclick="kbPress('R')">R</div> <div class="kb-key" id="key-t" onclick="kbPress('T')">T</div> <div class="kb-key" id="key-y" onclick="kbPress('Y')">Y</div> <div class="kb-key" id="key-u" onclick="kbPress('U')">U</div> <div class="kb-key" id="key-i" onclick="kbPress('I')">I</div> <div class="kb-key" id="key-o" onclick="kbPress('O')">O</div> <div class="kb-key" id="key-p" onclick="kbPress('P')">P</div> </div> <div class="kb-row"> <div class="kb-key" id="key-a" onclick="kbPress('A')">A</div> <div class="kb-key" id="key-s" onclick="kbPress('S')">S</div> <div class="kb-key" id="key-d" onclick="kbPress('D')">D</div> <div class="kb-key" id="key-f" onclick="kbPress('F')">F</div> <div class="kb-key" id="key-g" onclick="kbPress('G')">G</div> <div class="kb-key" id="key-h" onclick="kbPress('H')">H</div> <div class="kb-key" id="key-j" onclick="kbPress('J')">J</div> <div class="kb-key" id="key-k" onclick="kbPress('K')">K</div> <div class="kb-key" id="key-l" onclick="kbPress('L')">L</div> </div> <div class="kb-row"> <div class="kb-key" id="key-z" onclick="kbPress('Z')">Z</div> <div class="kb-key" id="key-x" onclick="kbPress('X')">X</div> <div class="kb-key" id="key-c" onclick="kbPress('C')">C</div> <div class="kb-key" id="key-v" onclick="kbPress('V')">V</div> <div class="kb-key" id="key-b" onclick="kbPress('B')">B</div> <div class="kb-key" id="key-n" onclick="kbPress('N')">N</div> <div class="kb-key" id="key-m" onclick="kbPress('M')">M</div> <div class="kb-key wide" onclick="kbBackspace()">⌫</div> </div> </div> <div class="controls"> <div class="ctrl-row mode-toggle"> <label class="toggle-label">Mode:</label> <label> <input type="radio" name="mode" value="solver" checked onchange="onModeChange()"> Solver </label> <label> <input type="radio" name="mode" value="challenge" onchange="onModeChange()"> Challenge </label> </div> <div class="ctrl-row" id="startWordRow"> <label>Start with:</label> <select id="startWordSelect" onchange="onStartWordChange(this.value)"> <option value="raise">RAISE</option> <option value="arise">ARISE</option> <option value="adieu">ADIEU</option> <option value="custom">Custom…</option> </select> </div> <div class="ctrl-row" id="inputRow"> <input type="text" id="wordInput" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="WORD"> <button class="btn-green" id="submitBtn" onclick="submitWord()">Enter</button> </div> <div class="ctrl-row" id="colorRow" style="display:none;"> <button class="btn-green" id="confirmBtn" onclick="confirmColors()">Get Suggestions</button> <button class="btn-gray" onclick="undoWord()">← Undo</button> </div> <div class="color-hint-row" id="colorHint" style="display:none;"> Click tiles to cycle: <span class="swatch" style="background:#787c7f"></span> gray → <span class="swatch" style="background:#c8b653"></span> yellow → <span class="swatch" style="background:#6ca965"></span> green </div> <hr class="divider"> <div class="ctrl-row"> <label> <input type="checkbox" id="excludeUsed" onchange="onOptionChange()"> Exclude past NYT solutions </label> </div> <div class="ctrl-row"> <button class="btn-reset" onclick="resetGame()">Reset</button> </div> </div> </div> <div class="wb-suggestions" id="suggestionsPanel"> <p class="loading-msg" id="loadingMsg">Loading word data…</p> </div> </div> </div> <script>
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Wordle Bot</title> <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{font-family:'Clear Sans','Helvetica Neue',Arial,sans-serif;background:#fff;color:#1a1a1b}.wb-wrap{max-width:860px;margin:0 auto;padding:16px 12px 40px}.wb-header{text-align:center;border-bottom:1px solid #d3d6da;padding-bottom:10px;margin-bottom:20px}.wb-header h1{font-size:1.9rem;font-weight:800;letter-spacing:4px;text-transform:uppercase}.wb-header p{font-size:.82rem;color:#666;margin-top:3px}.wb-main{display:flex;gap:28px;align-items:flex-start}@media(max-width:580px){.wb-main{flex-direction:column}}.wb-board{flex:0 0 auto}.grid{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}.grid-row{display:flex;gap:5px}.tile{width:62px;height:62px;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;text-transform:uppercase;border:2px solid #d3d6da;user-select:none;transition:background .08s,border-color .08s}@media(max-width:400px){.tile{width:54px;height:54px;font-size:1.7rem}}.tile.has-letter{border-color:#878a8c;color:#1a1a1b}.tile.clickable{cursor:pointer}.tile.clickable:hover{opacity:.85}.tile.gray{background:#787c7f;border-color:#787c7f;color:#fff}.tile.yellow{background:#c8b653;border-color:#c8b653;color:#fff}.tile.green{background:#6ca965;border-color:#6ca965;color:#fff}.tile.candidate{background:#fff;border-color:#333;color:#1a1a1b}.keyboard{margin-top:10px;margin-bottom:4px;display:flex;flex-direction:column;gap:5px}.kb-row{display:flex;gap:5px;justify-content:center}.kb-key{min-width:30px;height:38px;padding:0 5px;border-radius:4px;border:0;background:#d3d6da;color:#1a1a1b;font-size:.78rem;font-weight:700;text-transform:uppercase;display:flex;align-items:center;justify-content:center;user-select:none;cursor:pointer;transition:background .15s,color .15s}.kb-key:active{opacity:.7}.kb-key.wide{min-width:44px;font-size:.72rem}.kb-key.gray{background:#787c7f;color:#fff}.kb-key.yellow{background:#c8b653;color:#fff}.kb-key.green{background:#6ca965;color:#fff}.controls{display:flex;flex-direction:column;gap:10px}.ctrl-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{font-size:.88rem;color:#555}select,input[type="text"]{padding:8px 10px;border:1px solid #d3d6da;border-radius:4px;font-size:.95rem;font-family:inherit}input[type="text"]{text-transform:uppercase;letter-spacing:3px;width:130px}button{padding:8px 14px;border:0;border-radius:4px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .1s}button:hover{opacity:.85}.btn-green{background:#6ca965;color:#fff}.btn-gray{background:#878a8c;color:#fff}.btn-yellow{background:#c8b653;color:#fff}.btn-reset{background:#f0f0f0;color:#555;border:1px solid #ccc}.mode-toggle{display:flex;align-items:center;gap:8px;margin-bottom:4px}.toggle-label{font-size:.85rem;font-weight:700;color:#555}input[type="checkbox"]{width:15px;height:15px;cursor:pointer}.color-hint-row{font-size:.78rem;color:#777;line-height:1.7}.swatch{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:middle;margin:0 1px}.wb-suggestions{flex:1;min-width:0}.remaining-header{font-size:1rem;margin-bottom:10px;color:#333}.remaining-header strong{font-size:1.2rem}.computed-badge{font-size:.7rem;background:#f0f0f0;color:#888;padding:2px 6px;border-radius:10px;margin-left:6px;vertical-align:middle}.section-label{font-size:.78rem;font-weight:700;letter-spacing:1px;color:#888;text-transform:uppercase;margin:10px 0 5px;display:flex;justify-content:space-between;align-items:baseline}.score-col-label{font-size:.72rem;font-weight:400;letter-spacing:0;text-transform:none;color:#aaa}.suggestion-list{display:flex;flex-direction:column;gap:3px;max-height:420px;overflow-y:auto}.suggestion-item{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:4px;border:1px solid transparent}.suggestion-item.is-sol{background:#f0faf0;border-color:#c3e8c3}.sugg-rank{font-size:.75rem;color:#aaa;width:20px;text-align:right;flex-shrink:0}.sugg-word{font-weight:800;letter-spacing:1px;font-size:.95rem;width:60px;flex-shrink:0}.sugg-score{font-size:.8rem;color:#777;width:40px;flex-shrink:0}.badge{font-size:.65rem;font-weight:700;padding:1px 5px;border-radius:8px;flex-shrink:0}.badge-sol{background:#6ca965;color:#fff}.badge-past{background:#878a8c;color:#fff}.cand-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:10px}.cand-table th{text-align:left;font-size:.72rem;color:#aaa;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px 4px;border-bottom:1px solid #e8e8e8}.cand-table td{padding:4px 6px;border-bottom:1px solid #f0f0f0}.cand-table tr.cand-current td{background:#f7fbf7;font-weight:700}.cand-table tr.cand-best td:first-child::before{content:'★ ';color:#6ca965}.cand-table tr.cand-elim td{color:#bbb;text-decoration:line-through}.cand-table tr.cand-elim td:last-child{text-decoration:none}
+.undo-guess-btn{margin-top:10px;padding:5px 12px;font-size:.82rem;background:#fff;border:1px solid #ccc;border-radius:6px;cursor:pointer;color:#555}.undo-guess-btn:hover{background:#f5f5f5}.challenge-score{margin:8px 0;padding:12px 14px;border-radius:6px;background:#f8f8f8;border:1px solid #e0e0e0;font-size:.95rem;line-height:1.6}.challenge-score .pct{font-size:1.4rem;font-weight:800}.challenge-score .rank-line{font-size:.8rem;color:#888;margin-top:2px}details.rem-details{margin-top:10px;font-size:.82rem;color:#555}details.rem-details summary{cursor:pointer;color:#6ca965;font-weight:700}.rem-words{margin-top:6px;line-height:1.8;color:#333}.hint-text{font-size:.88rem;color:#888}.no-solutions{color:#c0392b;font-size:.9rem}.solved-msg{font-size:1.2rem;font-weight:700;color:#6ca965}.error-msg{font-size:.85rem;color:#c0392b}.loading-msg{font-size:.88rem;color:#888;font-style:italic}hr.divider{border:0;border-top:1px solid #e8e8e8;margin:10px 0}</style> <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script> <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script> <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script> <script>
+  // ────────────────────────────────────────────────────────────────────
+  // REPLACE THESE VALUES with your Firebase project config
+  // Firebase Console → Project Settings → Your apps → Web app → Config
+  // ────────────────────────────────────────────────────────────────────
+  const FIREBASE_CONFIG = {
+    apiKey:            "AIzaSyCSQSZd--OqZeJqGyc5ET7s6AaIpFW50fE",
+    authDomain:        "wordlebot-5e0aa.firebaseapp.com",
+    projectId:         "wordlebot-5e0aa",
+    storageBucket:     "wordlebot-5e0aa.firebasestorage.app",
+    messagingSenderId: "250511580847",
+    appId:             "1:250511580847:web:b654bdde71bf8a7e727e5a"
+  };
+  const FIREBASE_ENABLED = !FIREBASE_CONFIG.apiKey.startsWith('REPLACE');
+  </script> </head> <body> <div class="wb-wrap"> <div class="wb-header"> <h1>Wordle Bot</h1> <p>Enter your guesses and the colors Wordle gave you — get optimal next-guess suggestions.</p> </div> <div class="wb-main"> <div class="wb-board"> <div class="grid" id="grid"></div> <div class="keyboard" id="keyboard"> <div class="kb-row"> <div class="kb-key" id="key-q" onclick="kbPress('Q')">Q</div> <div class="kb-key" id="key-w" onclick="kbPress('W')">W</div> <div class="kb-key" id="key-e" onclick="kbPress('E')">E</div> <div class="kb-key" id="key-r" onclick="kbPress('R')">R</div> <div class="kb-key" id="key-t" onclick="kbPress('T')">T</div> <div class="kb-key" id="key-y" onclick="kbPress('Y')">Y</div> <div class="kb-key" id="key-u" onclick="kbPress('U')">U</div> <div class="kb-key" id="key-i" onclick="kbPress('I')">I</div> <div class="kb-key" id="key-o" onclick="kbPress('O')">O</div> <div class="kb-key" id="key-p" onclick="kbPress('P')">P</div> </div> <div class="kb-row"> <div class="kb-key" id="key-a" onclick="kbPress('A')">A</div> <div class="kb-key" id="key-s" onclick="kbPress('S')">S</div> <div class="kb-key" id="key-d" onclick="kbPress('D')">D</div> <div class="kb-key" id="key-f" onclick="kbPress('F')">F</div> <div class="kb-key" id="key-g" onclick="kbPress('G')">G</div> <div class="kb-key" id="key-h" onclick="kbPress('H')">H</div> <div class="kb-key" id="key-j" onclick="kbPress('J')">J</div> <div class="kb-key" id="key-k" onclick="kbPress('K')">K</div> <div class="kb-key" id="key-l" onclick="kbPress('L')">L</div> </div> <div class="kb-row"> <div class="kb-key" id="key-z" onclick="kbPress('Z')">Z</div> <div class="kb-key" id="key-x" onclick="kbPress('X')">X</div> <div class="kb-key" id="key-c" onclick="kbPress('C')">C</div> <div class="kb-key" id="key-v" onclick="kbPress('V')">V</div> <div class="kb-key" id="key-b" onclick="kbPress('B')">B</div> <div class="kb-key" id="key-n" onclick="kbPress('N')">N</div> <div class="kb-key" id="key-m" onclick="kbPress('M')">M</div> <div class="kb-key wide" onclick="kbBackspace()">⌫</div> </div> </div> <div class="controls"> <div class="ctrl-row mode-toggle"> <label class="toggle-label">Mode:</label> <label> <input type="radio" name="mode" value="solver" checked onchange="onModeChange()"> Solver </label> <label> <input type="radio" name="mode" value="challenge" onchange="onModeChange()"> Challenge </label> </div> <div class="ctrl-row" id="startWordRow"> <label>Start with:</label> <select id="startWordSelect" onchange="onStartWordChange(this.value)"> <option value="raise">RAISE</option> <option value="arise">ARISE</option> <option value="adieu">ADIEU</option> <option value="custom">Custom…</option> </select> </div> <div class="ctrl-row" id="inputRow"> <input type="text" id="wordInput" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="WORD"> <button class="btn-green" id="submitBtn" onclick="submitWord()">Enter</button> </div> <div class="ctrl-row" id="colorRow" style="display:none;"> <button class="btn-green" id="confirmBtn" onclick="confirmColors()">Get Suggestions</button> <button class="btn-gray" onclick="undoWord()">← Undo</button> </div> <div class="color-hint-row" id="colorHint" style="display:none;"> Click tiles to cycle: <span class="swatch" style="background:#787c7f"></span> gray → <span class="swatch" style="background:#c8b653"></span> yellow → <span class="swatch" style="background:#6ca965"></span> green </div> <hr class="divider"> <div class="ctrl-row"> <label> <input type="checkbox" id="excludeUsed" onchange="onOptionChange()"> Exclude past NYT solutions </label> </div> <div class="ctrl-row"> <button class="btn-reset" onclick="resetGame()">Reset</button> </div> </div> </div> <div class="wb-suggestions" id="suggestionsPanel"> <p class="loading-msg" id="loadingMsg">Loading word data…</p> </div> </div> </div> <div id="adminPanel" style=" max-width:700px; margin:20px auto; padding:12px 16px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px; font-size:0.85em; color:#555; " hidden> <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;"> <strong style="color:#333;">Admin</strong> <button id="fbSignIn" onclick="fbSignIn()" style=" padding:4px 10px; background:#4285f4; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.9em;"> Sign in with Google </button> <span id="fbSignOut" style="display:none;"> <span id="adminEmail" style="color:#888;"></span> <button onclick="fbSignOut()" style=" margin-left:8px; padding:2px 8px; background:#eee; border:1px solid #ccc; border-radius:4px; cursor:pointer;">Sign out</button> </span> </div> <div id="adminConfirmForm" style="display:none; margin-top:12px;"> <p style="margin:0 0 8px; color:#444; font-weight:600;">Confirm today's Wordle answer:</p> <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;"> <input id="confirmNum" type="number" placeholder="Puzzle #" min="0" max="9999" style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px; font-size:1em;"> <input id="confirmWord" type="text" placeholder="WORD" maxlength="5" oninput="this.value=this.value.toUpperCase()" style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px; font-size:1em; letter-spacing:2px; text-transform:uppercase;"> <button onclick="confirmTodayAnswer()" style="padding:5px 14px; background:#5cb85c; color:#fff; border:none; border-radius:4px; cursor:pointer;">Confirm</button> </div> <p id="confirmStatus" style="margin:6px 0 0; min-height:1.2em; color:#555;"></p> </div> </div> <script>
+// Show admin panel only if Firebase is enabled
+if (FIREBASE_ENABLED) {
+  document.getElementById('adminPanel').removeAttribute('hidden');
+}
+</script> <script>
 "use strict";
+
+// ── Firebase state ────────────────────────────────────────────────────────
+let fbApp      = null;
+let fbDb       = null;
+let fbAuth     = null;
+let fbUser     = null;  // signed-in user (null if not signed in)
+let fbSynced   = false; // true once Firebase data has been loaded
 
 // ── State ──────────────────────────────────────────────────────────────────
 let gameData            = null;   // loaded from precomputed.json
@@ -17,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') submitWord();
   });
   loadData();
+  if (FIREBASE_ENABLED) initFirebase();
 });
 
 function loadData() {
@@ -24,7 +51,10 @@ function loadData() {
   gameData = INLINE_DATA;
   // Pre-fill the starting word
   onStartWordChange(document.getElementById('startWordSelect').value);
-  setPanel('<p style="color:#6ca965;font-weight:700">Ready! Enter your first guess.</p>');
+  const syncMsg = FIREBASE_ENABLED
+    ? ' <span id="fbSyncStatus" style="font-size:0.78em;color:#888">⏳ syncing...</span>'
+    : '';
+  setPanel(`<p style="color:#6ca965;font-weight:700">Ready! Enter your first guess.${syncMsg}</p>`);
 }
 
 // ── Grid construction ──────────────────────────────────────────────────────
@@ -139,10 +169,6 @@ function scoreChallengeCandidate(word) {
   if (existing >= 0) challengeCandidates[existing] = entry;
   else challengeCandidates.push(entry);
 
-  // Sort by score ascending (best first) for display
-  const sorted = [...challengeCandidates].sort((a, b) => a.score - b.score);
-  const bestScore = sorted[0].score;
-
   const rankMsg = betterCount === 0
     ? `<span style="color:#6ca965;font-weight:700;">🏆 Optimal! No guess could do better.</span>`
     : `${betterCount.toLocaleString()} ${poolLabel} would be better`;
@@ -151,25 +177,7 @@ function scoreChallengeCandidate(word) {
     : `<div style="color:#787c7f;font-size:0.85rem;">✗ Not a possible solution (valid guess only)</div>`;
   const pastBadge = isPast ? '<span class="badge badge-past">PAST</span>' : '';
 
-  // Build comparison table
-  let tableRows = sorted.map(c => {
-    const isCurrent = c.word === word;
-    const isBest    = Math.abs(c.score - bestScore) < 0.0001;
-    const rowClass  = isCurrent ? 'cand-current' : (isBest ? 'cand-best' : '');
-    const solMark   = c.isSol  ? '<span class="badge badge-sol" style="font-size:0.65rem;">SOL</span>' : '';
-    const pastMark  = c.isPast ? '<span class="badge badge-past" style="font-size:0.65rem;">PAST</span>' : '';
-    return `<tr class="${rowClass}">
-      <td>${c.word.toUpperCase()}</td>
-      <td>${c.score.toFixed(2)}</td>
-      <td>${solMark}${pastMark}</td>
-    </tr>`;
-  }).join('');
-
-  const tableHtml = challengeCandidates.length > 1 ? `
-    <table class="cand-table">
-      <thead><tr><th>Word</th><th>Avg remaining</th><th></th></tr></thead>
-      <tbody>${tableRows}</tbody>
-    </table>` : '';
+  const tableHtml = buildCandidateTable(word);
 
   setPanel(`
     <p class="remaining-header"><strong>${remaining.length}</strong> solutions still possible</p>
@@ -190,10 +198,68 @@ function scoreChallengeCandidate(word) {
   `);
 }
 
+// ── Build the shared candidate comparison table ───────────────────────────
+function buildCandidateTable(currentWord) {
+  if (challengeCandidates.length < 1) return '';
+  const activeCands = challengeCandidates.filter(c => !c.eliminated);
+  if (activeCands.length === 0 && challengeCandidates.length > 0) {
+    return `<p class="hint-text" style="margin-top:8px;color:#aaa;">
+      All ${challengeCandidates.length} scored word${challengeCandidates.length>1?'s':''} eliminated by your guess.</p>`;
+  }
+  const sorted    = [...challengeCandidates].sort((a, b) => {
+    if (a.eliminated !== b.eliminated) return a.eliminated ? 1 : -1;
+    return a.score - b.score;
+  });
+  const bestScore = activeCands.length ? Math.min(...activeCands.map(c => c.score)) : Infinity;
+  const rows = sorted.map(c => {
+    const isCurrent = c.word === currentWord;
+    const isBest    = !c.eliminated && Math.abs(c.score - bestScore) < 0.0001;
+    const rowClass  = c.eliminated ? 'cand-elim'
+                    : isCurrent    ? 'cand-current'
+                    : isBest       ? 'cand-best' : '';
+    const solMark  = c.isSol  ? '<span class="badge badge-sol"  style="font-size:0.65rem;">SOL</span>'  : '';
+    const pastMark = c.isPast ? '<span class="badge badge-past" style="font-size:0.65rem;">PAST</span>' : '';
+    const elimMark = c.eliminated ? '<span style="font-size:0.7rem;color:#ccc;">✗</span>' : '';
+    return `<tr class="${rowClass}">
+      <td>${c.word.toUpperCase()}</td>
+      <td>${c.eliminated ? '—' : c.score.toFixed(2)}</td>
+      <td>${solMark}${pastMark}${elimMark}</td>
+    </tr>`;
+  }).join('');
+  return `<table class="cand-table" style="margin-top:10px;">
+    <thead><tr><th>Word</th><th>Avg remaining</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ── Refresh candidate scores after a guess is committed ───────────────────
+function refreshCandidateScores() {
+  if (!challengeCandidates.length) return;
+  const excludeUsed = document.getElementById('excludeUsed').checked;
+  const result      = computeResult(guessHistory, excludeUsed);
+  const remaining   = result.remainingWords;
+  const remainSet   = new Set(remaining);
+  const useFullPool = remaining.length <= 500;
+  const guessPool   = useFullPool ? gameData.meta.allWords : remaining;
+  const poolLabel   = useFullPool ? 'possible guesses' : 'solution guesses';
+
+  challengeCandidates = challengeCandidates.map(c => {
+    if (remaining.length === 0) {
+      return { ...c, score: 0, isSol: false, betterCount: 0, poolLabel, eliminated: true };
+    }
+    const newScore = scoreGuess(c.word, remaining);
+    const isSol    = remainSet.has(c.word);
+    let betterCount = 0;
+    for (const w of guessPool) {
+      if (scoreGuess(w, remaining) < newScore - 0.0001) betterCount++;
+    }
+    return { ...c, score: newScore, isSol, betterCount, poolLabel, eliminated: false };
+  });
+}
+
 // ── Challenge: commit a played guess (enter colors) ────────────────────────
 function startRecordGuess(word) {
   if (guessHistory.length >= 6) return;
-  challengeCandidates = []; // reset table for next turn
   pendingWord   = word;
   pendingColors = [0, 0, 0, 0, 0];
 
@@ -240,6 +306,7 @@ function confirmColors() {
   guessHistory.push({ word: pendingWord, colors });
   pendingWord = pendingColors = null;
   updateKeyboard(guessHistory);
+  if (appMode === 'challenge') refreshCandidateScores();
 
   document.getElementById('colorRow').style.display  = 'none';
   document.getElementById('colorHint').style.display = 'none';
@@ -404,6 +471,7 @@ function showChallengeScore(history) {
          </details>`
       : ''}
     ${after.length > 1 ? '<p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>' : ''}
+    ${buildCandidateTable()}
     <button class="undo-guess-btn" onclick="undoLastGuess()">↩ Try a different guess</button>
   `;
   setPanel(html);
@@ -411,6 +479,7 @@ function showChallengeScore(history) {
 
 function undoLastGuess() {
   if (guessHistory.length === 0) return;
+  challengeCandidates = []; // scores are stale after undoing
   const row = guessHistory.length - 1;
   for (let c = 0; c < 5; c++) {
     const tile = document.getElementById(`tile-${row}-${c}`);
@@ -619,4 +688,160 @@ function resetGame() {
   }
   document.getElementById('wordInput').focus();
 }
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Firebase integration
+// ══════════════════════════════════════════════════════════════════════════════
+
+function initFirebase() {
+  try {
+    fbApp  = firebase.initializeApp(FIREBASE_CONFIG);
+    fbDb   = firebase.firestore();
+    fbAuth = firebase.auth();
+
+    // Listen for auth state changes
+    fbAuth.onAuthStateChanged(user => {
+      fbUser = user;
+      updateAdminUI();
+    });
+
+    // Load word data from Firebase
+    loadFirebaseData();
+  } catch (e) {
+    console.warn('Firebase init failed:', e);
+    document.getElementById('fbSyncStatus') && (document.getElementById('fbSyncStatus').textContent = '');
+  }
+}
+
+async function loadFirebaseData() {
+  try {
+    const doc = await fbDb.collection('wordle').doc('answers').get();
+    if (!doc.exists) {
+      console.warn('Firebase: no wordle/answers document found');
+      setSyncStatus('❌ no data');
+      return;
+    }
+    const data = doc.data();
+    const fbUsedWords = data.usedWords || [];  // sorted lowercase array
+    mergeFirebaseUsedWords(fbUsedWords);
+    fbSynced = true;
+    const el = document.getElementById('fbSyncStatus');
+    if (el) el.textContent = `✓ synced (${fbUsedWords.length} past answers)`;
+    updateAdminUI();
+  } catch (e) {
+    console.warn('Firebase load failed:', e);
+    const el = document.getElementById('fbSyncStatus');
+    if (el) el.textContent = '⚠ offline';
+  }
+}
+
+function mergeFirebaseUsedWords(fbUsedWords) {
+  if (!gameData || !fbUsedWords.length) return;
+  const merged = new Set([...gameData.meta.usedWords, ...fbUsedWords]);
+  gameData.meta.usedWords = [...merged].sort();
+  // No need to recompute — usedWords is filtered at query time
+}
+
+function setSyncStatus(msg) {
+  const el = document.getElementById('fbSyncStatus');
+  if (el) el.textContent = msg;
+}
+
+// ── Admin UI (confirm today's answer) ────────────────────────────────────────
+
+function updateAdminUI() {
+  const signInBtn  = document.getElementById('fbSignIn');
+  const signOutBtn = document.getElementById('fbSignOut');
+  const adminForm  = document.getElementById('adminConfirmForm');
+  const adminEmail = document.getElementById('adminEmail');
+  if (!signInBtn) return;
+
+  if (fbUser) {
+    signInBtn.style.display  = 'none';
+    signOutBtn.style.display = 'inline';
+    if (adminEmail) adminEmail.textContent = fbUser.email;
+    if (adminForm) adminForm.style.display = 'block';
+  } else {
+    signInBtn.style.display  = 'inline';
+    signOutBtn.style.display = 'none';
+    if (adminForm) adminForm.style.display = 'none';
+  }
+}
+
+function fbSignIn() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ login_hint: 'fred.heberle@gmail.com' });
+  fbAuth.signInWithPopup(provider).catch(e => alert('Sign-in failed: ' + e.message));
+}
+
+function fbSignOut() {
+  fbAuth.signOut();
+}
+
+async function confirmTodayAnswer() {
+  if (!fbUser) { alert('Please sign in first.'); return; }
+
+  const wordEl = document.getElementById('confirmWord');
+  const numEl  = document.getElementById('confirmNum');
+  const statusEl = document.getElementById('confirmStatus');
+
+  const word = wordEl.value.trim().toLowerCase();
+  const num  = parseInt(numEl.value.trim(), 10);
+
+  if (word.length !== 5 || !/^[a-z]+$/.test(word)) {
+    statusEl.textContent = '❌ Must be a 5-letter word.';
+    return;
+  }
+  if (isNaN(num) || num < 0 || num > 9999) {
+    statusEl.textContent = '❌ Invalid puzzle number.';
+    return;
+  }
+
+  // Validate word is in the known word list
+  if (gameData && !gameData.meta.allWords.includes(word)) {
+    statusEl.textContent = '❌ Word not in valid word list.';
+    return;
+  }
+
+  statusEl.textContent = '⏳ Saving...';
+
+  try {
+    const doc = await fbDb.collection('wordle').doc('answers').get();
+    const data = doc.exists ? doc.data() : {};
+    const byNumber = data.byNumber || {};
+
+    if (byNumber[String(num)]) {
+      if (byNumber[String(num)] === word) {
+        statusEl.textContent = `✓ Already recorded: #${num} = ${word.toUpperCase()}`;
+      } else {
+        statusEl.textContent = `⚠ #${num} already has '${byNumber[String(num)].toUpperCase()}'. Contact admin.`;
+      }
+      return;
+    }
+
+    byNumber[String(num)] = word;
+    const usedSet = new Set(Object.values(byNumber));
+    const usedList = [...usedSet].sort();
+
+    await fbDb.collection('wordle').doc('answers').set({
+      byNumber,
+      usedWords: usedList,
+      lastPuzzleNum: num,
+      lastPuzzleWord: word,
+      lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+      totalPuzzles: Object.keys(byNumber).length,
+    }, { merge: true });
+
+    // Also update local gameData
+    mergeFirebaseUsedWords([word]);
+
+    statusEl.textContent = `✓ Saved! #${num} = ${word.toUpperCase()} (${usedList.length} total past answers)`;
+    wordEl.value = '';
+  } catch (e) {
+    console.error(e);
+    statusEl.textContent = '❌ Error: ' + e.message;
+  }
+}
+
 </script> </body> </html>
