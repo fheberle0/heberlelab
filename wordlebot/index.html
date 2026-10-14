@@ -13,7 +13,7 @@
     appId:             "1:250511580847:web:b654bdde71bf8a7e727e5a"
   };
   const FIREBASE_ENABLED = !FIREBASE_CONFIG.apiKey.startsWith('REPLACE');
-  </script> </head> <body> <div class="wb-wrap"> <div class="wb-header"> <h1>Wordle Bot</h1> <p>Enter your guesses and the colors Wordle gave you — get optimal next-guess suggestions.</p> </div> <div class="wb-main"> <div class="wb-board"> <div class="grid" id="grid"></div> <div class="keyboard" id="keyboard"> <div class="kb-row"> <div class="kb-key" id="key-q" onclick="kbPress('Q')">Q</div> <div class="kb-key" id="key-w" onclick="kbPress('W')">W</div> <div class="kb-key" id="key-e" onclick="kbPress('E')">E</div> <div class="kb-key" id="key-r" onclick="kbPress('R')">R</div> <div class="kb-key" id="key-t" onclick="kbPress('T')">T</div> <div class="kb-key" id="key-y" onclick="kbPress('Y')">Y</div> <div class="kb-key" id="key-u" onclick="kbPress('U')">U</div> <div class="kb-key" id="key-i" onclick="kbPress('I')">I</div> <div class="kb-key" id="key-o" onclick="kbPress('O')">O</div> <div class="kb-key" id="key-p" onclick="kbPress('P')">P</div> </div> <div class="kb-row"> <div class="kb-key" id="key-a" onclick="kbPress('A')">A</div> <div class="kb-key" id="key-s" onclick="kbPress('S')">S</div> <div class="kb-key" id="key-d" onclick="kbPress('D')">D</div> <div class="kb-key" id="key-f" onclick="kbPress('F')">F</div> <div class="kb-key" id="key-g" onclick="kbPress('G')">G</div> <div class="kb-key" id="key-h" onclick="kbPress('H')">H</div> <div class="kb-key" id="key-j" onclick="kbPress('J')">J</div> <div class="kb-key" id="key-k" onclick="kbPress('K')">K</div> <div class="kb-key" id="key-l" onclick="kbPress('L')">L</div> </div> <div class="kb-row"> <div class="kb-key" id="key-z" onclick="kbPress('Z')">Z</div> <div class="kb-key" id="key-x" onclick="kbPress('X')">X</div> <div class="kb-key" id="key-c" onclick="kbPress('C')">C</div> <div class="kb-key" id="key-v" onclick="kbPress('V')">V</div> <div class="kb-key" id="key-b" onclick="kbPress('B')">B</div> <div class="kb-key" id="key-n" onclick="kbPress('N')">N</div> <div class="kb-key" id="key-m" onclick="kbPress('M')">M</div> <div class="kb-key wide" onclick="kbBackspace()">⌫</div> </div> </div> <div class="controls"> <div class="ctrl-row mode-toggle"> <label class="toggle-label">Mode:</label> <label> <input type="radio" name="mode" value="solver" onchange="onModeChange()"> Solver </label> <label> <input type="radio" name="mode" value="challenge" checked onchange="onModeChange()"> Challenge </label> </div> <div class="ctrl-row" id="startWordRow"> <label>Start with:</label> <select id="startWordSelect" onchange="onStartWordChange(this.value)"> <option value="raise">RAISE</option> <option value="arise">ARISE</option> <option value="adieu">ADIEU</option> <option value="custom">Custom…</option> </select> </div> <div class="ctrl-row" id="inputRow"> <input type="text" id="wordInput" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="WORD"> <button class="btn-green" id="submitBtn" onclick="submitWord()">Enter</button> </div> <div class="ctrl-row" id="colorRow" style="display:none;"> <button class="btn-green" id="confirmBtn" onclick="confirmColors()">Get Suggestions</button> <button class="btn-gray" onclick="undoWord()">← Undo</button> </div> <div class="color-hint-row" id="colorHint" style="display:none;"> Click tiles to cycle: <span class="swatch" style="background:#787c7f"></span> gray → <span class="swatch" style="background:#c8b653"></span> yellow → <span class="swatch" style="background:#6ca965"></span> green </div> <hr class="divider"> <div class="ctrl-row"> <label> <input type="checkbox" id="excludeUsed" onchange="onOptionChange()"> Exclude past NYT solutions </label> </div> <div class="ctrl-row"> <button class="btn-reset" onclick="resetGame()">Reset</button> </div> </div> </div> <div class="wb-suggestions" id="suggestionsPanel"> <p class="loading-msg" id="loadingMsg">Loading word data…</p> </div> </div> </div> <div id="adminPanel" style=" max-width:700px; margin:20px auto; padding:12px 16px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px; font-size:0.85em; color:#555; " hidden> <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;"> <strong style="color:#333;">Admin</strong> <button id="fbSignIn" onclick="fbSignIn()" style=" padding:4px 10px; background:#4285f4; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.9em;"> Sign in with Google </button> <span id="fbSignOut" style="display:none;"> <span id="adminEmail" style="color:#888;"></span> <button onclick="fbSignOut()" style=" margin-left:8px; padding:2px 8px; background:#eee; border:1px solid #ccc; border-radius:4px; cursor:pointer;">Sign out</button> </span> </div> <div id="adminConfirmForm" style="display:none; margin-top:12px;"> <p style="margin:0 0 8px; color:#444; font-weight:600;">Confirm today's Wordle answer:</p> <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;"> <input id="confirmNum" type="number" placeholder="Puzzle #" min="0" max="9999" style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px; font-size:1em;"> <input id="confirmWord" type="text" placeholder="WORD" maxlength="5" oninput="this.value=this.value.toUpperCase()" style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px; font-size:1em; letter-spacing:2px; text-transform:uppercase;"> <button onclick="confirmTodayAnswer()" style="padding:5px 14px; background:#5cb85c; color:#fff; border:none; border-radius:4px; cursor:pointer;">Confirm</button> </div> <p id="confirmStatus" style="margin:6px 0 0; min-height:1.2em; color:#555;"></p> </div> </div> <script>
+  </script> </head> <body> <div class="wb-wrap"> <div class="wb-header"> <h1>Wordle Bot</h1> <p>Enter your guesses and the colors Wordle gave you — get optimal next-guess suggestions.</p> </div> <div class="wb-main"> <div class="wb-board"> <div class="grid" id="grid"></div> <div class="keyboard" id="keyboard"> <div class="kb-row"> <div class="kb-key" id="key-q" onclick="kbPress('Q')">Q</div> <div class="kb-key" id="key-w" onclick="kbPress('W')">W</div> <div class="kb-key" id="key-e" onclick="kbPress('E')">E</div> <div class="kb-key" id="key-r" onclick="kbPress('R')">R</div> <div class="kb-key" id="key-t" onclick="kbPress('T')">T</div> <div class="kb-key" id="key-y" onclick="kbPress('Y')">Y</div> <div class="kb-key" id="key-u" onclick="kbPress('U')">U</div> <div class="kb-key" id="key-i" onclick="kbPress('I')">I</div> <div class="kb-key" id="key-o" onclick="kbPress('O')">O</div> <div class="kb-key" id="key-p" onclick="kbPress('P')">P</div> </div> <div class="kb-row"> <div class="kb-key" id="key-a" onclick="kbPress('A')">A</div> <div class="kb-key" id="key-s" onclick="kbPress('S')">S</div> <div class="kb-key" id="key-d" onclick="kbPress('D')">D</div> <div class="kb-key" id="key-f" onclick="kbPress('F')">F</div> <div class="kb-key" id="key-g" onclick="kbPress('G')">G</div> <div class="kb-key" id="key-h" onclick="kbPress('H')">H</div> <div class="kb-key" id="key-j" onclick="kbPress('J')">J</div> <div class="kb-key" id="key-k" onclick="kbPress('K')">K</div> <div class="kb-key" id="key-l" onclick="kbPress('L')">L</div> </div> <div class="kb-row"> <div class="kb-key" id="key-z" onclick="kbPress('Z')">Z</div> <div class="kb-key" id="key-x" onclick="kbPress('X')">X</div> <div class="kb-key" id="key-c" onclick="kbPress('C')">C</div> <div class="kb-key" id="key-v" onclick="kbPress('V')">V</div> <div class="kb-key" id="key-b" onclick="kbPress('B')">B</div> <div class="kb-key" id="key-n" onclick="kbPress('N')">N</div> <div class="kb-key" id="key-m" onclick="kbPress('M')">M</div> <div class="kb-key wide" onclick="kbBackspace()">⌫</div> </div> </div> <div class="controls"> <div class="ctrl-row mode-toggle"> <label class="toggle-label">Mode:</label> <label> <input type="radio" name="mode" value="solver" onchange="onModeChange()"> Solver </label> <label> <input type="radio" name="mode" value="challenge" checked onchange="onModeChange()"> Challenge </label> </div> <div class="ctrl-row" id="startWordRow" style="display:none"> <label>Start with:</label> <select id="startWordSelect" onchange="onStartWordChange(this.value)"> <option value="raise">RAISE</option> <option value="arise">ARISE</option> <option value="adieu">ADIEU</option> <option value="custom">Custom…</option> </select> </div> <div class="ctrl-row" id="inputRow"> <input type="text" id="wordInput" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="WORD"> <button class="btn-green" id="submitBtn" onclick="submitWord()">Score This Guess</button> </div> <div class="ctrl-row" id="colorRow" style="display:none;"> <button class="btn-green" id="confirmBtn" onclick="confirmColors()">Get Suggestions</button> <button class="btn-gray" onclick="undoWord()">← Undo</button> </div> <div class="color-hint-row" id="colorHint" style="display:none;"> Click tiles to cycle: <span class="swatch" style="background:#787c7f"></span> gray → <span class="swatch" style="background:#c8b653"></span> yellow → <span class="swatch" style="background:#6ca965"></span> green </div> <hr class="divider"> <div class="ctrl-row"> <label> <input type="checkbox" id="excludeUsed" onchange="onOptionChange()"> Exclude past NYT solutions </label> </div> <div class="ctrl-row"> <button class="btn-reset" onclick="resetGame()">Reset</button> </div> </div> </div> <div class="wb-suggestions" id="suggestionsPanel"> <p class="loading-msg" id="loadingMsg">Loading word data…</p> </div> </div> </div> <div id="adminPanel" style=" max-width:700px; margin:20px auto; padding:12px 16px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px; font-size:0.85em; color:#555; " hidden> <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;"> <strong style="color:#333;">Admin</strong> <button id="fbSignIn" onclick="fbSignIn()" style=" padding:4px 10px; background:#4285f4; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.9em;"> Sign in with Google </button> <span id="fbSignOut" style="display:none;"> <span id="adminEmail" style="color:#888;"></span> <button onclick="fbSignOut()" style=" margin-left:8px; padding:2px 8px; background:#eee; border:1px solid #ccc; border-radius:4px; cursor:pointer;">Sign out</button> </span> </div> <div id="adminConfirmForm" style="display:none; margin-top:12px;"> <p style="margin:0 0 8px; color:#444; font-weight:600;">Confirm today's Wordle answer:</p> <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;"> <input id="confirmNum" type="number" placeholder="Puzzle #" min="0" max="9999" style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px; font-size:1em;"> <input id="confirmWord" type="text" placeholder="WORD" maxlength="5" oninput="this.value=this.value.toUpperCase()" style="width:90px; padding:5px 8px; border:1px solid #ccc; border-radius:4px; font-size:1em; letter-spacing:2px; text-transform:uppercase;"> <button onclick="confirmTodayAnswer()" style="padding:5px 14px; background:#5cb85c; color:#fff; border:none; border-radius:4px; cursor:pointer;">Confirm</button> </div> <p id="confirmStatus" style="margin:6px 0 0; min-height:1.2em; color:#555;"></p> </div> </div> <script>
 // Show admin panel only if Firebase is enabled
 if (FIREBASE_ENABLED) {
   document.getElementById('adminPanel').removeAttribute('hidden');
@@ -137,7 +137,9 @@ function scoreChallengeCandidate(word) {
   const remaining   = result.remainingWords;
 
   if (remaining.length === 0) {
-    // No solutions in database — still let user record what they actually played
+    // No solutions in standard list — fall back to allWords filtered by constraints
+    const extRem = computeExtendedRemaining(guessHistory, excludeUsed);
+
     clearCandidateTiles();
     const row0 = guessHistory.length;
     for (let c = 0; c < 5; c++) {
@@ -147,10 +149,46 @@ function scoreChallengeCandidate(word) {
       tile.onclick     = null;
       delete tile.dataset.color;
     }
+
+    if (extRem.length === 0) {
+      setPanel('<p class="hint-text" style="color:#b03030;">⚠ No words match these constraints — check your color choices.</p>');
+      return;
+    }
+
+    // Score against extended pool when feasible (same threshold as normal mode)
+    const inExt        = extRem.includes(word);
+    const useFullPool  = extRem.length <= 500;
+    const guessPool    = useFullPool ? gameData.meta.allWords : extRem;
+    const myScore      = scoreGuess(word, extRem);
+    let   betterCount  = 0;
+    for (const w of guessPool) {
+      if (scoreGuess(w, extRem) < myScore - 0.0001) betterCount++;
+    }
+    const rankMsg = betterCount === 0
+      ? `<span style="color:#6ca965;font-weight:700;">🏆 Optimal!</span>`
+      : `${betterCount.toLocaleString()} ${useFullPool ? 'possible guesses' : 'extended-pool guesses'} would be better`;
+    const solLine = inExt
+      ? `<div style="color:#6ca965;font-size:0.85rem;">✓ Could be the answer</div>`
+      : `<div style="color:#787c7f;font-size:0.85rem;">✗ Not in extended candidate list (valid guess only)</div>`;
+    const remList = extRem.length <= 30
+      ? `<details class="rem-details"><summary>${extRem.length} extended candidates</summary>
+           <div class="rem-words">${extRem.map(w=>w.toUpperCase()).join(', ')}</div></details>`
+      : `<p style="font-size:0.82rem;color:#555;margin-top:6px;">${extRem.length} extended candidates remain</p>`;
+
     setPanel(`
-      <p class="remaining-header"><strong>0</strong> known solutions remain</p>
-      <p class="hint-text" style="color:#c8853a;margin-top:6px;">⚠ The answer may not be in my database — keep going!</p>
-      <button class="btn-green" style="margin-top:10px;font-size:0.85rem;padding:6px 14px;"
+      <p class="remaining-header">
+        <strong>0</strong> standard solutions → <strong>${extRem.length}</strong> extended candidates
+      </p>
+      <p class="hint-text" style="color:#c8853a;margin-top:2px;font-size:0.82rem;">⚠ Answer not in standard list — searching extended dictionary</p>
+      <div class="challenge-score" style="margin-top:8px;">
+        <div style="font-size:1.05rem;font-weight:700;">${word.toUpperCase()}</div>
+        ${solLine}
+        <div style="font-size:0.82rem;color:#555;margin-top:4px;">Avg remaining (extended): <strong>${myScore.toFixed(2)}</strong></div>
+        <div class="rank-line" style="margin-top:3px;">${rankMsg}</div>
+      </div>
+      ${remList}
+      <p class="hint-text" style="margin-top:10px;">Try another word above, or record a guess you played in Wordle:</p>
+      <button class="btn-green" style="margin-top:6px;font-size:0.85rem;padding:6px 14px;"
               onclick="startRecordGuess('${word}')">
         ▶ I played ${word.toUpperCase()} — enter Wordle's result
       </button>
@@ -446,10 +484,37 @@ function showChallengeScore(history) {
   const after  = currentResult.remainingWords;
 
   if (before.length === 0) {
+    // Already in extended-pool territory — track progress there
+    const extBefore = computeExtendedRemaining(prevHistory,   excludeUsed);
+    const extAfter  = computeExtendedRemaining(history,       excludeUsed);
+    const extElim   = extBefore.length - extAfter.length;
+    const extPct    = extBefore.length > 0 ? (extElim / extBefore.length * 100).toFixed(1) : '0.0';
+    const extColor  = extAfter.length === 0 ? '#6ca965'
+                    : extPct >= 80           ? '#6ca965'
+                    : extPct >= 50           ? '#c8b653' : '#787c7f';
+    const remList   = extAfter.length > 0 && extAfter.length <= 30
+      ? `<details class="rem-details"><summary>${extAfter.length} extended candidates</summary>
+           <div class="rem-words">${extAfter.map(w=>w.toUpperCase()).join(', ')}</div></details>`
+      : extAfter.length > 30
+        ? `<p style="font-size:0.82rem;color:#555;margin-top:6px;">${extAfter.length} extended candidates remain</p>`
+        : '';
+    const nextPrompt = extAfter.length === 0
+      ? '<p class="hint-text" style="margin-top:10px;color:#b03030;">⚠ No words match these constraints — check your colors.</p>'
+      : extAfter.length !== 1
+        ? '<p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>' : '';
     setPanel(`
-      <p class="remaining-header"><strong>0</strong> known solutions remain</p>
-      <p class="hint-text" style="color:#c8853a;margin-top:6px;">⚠ The answer may not be in my database — keep going!</p>
-      <p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>
+      <p class="remaining-header" style="margin-bottom:8px;">
+        Extended: <strong>${extBefore.length}</strong> → <strong>${extAfter.length}</strong> candidates
+      </p>
+      <p class="hint-text" style="color:#c8853a;margin-top:2px;font-size:0.82rem;">⚠ Searching extended dictionary</p>
+      <div class="challenge-score">
+        <div class="pct" style="color:${extColor}">${extPct}%</div>
+        <div style="font-size:0.82rem;color:#555;">of extended candidates eliminated</div>
+      </div>
+      ${remList}
+      ${nextPrompt}
+      ${buildCandidateTable()}
+      <button class="undo-guess-btn" onclick="undoLastGuess()">↩ Try a different guess</button>
     `);
     return;
   }
@@ -499,7 +564,15 @@ function showChallengeScore(history) {
          </details>`
       : ''}
     ${after.length === 0
-      ? '<p class="hint-text" style="margin-top:10px;color:#c8853a;">⚠ No known solutions remain — the answer may not be in my database. Keep going!</p><p class="hint-text" style="margin-top:6px;">Enter your next guess.</p>'
+      ? (() => {
+          const extAfter = computeExtendedRemaining(history, excludeUsed);
+          const extMsg = extAfter.length > 0
+            ? (extAfter.length <= 30
+                ? `<details class="rem-details" style="margin-top:6px;"><summary>${extAfter.length} extended candidates</summary><div class="rem-words">${extAfter.map(w=>w.toUpperCase()).join(', ')}</div></details>`
+                : `<p style="font-size:0.82rem;color:#555;margin-top:4px;">${extAfter.length} extended candidates remain</p>`)
+            : '';
+          return `<p class="hint-text" style="margin-top:10px;color:#c8853a;">⚠ No standard solutions remain — searching extended dictionary</p>${extMsg}<p class="hint-text" style="margin-top:6px;">Enter your next guess.</p>`;
+        })()
       : after.length > 1 ? '<p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>' : ''}
     ${buildCandidateTable()}
     <button class="undo-guess-btn" onclick="undoLastGuess()">↩ Try a different guess</button>
@@ -529,6 +602,18 @@ function undoLastGuess() {
 }
 
 // ── Core computation (tree lookup + live fallback) ─────────────────────────
+// ── Extended-pool fallback (allWords filtered by constraints) ─────────────
+// Used when solutionWords yields 0 remaining — e.g. NYT used an obscure word.
+function computeExtendedRemaining(history, excludeUsed) {
+  const usedSet = new Set(gameData.meta.usedWords);
+  let remaining  = [...gameData.meta.allWords];
+  for (const { word, colors } of history) {
+    remaining = filterWords(remaining, word, colors);
+  }
+  if (excludeUsed) remaining = remaining.filter(w => !usedSet.has(w));
+  return remaining;
+}
+
 function computeResult(history, excludeUsed) {
   if (!gameData || history.length === 0) {
     return { remainingWords: gameData ? [...gameData.meta.solutionWords] : [], suggestions: [], fromCache: false };
