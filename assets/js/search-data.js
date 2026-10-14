@@ -705,6 +705,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/mint-chocolate-cake/";
+            },},{id: "recipes-minty-pea-risotto",
+          title: 'Minty Pea Risotto',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/minty-pea-risotto/";
             },},{id: "recipes-miracle-no-knead-bread",
           title: 'Miracle No-Knead Bread',
           description: "",
