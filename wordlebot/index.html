@@ -228,6 +228,8 @@ permalink: /wordlebot/
     .cand-table tr.cand-best td:first-child::before { content: '★ '; color: #6ca965; }
     .cand-table tr.cand-elim td { color: #bbb; text-decoration: line-through; }
     .cand-table tr.cand-elim td:last-child { text-decoration: none; }
+    .cand-table tr.cand-clickable { cursor: pointer; }
+    .cand-table tr.cand-clickable:hover td { background: #f0f7ef; }
 
     /* Undo button (challenge mode) */
     .undo-guess-btn {
@@ -717,12 +719,13 @@ function buildCandidateTable(currentWord) {
     const isCurrent = c.word === currentWord;
     const isBest    = !c.eliminated && Math.abs(c.score - bestScore) < 0.0001;
     const rowClass  = c.eliminated ? 'cand-elim'
-                    : isCurrent    ? 'cand-current'
-                    : isBest       ? 'cand-best' : '';
+                    : isCurrent    ? 'cand-current cand-clickable'
+                    : isBest       ? 'cand-best cand-clickable' : 'cand-clickable';
+    const onclick   = c.eliminated ? '' : ` onclick="scoreChallengeCandidate('${c.word}')" title="Click to re-score ${c.word.toUpperCase()}"`;
     const solMark  = c.isSol  ? '<span class="badge badge-sol"  style="font-size:0.65rem;">SOL</span>'  : '';
     const pastMark = c.isPast ? '<span class="badge badge-past" style="font-size:0.65rem;">PAST</span>' : '';
     const elimMark = c.eliminated ? '<span style="font-size:0.7rem;color:#ccc;">✗</span>' : '';
-    return `<tr class="${rowClass}">
+    return `<tr class="${rowClass}"${onclick}>
       <td>${c.word.toUpperCase()}</td>
       <td>${c.eliminated ? '—' : c.score.toFixed(2)}</td>
       <td>${solMark}${pastMark}${elimMark}</td>
