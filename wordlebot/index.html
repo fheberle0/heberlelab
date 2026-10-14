@@ -360,7 +360,7 @@ permalink: /wordlebot/
         </div>
 
         <!-- Starting word selector (solver mode only) -->
-        <div class="ctrl-row" id="startWordRow">
+        <div class="ctrl-row" id="startWordRow" style="display:none">
           <label>Start with:</label>
           <select id="startWordSelect" onchange="onStartWordChange(this.value)">
             <option value="raise">RAISE</option>
@@ -375,7 +375,7 @@ permalink: /wordlebot/
           <input type="text" id="wordInput" maxlength="5"
                  autocomplete="off" autocorrect="off" autocapitalize="characters"
                  spellcheck="false" placeholder="WORD" />
-          <button class="btn-green" id="submitBtn" onclick="submitWord()">Enter</button>
+          <button class="btn-green" id="submitBtn" onclick="submitWord()">Score This Guess</button>
         </div>
 
         <!-- Color-selection controls (hidden until word submitted) -->
@@ -580,7 +580,9 @@ function scoreChallengeCandidate(word) {
   const remaining   = result.remainingWords;
 
   if (remaining.length === 0) {
-    // No solutions in database — still let user record what they actually played
+    // No solutions in standard list — fall back to allWords filtered by constraints
+    const extRem = computeExtendedRemaining(guessHistory, excludeUsed);
+
     clearCandidateTiles();
     const row0 = guessHistory.length;
     for (let c = 0; c < 5; c++) {
@@ -590,10 +592,46 @@ function scoreChallengeCandidate(word) {
       tile.onclick     = null;
       delete tile.dataset.color;
     }
+
+    if (extRem.length === 0) {
+      setPanel('<p class="hint-text" style="color:#b03030;">⚠ No words match these constraints — check your color choices.</p>');
+      return;
+    }
+
+    // Score against extended pool when feasible (same threshold as normal mode)
+    const inExt        = extRem.includes(word);
+    const useFullPool  = extRem.length <= 500;
+    const guessPool    = useFullPool ? gameData.meta.allWords : extRem;
+    const myScore      = scoreGuess(word, extRem);
+    let   betterCount  = 0;
+    for (const w of guessPool) {
+      if (scoreGuess(w, extRem) < myScore - 0.0001) betterCount++;
+    }
+    const rankMsg = betterCount === 0
+      ? `<span style="color:#6ca965;font-weight:700;">🏆 Optimal!</span>`
+      : `${betterCount.toLocaleString()} ${useFullPool ? 'possible guesses' : 'extended-pool guesses'} would be better`;
+    const solLine = inExt
+      ? `<div style="color:#6ca965;font-size:0.85rem;">✓ Could be the answer</div>`
+      : `<div style="color:#787c7f;font-size:0.85rem;">✗ Not in extended candidate list (valid guess only)</div>`;
+    const remList = extRem.length <= 30
+      ? `<details class="rem-details"><summary>${extRem.length} extended candidates</summary>
+           <div class="rem-words">${extRem.map(w=>w.toUpperCase()).join(', ')}</div></details>`
+      : `<p style="font-size:0.82rem;color:#555;margin-top:6px;">${extRem.length} extended candidates remain</p>`;
+
     setPanel(`
-      <p class="remaining-header"><strong>0</strong> known solutions remain</p>
-      <p class="hint-text" style="color:#c8853a;margin-top:6px;">⚠ The answer may not be in my database — keep going!</p>
-      <button class="btn-green" style="margin-top:10px;font-size:0.85rem;padding:6px 14px;"
+      <p class="remaining-header">
+        <strong>0</strong> standard solutions → <strong>${extRem.length}</strong> extended candidates
+      </p>
+      <p class="hint-text" style="color:#c8853a;margin-top:2px;font-size:0.82rem;">⚠ Answer not in standard list — searching extended dictionary</p>
+      <div class="challenge-score" style="margin-top:8px;">
+        <div style="font-size:1.05rem;font-weight:700;">${word.toUpperCase()}</div>
+        ${solLine}
+        <div style="font-size:0.82rem;color:#555;margin-top:4px;">Avg remaining (extended): <strong>${myScore.toFixed(2)}</strong></div>
+        <div class="rank-line" style="margin-top:3px;">${rankMsg}</div>
+      </div>
+      ${remList}
+      <p class="hint-text" style="margin-top:10px;">Try another word above, or record a guess you played in Wordle:</p>
+      <button class="btn-green" style="margin-top:6px;font-size:0.85rem;padding:6px 14px;"
               onclick="startRecordGuess('${word}')">
         ▶ I played ${word.toUpperCase()} — enter Wordle's result
       </button>
@@ -889,10 +927,37 @@ function showChallengeScore(history) {
   const after  = currentResult.remainingWords;
 
   if (before.length === 0) {
+    // Already in extended-pool territory — track progress there
+    const extBefore = computeExtendedRemaining(prevHistory,   excludeUsed);
+    const extAfter  = computeExtendedRemaining(history,       excludeUsed);
+    const extElim   = extBefore.length - extAfter.length;
+    const extPct    = extBefore.length > 0 ? (extElim / extBefore.length * 100).toFixed(1) : '0.0';
+    const extColor  = extAfter.length === 0 ? '#6ca965'
+                    : extPct >= 80           ? '#6ca965'
+                    : extPct >= 50           ? '#c8b653' : '#787c7f';
+    const remList   = extAfter.length > 0 && extAfter.length <= 30
+      ? `<details class="rem-details"><summary>${extAfter.length} extended candidates</summary>
+           <div class="rem-words">${extAfter.map(w=>w.toUpperCase()).join(', ')}</div></details>`
+      : extAfter.length > 30
+        ? `<p style="font-size:0.82rem;color:#555;margin-top:6px;">${extAfter.length} extended candidates remain</p>`
+        : '';
+    const nextPrompt = extAfter.length === 0
+      ? '<p class="hint-text" style="margin-top:10px;color:#b03030;">⚠ No words match these constraints — check your colors.</p>'
+      : extAfter.length !== 1
+        ? '<p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>' : '';
     setPanel(`
-      <p class="remaining-header"><strong>0</strong> known solutions remain</p>
-      <p class="hint-text" style="color:#c8853a;margin-top:6px;">⚠ The answer may not be in my database — keep going!</p>
-      <p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>
+      <p class="remaining-header" style="margin-bottom:8px;">
+        Extended: <strong>${extBefore.length}</strong> → <strong>${extAfter.length}</strong> candidates
+      </p>
+      <p class="hint-text" style="color:#c8853a;margin-top:2px;font-size:0.82rem;">⚠ Searching extended dictionary</p>
+      <div class="challenge-score">
+        <div class="pct" style="color:${extColor}">${extPct}%</div>
+        <div style="font-size:0.82rem;color:#555;">of extended candidates eliminated</div>
+      </div>
+      ${remList}
+      ${nextPrompt}
+      ${buildCandidateTable()}
+      <button class="undo-guess-btn" onclick="undoLastGuess()">↩ Try a different guess</button>
     `);
     return;
   }
@@ -942,7 +1007,15 @@ function showChallengeScore(history) {
          </details>`
       : ''}
     ${after.length === 0
-      ? '<p class="hint-text" style="margin-top:10px;color:#c8853a;">⚠ No known solutions remain — the answer may not be in my database. Keep going!</p><p class="hint-text" style="margin-top:6px;">Enter your next guess.</p>'
+      ? (() => {
+          const extAfter = computeExtendedRemaining(history, excludeUsed);
+          const extMsg = extAfter.length > 0
+            ? (extAfter.length <= 30
+                ? `<details class="rem-details" style="margin-top:6px;"><summary>${extAfter.length} extended candidates</summary><div class="rem-words">${extAfter.map(w=>w.toUpperCase()).join(', ')}</div></details>`
+                : `<p style="font-size:0.82rem;color:#555;margin-top:4px;">${extAfter.length} extended candidates remain</p>`)
+            : '';
+          return `<p class="hint-text" style="margin-top:10px;color:#c8853a;">⚠ No standard solutions remain — searching extended dictionary</p>${extMsg}<p class="hint-text" style="margin-top:6px;">Enter your next guess.</p>`;
+        })()
       : after.length > 1 ? '<p class="hint-text" style="margin-top:10px;">Enter your next guess.</p>' : ''}
     ${buildCandidateTable()}
     <button class="undo-guess-btn" onclick="undoLastGuess()">↩ Try a different guess</button>
@@ -972,6 +1045,18 @@ function undoLastGuess() {
 }
 
 // ── Core computation (tree lookup + live fallback) ─────────────────────────
+// ── Extended-pool fallback (allWords filtered by constraints) ─────────────
+// Used when solutionWords yields 0 remaining — e.g. NYT used an obscure word.
+function computeExtendedRemaining(history, excludeUsed) {
+  const usedSet = new Set(gameData.meta.usedWords);
+  let remaining  = [...gameData.meta.allWords];
+  for (const { word, colors } of history) {
+    remaining = filterWords(remaining, word, colors);
+  }
+  if (excludeUsed) remaining = remaining.filter(w => !usedSet.has(w));
+  return remaining;
+}
+
 function computeResult(history, excludeUsed) {
   if (!gameData || history.length === 0) {
     return { remainingWords: gameData ? [...gameData.meta.solutionWords] : [], suggestions: [], fromCache: false };
