@@ -505,6 +505,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/best-juicy-skillet-pork-chops/";
+            },},{id: "recipes-blueberry-muffins",
+          title: 'Blueberry Muffins',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/blueberry-muffins/";
             },},{id: "recipes-boom-boom-sauce-copycat",
           title: 'Boom-Boom Sauce (Copycat)',
           description: "",
