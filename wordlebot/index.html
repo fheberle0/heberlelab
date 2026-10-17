@@ -228,6 +228,9 @@ permalink: /wordlebot/
     .cand-table tr.cand-best td:first-child::before { content: '★ '; color: #6ca965; }
     .cand-table tr.cand-elim td { color: #bbb; text-decoration: line-through; }
     .cand-table tr.cand-elim td:last-child { text-decoration: none; }
+    .cand-table tr.cand-constraint-elim td { color: #bbb; text-decoration: line-through;
+                                              text-decoration-color: #ddd; text-decoration-style: solid; }
+    .cand-table tr.cand-constraint-elim td:last-child { text-decoration: none; }
     .cand-table tr.cand-clickable { cursor: pointer; }
     .cand-table tr.cand-clickable:hover td { background: #f0f7ef; }
 
@@ -718,9 +721,10 @@ function buildCandidateTable(currentWord) {
   const rows = sorted.map(c => {
     const isCurrent = c.word === currentWord;
     const isBest    = !c.eliminated && Math.abs(c.score - bestScore) < 0.0001;
-    const rowClass  = c.eliminated ? 'cand-elim'
-                    : isCurrent    ? 'cand-current cand-clickable'
-                    : isBest       ? 'cand-best cand-clickable' : 'cand-clickable';
+    const rowClass  = c.eliminated      ? 'cand-elim'
+                    : c.constraintElim  ? 'cand-constraint-elim cand-clickable'
+                    : isCurrent         ? 'cand-current cand-clickable'
+                    : isBest            ? 'cand-best cand-clickable' : 'cand-clickable';
     const onclick   = c.eliminated ? '' : ` onclick="scoreChallengeCandidate('${c.word}')" title="Click to re-score ${c.word.toUpperCase()}"`;
     const solMark  = c.isSol  ? '<span class="badge badge-sol"  style="font-size:0.65rem;">SOL</span>'  : '';
     const pastMark = c.isPast ? '<span class="badge badge-past" style="font-size:0.65rem;">PAST</span>' : '';
@@ -748,17 +752,22 @@ function refreshCandidateScores() {
   const guessPool   = useFullPool ? gameData.meta.allWords : remaining;
   const poolLabel   = useFullPool ? 'possible guesses' : 'solution guesses';
 
+  // Build set of words that still fit the constraints (from full allWords pool)
+  const extRemSet = new Set(computeExtendedRemaining(guessHistory, excludeUsed));
+
   challengeCandidates = challengeCandidates.map(c => {
     if (remaining.length === 0) {
-      return { ...c, score: 0, isSol: false, betterCount: 0, poolLabel, eliminated: true };
+      return { ...c, score: 0, isSol: false, betterCount: 0, poolLabel,
+               eliminated: true, constraintElim: !extRemSet.has(c.word) };
     }
-    const newScore = scoreGuess(c.word, remaining);
-    const isSol    = remainSet.has(c.word);
+    const newScore      = scoreGuess(c.word, remaining);
+    const isSol         = remainSet.has(c.word);
+    const constraintElim = !extRemSet.has(c.word); // ruled out by guess pattern
     let betterCount = 0;
     for (const w of guessPool) {
       if (scoreGuess(w, remaining) < newScore - 0.0001) betterCount++;
     }
-    return { ...c, score: newScore, isSol, betterCount, poolLabel, eliminated: false };
+    return { ...c, score: newScore, isSol, betterCount, poolLabel, eliminated: false, constraintElim };
   });
 }
 
