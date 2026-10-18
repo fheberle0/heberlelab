@@ -92,6 +92,18 @@ async function addItemToList(rawName) {
   hideResults();
 }
 
+function showError(err) {
+  console.error("Costco list error:", err);
+  var code = err && err.code ? err.code : "error";
+  var msg = (code === "permission-denied")
+    ? "Couldn't save: Firestore is blocking writes to the Costco collections (permission-denied). The security rules need to allow costcoItems and costcoList."
+    : "Couldn't save the item (" + code + "). Check your connection and try again.";
+  if (addResults) {
+    addResults.innerHTML = '<div class="rb-search-empty" style="color: var(--rb-red);">' + esc(msg) + '</div>';
+    addResults.hidden = false;
+  }
+}
+
 function hideResults() {
   if (addResults) {
     addResults.hidden = true;
@@ -125,7 +137,7 @@ function renderAutocomplete(qstr) {
 
   addResults.querySelectorAll("[data-name]").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      addItemToList(btn.dataset.name);
+      addItemToList(btn.dataset.name).catch(showError);
     });
   });
 }
@@ -150,7 +162,7 @@ if (addInput) {
 if (addForm) {
   addForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    if (addInput) addItemToList(addInput.value);
+    if (addInput) addItemToList(addInput.value).catch(showError);
   });
 }
 
@@ -341,7 +353,7 @@ onSnapshot(collection(db, ITEMS_COLLECTION), function (snapshot) {
   itemsCache = snapshot.docs.map(function (d) {
     return Object.assign({ id: d.id }, d.data());
   });
-});
+}, showError);
 
 onSnapshot(query(collection(db, LIST_COLLECTION), orderBy("createdAt")), function (snapshot) {
   listCache = snapshot.docs.map(function (d) {
@@ -349,4 +361,4 @@ onSnapshot(query(collection(db, LIST_COLLECTION), orderBy("createdAt")), functio
   });
   purgeOldPurchases().catch(function () {});
   renderList();
-});
+}, showError);
