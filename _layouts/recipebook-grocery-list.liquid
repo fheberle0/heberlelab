@@ -13,7 +13,10 @@
 
 <header class="rb-header" style="display:flex; justify-content:space-between; align-items:center;">
   <a class="rb-home-link" href="{{ '/recipebook/' | relative_url }}">Recipe Book</a>
-  <span class="rb-home-link" style="cursor:default;">Grocery List</span>
+  <span style="display:flex; gap:1.25rem; align-items:center;">
+    <span class="rb-home-link" style="cursor:default;">Grocery List</span>
+    <a class="rb-home-link" href="{{ '/recipebook/costco/' | relative_url }}">Costco List</a>
+  </span>
 </header>
 
 <main class="rb-recipe">
