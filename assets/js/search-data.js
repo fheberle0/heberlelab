@@ -855,6 +855,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/summer-macaroni-salad/";
+            },},{id: "recipes-sunset-citrus-teriyaki-chicken",
+          title: 'Sunset Citrus Teriyaki Chicken',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/sunset-citrus-teriyaki-chicken/";
             },},{id: "recipes-zucchini-and-rice-bake",
           title: 'Zucchini and Rice Bake',
           description: "",
