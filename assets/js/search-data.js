@@ -590,6 +590,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/double-strawberry-sugar-cookies/";
+            },},{id: "recipes-easy-breakfast-muffins",
+          title: 'Easy Breakfast Muffins',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/easy-breakfast-muffins/";
             },},{id: "recipes-everything-salmon-with-creamy-caper-sauce",
           title: 'Everything Salmon with Creamy Caper Sauce',
           description: "",
