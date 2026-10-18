@@ -617,7 +617,7 @@ function scoreChallengeCandidate(word) {
       : `${betterCount.toLocaleString()} ${useFullPool ? 'possible guesses' : 'extended-pool guesses'} would be better`;
     const solLine = inExt
       ? `<div style="color:#6ca965;font-size:0.85rem;">✓ Could be the answer</div>`
-      : `<div style="color:#787c7f;font-size:0.85rem;">✗ Not in extended candidate list (valid guess only)</div>`;
+      : `<div style="color:#787c7f;font-size:0.85rem;">~ Not in typical solution set (still a valid guess)</div>`;
     const remList = extRem.length <= 30
       ? `<details class="rem-details"><summary>${extRem.length} extended candidates</summary>
            <div class="rem-words">${extRem.map(w=>w.toUpperCase()).join(', ')}</div></details>`
@@ -681,7 +681,7 @@ function scoreChallengeCandidate(word) {
     : `${betterCount.toLocaleString()} ${poolLabel} would be better`;
   const solLine = isSol
     ? `<div style="color:#6ca965;font-weight:600;font-size:0.85rem;">✓ Possible solution</div>`
-    : `<div style="color:#787c7f;font-size:0.85rem;">✗ Not a possible solution (valid guess only)</div>`;
+    : `<div style="color:#787c7f;font-size:0.85rem;">~ Not in typical solution set (still a valid guess)</div>`;
   const pastBadge = isPast ? '<span class="badge badge-past">PAST</span>' : '';
 
   const tableHtml = buildCandidateTable(word);
