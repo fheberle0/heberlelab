@@ -204,6 +204,8 @@ permalink: /wordlebot/
       border: 1px solid transparent;
     }
     .suggestion-item.is-sol { background: #f0faf0; border-color: #c3e8c3; }
+    .suggestion-item { cursor: pointer; }
+    .suggestion-item:hover { background: #f0f7ef; border-color: #c3e8c3; }
 
     .sugg-rank  { font-size: 0.75rem; color: #aaa; width: 20px; text-align: right; flex-shrink: 0; }
     .sugg-word  { font-weight: 800; letter-spacing: 1px; font-size: 0.95rem; width: 60px; flex-shrink: 0; }
@@ -524,6 +526,12 @@ function buildGrid() {
 }
 
 // ── Word input ─────────────────────────────────────────────────────────────
+// Click a suggestion to use it as the next guess
+function useSuggestion(word) {
+  document.getElementById('wordInput').value = word;
+  submitWord();
+}
+
 function submitWord() {
   if (!gameData) return;
   const input = document.getElementById('wordInput');
@@ -891,7 +899,7 @@ function showSuggestions(history) {
       const solClass = g.sol ? ' is-sol' : '';
       const solBadge  = g.sol  ? '<span class="badge badge-sol">SOL</span>'   : '';
       const pastBadge = g.used ? '<span class="badge badge-past">PAST</span>' : '';
-      html += `<div class="suggestion-item${solClass}">
+      html += `<div class="suggestion-item${solClass}" onclick="useSuggestion('${g.w}')" title="Click to use ${g.w.toUpperCase()}">
         <span class="sugg-rank">${i+1}</span>
         <span class="sugg-word">${g.w.toUpperCase()}</span>
         <span class="sugg-score">${g.s.toFixed(2)}</span>
@@ -910,7 +918,7 @@ function showSuggestions(history) {
     html += '<div class="suggestion-list">';
     rankedSols.forEach((g, i) => {
       const pastBadge = solUsedWords.has(g.word) ? '<span class="badge badge-past">PAST</span>' : '';
-      html += `<div class="suggestion-item is-sol">
+      html += `<div class="suggestion-item is-sol" onclick="useSuggestion('${g.word}')" title="Click to use ${g.word.toUpperCase()}">
         <span class="sugg-rank">${i+1}</span>
         <span class="sugg-word">${g.word.toUpperCase()}</span>
         <span class="sugg-score">${g.score.toFixed(2)}</span>
