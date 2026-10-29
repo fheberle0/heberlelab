@@ -500,6 +500,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/best-beef-stroganoff/";
+            },},{id: "recipes-best-chocolate-chip-cookies",
+          title: 'Best Chocolate Chip Cookies',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/best-chocolate-chip-cookies/";
             },},{id: "recipes-the-best-juicy-skillet-pork-chops",
           title: 'The Best Juicy Skillet Pork Chops',
           description: "",
@@ -515,6 +520,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/boom-boom-sauce-copycat/";
+            },},{id: "recipes-butterscotch-chip-cookies",
+          title: 'Butterscotch Chip Cookies',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/butterscotch-chip-cookies/";
             },},{id: "recipes-cheesy-green-chile-bean-bake",
           title: 'Cheesy Green Chile Bean Bake',
           description: "",
