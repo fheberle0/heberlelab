@@ -1,6 +1,6 @@
 ---
 title: Double Strawberry Sugar Cookies
-category: cookies
+category: desserts
 tags: [freeze-dried strawberry, iced, chewy]
 servings: 20
 prep_time: 20

@@ -1,6 +1,7 @@
 ---
 title: Best Chocolate Chip Cookies
 category: desserts
+favorite: true
 tags: [cookies, chocolate chip, no chill, classic]
 servings: 36
 prep_time: 10

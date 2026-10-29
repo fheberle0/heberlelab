@@ -1,6 +1,7 @@
 ---
 title: Butterscotch Chip Cookies
 category: desserts
+favorite: true
 tags: [cookies, butterscotch, chilled dough]
 servings: 36
 prep_time: 10
