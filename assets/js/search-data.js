@@ -485,6 +485,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/authentic-greek-lemon-potatoes/";
+            },},{id: "recipes-baked-lemon-pudding",
+          title: 'Baked Lemon Pudding',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/baked-lemon-pudding/";
             },},{id: "recipes-beef-bourguignon",
           title: 'Beef Bourguignon',
           description: "",
@@ -790,6 +795,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/peanut-butter-noodles/";
+            },},{id: "recipes-perfect-peach-pie",
+          title: 'Perfect Peach Pie',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/perfect-peach-pie/";
             },},{id: "recipes-pesto-beans",
           title: 'Pesto Beans',
           description: "",
