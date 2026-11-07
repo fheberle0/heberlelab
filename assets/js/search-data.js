@@ -880,6 +880,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/sunset-citrus-teriyaki-chicken/";
+            },},{id: "recipes-crispy-waffles",
+          title: 'Crispy Waffles',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/waffles-preppy-kitchen/";
             },},{id: "recipes-zucchini-and-rice-bake",
           title: 'Zucchini and Rice Bake',
           description: "",
