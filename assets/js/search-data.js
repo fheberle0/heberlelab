@@ -700,6 +700,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/instant-pot-pot-roast-potatoes/";
+            },},{id: "recipes-instant-pot-smoky-paprika-pork-stew",
+          title: 'Instant Pot Smoky Paprika Pork Stew',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/instant-pot-smoky-paprika-pork-stew/";
             },},{id: "recipes-lemon-butter-salmon-with-rice",
           title: 'Lemon Butter Salmon with Rice',
           description: "",
