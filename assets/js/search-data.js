@@ -890,6 +890,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/sunset-citrus-teriyaki-chicken/";
+            },},{id: "recipes-swedish-meatballs-köttbullar-with-mashed-potatoes-and-lingonberry-jam",
+          title: 'Swedish Meatballs (Köttbullar) with Mashed Potatoes and Lingonberry Jam',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/swedish-meatballs-kottbullar/";
             },},{id: "recipes-crispy-waffles",
           title: 'Crispy Waffles',
           description: "",
