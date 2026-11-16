@@ -490,6 +490,11 @@ ninja.data = [{
           description: "",
           section: "Recipes",handler: () => {
               window.location.href = "/recipebook/baked-lemon-pudding/";
+            },},{id: "recipes-banana-pancakes",
+          title: 'Banana Pancakes',
+          description: "",
+          section: "Recipes",handler: () => {
+              window.location.href = "/recipebook/banana-pancakes/";
             },},{id: "recipes-beef-bourguignon",
           title: 'Beef Bourguignon',
           description: "",
